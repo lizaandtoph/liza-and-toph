@@ -1,0 +1,110 @@
+# Overview
+
+This is a React-based web application called "Liza & Toph" that helps parents track their child's developmental milestones and discover age-appropriate products, toys, and books. The application provides personalized "Play Boards" based on a child's age range, interests, and developmental stage. Users complete a questionnaire about their child, and the system generates customized recommendations including developmental milestones, activity ideas, and curated product suggestions.
+
+# User Preferences
+
+Preferred communication style: Simple, everyday language.
+
+# System Architecture
+
+## Frontend Architecture
+
+**Framework & Build System**
+- React 18+ with TypeScript for type-safe component development
+- Vite as the build tool and development server for fast compilation and HMR
+- Wouter for lightweight client-side routing (alternative to React Router)
+- Path aliases configured for clean imports (`@/`, `@shared/`, `@assets/`)
+
+**UI Component System**
+- shadcn/ui component library with Radix UI primitives for accessible, customizable components
+- Tailwind CSS for utility-first styling with custom design tokens
+- CSS variables for theming (light/dark mode support built-in)
+- Custom fonts: DM Sans (headings), Inter (body), with serif and mono fallbacks
+
+**State Management & Data Fetching**
+- TanStack Query (React Query) for server state management, caching, and data synchronization
+- React Hook Form with Zod for form validation and type-safe form handling
+- Custom hooks for UI concerns (mobile detection, toast notifications)
+
+**Component Structure**
+- Reusable UI components in `client/src/components/ui/` following shadcn conventions
+- Feature components for domain logic (MilestoneTimeline, ProductGrid, QuestionnaireStep)
+- Pages organized by route (`home`, `questionnaire`, `play-board`)
+
+## Backend Architecture
+
+**Server Framework**
+- Express.js with TypeScript for HTTP server and API routes
+- Custom middleware for request logging, JSON parsing, and raw body capture
+- Vite middleware integration in development for SSR-like capabilities
+
+**API Design**
+- RESTful API endpoints under `/api/` prefix
+- Routes for child profiles (`POST /api/child-profiles`, `GET /api/child-profiles/:id`)
+- Routes for milestones with filtering (`GET /api/milestones?ageRange=...`)
+- Routes for products with category and age-range filtering
+- Routes for play boards (personalized recommendation boards)
+
+**Data Layer**
+- In-memory storage implementation (`MemStorage`) for development/prototyping
+- Interface-based storage abstraction (`IStorage`) allowing easy swap to database
+- Seed data included for milestones and products
+- Type-safe data models shared between client and server via `@shared/schema`
+
+**Schema & Validation**
+- Drizzle ORM schema definitions in PostgreSQL dialect
+- Zod schemas generated from Drizzle schemas for runtime validation
+- Type inference from schemas ensures end-to-end type safety
+- Tables: users, childProfiles, milestones, products, playBoards
+
+## Data Storage
+
+**Database Configuration**
+- Drizzle ORM configured for PostgreSQL via `@neondatabase/serverless`
+- Connection via `DATABASE_URL` environment variable
+- Migrations output to `./migrations` directory
+- Schema-first approach with shared type definitions
+
+**Data Models**
+- **Users**: Basic authentication structure with username/password
+- **Child Profiles**: Stores child information (age range, interests, preferences)
+- **Milestones**: Developmental milestones categorized by type (cognitive, motor, language, social-emotional)
+- **Products**: Toy/book recommendations with pricing, ratings, categories, affiliate links
+- **Play Boards**: Aggregated personalized boards combining profiles, milestones, and products
+
+**Current Implementation**
+- Development uses in-memory storage with seed data
+- Production-ready schema exists for PostgreSQL migration
+- Storage interface allows seamless transition from mock to real database
+
+## External Dependencies
+
+**UI & Styling**
+- Radix UI components for accessible primitives (dialogs, dropdowns, tooltips, etc.)
+- Tailwind CSS with PostCSS for styling pipeline
+- Google Fonts: DM Sans, Inter, Architects Daughter, Fira Code, Geist Mono
+- class-variance-authority and clsx for conditional className composition
+
+**Data & Forms**
+- TanStack Query for data fetching and caching
+- React Hook Form with @hookform/resolvers for form management
+- Zod for schema validation and type inference
+- drizzle-zod for automatic Zod schema generation from ORM models
+
+**Database & ORM**
+- Drizzle ORM for type-safe database queries
+- @neondatabase/serverless for PostgreSQL connection pooling
+- connect-pg-simple for PostgreSQL session store (authentication sessions)
+
+**Development Tools**
+- tsx for running TypeScript server code directly
+- esbuild for production server bundling
+- @replit specific plugins for development environment integration (error overlay, cartographer, dev banner)
+
+**Utilities**
+- date-fns for date manipulation
+- nanoid for unique ID generation
+- lucide-react for icon components
+- cmdk for command palette functionality
+- embla-carousel-react for carousel components
