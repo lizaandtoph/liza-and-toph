@@ -78,7 +78,7 @@ Preferred communication style: Simple, everyday language.
   - Onboarding Step 1 collects parent account info and first child info together
   - Login page validates credentials against stored parentAccount
   - Settings page allows editing name, email, and password
-  - Special access: firstName "Topher" grants full access without subscription
+  - Special access: firstName "Topher" OR email "cpm@mcginnisenterprise.com" grants full access without subscription
 - **Child Profiles**: Stores child information with unique ID (nanoid), name, birthday, calculated age, age band, and developmental preferences
   - Multiple children per parent account supported
   - Each child has separate questionnaire answers (schemas, barriers, interests)

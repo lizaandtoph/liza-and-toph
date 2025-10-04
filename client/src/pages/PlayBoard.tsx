@@ -13,7 +13,9 @@ export default function PlayBoard() {
   const child = getActiveChild();
   const answers = child ? getAnswers(child.id) : { schemas: [], barriers: [], interests: [] };
   
-  const hasFullAccess = subscribed || (parentAccount?.firstName?.toLowerCase() === 'topher');
+  const hasFullAccess = subscribed || 
+    (parentAccount?.firstName?.toLowerCase() === 'topher') ||
+    (parentAccount?.email?.toLowerCase() === 'cpm@mcginnisenterprise.com');
 
   useEffect(() => {
     if (child) {
