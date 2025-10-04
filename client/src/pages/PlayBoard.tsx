@@ -35,6 +35,27 @@ export default function PlayBoard() {
   }
 
   const milestones = milestonesData[child.ageBand as keyof typeof milestonesData];
+  
+  if (!milestones) {
+    return (
+      <div className="container mx-auto px-4 max-w-4xl py-12 text-center">
+        <h2 className="text-2xl font-semibold mb-4">Milestone Data Not Available</h2>
+        <p className="mb-4">We couldn't find milestone data for age band: {child.ageBand}</p>
+        <p className="mb-4 text-sm text-espresso/60">This may happen if you completed the questionnaire before the latest update.</p>
+        <button
+          onClick={() => {
+            useStore.getState().reset();
+            window.location.href = '/onboarding';
+          }}
+          className="px-6 py-3 bg-olive text-ivory rounded-xl hover:bg-ochre transition font-medium"
+          data-testid="button-restart-onboarding"
+        >
+          Restart Onboarding
+        </button>
+      </div>
+    );
+  }
+  
   const domains = ['socialEmotional', 'cognitive', 'languageCommunication', 'motor'];
   const domainLabels: Record<string, string> = {
     socialEmotional: 'Social-Emotional',

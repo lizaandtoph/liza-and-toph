@@ -1,92 +1,362 @@
 {
-  "newborn-2": {
+  "newborn-18m": {
     "socialEmotional": {
-      "currentMilestone": "Smiles at familiar faces",
-      "shiftSummary": "Begins parallel play alongside peers, showing early sharing behaviors",
-      "endMilestone": "Engages in simple pretend play and takes turns",
-      "playSupport": "Provide soft dolls and stuffed animals for hugging practice",
+      "currentMilestone": "Smiles at familiar faces and shows early social engagement",
+      "shiftSummary": "Begins parallel play alongside peers, showing early sharing behaviors and attachment to caregivers",
+      "endMilestone": "Engages in simple pretend play and takes turns with support",
+      "playSupport": "Provide soft dolls and stuffed animals for hugging practice, peek-a-boo games",
       "parentSupport": "Respond to baby's smiles and coos to build secure attachment"
     },
     "cognitive": {
-      "currentMilestone": "Tracks objects with eyes",
-      "shiftSummary": "Develops object permanence and cause-effect understanding",
-      "endMilestone": "Sorts shapes and matches colors",
-      "playSupport": "Offer nesting cups and simple shape sorters",
-      "parentSupport": "Play peek-a-boo and hide toys under blankets"
+      "currentMilestone": "Tracks objects with eyes and explores with hands and mouth",
+      "shiftSummary": "Develops object permanence and cause-effect understanding through exploration",
+      "endMilestone": "Sorts shapes, matches colors, and shows problem-solving skills",
+      "playSupport": "Offer nesting cups, simple shape sorters, and stacking toys",
+      "parentSupport": "Play peek-a-boo and hide toys under blankets to teach object permanence"
     },
     "languageCommunication": {
-      "currentMilestone": "Coos and makes vowel sounds",
-      "shiftSummary": "First words emerge around 12 months, vocabulary expands rapidly",
+      "currentMilestone": "Coos and makes vowel sounds, responds to name",
+      "shiftSummary": "First words emerge around 12 months, vocabulary expands rapidly to 10-25 words",
       "endMilestone": "Uses 2-word phrases and follows simple instructions",
-      "playSupport": "Read board books with simple pictures daily",
-      "parentSupport": "Narrate daily activities and respond to baby's sounds"
+      "playSupport": "Read board books with simple pictures daily, sing songs",
+      "parentSupport": "Narrate daily activities and respond enthusiastically to baby's sounds"
     },
     "motor": {
-      "currentMilestone": "Lifts head during tummy time",
+      "currentMilestone": "Lifts head during tummy time, reaches for objects",
       "shiftSummary": "Progresses from rolling to sitting, crawling, standing, and walking",
       "endMilestone": "Walks independently and climbs stairs with support",
-      "playSupport": "Create safe spaces for floor play and climbing",
-      "parentSupport": "Supervise tummy time and encourage movement"
+      "playSupport": "Create safe spaces for floor play, provide push toys and climbing structures",
+      "parentSupport": "Supervise tummy time and encourage movement with toys just out of reach"
     }
   },
-  "2-5": {
+  "18m-3y": {
     "socialEmotional": {
-      "currentMilestone": "Shows affection openly",
+      "currentMilestone": "Shows affection openly and begins parallel play",
+      "shiftSummary": "Transitions from parallel play to early cooperative play, shows empathy",
+      "endMilestone": "Plays cooperatively with peers and shows concern for others' feelings",
+      "playSupport": "Provide dress-up clothes, dolls, and simple role-play scenarios",
+      "parentSupport": "Label emotions, model sharing, and guide conflict resolution"
+    },
+    "cognitive": {
+      "currentMilestone": "Sorts by color and shape, understands object categories",
+      "shiftSummary": "Develops symbolic thinking, memory, and early problem-solving",
+      "endMilestone": "Counts to 10, understands more/less, and solves simple puzzles",
+      "playSupport": "Offer shape sorters, simple puzzles, and matching games",
+      "parentSupport": "Ask open-ended questions and encourage exploration"
+    },
+    "languageCommunication": {
+      "currentMilestone": "Speaks in 2-3 word sentences, vocabulary of 50+ words",
+      "shiftSummary": "Vocabulary explosion to 200-1000 words, grammar emerges",
+      "endMilestone": "Tells simple stories and asks 'what' and 'why' questions",
+      "playSupport": "Read picture books daily and encourage storytelling",
+      "parentSupport": "Expand on child's sentences and have back-and-forth conversations"
+    },
+    "motor": {
+      "currentMilestone": "Runs and kicks a ball, stacks blocks",
+      "shiftSummary": "Refines balance, coordination, and fine motor control",
+      "endMilestone": "Jumps with both feet, uses crayons, and begins using scissors",
+      "playSupport": "Provide art materials, building blocks, and outdoor play equipment",
+      "parentSupport": "Encourage outdoor play and practice with utensils and zippers"
+    }
+  },
+  "2-5y": {
+    "socialEmotional": {
+      "currentMilestone": "Shows affection openly and wants to please friends",
       "shiftSummary": "Develops empathy, negotiates with peers, manages emotions better",
-      "endMilestone": "Plays cooperatively and shows concern for crying friends",
-      "playSupport": "Provide dress-up clothes and dolls for role-play scenarios",
-      "parentSupport": "Label emotions and model conflict resolution"
+      "endMilestone": "Plays cooperatively, shares willingly, and shows concern for crying friends",
+      "playSupport": "Provide dress-up clothes and dolls for complex role-play scenarios",
+      "parentSupport": "Label emotions, teach problem-solving, and model conflict resolution"
     },
     "cognitive": {
-      "currentMilestone": "Sorts by color and shape",
-      "shiftSummary": "Understands counting, patterns, and basic problem-solving",
-      "endMilestone": "Counts to 20 and understands more/less concepts",
-      "playSupport": "Offer pattern blocks, puzzles, and building sets",
-      "parentSupport": "Ask open-ended questions during play"
+      "currentMilestone": "Sorts by multiple attributes (color, shape, size)",
+      "shiftSummary": "Understands counting, patterns, and basic problem-solving strategies",
+      "endMilestone": "Counts to 20, understands more/less concepts, and solves multi-step problems",
+      "playSupport": "Offer pattern blocks, complex puzzles, and building sets",
+      "parentSupport": "Ask open-ended questions during play and encourage prediction"
     },
     "languageCommunication": {
-      "currentMilestone": "Speaks in 3-4 word sentences",
-      "shiftSummary": "Grammar improves, vocabulary explodes to 1000+ words",
-      "endMilestone": "Tells simple stories and asks 'why' questions",
-      "playSupport": "Provide story books and encourage storytelling",
-      "parentSupport": "Have conversations and expand on child's sentences"
+      "currentMilestone": "Speaks in 4-5 word sentences with clear pronunciation",
+      "shiftSummary": "Grammar improves dramatically, vocabulary explodes to 1000+ words",
+      "endMilestone": "Tells elaborate stories and asks complex 'why' questions",
+      "playSupport": "Provide story books, encourage storytelling, and play word games",
+      "parentSupport": "Have conversations, expand on child's sentences, and read together daily"
     },
     "motor": {
-      "currentMilestone": "Runs and kicks a ball",
-      "shiftSummary": "Refines balance, coordination, and fine motor skills",
-      "endMilestone": "Hops on one foot and uses scissors",
-      "playSupport": "Set up obstacle courses and provide art materials",
-      "parentSupport": "Encourage outdoor play and practice with utensils"
+      "currentMilestone": "Runs smoothly, kicks ball with aim, pedals tricycle",
+      "shiftSummary": "Refines balance, coordination, and fine motor skills dramatically",
+      "endMilestone": "Hops on one foot, uses scissors with control, and draws recognizable pictures",
+      "playSupport": "Set up obstacle courses, provide art materials and building toys",
+      "parentSupport": "Encourage outdoor play, practice with scissors, and support writing attempts"
     }
   },
-  "5-8": {
+  "3-6y": {
     "socialEmotional": {
-      "currentMilestone": "Wants to please friends",
-      "shiftSummary": "Develops complex friendships, understands rules and fairness",
-      "endMilestone": "Shows increased independence and self-control",
-      "playSupport": "Encourage group games with rules and turn-taking",
-      "parentSupport": "Support friendships and discuss social situations"
+      "currentMilestone": "Wants to please friends and follows rules in games",
+      "shiftSummary": "Develops complex friendships, understands rules, fairness, and cooperation",
+      "endMilestone": "Shows increased independence, self-control, and complex social understanding",
+      "playSupport": "Encourage group games with rules, turn-taking, and collaborative projects",
+      "parentSupport": "Support friendships, discuss social situations, and teach conflict resolution"
     },
     "cognitive": {
-      "currentMilestone": "Understands time concepts",
-      "shiftSummary": "Masters reading, writing, and mathematical reasoning",
-      "endMilestone": "Reads fluently and solves multi-step problems",
-      "playSupport": "Provide strategy games, science kits, and chapter books",
-      "parentSupport": "Support homework and encourage curiosity"
+      "currentMilestone": "Understands time concepts (yesterday, today, tomorrow)",
+      "shiftSummary": "Masters early reading, writing, and mathematical reasoning",
+      "endMilestone": "Reads simple words, writes name, and solves multi-step math problems",
+      "playSupport": "Provide strategy games, science kits, early reader books, and math manipulatives",
+      "parentSupport": "Support learning activities and encourage curiosity about the world"
     },
     "languageCommunication": {
-      "currentMilestone": "Speaks clearly with complex grammar",
-      "shiftSummary": "Develops reading comprehension and writing skills",
-      "endMilestone": "Writes stories and understands figurative language",
-      "playSupport": "Encourage journaling and creative writing",
-      "parentSupport": "Read together and discuss book themes"
+      "currentMilestone": "Speaks clearly with complex grammar and full sentences",
+      "shiftSummary": "Develops reading readiness and writing skills, expands vocabulary",
+      "endMilestone": "Begins reading independently and writes simple sentences",
+      "playSupport": "Encourage pre-writing activities, letter games, and storytelling",
+      "parentSupport": "Read together daily, discuss book themes, and practice letter sounds"
     },
     "motor": {
-      "currentMilestone": "Rides a bike",
+      "currentMilestone": "Rides a bike with training wheels, catches a ball",
       "shiftSummary": "Masters complex movements and refined hand-eye coordination",
-      "endMilestone": "Participates in organized sports",
-      "playSupport": "Support sports interests and provide craft materials",
-      "parentSupport": "Encourage physical activity and skill development"
+      "endMilestone": "Participates in organized sports and creates detailed art",
+      "playSupport": "Support sports interests, provide craft materials, and encourage building",
+      "parentSupport": "Encourage physical activity, practice skills, and support artistic expression"
+    }
+  },
+  "4-7y": {
+    "socialEmotional": {
+      "currentMilestone": "Wants to please friends and follows rules consistently",
+      "shiftSummary": "Develops complex friendships, understands fairness, and shows empathy",
+      "endMilestone": "Shows strong independence, self-control, and moral reasoning",
+      "playSupport": "Encourage team sports, board games, and collaborative projects",
+      "parentSupport": "Support friendships, discuss moral concepts, and teach problem-solving"
+    },
+    "cognitive": {
+      "currentMilestone": "Reads simple books and solves basic math problems",
+      "shiftSummary": "Masters reading fluency, writing, and mathematical operations",
+      "endMilestone": "Reads chapter books and solves complex multi-step problems",
+      "playSupport": "Provide strategy games, science experiments, and challenging puzzles",
+      "parentSupport": "Support homework, encourage reading, and foster curiosity"
+    },
+    "languageCommunication": {
+      "currentMilestone": "Reads simple sentences and writes short stories",
+      "shiftSummary": "Develops reading comprehension and expressive writing skills",
+      "endMilestone": "Writes detailed stories and understands figurative language",
+      "playSupport": "Encourage journaling, creative writing, and book discussions",
+      "parentSupport": "Read together, discuss themes, and support writing projects"
+    },
+    "motor": {
+      "currentMilestone": "Rides a bike without training wheels, swims",
+      "shiftSummary": "Masters complex sports movements and refined artistic skills",
+      "endMilestone": "Excels in chosen sports or arts, shows strong coordination",
+      "playSupport": "Support sports and arts interests, provide specialized equipment",
+      "parentSupport": "Encourage physical activity, skill practice, and artistic development"
+    }
+  },
+  "5-8y": {
+    "socialEmotional": {
+      "currentMilestone": "Values friendships and understands social rules",
+      "shiftSummary": "Develops deeper friendships, independence, and emotional regulation",
+      "endMilestone": "Shows strong self-awareness, empathy, and social competence",
+      "playSupport": "Encourage team activities, leadership roles, and community involvement",
+      "parentSupport": "Support social development, discuss feelings, and teach coping strategies"
+    },
+    "cognitive": {
+      "currentMilestone": "Reads fluently and solves multi-step problems",
+      "shiftSummary": "Masters complex academic skills and abstract thinking",
+      "endMilestone": "Thinks critically, analyzes information, and creates complex projects",
+      "playSupport": "Provide challenging games, research projects, and coding activities",
+      "parentSupport": "Support academic growth, encourage curiosity, and foster critical thinking"
+    },
+    "languageCommunication": {
+      "currentMilestone": "Writes stories and understands figurative language",
+      "shiftSummary": "Develops advanced writing and analytical reading skills",
+      "endMilestone": "Writes persuasive essays and analyzes complex texts",
+      "playSupport": "Encourage debate, creative writing, and book clubs",
+      "parentSupport": "Read together, discuss themes, and support writing development"
+    },
+    "motor": {
+      "currentMilestone": "Participates in organized sports with skill",
+      "shiftSummary": "Refines specialized physical and artistic abilities",
+      "endMilestone": "Shows excellence in chosen physical or artistic pursuits",
+      "playSupport": "Support specialized training, provide advanced equipment",
+      "parentSupport": "Encourage dedication, practice, and healthy competition"
+    }
+  },
+  "6-9y": {
+    "socialEmotional": {
+      "currentMilestone": "Forms close friendships and values peer approval",
+      "shiftSummary": "Develops independence, self-concept, and complex social skills",
+      "endMilestone": "Shows strong identity, leadership, and emotional maturity",
+      "playSupport": "Support clubs, teams, and independent social activities",
+      "parentSupport": "Guide social challenges, discuss values, and foster independence"
+    },
+    "cognitive": {
+      "currentMilestone": "Thinks abstractly and solves complex problems",
+      "shiftSummary": "Masters advanced academic concepts and critical thinking",
+      "endMilestone": "Analyzes information critically and creates original work",
+      "playSupport": "Provide advanced projects, coding, and research opportunities",
+      "parentSupport": "Support academic challenges and intellectual curiosity"
+    },
+    "languageCommunication": {
+      "currentMilestone": "Writes complex narratives and analyzes literature",
+      "shiftSummary": "Develops sophisticated writing and communication skills",
+      "endMilestone": "Writes persuasively and communicates ideas clearly",
+      "playSupport": "Encourage debate, journalism, and creative expression",
+      "parentSupport": "Discuss ideas, support writing, and encourage presentation skills"
+    },
+    "motor": {
+      "currentMilestone": "Shows proficiency in chosen physical activities",
+      "shiftSummary": "Develops specialized skills and coordination",
+      "endMilestone": "Achieves high level of mastery in chosen pursuits",
+      "playSupport": "Support advanced training and competitive opportunities",
+      "parentSupport": "Encourage practice, balance, and healthy lifestyle"
+    }
+  },
+  "7-10y": {
+    "socialEmotional": {
+      "currentMilestone": "Values peer relationships and developing identity",
+      "shiftSummary": "Navigates complex social dynamics and builds self-esteem",
+      "endMilestone": "Shows strong sense of self and mature peer relationships",
+      "playSupport": "Support social clubs, team activities, and leadership roles",
+      "parentSupport": "Guide social challenges and support identity development"
+    },
+    "cognitive": {
+      "currentMilestone": "Thinks critically and manages long-term projects",
+      "shiftSummary": "Develops advanced reasoning and academic excellence",
+      "endMilestone": "Shows expertise in areas of interest and strong work habits",
+      "playSupport": "Provide specialized learning opportunities and mentorship",
+      "parentSupport": "Support passion areas and encourage goal-setting"
+    },
+    "languageCommunication": {
+      "currentMilestone": "Communicates effectively in writing and speech",
+      "shiftSummary": "Masters sophisticated communication across contexts",
+      "endMilestone": "Articulates complex ideas persuasively",
+      "playSupport": "Encourage public speaking, writing competitions, and debate",
+      "parentSupport": "Support communication skills and intellectual expression"
+    },
+    "motor": {
+      "currentMilestone": "Demonstrates skill in chosen physical activities",
+      "shiftSummary": "Refines technique and builds endurance",
+      "endMilestone": "Achieves competitive level in chosen pursuits",
+      "playSupport": "Support intensive training and competitive opportunities",
+      "parentSupport": "Balance activity with rest and maintain healthy habits"
+    }
+  },
+  "8-11y": {
+    "socialEmotional": {
+      "currentMilestone": "Developing strong peer identity and independence",
+      "shiftSummary": "Transitions toward adolescence with increasing autonomy",
+      "endMilestone": "Shows mature social skills and self-awareness",
+      "playSupport": "Support independent social activities and leadership",
+      "parentSupport": "Guide toward healthy independence while maintaining connection"
+    },
+    "cognitive": {
+      "currentMilestone": "Masters complex academic material and abstract thinking",
+      "shiftSummary": "Develops critical analysis and independent learning",
+      "endMilestone": "Shows readiness for advanced academic challenges",
+      "playSupport": "Provide mentorship, advanced courses, and research projects",
+      "parentSupport": "Support academic goals and intellectual passions"
+    },
+    "languageCommunication": {
+      "currentMilestone": "Communicates ideas clearly across contexts",
+      "shiftSummary": "Develops persuasive and analytical communication",
+      "endMilestone": "Masters sophisticated written and oral expression",
+      "playSupport": "Support debate, writing portfolios, and presentations",
+      "parentSupport": "Encourage communication excellence and self-expression"
+    },
+    "motor": {
+      "currentMilestone": "Shows proficiency in specialized activities",
+      "shiftSummary": "Navigates physical changes while maintaining skills",
+      "endMilestone": "Adapts to growth changes and maintains performance",
+      "playSupport": "Support continued training and adaptation to growth",
+      "parentSupport": "Help manage physical changes and maintain activity"
+    }
+  },
+  "9-12y": {
+    "socialEmotional": {
+      "currentMilestone": "Peer group is important; developing separate identity from family",
+      "shiftSummary": "Navigates pre-teen social dynamics and identity formation",
+      "endMilestone": "Shows strong peer relationships and emerging adult identity",
+      "playSupport": "Support social clubs, teams, and peer activities",
+      "parentSupport": "Balance independence with guidance and maintain communication"
+    },
+    "cognitive": {
+      "currentMilestone": "Thinks abstractly and manages complex projects",
+      "shiftSummary": "Develops future-oriented thinking and advanced reasoning",
+      "endMilestone": "Shows mature academic skills and intellectual independence",
+      "playSupport": "Provide advanced learning opportunities and mentorship",
+      "parentSupport": "Support academic goals and intellectual development"
+    },
+    "languageCommunication": {
+      "currentMilestone": "Articulates complex ideas effectively",
+      "shiftSummary": "Masters persuasive and analytical communication",
+      "endMilestone": "Communicates with adult-level sophistication",
+      "playSupport": "Support debate, writing, and public speaking",
+      "parentSupport": "Encourage self-expression and communication skills"
+    },
+    "motor": {
+      "currentMilestone": "Navigating physical changes of puberty and growth spurts",
+      "shiftSummary": "Adapts motor skills through physical development",
+      "endMilestone": "Maintains performance through body changes",
+      "playSupport": "Support chosen activities with understanding of physical changes",
+      "parentSupport": "Help navigate puberty changes while maintaining activity"
+    }
+  },
+  "10-early-teens": {
+    "socialEmotional": {
+      "currentMilestone": "Peer group is paramount; experiences intense friendships and emotions; is highly focused on developing an identity separate from their family",
+      "shiftSummary": "A shift from trying to fit in with the group to figuring out who they are as an individual. They form more intimate, trusting relationships and develop a stronger, more stable sense of self",
+      "endMilestone": "Has a consolidated sense of personal identity; relationships with peers are based on intimacy and shared values; is comfortable with their developing autonomy",
+      "playSupport": "The 'play' is almost entirely social. Clubs, sports teams, and unstructured time with friends are essential for navigating complex peer dynamics and exploring their identity",
+      "parentSupport": "Their personal space needs to function as a mini-apartment: a place for sleep, study, and socializing. It must be a space they can control and personalize"
+    },
+    "cognitive": {
+      "currentMilestone": "Thinks abstractly and hypothetically; is better at managing long-term projects; is developing more complex moral reasoning",
+      "shiftSummary": "Thinking becomes future-oriented. They move from abstractly understanding 'what if' to applying that thinking to their own life: 'What if I go to this college? What career do I want?'",
+      "endMilestone": "Can think critically about complex global and personal issues; sets long-term goals and makes plans to achieve them; has a well-developed sense of personal values and ethics",
+      "playSupport": "Debate, role-playing games, and complex, self-directed projects are ideal forms of play for exercising their abstract minds",
+      "parentSupport": "Engage them in conversations about their future. Provide them with the tools and resources to explore their passions deeply (e.g., advanced software, books, classes)"
+    },
+    "languageCommunication": {
+      "currentMilestone": "Can read and understand complex texts; can write persuasive essays; can articulate a complex argument",
+      "shiftSummary": "Communication becomes a tool for self-advocacy and navigating the adult world. They learn to tailor their communication style to different audiences (teachers, employers, friends)",
+      "endMilestone": "Can communicate ideas clearly and persuasively in both written and spoken form; can understand and analyze complex media; uses language to build and maintain relationships",
+      "playSupport": "Theater, debate club, and creative writing are powerful ways to practice sophisticated and persuasive communication",
+      "parentSupport": "Encourage them to take on roles that require public speaking or formal writing. Help them practice real-world communication, like writing a professional email or preparing for an interview"
+    },
+    "motor": {
+      "currentMilestone": "Gross: Is navigating the physical changes of puberty and growth spurts. Fine: Has highly refined dexterity for complex, specialized tasks",
+      "shiftSummary": "Motor skills are largely mature. The focus is on achieving an elite level of performance in chosen activities and maintaining physical health and well-being",
+      "endMilestone": "Has reached full physical maturity; has achieved a high level of mastery in chosen physical skills",
+      "playSupport": "Dedicating time to a chosen sport, instrument, or art form is how they use their motor skills to build competence and identity",
+      "parentSupport": "Support their pursuit of excellence in their chosen activities, while also encouraging healthy habits like regular exercise, sleep, and nutrition"
+    }
+  },
+  "preteens-older-teens": {
+    "socialEmotional": {
+      "currentMilestone": "Developing strong sense of personal identity; forming intimate, trusting relationships based on shared values",
+      "shiftSummary": "Shift from adolescent identity formation to emerging adult independence. Developing mature relationships and autonomous decision-making",
+      "endMilestone": "Has consolidated personal identity; manages complex relationships; demonstrates emotional maturity and self-awareness",
+      "playSupport": "Deep engagement in a chosen passion (the lead in the play, the captain of the team, the president of the club). This is where they synthesize their identity",
+      "parentSupport": "Transition from manager to consultant. They need you to be available for advice but respect their increasing autonomy and decision-making"
+    },
+    "cognitive": {
+      "currentMilestone": "Thinks critically about complex issues; sets long-term goals; has developed personal values and ethics",
+      "shiftSummary": "Thinking becomes real-world preparation. Applying abstract thinking to concrete life decisions about education, career, and relationships",
+      "endMilestone": "Demonstrates mature critical thinking; makes informed life decisions; shows intellectual independence and curiosity",
+      "playSupport": "The 'play' is now real-world preparation. This includes college exploration, passion projects that could be part of a portfolio or resume, internships",
+      "parentSupport": "Help them think through major life decisions while respecting their autonomy. Provide resources and connections but let them drive the process"
+    },
+    "languageCommunication": {
+      "currentMilestone": "Communicates clearly and persuasively in written and spoken form; understands complex media; uses language effectively",
+      "shiftSummary": "Communication becomes professional and purposeful. Mastering adult communication contexts like interviews, presentations, and formal writing",
+      "endMilestone": "Demonstrates sophisticated communication across contexts; advocates effectively for self; analyzes complex information critically",
+      "playSupport": "Participating in student government, leading a club, presenting a major project, writing a college application essay - all are forms of high-stakes communication practice",
+      "parentSupport": "Help them practice professional communication. Review their resume, do mock interviews, discuss their ideas for presentations"
+    },
+    "motor": {
+      "currentMilestone": "Has achieved high level of mastery in chosen physical skills; reached full physical maturity",
+      "shiftSummary": "Focus shifts from skill development to performance, competition, and maintaining lifelong healthy habits",
+      "endMilestone": "Maintains physical health and well-being; may achieve elite performance in chosen activities; understands importance of lifelong fitness",
+      "playSupport": "The 'play' is performance and mastery. This is the varsity game, the senior recital, the final art portfolio. It's the culmination of years of practice",
+      "parentSupport": "Celebrate their achievements while helping them understand that physical activity is a lifelong practice, not just about winning or performance"
     }
   }
 }
