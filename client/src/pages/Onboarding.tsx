@@ -18,7 +18,7 @@ const answersSchema = z.object({
 
 export default function Onboarding() {
   const navigate = useNavigate();
-  const { setChild, setAnswers } = useStore();
+  const { setChild, setAnswers, setLoggedIn } = useStore();
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     name: '',
@@ -88,6 +88,7 @@ export default function Onboarding() {
       
       setChild(child);
       setAnswers(answers);
+      setLoggedIn(true);
       logEvent('onboarding_completed', { ageBand: child.ageBand });
       navigate('/playboard');
     } catch (e) {

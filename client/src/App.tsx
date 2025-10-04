@@ -1,8 +1,11 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Layout from './components/Layout';
+import Home from './pages/Home';
 import Onboarding from './pages/Onboarding';
 import PlayBoard from './pages/PlayBoard';
 import Recommendations from './pages/Recommendations';
+import Shop from './pages/Shop';
+import FindPros from './pages/FindPros';
 import Admin from './pages/Admin';
 
 function App() {
@@ -10,10 +13,12 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route index element={<Navigate to="/onboarding" replace />} />
+          <Route index element={<Home />} />
           <Route path="onboarding" element={<Onboarding />} />
           <Route path="playboard" element={<PlayBoard />} />
           <Route path="recommendations" element={<Recommendations />} />
+          <Route path="shop" element={<Shop />} />
+          <Route path="find-pros" element={<FindPros />} />
           <Route path="admin" element={<Admin />} />
         </Route>
       </Routes>
