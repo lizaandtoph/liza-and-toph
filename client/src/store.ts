@@ -25,6 +25,12 @@ export interface ParentAccount {
   password: string;
 }
 
+export interface SavedItems {
+  brands: string[];
+  professionals: string[];
+  products: string[];
+}
+
 interface Store {
   children: ChildProfile[];
   activeChildId: string | null;
@@ -32,8 +38,10 @@ interface Store {
   subscribed: boolean;
   isLoggedIn: boolean;
   parentAccount: ParentAccount | null;
+  savedItems: SavedItems;
   addChild: (child: Omit<ChildProfile, 'id'>, answers?: Answers) => string;
   updateChild: (id: string, child: Partial<ChildProfile>) => void;
+  deleteChild: (id: string) => void;
   setActiveChild: (id: string) => void;
   getActiveChild: () => ChildProfile | null;
   setAnswers: (childId: string, answers: Answers) => void;
@@ -41,6 +49,9 @@ interface Store {
   setSubscribed: (subscribed: boolean) => void;
   setLoggedIn: (isLoggedIn: boolean) => void;
   setParentAccount: (account: ParentAccount) => void;
+  updateParentAccount: (updates: Partial<ParentAccount>) => void;
+  addSavedItem: (category: keyof SavedItems, item: string) => void;
+  removeSavedItem: (category: keyof SavedItems, item: string) => void;
   reset: () => void;
 }
 
@@ -53,6 +64,7 @@ export const useStore = create<Store>()(
       subscribed: false,
       isLoggedIn: false,
       parentAccount: null,
+      savedItems: { brands: [], professionals: [], products: [] },
       
       addChild: (childData, answers) => {
         const id = nanoid();
@@ -74,6 +86,25 @@ export const useStore = create<Store>()(
             child.id === id ? { ...child, ...updates } : child
           )
         }));
+      },
+      
+      deleteChild: (id) => {
+        set((state) => {
+          const newChildren = state.children.filter(child => child.id !== id);
+          const newChildAnswers = { ...state.childAnswers };
+          delete newChildAnswers[id];
+          
+          let newActiveChildId = state.activeChildId;
+          if (state.activeChildId === id) {
+            newActiveChildId = newChildren.length > 0 ? newChildren[0].id : null;
+          }
+          
+          return {
+            children: newChildren,
+            childAnswers: newChildAnswers,
+            activeChildId: newActiveChildId
+          };
+        });
       },
       
       setActiveChild: (id) => {
@@ -104,13 +135,40 @@ export const useStore = create<Store>()(
       setLoggedIn: (isLoggedIn) => set({ isLoggedIn }),
       setParentAccount: (account) => set({ parentAccount: account }),
       
+      updateParentAccount: (updates) => {
+        set((state) => ({
+          parentAccount: state.parentAccount 
+            ? { ...state.parentAccount, ...updates }
+            : null
+        }));
+      },
+      
+      addSavedItem: (category, item) => {
+        set((state) => ({
+          savedItems: {
+            ...state.savedItems,
+            [category]: [...state.savedItems[category], item]
+          }
+        }));
+      },
+      
+      removeSavedItem: (category, item) => {
+        set((state) => ({
+          savedItems: {
+            ...state.savedItems,
+            [category]: state.savedItems[category].filter(i => i !== item)
+          }
+        }));
+      },
+      
       reset: () => set({ 
         children: [],
         activeChildId: null,
         childAnswers: {},
         subscribed: false,
         isLoggedIn: false,
-        parentAccount: null
+        parentAccount: null,
+        savedItems: { brands: [], professionals: [], products: [] }
       }),
     }),
     {

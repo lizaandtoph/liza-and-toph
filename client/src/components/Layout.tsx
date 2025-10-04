@@ -1,5 +1,5 @@
 import { Link, Outlet, useLocation } from 'react-router-dom';
-import { Baby, Heart, ShoppingCart, HardHat, MoreHorizontal, User, ChevronDown, Plus } from 'lucide-react';
+import { Baby, Heart, ShoppingCart, HardHat, Settings as SettingsIcon, User, ChevronDown, Plus } from 'lucide-react';
 import { useStore } from '../store';
 import logoImage from '@assets/symbol_orange_mono_1759602921856.png';
 import { useState, useEffect, useRef } from 'react';
@@ -29,7 +29,7 @@ export default function Layout() {
     { to: '/playboard', label: 'Play Board', icon: Heart },
     { to: '/shop', label: 'Shop', icon: ShoppingCart },
     { to: '/find-pros', label: 'Find Pros', icon: HardHat },
-    { to: '/admin', label: 'More', icon: MoreHorizontal },
+    { to: '/settings', label: 'Settings', icon: SettingsIcon },
   ];
 
   const isActive = (path: string) => {
@@ -116,6 +116,15 @@ export default function Layout() {
                           >
                             <Plus className="w-4 h-4" />
                             <span>Add Another Child</span>
+                          </Link>
+                          <Link
+                            to="/settings"
+                            onClick={() => setShowChildDropdown(false)}
+                            className="w-full text-left px-3 py-2 rounded-lg hover:bg-olive/10 transition flex items-center gap-2"
+                            data-testid="button-settings-dropdown"
+                          >
+                            <User className="w-4 h-4" />
+                            <span>Settings</span>
                           </Link>
                         </div>
                       </div>

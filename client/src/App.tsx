@@ -7,6 +7,7 @@ import PlayBoard from './pages/PlayBoard';
 import Recommendations from './pages/Recommendations';
 import Shop from './pages/Shop';
 import FindPros from './pages/FindPros';
+import Settings from './pages/Settings';
 import Admin from './pages/Admin';
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
           <Route path="recommendations" element={<Recommendations />} />
           <Route path="shop" element={<Shop />} />
           <Route path="find-pros" element={<FindPros />} />
+          <Route path="settings" element={<Settings />} />
           <Route path="admin" element={<Admin />} />
         </Route>
       </Routes>
