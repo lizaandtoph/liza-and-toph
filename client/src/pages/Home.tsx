@@ -298,23 +298,30 @@ export default function Home() {
       {/* Platform Carousel */}
       <PlatformCarousel />
 
-      {/* CTA Section */}
-      <section className="py-20">
+      {/* Newsletter Section */}
+      <section className="py-20 bg-gradient-to-br from-olive/10 via-ivory to-blush/10">
         <div className="container mx-auto px-4 max-w-4xl text-center">
-          <Heart className="w-16 h-16 text-olive mx-auto mb-6" />
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">
-            Start your child's play journey today
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            Stay in the loop
           </h2>
-          <p className="text-xl mb-8 opacity-80">
-            Join thousands of parents creating meaningful play experiences
+          <p className="text-lg mb-8 opacity-80 max-w-2xl mx-auto">
+            Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci.
           </p>
-          <Link
-            to="/onboarding"
-            className="inline-block px-10 py-5 bg-olive text-ivory rounded-lg hover:bg-ochre transition text-xl font-semibold shadow-lg hover:shadow-xl"
-            data-testid="button-get-started"
-          >
-            Get Started Free
-          </Link>
+          <form className="flex flex-col sm:flex-row gap-4 max-w-xl mx-auto">
+            <input
+              type="email"
+              placeholder="Email address"
+              className="flex-1 px-6 py-4 bg-white border-2 border-sand rounded-xl focus:border-olive focus:outline-none text-lg transition"
+              data-testid="input-newsletter-email"
+            />
+            <button
+              type="submit"
+              className="px-8 py-4 bg-olive text-ivory rounded-xl hover:bg-ochre transition text-lg font-semibold shadow-md hover:shadow-lg whitespace-nowrap"
+              data-testid="button-subscribe"
+            >
+              Subscribe
+            </button>
+          </form>
         </div>
       </section>
     </div>
