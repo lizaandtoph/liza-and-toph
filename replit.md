@@ -13,14 +13,14 @@ Preferred communication style: Simple, everyday language.
 **Framework & Build System**
 - React 18+ with TypeScript for type-safe component development
 - Vite as the build tool and development server for fast compilation and HMR
-- Wouter for lightweight client-side routing (alternative to React Router)
+- React Router DOM for client-side routing
 - Path aliases configured for clean imports (`@/`, `@shared/`, `@assets/`)
 
 **UI Component System**
 - shadcn/ui component library with Radix UI primitives for accessible, customizable components
 - Tailwind CSS for utility-first styling with custom design tokens
 - CSS variables for theming (light/dark mode support built-in)
-- Custom fonts: DM Sans (headings), Inter (body), with serif and mono fallbacks
+- Custom fonts: Sentient (headings), Poppins (body and subheaders)
 
 **State Management & Data Fetching**
 - TanStack Query (React Query) for server state management, caching, and data synchronization
@@ -83,7 +83,7 @@ Preferred communication style: Simple, everyday language.
 **UI & Styling**
 - Radix UI components for accessible primitives (dialogs, dropdowns, tooltips, etc.)
 - Tailwind CSS with PostCSS for styling pipeline
-- Google Fonts: DM Sans, Inter, Architects Daughter, Fira Code, Geist Mono
+- Custom fonts: Sentient (self-hosted .otf files for headers), Poppins (Google Fonts for body text)
 - class-variance-authority and clsx for conditional className composition
 
 **Data & Forms**
