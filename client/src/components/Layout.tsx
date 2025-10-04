@@ -1,5 +1,5 @@
 import { Link, Outlet, useLocation } from 'react-router-dom';
-import { Baby, Heart, ShoppingCart, HardHat, MoreHorizontal } from 'lucide-react';
+import { Baby, Heart, ShoppingCart, HardHat, MoreHorizontal, User } from 'lucide-react';
 import { useStore } from '../store';
 import logoImage from '@assets/symbol_orange_mono_1759602921856.png';
 
@@ -27,26 +27,30 @@ export default function Layout() {
         <div className="container mx-auto px-4 max-w-7xl flex items-center justify-between">
           <Link 
             to="/" 
-            className="flex items-center gap-2 text-xl font-semibold hover:opacity-90 transition"
+            className="flex items-center gap-3 text-2xl font-semibold hover:opacity-90 transition"
             data-testid="link-home"
           >
-            <img src={logoImage} alt="Liza & Toph Logo" className="w-6 h-6" />
-            Liza & Toph
+            <img src={logoImage} alt="Liza & Toph Logo" className="w-10 h-10" />
+            <span className="hidden sm:inline">Liza & Toph</span>
           </Link>
 
           <div className="flex items-center gap-4">
             {!isLoggedIn ? (
               <Link
                 to="/onboarding"
-                className="px-4 py-2 bg-ochre text-ivory rounded-lg hover:bg-burnt transition font-medium"
+                className="px-6 py-2.5 bg-ochre text-ivory rounded-lg hover:bg-burnt transition font-semibold text-base"
                 data-testid="button-try-free"
               >
                 Try for Free
               </Link>
             ) : (
-              <div className="text-sm">
-                <span className="opacity-80">Hello, </span>
-                <span className="font-semibold">{child.name || 'Parent'}</span>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-ochre rounded-full flex items-center justify-center">
+                  <User className="w-6 h-6 text-ivory" />
+                </div>
+                <span className="font-semibold text-base hidden sm:inline" data-testid="text-user-name">
+                  {child.name || 'Parent'}
+                </span>
               </div>
             )}
           </div>
