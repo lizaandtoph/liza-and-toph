@@ -4,6 +4,7 @@ import { useStore } from '../store';
 import { logEvent } from '../analytics';
 import { z } from 'zod';
 import schemasData from '../data/schemas.json';
+import { ChevronRight, ChevronLeft } from 'lucide-react';
 
 const childSchema = z.object({
   name: z.string().min(1, 'Name is required'),
@@ -30,23 +31,23 @@ export default function Onboarding() {
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const ageBands = [
-    { value: 'newborn-2', label: 'Newborn - 2 years' },
-    { value: '2-5', label: '2 - 5 years' },
-    { value: '5-8', label: '5 - 8 years' },
+    { value: 'newborn-2', label: 'Newborn - 2 years', emoji: '👶' },
+    { value: '2-5', label: '2 - 5 years', emoji: '🧒' },
+    { value: '5-8', label: '5 - 8 years', emoji: '🧑' },
   ];
 
   const barriers = [
-    { value: 'access_to_toys', label: 'Hard to access toys' },
-    { value: 'dumps_bins', label: 'Child dumps toy bins' },
-    { value: 'space_constrained', label: 'Limited space' },
+    { value: 'access_to_toys', label: 'Hard to access toys', description: 'Toys are stored out of reach or in difficult-to-open containers' },
+    { value: 'dumps_bins', label: 'Child dumps toy bins', description: 'Your child tends to dump entire toy bins rather than select individual items' },
+    { value: 'space_constrained', label: 'Limited space', description: 'You have limited space for play areas or toy storage' },
   ];
 
   const interests = [
-    { value: 'building', label: 'Building' },
-    { value: 'dolls', label: 'Dolls & Pretend Play' },
-    { value: 'art', label: 'Art & Creativity' },
-    { value: 'books', label: 'Books & Stories' },
-    { value: 'gross_motor', label: 'Climbing & Movement' },
+    { value: 'building', label: 'Building & Construction', description: 'Blocks, Legos, puzzles' },
+    { value: 'dolls', label: 'Dolls & Pretend Play', description: 'Role-playing, dress-up, dolls' },
+    { value: 'art', label: 'Art & Creativity', description: 'Drawing, painting, crafts' },
+    { value: 'books', label: 'Books & Stories', description: 'Reading, storytelling' },
+    { value: 'gross_motor', label: 'Climbing & Movement', description: 'Running, jumping, climbing' },
   ];
 
   const toggleArray = (arr: string[], value: string) => {
@@ -97,64 +98,118 @@ export default function Onboarding() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto">
-      <div className="mb-8">
-        <div className="flex items-center justify-between mb-4">
+    <div className="container mx-auto px-4 max-w-4xl py-8">
+      {/* Progress Bar */}
+      <div className="mb-12">
+        <div className="flex items-center justify-between mb-6">
           {[1, 2, 3, 4].map((num) => (
-            <div
-              key={num}
-              className={`flex-1 h-2 rounded ${
-                num <= step ? 'bg-olive' : 'bg-sand'
-              } ${num !== 4 ? 'mr-2' : ''}`}
-            />
+            <div key={num} className="flex items-center flex-1">
+              <div
+                className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold transition-all ${
+                  num <= step 
+                    ? 'bg-olive text-ivory' 
+                    : 'bg-sand text-espresso/50'
+                }`}
+                data-testid={`step-indicator-${num}`}
+              >
+                {num}
+              </div>
+              {num !== 4 && (
+                <div
+                  className={`flex-1 h-1 mx-2 transition-all ${
+                    num < step ? 'bg-olive' : 'bg-sand'
+                  }`}
+                />
+              )}
+            </div>
           ))}
         </div>
-        <p className="text-sm text-center">Step {step} of 4</p>
+        <p className="text-center text-lg font-medium">
+          Step {step} of 4: {
+            step === 1 ? 'About Your Child' :
+            step === 2 ? 'Play Patterns' :
+            step === 3 ? 'Current Challenges' :
+            'Interests & Activities'
+          }
+        </p>
       </div>
 
+      {/* Step 1: Child Info */}
       {step === 1 && (
-        <div className="bg-[#EDE9DC] p-8 rounded shadow-md">
-          <h2 className="text-2xl font-semibold mb-6">Tell us about your child</h2>
-          <div className="mb-4">
-            <label className="block mb-2 font-medium">Child's Name</label>
+        <div className="bg-gradient-to-br from-[#EDE9DC] to-ivory p-10 rounded-2xl shadow-lg">
+          <h2 className="text-3xl font-bold mb-3 text-center" data-testid="heading-step-1">
+            About Your Child
+          </h2>
+          <p className="text-center mb-8 opacity-70">
+            Let's start by learning a bit about your little one
+          </p>
+          
+          <div className="mb-6">
+            <label className="block mb-3 font-semibold text-lg">What's your child's name?</label>
             <input
               type="text"
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              className="w-full px-4 py-2 bg-ivory border-2 border-sand rounded focus:border-ochre focus:outline-none"
-              placeholder="Enter name"
+              className="w-full px-6 py-4 bg-ivory border-2 border-sand rounded-xl focus:border-olive focus:outline-none text-lg transition"
+              placeholder="Enter child's name"
+              data-testid="input-child-name"
             />
-            {errors.name && <p className="text-burnt text-sm mt-1">{errors.name}</p>}
+            {errors.name && <p className="text-burnt text-sm mt-2" data-testid="error-name">{errors.name}</p>}
           </div>
-          <div className="mb-6">
-            <label className="block mb-2 font-medium">Age Band</label>
-            <div className="space-y-2">
+
+          <div className="mb-8">
+            <label className="block mb-4 font-semibold text-lg">How old are they?</label>
+            <div className="grid md:grid-cols-3 gap-4">
               {ageBands.map((band) => (
-                <label key={band.value} className="flex items-center cursor-pointer">
+                <label
+                  key={band.value}
+                  className={`flex flex-col items-center p-6 border-3 rounded-xl cursor-pointer transition-all hover:shadow-lg ${
+                    formData.ageBand === band.value
+                      ? 'border-olive bg-olive/5 shadow-md'
+                      : 'border-sand bg-ivory hover:border-ochre'
+                  }`}
+                  data-testid={`option-ageband-${band.value}`}
+                >
                   <input
                     type="radio"
                     name="ageBand"
                     value={band.value}
                     checked={formData.ageBand === band.value}
                     onChange={(e) => setFormData({ ...formData, ageBand: e.target.value })}
-                    className="mr-3"
+                    className="sr-only"
+                    data-testid={`input-ageband-${band.value}`}
                   />
-                  <span>{band.label}</span>
+                  <span className="text-4xl mb-2">{band.emoji}</span>
+                  <span className="font-medium text-center">{band.label}</span>
                 </label>
               ))}
             </div>
-            {errors.ageBand && <p className="text-burnt text-sm mt-1">{errors.ageBand}</p>}
+            {errors.ageBand && <p className="text-burnt text-sm mt-2" data-testid="error-ageband">{errors.ageBand}</p>}
           </div>
         </div>
       )}
 
+      {/* Step 2: Play Schemas */}
       {step === 2 && (
-        <div className="bg-[#EDE9DC] p-8 rounded shadow-md">
-          <h2 className="text-2xl font-semibold mb-6">Play Schemas</h2>
-          <p className="mb-4 text-sm">Select any play patterns you've noticed:</p>
-          <div className="space-y-3">
+        <div className="bg-gradient-to-br from-[#EDE9DC] to-ivory p-10 rounded-2xl shadow-lg">
+          <h2 className="text-3xl font-bold mb-3 text-center" data-testid="heading-step-2">
+            Play Patterns
+          </h2>
+          <p className="text-center mb-8 opacity-70">
+            Have you noticed any of these play behaviors? Select all that apply.
+          </p>
+          
+          <div className="space-y-4">
             {Object.entries(schemasData).map(([key, schema]) => (
-              <label key={key} className="flex items-start cursor-pointer">
+              <label
+                key={key}
+                className={`flex items-start p-5 border-2 rounded-xl cursor-pointer transition-all hover:shadow-md ${
+                  formData.schemas.includes(key)
+                    ? 'border-olive bg-olive/5'
+                    : 'border-sand bg-ivory hover:border-ochre'
+                }`}
+                data-testid={`option-schema-${key}`}
+              >
                 <input
                   type="checkbox"
                   checked={formData.schemas.includes(key)}
@@ -162,25 +217,43 @@ export default function Onboarding() {
                     ...formData,
                     schemas: toggleArray(formData.schemas, key)
                   })}
-                  className="mt-1 mr-3"
+                  className="mt-1 mr-4 w-5 h-5 accent-olive"
+                  data-testid={`input-schema-${key}`}
                 />
-                <div>
-                  <div className="font-medium">{schema.label}</div>
-                  <div className="text-sm text-espresso/70">{schema.description}</div>
+                <div className="flex-1">
+                  <div className="font-semibold text-lg mb-1">{schema.label}</div>
+                  <div className="text-sm opacity-70">{schema.description}</div>
                 </div>
               </label>
             ))}
           </div>
+          <p className="text-sm text-center mt-6 opacity-60">
+            It's okay if you don't see these behaviors yet - you can skip this step
+          </p>
         </div>
       )}
 
+      {/* Step 3: Barriers */}
       {step === 3 && (
-        <div className="bg-[#EDE9DC] p-8 rounded shadow-md">
-          <h2 className="text-2xl font-semibold mb-6">Current Barriers</h2>
-          <p className="mb-4 text-sm">Any challenges with play at home?</p>
-          <div className="space-y-3">
+        <div className="bg-gradient-to-br from-[#EDE9DC] to-ivory p-10 rounded-2xl shadow-lg">
+          <h2 className="text-3xl font-bold mb-3 text-center" data-testid="heading-step-3">
+            Current Challenges
+          </h2>
+          <p className="text-center mb-8 opacity-70">
+            What challenges do you face with play at home? Select all that apply.
+          </p>
+          
+          <div className="space-y-4">
             {barriers.map((barrier) => (
-              <label key={barrier.value} className="flex items-center cursor-pointer">
+              <label
+                key={barrier.value}
+                className={`flex items-start p-5 border-2 rounded-xl cursor-pointer transition-all hover:shadow-md ${
+                  formData.barriers.includes(barrier.value)
+                    ? 'border-olive bg-olive/5'
+                    : 'border-sand bg-ivory hover:border-ochre'
+                }`}
+                data-testid={`option-barrier-${barrier.value}`}
+              >
                 <input
                   type="checkbox"
                   checked={formData.barriers.includes(barrier.value)}
@@ -188,22 +261,43 @@ export default function Onboarding() {
                     ...formData,
                     barriers: toggleArray(formData.barriers, barrier.value)
                   })}
-                  className="mr-3"
+                  className="mt-1 mr-4 w-5 h-5 accent-olive"
+                  data-testid={`input-barrier-${barrier.value}`}
                 />
-                <span>{barrier.label}</span>
+                <div className="flex-1">
+                  <div className="font-semibold text-lg mb-1">{barrier.label}</div>
+                  <div className="text-sm opacity-70">{barrier.description}</div>
+                </div>
               </label>
             ))}
           </div>
+          <p className="text-sm text-center mt-6 opacity-60">
+            Optional - we'll customize your Play Board based on your selections
+          </p>
         </div>
       )}
 
+      {/* Step 4: Interests */}
       {step === 4 && (
-        <div className="bg-[#EDE9DC] p-8 rounded shadow-md">
-          <h2 className="text-2xl font-semibold mb-6">Interests</h2>
-          <p className="mb-4 text-sm">What does your child enjoy?</p>
-          <div className="space-y-3">
+        <div className="bg-gradient-to-br from-[#EDE9DC] to-ivory p-10 rounded-2xl shadow-lg">
+          <h2 className="text-3xl font-bold mb-3 text-center" data-testid="heading-step-4">
+            Interests & Activities
+          </h2>
+          <p className="text-center mb-8 opacity-70">
+            What types of play does your child enjoy most? Select all that apply.
+          </p>
+          
+          <div className="space-y-4">
             {interests.map((interest) => (
-              <label key={interest.value} className="flex items-center cursor-pointer">
+              <label
+                key={interest.value}
+                className={`flex items-start p-5 border-2 rounded-xl cursor-pointer transition-all hover:shadow-md ${
+                  formData.interests.includes(interest.value)
+                    ? 'border-olive bg-olive/5'
+                    : 'border-sand bg-ivory hover:border-ochre'
+                }`}
+                data-testid={`option-interest-${interest.value}`}
+              >
                 <input
                   type="checkbox"
                   checked={formData.interests.includes(interest.value)}
@@ -211,41 +305,53 @@ export default function Onboarding() {
                     ...formData,
                     interests: toggleArray(formData.interests, interest.value)
                   })}
-                  className="mr-3"
+                  className="mt-1 mr-4 w-5 h-5 accent-olive"
+                  data-testid={`input-interest-${interest.value}`}
                 />
-                <span>{interest.label}</span>
+                <div className="flex-1">
+                  <div className="font-semibold text-lg mb-1">{interest.label}</div>
+                  <div className="text-sm opacity-70">{interest.description}</div>
+                </div>
               </label>
             ))}
           </div>
         </div>
       )}
 
-      <div className="flex justify-between mt-6">
-        {step > 1 && (
+      {/* Navigation Buttons */}
+      <div className="flex justify-between mt-8">
+        {step > 1 ? (
           <button
             onClick={prevStep}
-            className="px-6 py-2 border-2 border-olive text-olive rounded hover:bg-olive hover:text-ivory transition"
+            className="flex items-center gap-2 px-6 py-3 border-2 border-olive text-olive rounded-xl hover:bg-olive hover:text-ivory transition font-medium"
+            data-testid="button-back"
           >
+            <ChevronLeft className="w-5 h-5" />
             Back
           </button>
+        ) : (
+          <div></div>
         )}
-        <div className={step === 1 ? 'ml-auto' : ''}>
-          {step < 4 ? (
-            <button
-              onClick={nextStep}
-              className="px-6 py-2 bg-olive text-ivory rounded hover:bg-ochre transition"
-            >
-              Next
-            </button>
-          ) : (
-            <button
-              onClick={handleSubmit}
-              className="px-6 py-2 bg-olive text-ivory rounded hover:bg-ochre transition"
-            >
-              See My Play Board
-            </button>
-          )}
-        </div>
+
+        {step < 4 ? (
+          <button
+            onClick={nextStep}
+            className="flex items-center gap-2 px-8 py-3 bg-olive text-ivory rounded-xl hover:bg-ochre transition font-semibold text-lg shadow-md hover:shadow-lg ml-auto"
+            data-testid="button-next"
+          >
+            Next
+            <ChevronRight className="w-5 h-5" />
+          </button>
+        ) : (
+          <button
+            onClick={handleSubmit}
+            className="flex items-center gap-2 px-8 py-3 bg-olive text-ivory rounded-xl hover:bg-ochre transition font-semibold text-lg shadow-md hover:shadow-lg ml-auto"
+            data-testid="button-submit"
+          >
+            See My Play Board
+            <ChevronRight className="w-5 h-5" />
+          </button>
+        )}
       </div>
     </div>
   );
