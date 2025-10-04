@@ -1,6 +1,7 @@
 import { Link, Outlet, useLocation } from 'react-router-dom';
-import { Heart, Home, User, ShoppingBag, Users } from 'lucide-react';
+import { Home, User, ShoppingBag, Users } from 'lucide-react';
 import { useStore } from '../store';
+import logoImage from '@assets/symbol_orange_mono_1759602921856.png';
 
 export default function Layout() {
   const location = useLocation();
@@ -28,7 +29,7 @@ export default function Layout() {
             className="flex items-center gap-2 text-xl font-semibold hover:opacity-90 transition"
             data-testid="link-home"
           >
-            <Heart className="w-6 h-6" fill="currentColor" />
+            <img src={logoImage} alt="Liza & Toph Logo" className="w-6 h-6" />
             Liza & Toph
           </Link>
           
@@ -99,7 +100,7 @@ export default function Layout() {
           <div className="grid md:grid-cols-3 gap-8 mb-6">
             <div>
               <h3 className="font-semibold mb-3 flex items-center gap-2">
-                <Heart className="w-5 h-5" />
+                <img src={logoImage} alt="Liza & Toph Logo" className="w-5 h-5" />
                 Liza & Toph
               </h3>
               <p className="text-sm opacity-80">
