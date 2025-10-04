@@ -1,9 +1,12 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { AgeBand } from '@shared/ageUtils';
 
 interface ChildProfile {
   name: string;
-  ageBand: 'newborn-2' | '2-5' | '5-8' | '';
+  ageYears?: number;
+  ageMonths?: number;
+  ageBand: AgeBand | '';
 }
 
 interface Answers {

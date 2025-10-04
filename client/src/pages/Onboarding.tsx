@@ -5,10 +5,12 @@ import { logEvent } from '../analytics';
 import { z } from 'zod';
 import schemasData from '../data/schemas.json';
 import { ChevronRight, ChevronLeft } from 'lucide-react';
+import { calculateAgeInMonths, categorizeAgeBand, getAgeBandLabel } from '@shared/ageUtils';
 
 const childSchema = z.object({
   name: z.string().min(1, 'Name is required'),
-  ageBand: z.enum(['newborn-2', '2-5', '5-8']),
+  ageYears: z.number().min(0, 'Years must be 0 or more').max(18, 'Years must be 18 or less'),
+  ageMonths: z.number().min(0, 'Months must be 0 or more').max(11, 'Months must be 11 or less'),
 });
 
 const answersSchema = z.object({
@@ -23,18 +25,13 @@ export default function Onboarding() {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     name: '',
-    ageBand: '' as any,
+    ageYears: 0,
+    ageMonths: 0,
     schemas: [] as string[],
     barriers: [] as string[],
     interests: [] as string[],
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
-
-  const ageBands = [
-    { value: 'newborn-2', label: 'Newborn - 2 years', emoji: '👶' },
-    { value: '2-5', label: '2 - 5 years', emoji: '🧒' },
-    { value: '5-8', label: '5 - 8 years', emoji: '🧑' },
-  ];
 
   const barriers = [
     { value: 'access_to_toys', label: 'Hard to access toys', description: 'Toys are stored out of reach or in difficult-to-open containers' },
@@ -57,7 +54,11 @@ export default function Onboarding() {
   const nextStep = () => {
     if (step === 1) {
       try {
-        childSchema.parse({ name: formData.name, ageBand: formData.ageBand });
+        childSchema.parse({ 
+          name: formData.name, 
+          ageYears: formData.ageYears, 
+          ageMonths: formData.ageMonths 
+        });
         setErrors({});
         setStep(2);
       } catch (e) {
@@ -80,17 +81,29 @@ export default function Onboarding() {
 
   const handleSubmit = () => {
     try {
-      const child = childSchema.parse({ name: formData.name, ageBand: formData.ageBand });
+      const childData = childSchema.parse({ 
+        name: formData.name, 
+        ageYears: formData.ageYears, 
+        ageMonths: formData.ageMonths 
+      });
       const answers = answersSchema.parse({
         schemas: formData.schemas,
         barriers: formData.barriers,
         interests: formData.interests,
       });
       
-      setChild(child);
+      const totalMonths = calculateAgeInMonths(childData.ageYears, childData.ageMonths);
+      const ageBand = categorizeAgeBand(totalMonths);
+      
+      setChild({
+        name: childData.name,
+        ageYears: childData.ageYears,
+        ageMonths: childData.ageMonths,
+        ageBand,
+      });
       setAnswers(answers);
       setLoggedIn(true);
-      logEvent('onboarding_completed', { ageBand: child.ageBand });
+      logEvent('onboarding_completed', { ageBand });
       navigate('/playboard');
     } catch (e) {
       console.error('Validation error:', e);
@@ -159,32 +172,39 @@ export default function Onboarding() {
 
           <div className="mb-8">
             <label className="block mb-4 font-semibold text-lg">How old are they?</label>
-            <div className="grid md:grid-cols-3 gap-4">
-              {ageBands.map((band) => (
-                <label
-                  key={band.value}
-                  className={`flex flex-col items-center p-6 border-3 rounded-xl cursor-pointer transition-all hover:shadow-lg ${
-                    formData.ageBand === band.value
-                      ? 'border-olive bg-olive/5 shadow-md'
-                      : 'border-sand bg-ivory hover:border-ochre'
-                  }`}
-                  data-testid={`option-ageband-${band.value}`}
-                >
-                  <input
-                    type="radio"
-                    name="ageBand"
-                    value={band.value}
-                    checked={formData.ageBand === band.value}
-                    onChange={(e) => setFormData({ ...formData, ageBand: e.target.value })}
-                    className="sr-only"
-                    data-testid={`input-ageband-${band.value}`}
-                  />
-                  <span className="text-4xl mb-2">{band.emoji}</span>
-                  <span className="font-medium text-center">{band.label}</span>
-                </label>
-              ))}
+            <div className="flex gap-4 max-w-md">
+              <div className="flex-1">
+                <label className="block mb-2 text-sm font-medium">Years</label>
+                <input
+                  type="number"
+                  min="0"
+                  max="18"
+                  value={formData.ageYears}
+                  onChange={(e) => setFormData({ ...formData, ageYears: parseInt(e.target.value) || 0 })}
+                  className="w-full px-4 py-3 bg-ivory border-2 border-sand rounded-xl focus:border-olive focus:outline-none text-lg transition"
+                  data-testid="input-age-years"
+                />
+                {errors.ageYears && <p className="text-burnt text-sm mt-1" data-testid="error-age-years">{errors.ageYears}</p>}
+              </div>
+              <div className="flex-1">
+                <label className="block mb-2 text-sm font-medium">Months</label>
+                <input
+                  type="number"
+                  min="0"
+                  max="11"
+                  value={formData.ageMonths}
+                  onChange={(e) => setFormData({ ...formData, ageMonths: parseInt(e.target.value) || 0 })}
+                  className="w-full px-4 py-3 bg-ivory border-2 border-sand rounded-xl focus:border-olive focus:outline-none text-lg transition"
+                  data-testid="input-age-months"
+                />
+                {errors.ageMonths && <p className="text-burnt text-sm mt-1" data-testid="error-age-months">{errors.ageMonths}</p>}
+              </div>
             </div>
-            {errors.ageBand && <p className="text-burnt text-sm mt-2" data-testid="error-ageband">{errors.ageBand}</p>}
+            {formData.ageYears > 0 || formData.ageMonths > 0 ? (
+              <p className="text-sm mt-3 opacity-70">
+                Age category: <span className="font-semibold">{getAgeBandLabel(categorizeAgeBand(calculateAgeInMonths(formData.ageYears, formData.ageMonths)))}</span>
+              </p>
+            ) : null}
           </div>
         </div>
       )}
