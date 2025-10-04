@@ -1,5 +1,5 @@
 import { Link, Outlet, useLocation } from 'react-router-dom';
-import { Home, User, ShoppingBag, Users } from 'lucide-react';
+import { Baby, Heart, ShoppingCart, HardHat, MoreHorizontal } from 'lucide-react';
 import { useStore } from '../store';
 import logoImage from '@assets/symbol_orange_mono_1759602921856.png';
 
@@ -7,11 +7,12 @@ export default function Layout() {
   const location = useLocation();
   const { isLoggedIn, child } = useStore();
 
-  const navLinks = [
-    { to: '/', label: 'Home', icon: Home, show: true },
-    { to: '/playboard', label: 'Play Board', icon: User, show: isLoggedIn },
-    { to: '/shop', label: 'Shop', icon: ShoppingBag, show: isLoggedIn },
-    { to: '/find-pros', label: 'Find Pros', icon: Users, show: isLoggedIn },
+  const secondaryNavLinks = [
+    { to: '/onboarding', label: 'Your Child', icon: Baby },
+    { to: '/playboard', label: 'Play Board', icon: Heart },
+    { to: '/shop', label: 'Shop', icon: ShoppingCart },
+    { to: '/find-pros', label: 'Find Pros', icon: HardHat },
+    { to: '/admin', label: 'More', icon: MoreHorizontal },
   ];
 
   const isActive = (path: string) => {
@@ -20,7 +21,7 @@ export default function Layout() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col pb-16">
+    <div className="min-h-screen flex flex-col pb-20 md:pb-0">
       {/* Top Navigation */}
       <header className="bg-olive text-ivory py-4 shadow-md sticky top-0 z-50">
         <div className="container mx-auto px-4 max-w-7xl flex items-center justify-between">
@@ -32,22 +33,6 @@ export default function Layout() {
             <img src={logoImage} alt="Liza & Toph Logo" className="w-6 h-6" />
             Liza & Toph
           </Link>
-          
-          <nav className="hidden md:flex items-center gap-6">
-            {navLinks.filter(link => link.show).map((link) => (
-              <Link
-                key={link.to}
-                to={link.to}
-                className={`flex items-center gap-2 hover:text-ochre transition ${
-                  isActive(link.to) ? 'text-ochre font-medium' : ''
-                }`}
-                data-testid={`link-${link.label.toLowerCase().replace(' ', '-')}`}
-              >
-                <link.icon className="w-4 h-4" />
-                {link.label}
-              </Link>
-            ))}
-          </nav>
 
           <div className="flex items-center gap-4">
             {!isLoggedIn ? (
@@ -67,32 +52,53 @@ export default function Layout() {
           </div>
         </div>
       </header>
+
+      {/* Secondary Navigation - Desktop (Below Header) */}
+      <nav className="hidden md:block bg-white border-b-2 border-sand sticky top-[60px] z-40">
+        <div className="container mx-auto px-4 max-w-7xl">
+          <div className="flex items-center justify-center gap-8 py-3">
+            {secondaryNavLinks.map((link) => (
+              <Link
+                key={link.to}
+                to={link.to}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg transition ${
+                  isActive(link.to)
+                    ? 'bg-olive/10 text-olive font-semibold'
+                    : 'text-espresso/70 hover:bg-sand/50'
+                }`}
+                data-testid={`secondary-link-${link.label.toLowerCase().replace(' ', '-')}`}
+              >
+                <link.icon className="w-5 h-5" />
+                <span>{link.label}</span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </nav>
       
       {/* Main Content */}
       <main className="flex-1">
         <Outlet />
       </main>
-      
-      {/* Bottom Navigation (Mobile) - Only show when logged in */}
-      {isLoggedIn && (
-        <nav className="fixed bottom-0 left-0 right-0 bg-white border-t-2 border-sand md:hidden z-50">
-          <div className="flex items-center justify-around py-3">
-            {navLinks.filter(link => link.show).map((link) => (
-              <Link
-                key={link.to}
-                to={link.to}
-                className={`flex flex-col items-center gap-1 px-4 py-2 ${
-                  isActive(link.to) ? 'text-olive' : 'text-espresso/60'
-                }`}
-                data-testid={`mobile-link-${link.label.toLowerCase().replace(' ', '-')}`}
-              >
-                <link.icon className="w-5 h-5" />
-                <span className="text-xs font-medium">{link.label}</span>
-              </Link>
-            ))}
-          </div>
-        </nav>
-      )}
+
+      {/* Secondary Navigation - Mobile (Fixed Bottom) */}
+      <nav className="fixed bottom-0 left-0 right-0 bg-white border-t-2 border-sand md:hidden z-50 shadow-lg">
+        <div className="flex items-center justify-around py-3">
+          {secondaryNavLinks.map((link) => (
+            <Link
+              key={link.to}
+              to={link.to}
+              className={`flex flex-col items-center gap-1 px-3 py-2 transition ${
+                isActive(link.to) ? 'text-olive' : 'text-espresso/60'
+              }`}
+              data-testid={`mobile-link-${link.label.toLowerCase().replace(' ', '-')}`}
+            >
+              <link.icon className="w-5 h-5" />
+              <span className="text-xs font-medium">{link.label}</span>
+            </Link>
+          ))}
+        </div>
+      </nav>
       
       {/* Footer */}
       <footer className="bg-sand text-espresso py-8 mt-auto">
