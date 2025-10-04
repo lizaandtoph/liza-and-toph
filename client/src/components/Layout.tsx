@@ -23,7 +23,7 @@ export default function Layout() {
   return (
     <div className="min-h-screen flex flex-col pb-20 md:pb-0">
       {/* Top Navigation */}
-      <header className="bg-olive text-ivory py-4 shadow-md sticky top-0 z-50">
+      <header className="bg-olive text-ivory py-4 shadow-md fixed top-0 left-0 right-0 z-50">
         <div className="container mx-auto px-4 max-w-7xl flex items-center justify-between">
           <Link 
             to="/" 
@@ -58,7 +58,7 @@ export default function Layout() {
       </header>
 
       {/* Secondary Navigation - Desktop (Below Header) */}
-      <nav className="hidden md:block bg-white border-b-2 border-sand sticky top-[60px] z-40">
+      <nav className="hidden md:block bg-white border-b-2 border-sand fixed top-[60px] left-0 right-0 z-40">
         <div className="container mx-auto px-4 max-w-7xl">
           <div className="flex items-center justify-center gap-8 py-3">
             {secondaryNavLinks.map((link) => (
@@ -81,7 +81,7 @@ export default function Layout() {
       </nav>
       
       {/* Main Content */}
-      <main className="flex-1">
+      <main className="flex-1 pt-[60px] md:pt-[108px]">
         <Outlet />
       </main>
 
