@@ -1,16 +1,30 @@
+import { Link } from 'react-router-dom';
 import { useStore } from '../store';
 import { logEvent } from '../analytics';
 import rulesData from '../data/rules.json';
 import needsToProductsData from '../data/needsToProducts.json';
+import { Sparkles, ExternalLink, ShoppingBag } from 'lucide-react';
 
 export default function Recommendations() {
   const { child, answers } = useStore();
 
   if (!child.ageBand) {
     return (
-      <div className="text-center">
-        <h2 className="text-2xl font-semibold mb-4">No Recommendations Yet</h2>
-        <p>Complete the onboarding first.</p>
+      <div className="container mx-auto px-4 max-w-4xl py-12 text-center">
+        <div className="bg-gradient-to-br from-[#EDE9DC] to-ivory p-12 rounded-2xl shadow-lg">
+          <ShoppingBag className="w-16 h-16 text-espresso/30 mx-auto mb-4" />
+          <h2 className="text-3xl font-semibold mb-4">No Recommendations Yet</h2>
+          <p className="text-lg mb-6 opacity-70">
+            Complete the onboarding to get personalized product recommendations
+          </p>
+          <Link
+            to="/onboarding"
+            className="inline-block px-8 py-3 bg-olive text-ivory rounded-xl hover:bg-ochre transition font-semibold"
+            data-testid="link-onboarding"
+          >
+            Start Onboarding
+          </Link>
+        </div>
       </div>
     );
   }
@@ -56,35 +70,97 @@ export default function Recommendations() {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-2">Recommended for {child.name}</h1>
-      <p className="text-lg mb-8">Curated picks based on your Play Board</p>
+      {/* Hero Section */}
+      <div className="bg-gradient-to-br from-olive/20 via-ivory to-blush/20 py-12 -mt-8 mb-8">
+        <div className="container mx-auto px-4 max-w-6xl text-center">
+          <div className="flex items-center justify-center gap-2 mb-3">
+            <Sparkles className="w-8 h-8 text-ochre" />
+            <h1 className="text-4xl md:text-5xl font-bold" data-testid="text-recommendations-title">
+              Recommended for {child.name}
+            </h1>
+          </div>
+          <p className="text-xl opacity-80">
+            Curated picks based on your Play Board and {child.name}'s unique development
+          </p>
+        </div>
+      </div>
 
-      {uniqueProducts.length === 0 && (
-        <p className="text-center py-12">No recommendations available yet.</p>
-      )}
+      <div className="container mx-auto px-4 max-w-6xl pb-8">
+        {uniqueProducts.length === 0 && (
+          <div className="bg-gradient-to-br from-[#EDE9DC] to-ivory p-12 rounded-2xl shadow-lg text-center">
+            <p className="text-xl opacity-70 mb-6">
+              No specific recommendations available yet based on your selections.
+            </p>
+            <Link
+              to="/shop"
+              className="inline-block px-8 py-3 bg-olive text-ivory rounded-xl hover:bg-ochre transition font-semibold"
+              data-testid="link-browse-shop"
+            >
+              Browse All Products
+            </Link>
+          </div>
+        )}
 
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {uniqueProducts.map((product) => (
-          <div key={product.skuId} className="bg-[#EDE9DC] p-6 rounded shadow-md">
-            <h3 className="text-lg font-semibold mb-3">{product.title}</h3>
-            <div className="flex flex-wrap gap-2 mb-4">
-              {product.domains.map((domain) => (
-                <span
-                  key={domain}
-                  className="px-2 py-1 bg-sand text-espresso text-xs rounded"
+        {uniqueProducts.length > 0 && (
+          <>
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {uniqueProducts.map((product) => (
+                <div
+                  key={product.skuId}
+                  className="bg-white border-2 border-sand rounded-2xl shadow-md hover:shadow-xl transition-all overflow-hidden group"
+                  data-testid={`card-recommendation-${product.skuId}`}
                 >
-                  {domain}
-                </span>
+                  <div className="bg-gradient-to-br from-olive/10 to-blush/10 p-4 border-b-2 border-sand">
+                    <h3 className="text-lg font-bold line-clamp-2 min-h-[3.5rem]" data-testid={`text-product-title-${product.skuId}`}>
+                      {product.title}
+                    </h3>
+                  </div>
+                  <div className="p-6">
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {product.domains.slice(0, 3).map((domain, idx) => (
+                        <span
+                          key={idx}
+                          className="px-3 py-1 bg-ochre/10 text-ochre text-xs font-medium rounded-full"
+                          data-testid={`tag-domain-${idx}`}
+                        >
+                          {domain}
+                        </span>
+                      ))}
+                    </div>
+                    <p className="text-sm opacity-70 mb-4 flex items-center gap-1">
+                      <span>📅</span>
+                      Ages {product.ageMin}-{product.ageMax}
+                    </p>
+                    <button
+                      onClick={() => handleClick(product.skuId, product.url)}
+                      className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-olive text-ivory rounded-xl hover:bg-ochre transition font-semibold group-hover:shadow-lg"
+                      data-testid={`button-view-product-${product.skuId}`}
+                    >
+                      View Product
+                      <ExternalLink className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
               ))}
             </div>
-            <button
-              onClick={() => handleClick(product.skuId, product.url)}
-              className="w-full px-4 py-2 bg-olive text-ivory rounded hover:bg-ochre transition"
-            >
-              View
-            </button>
-          </div>
-        ))}
+
+            {/* CTA to Shop */}
+            <div className="mt-12 bg-gradient-to-br from-olive/10 to-blush/10 rounded-2xl p-8 text-center">
+              <h2 className="text-2xl font-bold mb-4">Looking for more?</h2>
+              <p className="mb-6 text-lg opacity-80">
+                Browse our full collection of developmentally-appropriate toys and products
+              </p>
+              <Link
+                to="/shop"
+                className="inline-flex items-center gap-2 px-8 py-4 bg-olive text-ivory rounded-xl hover:bg-ochre transition text-lg font-semibold shadow-lg hover:shadow-xl"
+                data-testid="button-browse-shop"
+              >
+                <ShoppingBag className="w-5 h-5" />
+                Browse Full Shop
+              </Link>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
