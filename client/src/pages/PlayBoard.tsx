@@ -96,6 +96,59 @@ export default function PlayBoard() {
 
   const insights = computeInsights();
 
+  const journeyDescriptions: Record<string, { title: string; description: string }> = {
+    'newborn-18m': {
+      title: 'The Journey from Newborn to 2 Years',
+      description: "This period is a breathtaking journey from a purely sensory being, completely dependent on caregivers, to a mobile, vocal, and independent little person. A newborn is a Sensory Being, learning about the world through touch, sight, and sound. As they master their body and find their voice, they transform into an Independent Explorer, eager to move, interact, and assert their will on the world around them. Our goal is to design a safe and stimulating environment that supports this journey."
+    },
+    '18m-3y': {
+      title: 'The Journey from 18 Months to 3 Years',
+      description: "The journey from 18 months to age three is a magical transition. A young toddler is a physical Explorer, driven by a powerful need to test their limits, master their movements, and declare their independence with a joyful 'me do it!' As they grow, their focus turns from the purely physical to the social and imaginative. A new, creative world blossoms, and they become a Budding Storyteller, using language and pretend play to make sense of their experiences."
+    },
+    '2-5y': {
+      title: 'The Journey from 2 to 5 Years',
+      description: "This three-year span is a period of pure magic, where the world of imagination reigns supreme. A two-year-old is an Eager Imitator, watching the world around them and practicing what they see through simple, parallel play. As their social and cognitive worlds explode, they transform into an Imaginative Creator, capable of inventing elaborate worlds, negotiating roles with friends, and using play to make sense of everything. Our goal is to provide the tools and space for this imaginative flowering."
+    },
+    '3-6y': {
+      title: 'The Journey from 3 to 6 Years',
+      description: "This stage is defined by the blossoming of a child's inner world. A three-year-old is a Magical Thinker, whose play is a wonderful, free-flowing exploration of their imagination without regard for the rules of reality. As they approach age six, their cognitive and social skills allow them to become an Early Planner, a child who can not only imagine a scenario but can also organize it, assign roles, and follow simple rules to bring it to life. Our goal is to nurture this transition from pure imagination to purposeful creation."
+    },
+    '4-7y': {
+      title: 'The Journey from 4 to 7 Years',
+      description: "This period marks the critical transition from the free-form world of preschool to the more structured world of early elementary school. A four-year-old is an Enthusiastic Friend, whose social world is blossoming and whose play is imaginative and boisterous. As they approach age seven, they become a Rule-Follower, a child who finds deep satisfaction in understanding how things work, following established rules, and using logic to solve problems. Our goal is to support this shift from imaginative exploration to structured learning."
+    },
+    '5-8y': {
+      title: 'The Journey from 5 to 8 Years',
+      description: "The journey from age five to eight is one of the most remarkable transformations in childhood. A five-year-old lives in a world of pure imagination, where play is about inventing stories and asking 'What if...?' As they grow, a powerful new drive emerges: the desire to become a master of new skills. Play shifts towards figuring out 'How to...', whether it's building a complex LEGO set or winning a board game. Their thinking follows the same path, moving from fantasy to a need to understand how the real world works."
+    },
+    '6-9y': {
+      title: 'The Journey from 6 to 9 Years',
+      description: "This period is about building and problem-solving, both with things and with friends. A six-year-old is a Concrete Thinker, just beginning to understand the world through a more logical, rule-based lens. As they grow, their ability to plan, strategize, and see things from another's perspective deepens, and they emerge as a Strategic Problem-Solver. Play becomes less about simple creation and more about building complex systems, whether it's a LEGO creation or a friendship group."
+    },
+    '7-10y': {
+      title: 'The Journey from 7 to 10 Years',
+      description: "During these years, children solidify their place in the world outside the family. A seven-year-old is a Competent Peer, focused on mastering the academic and social rules of school and friendship. They are driven by a desire to 'do it right.' As they mature, they become an Independent Expert, a child who has developed deep knowledge and passion for their own unique interests. They are not just a member of the group; they are an individual with their own expertise and ideas."
+    },
+    '8-11y': {
+      title: 'The Journey from 8 to 11 Years',
+      description: "This stage is the bridge to adolescence, a time when social structures become paramount and a child's inner world grows more complex. An eight-year-old is a Team Player, thriving on collaboration, fairness, and mastering the rules of their social and academic worlds. As they approach the pre-teen years, they become a Budding Individual, using their skills not just to fit in, but to begin defining who they are. Their focus shifts from group success to personal achievement and self-discovery."
+    },
+    '9-12y': {
+      title: 'The Journey from 9 to 12 Years',
+      description: "This is the heart of the 'tween' years, a dynamic period of transition from childhood toward adolescence. A nine-year-old is a Rule Master, who has become adept at understanding and even using the rules of games, friendships, and school to their advantage. As they move toward twelve, they become an Abstract Thinker, capable of looking beyond the literal rules to question, hypothesize, and form their own complex opinions about the world. Play evolves from structured games to more abstract social interactions and personal projects."
+    },
+    '10-early-teens': {
+      title: 'The Journey from 10 to Early Teens (13-15 Years)',
+      description: "This stage marks the official entry into adolescence, a period of profound self-discovery. A ten-year-old is a Confident Peer, comfortable in their social groups and competent in their skills. As they enter their teens, the central task becomes figuring out who they are, and they transform into an Identity Seeker. Their world expands beyond the here-and-now to include complex questions about their future, their beliefs, and their place in the world."
+    },
+    'preteens-older-teens': {
+      title: 'The Journey from Preteen to Older Teen (11-13 to 15-18 Years)',
+      description: "This final stage of childhood is a powerful journey of consolidation and launch. The preteen (11-13) is an Emerging Individual, actively trying on different identities and figuring out where they fit in. As they move through their high school years, they become a Young Adult, a person who has begun to consolidate their identity, values, and goals, and is looking toward their future beyond the family home. Play transforms into the serious work of preparing for adulthood."
+    }
+  };
+
+  const currentJourney = journeyDescriptions[child.ageBand as keyof typeof journeyDescriptions];
+
   const handleSubscribe = () => {
     logEvent('subscribe_clicked');
     setSubscribed(true);
@@ -299,6 +352,16 @@ export default function PlayBoard() {
               See how {child.name} is growing across all developmental domains
             </p>
           </div>
+
+          {/* Journey Overview */}
+          {currentJourney && (
+            <div className="mb-8 bg-gradient-to-br from-olive/5 via-blush/5 to-ochre/5 border-2 border-olive/20 rounded-2xl p-8" data-testid="section-journey-overview">
+              <h3 className="text-2xl font-bold mb-4 text-olive">{currentJourney.title}</h3>
+              <p className="text-lg leading-relaxed text-espresso/90">
+                {currentJourney.description}
+              </p>
+            </div>
+          )}
           
           <div className="bg-white border-2 border-sand rounded-2xl shadow-lg overflow-hidden">
             <div className="overflow-x-auto">
