@@ -1,39 +1,72 @@
-import { useState } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useStore } from '../store';
 import { Sparkles, Heart, TrendingUp, ShoppingBag } from 'lucide-react';
+import useEmblaCarousel from 'embla-carousel-react';
 
 function PlatformCarousel() {
-  const [activeTab, setActiveTab] = useState<'shop' | 'ai' | 'resources' | 'expert'>('shop');
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [emblaRef, emblaApi] = useEmblaCarousel({ 
+    loop: false,
+    align: 'center',
+    skipSnaps: false
+  });
 
-  const carouselContent = {
-    shop: {
+  const carouselSlides = [
+    {
+      id: 'shop',
+      tabLabel: 'Online shop',
       buttonText: 'Shop Now',
       heading: 'Taking the guess work out of the toy aisle',
       description: 'In pellentesque leo at nulla laoreet, vel auctor augue porttitor. Nulla ac massa nunc. Nulla scelerisque mattis lorem, sit amet tempus tellus euismod nec. Vivamus.',
-      link: '/shop'
+      link: '/shop',
+      testId: 'tab-online-shop'
     },
-    ai: {
+    {
+      id: 'ai',
+      tabLabel: 'AI guidance',
       buttonText: 'Get Started',
       heading: "Explore your child's Playboard",
       description: 'Integer vulputate sem nisl, at efficitur mi vehicula eget. Fusce porttitor mauris vitae libero feugiat, ac blandit turpis suscipit. Suspendisse vitae auctor ipsum, at volutpat.',
-      link: '/onboarding'
+      link: '/onboarding',
+      testId: 'tab-ai-guidance'
     },
-    resources: {
+    {
+      id: 'resources',
+      tabLabel: 'Play resources',
       buttonText: 'Get Started',
       heading: 'Playtime essentials',
       description: 'Integer vulputate sem nisl, at efficitur mi vehicula eget. Fusce porttitor mauris vitae libero feugiat, ac blandit turpis suscipit. Suspendisse vitae auctor ipsum, at volutpat.',
-      link: '/playboard'
+      link: '/playboard',
+      testId: 'tab-play-resources'
     },
-    expert: {
+    {
+      id: 'expert',
+      tabLabel: 'Expert-led guidance',
       buttonText: 'Get Started',
       heading: "Support your child's development anywhere",
       description: 'Integer vulputate sem nisl, at efficitur mi vehicula eget. Fusce porttitor mauris vitae libero feugiat, ac blandit turpis suscipit. Suspendisse vitae auctor ipsum, at volutpat.',
-      link: '/find-pros'
+      link: '/find-pros',
+      testId: 'tab-expert-guidance'
     }
-  };
+  ];
 
-  const currentContent = carouselContent[activeTab];
+  const onSelect = useCallback(() => {
+    if (!emblaApi) return;
+    setSelectedIndex(emblaApi.selectedScrollSnap());
+  }, [emblaApi]);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    onSelect();
+    emblaApi.on('select', onSelect);
+    emblaApi.on('reInit', onSelect);
+  }, [emblaApi, onSelect]);
+
+  const scrollTo = useCallback((index: number) => {
+    if (!emblaApi) return;
+    emblaApi.scrollTo(index);
+  }, [emblaApi]);
 
   return (
     <section className="bg-sand/30 py-20">
@@ -44,67 +77,65 @@ function PlatformCarousel() {
         
         {/* Tab Buttons */}
         <div className="flex flex-wrap justify-center gap-4 mb-12">
-          <button
-            onClick={() => setActiveTab('shop')}
-            className={`px-6 py-3 rounded-xl font-semibold transition ${
-              activeTab === 'shop'
-                ? 'bg-olive text-ivory'
-                : 'bg-white text-espresso hover:bg-olive/10'
-            }`}
-            data-testid="tab-online-shop"
-          >
-            Online shop
-          </button>
-          <button
-            onClick={() => setActiveTab('ai')}
-            className={`px-6 py-3 rounded-xl font-semibold transition ${
-              activeTab === 'ai'
-                ? 'bg-olive text-ivory'
-                : 'bg-white text-espresso hover:bg-olive/10'
-            }`}
-            data-testid="tab-ai-guidance"
-          >
-            AI guidance
-          </button>
-          <button
-            onClick={() => setActiveTab('resources')}
-            className={`px-6 py-3 rounded-xl font-semibold transition ${
-              activeTab === 'resources'
-                ? 'bg-olive text-ivory'
-                : 'bg-white text-espresso hover:bg-olive/10'
-            }`}
-            data-testid="tab-play-resources"
-          >
-            Play resources
-          </button>
-          <button
-            onClick={() => setActiveTab('expert')}
-            className={`px-6 py-3 rounded-xl font-semibold transition ${
-              activeTab === 'expert'
-                ? 'bg-olive text-ivory'
-                : 'bg-white text-espresso hover:bg-olive/10'
-            }`}
-            data-testid="tab-expert-guidance"
-          >
-            Expert-led guidance
-          </button>
+          {carouselSlides.map((slide, index) => (
+            <button
+              key={slide.id}
+              onClick={() => scrollTo(index)}
+              className={`px-6 py-3 rounded-xl font-semibold transition ${
+                selectedIndex === index
+                  ? 'bg-olive text-ivory'
+                  : 'bg-white text-espresso hover:bg-olive/10'
+              }`}
+              data-testid={slide.testId}
+            >
+              {slide.tabLabel}
+            </button>
+          ))}
         </div>
 
-        {/* Carousel Content */}
-        <div className="bg-white rounded-2xl shadow-lg p-8 md:p-12 max-w-4xl mx-auto text-center">
-          <h3 className="text-2xl md:text-3xl font-bold mb-6">
-            {currentContent.heading}
-          </h3>
-          <p className="text-lg opacity-80 mb-8 max-w-2xl mx-auto">
-            {currentContent.description}
-          </p>
-          <Link
-            to={currentContent.link}
-            className="inline-block px-8 py-4 bg-olive text-ivory rounded-lg hover:bg-ochre transition text-lg font-semibold shadow-md hover:shadow-lg"
-            data-testid={`button-carousel-cta-${activeTab}`}
-          >
-            {currentContent.buttonText}
-          </Link>
+        {/* Embla Carousel */}
+        <div className="overflow-hidden" ref={emblaRef}>
+          <div className="flex">
+            {carouselSlides.map((slide) => (
+              <div 
+                key={slide.id} 
+                className="flex-[0_0_100%] min-w-0"
+              >
+                <div className="bg-white rounded-2xl shadow-lg p-8 md:p-12 max-w-4xl mx-auto text-center">
+                  <h3 className="text-2xl md:text-3xl font-bold mb-6">
+                    {slide.heading}
+                  </h3>
+                  <p className="text-lg opacity-80 mb-8 max-w-2xl mx-auto">
+                    {slide.description}
+                  </p>
+                  <Link
+                    to={slide.link}
+                    className="inline-block px-8 py-4 bg-olive text-ivory rounded-lg hover:bg-ochre transition text-lg font-semibold shadow-md hover:shadow-lg"
+                    data-testid={`button-carousel-cta-${slide.id}`}
+                  >
+                    {slide.buttonText}
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Dot Indicators */}
+        <div className="flex justify-center gap-2 mt-8">
+          {carouselSlides.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => scrollTo(index)}
+              className={`w-2.5 h-2.5 rounded-full transition-all ${
+                selectedIndex === index 
+                  ? 'bg-olive w-8' 
+                  : 'bg-olive/30 hover:bg-olive/50'
+              }`}
+              aria-label={`Go to slide ${index + 1}`}
+              data-testid={`dot-indicator-${index}`}
+            />
+          ))}
         </div>
       </div>
     </section>
