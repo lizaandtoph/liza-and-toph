@@ -23,7 +23,8 @@ Preferred communication style: Simple, everyday language.
 - Custom fonts: Sentient (headings), Poppins (body and subheaders)
 
 **State Management & Data Fetching**
-- Zustand with localStorage persistence for global state (multi-child support, active child selection, per-child questionnaire answers)
+- Zustand with localStorage persistence for global state (multi-child support, active child selection, per-child questionnaire answers, parent account)
+- Parent authentication: firstName, lastName, email, password stored in zustand (localStorage-based MVP, not backend)
 - Multi-child architecture: parents can add and manage multiple children, each with unique ID (nanoid), profile, and answers
 - TanStack Query (React Query) for server state management, caching, and data synchronization
 - React Hook Form with Zod for form validation and type-safe form handling
@@ -71,7 +72,10 @@ Preferred communication style: Simple, everyday language.
 - Schema-first approach with shared type definitions
 
 **Data Models**
-- **Users**: Basic authentication structure with username/password
+- **Parent Accounts**: Stored in localStorage via zustand persist with firstName, lastName, email, password (plaintext MVP limitation)
+  - Onboarding Step 1 collects parent account info and first child info together
+  - Login page validates credentials against stored parentAccount
+  - Special access: firstName "Topher" grants full access without subscription
 - **Child Profiles**: Stores child information with unique ID (nanoid), name, birthday, calculated age, age band, and developmental preferences
   - Multiple children per parent account supported
   - Each child has separate questionnaire answers (schemas, barriers, interests)
@@ -84,6 +88,8 @@ Preferred communication style: Simple, everyday language.
 - Development uses in-memory storage with seed data
 - Production-ready schema exists for PostgreSQL migration
 - Storage interface allows seamless transition from mock to real database
+- Parent authentication stored in localStorage (MVP only, not backend-persisted)
+- Known MVP limitations: passwords stored plaintext, no multi-device sync, no password reset
 
 ## External Dependencies
 
