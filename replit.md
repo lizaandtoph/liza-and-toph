@@ -1,6 +1,6 @@
 # Overview
 
-This is a React-based web application called "Liza & Toph" that helps parents track their child's developmental milestones and discover age-appropriate products, toys, and books. The application provides personalized "Play Boards" based on a child's age range, interests, and developmental stage. Users complete a questionnaire about their child, and the system generates customized recommendations including developmental milestones, activity ideas, and curated product suggestions.
+This is a React-based web application called "Liza & Toph" that helps parents track their children's developmental milestones and discover age-appropriate products, toys, and books. The application provides personalized "Play Boards" based on each child's age range, interests, and developmental stage. Parents can manage multiple children in their account, with each child having their own profile and personalized recommendations. Users complete a questionnaire for each child, and the system generates customized recommendations including developmental milestones, activity ideas, and curated product suggestions.
 
 # User Preferences
 
@@ -23,6 +23,8 @@ Preferred communication style: Simple, everyday language.
 - Custom fonts: Sentient (headings), Poppins (body and subheaders)
 
 **State Management & Data Fetching**
+- Zustand with localStorage persistence for global state (multi-child support, active child selection, per-child questionnaire answers)
+- Multi-child architecture: parents can add and manage multiple children, each with unique ID (nanoid), profile, and answers
 - TanStack Query (React Query) for server state management, caching, and data synchronization
 - React Hook Form with Zod for form validation and type-safe form handling
 - Custom hooks for UI concerns (mobile detection, toast notifications)
@@ -31,6 +33,8 @@ Preferred communication style: Simple, everyday language.
 - Reusable UI components in `client/src/components/ui/` following shadcn conventions
 - Feature components for domain logic (MilestoneTimeline, ProductGrid, QuestionnaireStep)
 - Pages organized by route (`home`, `questionnaire`, `play-board`)
+- Child selector dropdown in Layout component for switching between children
+- "Add Another Child" functionality integrated into navigation
 
 ## Backend Architecture
 
@@ -68,7 +72,10 @@ Preferred communication style: Simple, everyday language.
 
 **Data Models**
 - **Users**: Basic authentication structure with username/password
-- **Child Profiles**: Stores child information (age range, interests, preferences)
+- **Child Profiles**: Stores child information with unique ID (nanoid), name, birthday, calculated age, age band, and developmental preferences
+  - Multiple children per parent account supported
+  - Each child has separate questionnaire answers (schemas, barriers, interests)
+  - Active child selection tracked for personalized view
 - **Milestones**: Developmental milestones categorized by type (cognitive, motor, language, social-emotional)
 - **Products**: Toy/book recommendations with pricing, ratings, categories, affiliate links
 - **Play Boards**: Aggregated personalized boards combining profiles, milestones, and products

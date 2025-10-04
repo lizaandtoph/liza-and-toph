@@ -1,11 +1,28 @@
 import { Link, Outlet, useLocation } from 'react-router-dom';
-import { Baby, Heart, ShoppingCart, HardHat, MoreHorizontal, User } from 'lucide-react';
+import { Baby, Heart, ShoppingCart, HardHat, MoreHorizontal, User, ChevronDown, Plus } from 'lucide-react';
 import { useStore } from '../store';
 import logoImage from '@assets/symbol_orange_mono_1759602921856.png';
+import { useState, useEffect, useRef } from 'react';
 
 export default function Layout() {
   const location = useLocation();
-  const { isLoggedIn, child } = useStore();
+  const { isLoggedIn, children, getActiveChild, setActiveChild } = useStore();
+  const [showChildDropdown, setShowChildDropdown] = useState(false);
+  const activeChild = getActiveChild();
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setShowChildDropdown(false);
+      }
+    };
+
+    if (showChildDropdown) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [showChildDropdown]);
 
   const secondaryNavLinks = [
     { to: '/onboarding', label: 'Your Child', icon: Baby },
@@ -44,13 +61,72 @@ export default function Layout() {
                 Try for Free
               </Link>
             ) : (
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-ochre rounded-full flex items-center justify-center">
-                  <User className="w-6 h-6 text-ivory" />
-                </div>
-                <span className="font-semibold text-base hidden sm:inline" data-testid="text-user-name">
-                  {child.name || 'Parent'}
-                </span>
+              <div className="flex items-center gap-3 relative">
+                {children.length > 0 && (
+                  <div className="relative" ref={dropdownRef}>
+                    <button
+                      onClick={() => setShowChildDropdown(!showChildDropdown)}
+                      className="flex items-center gap-2 px-3 py-2 bg-ivory/10 hover:bg-ivory/20 rounded-lg transition"
+                      data-testid="button-child-selector"
+                    >
+                      <div className="w-8 h-8 bg-ochre rounded-full flex items-center justify-center">
+                        <User className="w-5 h-5 text-ivory" />
+                      </div>
+                      <span className="font-semibold text-base hidden sm:inline" data-testid="text-active-child-name">
+                        {activeChild?.name || 'Select Child'}
+                      </span>
+                      <ChevronDown className="w-4 h-4" />
+                    </button>
+
+                    {showChildDropdown && (
+                      <div className="absolute top-full right-0 mt-2 bg-white text-espresso rounded-lg shadow-lg border-2 border-sand min-w-[200px] z-50">
+                        <div className="p-2">
+                          <p className="text-xs uppercase tracking-wide text-espresso/60 px-3 py-2 font-semibold">
+                            Your Children
+                          </p>
+                          {children.map((child) => (
+                            <button
+                              key={child.id}
+                              onClick={() => {
+                                setActiveChild(child.id);
+                                setShowChildDropdown(false);
+                              }}
+                              className={`w-full text-left px-3 py-2 rounded-lg transition flex items-center gap-2 ${
+                                activeChild?.id === child.id
+                                  ? 'bg-olive/10 text-olive font-semibold'
+                                  : 'hover:bg-sand/50'
+                              }`}
+                              data-testid={`option-child-${child.id}`}
+                            >
+                              <User className="w-4 h-4" />
+                              <span>{child.name}</span>
+                              {child.ageBand && (
+                                <span className="text-xs opacity-70 ml-auto">
+                                  {child.ageBand.replace('-', ' - ')}
+                                </span>
+                              )}
+                            </button>
+                          ))}
+                          <div className="border-t border-sand my-2"></div>
+                          <Link
+                            to="/onboarding"
+                            onClick={() => setShowChildDropdown(false)}
+                            className="w-full text-left px-3 py-2 rounded-lg hover:bg-olive/10 transition flex items-center gap-2 text-olive font-semibold"
+                            data-testid="button-add-child"
+                          >
+                            <Plus className="w-4 h-4" />
+                            <span>Add Another Child</span>
+                          </Link>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+                {children.length === 0 && (
+                  <div className="w-10 h-10 bg-ochre rounded-full flex items-center justify-center">
+                    <User className="w-6 h-6 text-ivory" />
+                  </div>
+                )}
               </div>
             )}
           </div>

@@ -20,7 +20,7 @@ const answersSchema = z.object({
 
 export default function Onboarding() {
   const navigate = useNavigate();
-  const { setChild, setAnswers, setLoggedIn } = useStore();
+  const { addChild, setAnswers, setLoggedIn } = useStore();
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     name: '',
@@ -91,14 +91,14 @@ export default function Onboarding() {
       const { years, months, totalMonths } = calculateAgeFromBirthday(childData.birthday);
       const ageBand = categorizeAgeBand(totalMonths);
       
-      setChild({
+      addChild({
         name: childData.name,
         birthday: childData.birthday,
         ageYears: years,
         ageMonths: months,
         ageBand,
-      });
-      setAnswers(answers);
+      }, answers);
+      
       setLoggedIn(true);
       logEvent('onboarding_completed', { ageBand });
       navigate('/playboard');

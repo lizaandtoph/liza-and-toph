@@ -7,18 +7,23 @@ import rulesData from '../data/rules.json';
 import { Sparkles, Lock, TrendingUp, ShoppingCart } from 'lucide-react';
 
 export default function PlayBoard() {
-  const { child, answers, subscribed, setSubscribed } = useStore();
+  const { getActiveChild, getAnswers, activeChildId, subscribed, setSubscribed } = useStore();
   const [showPaywall, setShowPaywall] = useState(false);
+  
+  const child = getActiveChild();
+  const answers = child ? getAnswers(child.id) : { schemas: [], barriers: [], interests: [] };
 
   useEffect(() => {
-    logEvent('playboard_viewed', { ageBand: child.ageBand });
-    if (!subscribed) {
-      logEvent('paywall_viewed');
-      setShowPaywall(true);
+    if (child) {
+      logEvent('playboard_viewed', { ageBand: child.ageBand });
+      if (!subscribed) {
+        logEvent('paywall_viewed');
+        setShowPaywall(true);
+      }
     }
-  }, [child.ageBand, subscribed]);
+  }, [child?.ageBand, subscribed]);
 
-  if (!child.ageBand) {
+  if (!child) {
     return (
       <div className="container mx-auto px-4 max-w-4xl py-12 text-center">
         <h2 className="text-2xl font-semibold mb-4">No Play Board Yet</h2>
