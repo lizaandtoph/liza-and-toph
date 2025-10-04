@@ -1,0 +1,109 @@
+{
+  "extends": "quickStart",
+  "extraSections": [
+    {
+      "id": "attention_problem_solving",
+      "items": [
+        {
+          "id": "att_span",
+          "type": "single",
+          "label": "Typical focus for self-chosen play",
+          "options": ["<5", "5-10", "10-15", "15+"],
+          "ageRoutes": {
+            "3-6": ["<10", "10-20", "20-30", "30+"],
+            "5-8": ["<15", "15-30", "30-45", "45+"],
+            "8+": ["<20", "20-30", "30-45", "45+"]
+          }
+        },
+        {
+          "id": "att_when_stuck",
+          "type": "single",
+          "label": "When stuck they",
+          "options": ["Ask for help", "Try a few ways", "Try many ways", "Give up"]
+        },
+        {
+          "id": "ps_style",
+          "type": "single",
+          "label": "Problem-solving style",
+          "options": ["Step-by-step", "Experiment", "Watch first", "Jump in"]
+        }
+      ]
+    },
+    {
+      "id": "sensory",
+      "items": [
+        {
+          "id": "sens_seek",
+          "type": "multicheck",
+          "label": "Sensory seeking",
+          "options": [
+            "deep_pressure",
+            "messy_play",
+            "constant_moving",
+            "loud_environments",
+            "crash"
+          ]
+        },
+        {
+          "id": "sens_avoid",
+          "type": "multicheck",
+          "label": "Sensory avoiding",
+          "options": [
+            "covers_ears",
+            "avoids_sticky",
+            "clothing_tags",
+            "busy_overwhelm",
+            "avoids_spinning"
+          ]
+        },
+        {
+          "id": "sens_under",
+          "type": "multicheck",
+          "label": "Under-responsive",
+          "options": [
+            "doesnt_notice_called",
+            "high_pain_tol",
+            "mouths_objects",
+            "low_energy",
+            "ignores_mess"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "independence_space",
+      "items": [
+        {
+          "id": "acc_toys",
+          "type": "single",
+          "label": "Toy accessibility",
+          "options": ["independent", "some_help", "adult_help", "out_of_reach"]
+        },
+        {
+          "id": "cleanup",
+          "type": "single",
+          "label": "Clean-up independence",
+          "options": ["independent", "helps", "resists", "adult_does"]
+        },
+        {
+          "id": "space_limits",
+          "type": "multicheck",
+          "label": "Space constraints",
+          "options": [
+            "limited_floor",
+            "shared_space",
+            "no_play_area",
+            "noise_rules",
+            "rental_limits"
+          ]
+        },
+        {
+          "id": "storage_pref",
+          "type": "multicheck",
+          "label": "Storage preferences",
+          "options": ["open_shelf", "labeled_bins", "rotation", "few_out"]
+        }
+      ]
+    }
+  ]
+}

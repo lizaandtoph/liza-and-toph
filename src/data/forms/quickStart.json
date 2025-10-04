@@ -1,0 +1,229 @@
+{
+  "sections": [
+    {
+      "id": "basics",
+      "items": [
+        {
+          "id": "child_name",
+          "type": "text",
+          "label": "Child name"
+        },
+        {
+          "id": "age_months",
+          "type": "number",
+          "label": "Child age in months"
+        }
+      ]
+    },
+    {
+      "id": "milestones",
+      "byBand": {
+        "18m-3": [
+          {
+            "id": "se_parallel_play",
+            "type": "single",
+            "label": "Plays next to other children",
+            "options": ["Yes", "Sometimes", "Not yet"],
+            "domain": "social_emotional"
+          },
+          {
+            "id": "c_copy_actions",
+            "type": "single",
+            "label": "Copies simple actions",
+            "options": ["Yes", "Sometimes", "Not yet"],
+            "domain": "cognitive"
+          },
+          {
+            "id": "lc_word_count",
+            "type": "single",
+            "label": "About how many words",
+            "options": ["10-25", "25-50", "50+"],
+            "domain": "language_communication"
+          },
+          {
+            "id": "m_stack_blocks",
+            "type": "single",
+            "label": "Stacks blocks or similar",
+            "options": ["Yes", "Sometimes", "Not yet"],
+            "domain": "motor"
+          }
+        ],
+        "2-5": [
+          {
+            "id": "se_turn_taking",
+            "type": "single",
+            "label": "Takes turns during play",
+            "options": ["Yes", "Sometimes", "Not yet"],
+            "domain": "social_emotional"
+          },
+          {
+            "id": "c_pretend_objects",
+            "type": "single",
+            "label": "Uses objects for pretend",
+            "options": ["Yes", "Sometimes", "Not yet"],
+            "domain": "cognitive"
+          },
+          {
+            "id": "lc_tell_story",
+            "type": "single",
+            "label": "Tells simple stories",
+            "options": ["Yes", "Sometimes", "Not yet"],
+            "domain": "language_communication"
+          },
+          {
+            "id": "m_draws",
+            "type": "single",
+            "label": "Uses crayons or markers",
+            "options": ["Yes", "Sometimes", "Not yet"],
+            "domain": "motor"
+          }
+        ],
+        "3-6": [
+          {
+            "id": "se_assign_roles",
+            "type": "single",
+            "label": "Assigns roles in pretend",
+            "options": ["Yes", "Sometimes", "Not yet"],
+            "domain": "social_emotional"
+          },
+          {
+            "id": "c_plan_play",
+            "type": "single",
+            "label": "Plans play in advance",
+            "options": ["Yes", "Sometimes", "Not yet"],
+            "domain": "cognitive"
+          },
+          {
+            "id": "lc_back_forth",
+            "type": "single",
+            "label": "Has back-and-forth talks",
+            "options": ["Yes", "Sometimes", "Not yet"],
+            "domain": "language_communication"
+          },
+          {
+            "id": "m_scissors",
+            "type": "single",
+            "label": "Uses scissors to cut paper",
+            "options": ["Yes", "Sometimes", "Not yet"],
+            "domain": "motor"
+          }
+        ]
+      }
+    },
+    {
+      "id": "schemas",
+      "items": [
+        {
+          "id": "schema_connecting",
+          "type": "checkbox",
+          "label": "Connecting"
+        },
+        {
+          "id": "schema_disconnecting",
+          "type": "checkbox",
+          "label": "Disconnecting"
+        },
+        {
+          "id": "schema_rotation",
+          "type": "checkbox",
+          "label": "Rotation"
+        },
+        {
+          "id": "schema_enveloping",
+          "type": "checkbox",
+          "label": "Enveloping"
+        },
+        {
+          "id": "schema_trajectory",
+          "type": "checkbox",
+          "label": "Trajectory"
+        },
+        {
+          "id": "schema_orientation",
+          "type": "checkbox",
+          "label": "Orientation"
+        }
+      ]
+    },
+    {
+      "id": "barriers",
+      "items": [
+        {
+          "id": "bar_access",
+          "type": "checkbox",
+          "label": "Access barriers"
+        },
+        {
+          "id": "bar_space",
+          "type": "checkbox",
+          "label": "Space barriers"
+        },
+        {
+          "id": "bar_sensory",
+          "type": "checkbox",
+          "label": "Sensory barriers"
+        },
+        {
+          "id": "bar_social",
+          "type": "checkbox",
+          "label": "Social barriers"
+        },
+        {
+          "id": "bar_attention",
+          "type": "checkbox",
+          "label": "Attention barriers"
+        }
+      ]
+    },
+    {
+      "id": "interests",
+      "items": [
+        {
+          "id": "int_movement",
+          "type": "checkbox",
+          "label": "Movement"
+        },
+        {
+          "id": "int_building",
+          "type": "checkbox",
+          "label": "Building"
+        },
+        {
+          "id": "int_nurturing",
+          "type": "checkbox",
+          "label": "Nurturing"
+        },
+        {
+          "id": "int_vehicles",
+          "type": "checkbox",
+          "label": "Vehicles"
+        },
+        {
+          "id": "int_art",
+          "type": "checkbox",
+          "label": "Art"
+        },
+        {
+          "id": "int_music",
+          "type": "checkbox",
+          "label": "Music"
+        },
+        {
+          "id": "int_books",
+          "type": "checkbox",
+          "label": "Books"
+        },
+        {
+          "id": "int_nature",
+          "type": "checkbox",
+          "label": "Nature"
+        },
+        {
+          "id": "int_pretend",
+          "type": "checkbox",
+          "label": "Pretend"
+        }
+      ]
+    }
+  ]
+}

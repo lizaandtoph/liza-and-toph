@@ -1,0 +1,86 @@
+{
+  "domains": [
+    "social_emotional",
+    "cognitive",
+    "language_communication",
+    "fine_motor",
+    "gross_motor"
+  ],
+  "schemas": [
+    "connecting",
+    "disconnecting",
+    "rotation",
+    "enveloping",
+    "orientation",
+    "trajectory"
+  ],
+  "play_types": [
+    "functional",
+    "constructive",
+    "symbolic",
+    "socio_dramatic",
+    "rules_based"
+  ],
+  "social_stages": [
+    "solitary",
+    "parallel",
+    "associative",
+    "cooperative"
+  ],
+  "needs": [
+    "accessible_storage",
+    "fine_motor_tools",
+    "gross_motor_climb",
+    "nurturing_play",
+    "building_foundations",
+    "sensory_input",
+    "problem_solving_practice"
+  ],
+  "space": [
+    "small_space",
+    "shared_space",
+    "rental_friendly",
+    "noise_sensitive"
+  ],
+  "sensory": [
+    "seeks_deep_pressure",
+    "avoids_sticky",
+    "loves_messy",
+    "avoids_noise",
+    "seeks_movement",
+    "prefers_calm"
+  ],
+  "materials": [
+    "wood",
+    "fabric",
+    "paper",
+    "silicone",
+    "metal",
+    "plastic_alternative"
+  ],
+  "books": [
+    "topic_emotions",
+    "topic_numbers",
+    "topic_science",
+    "reading_level_early",
+    "reading_level_chapter"
+  ],
+  "safety": [
+    "small_parts_free",
+    "battery_free",
+    "non_toxic",
+    "easy_clean"
+  ],
+  "budget": [
+    "under_25",
+    "25_75",
+    "75_200",
+    "200_plus"
+  ],
+  "quality": [
+    "repairable",
+    "replacement_parts_available",
+    "durability_high",
+    "sustainable"
+  ]
+}

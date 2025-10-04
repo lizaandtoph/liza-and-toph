@@ -1,0 +1,20 @@
+{
+  "18m-3": {
+    "social_emotional": [10, 50, 75],
+    "cognitive": [10, 50, 75],
+    "language_communication": [10, 50, 75],
+    "motor": [10, 50, 75]
+  },
+  "2-5": {
+    "social_emotional": [10, 50, 75],
+    "cognitive": [10, 50, 75],
+    "language_communication": [10, 50, 75],
+    "motor": [10, 50, 75]
+  },
+  "3-6": {
+    "social_emotional": [10, 50, 75],
+    "cognitive": [10, 50, 75],
+    "language_communication": [10, 50, 75],
+    "motor": [10, 50, 75]
+  }
+}

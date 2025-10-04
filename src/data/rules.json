@@ -1,0 +1,37 @@
+[
+  {
+    "triggerType": "barrier",
+    "condition": "bar_access",
+    "needId": "accessible_storage",
+    "explanation": "If toys are hard to reach, add low open shelves and clear categories.",
+    "tags": ["accessible_storage"]
+  },
+  {
+    "triggerType": "barrier",
+    "condition": "bar_space",
+    "needId": "gross_motor_climb",
+    "explanation": "If space is tight, add soft climb blocks and foldable options.",
+    "tags": ["small_space", "gross_motor_climb"]
+  },
+  {
+    "triggerType": "schema",
+    "condition": "schema_enveloping",
+    "needId": "nurturing_play",
+    "explanation": "If wrapping shows up, offer dolls, blankets, and nesting.",
+    "tags": ["enveloping", "nurturing_play"]
+  },
+  {
+    "triggerType": "schema",
+    "condition": "schema_connecting",
+    "needId": "building_foundations",
+    "explanation": "If connecting is strong, add blocks, plates, and firm build surfaces.",
+    "tags": ["connecting", "building_foundations"]
+  },
+  {
+    "triggerType": "schema",
+    "condition": "schema_trajectory",
+    "needId": "sensory_input",
+    "explanation": "If trajectory is strong, add safe throwing, pouring, and jumping outlets.",
+    "tags": ["trajectory", "sensory_input"]
+  }
+]

@@ -1,0 +1,203 @@
+Use short prompts. Paste each into Replit chat in order.
+
+PROMPT 1 — data and schemas
+Start from the existing React + Vite + Express app. Keep all code. Add new data and schemas for the intake and filters.
+
+Create files:
+
+* src/data/ageBands.json  // the router bands
+* src/data/forms/quickStart.json
+* src/data/forms/fullIntake.json
+* src/data/universalFilters.json  // final tag list and definitions
+* src/data/scoringBands.json  // domain thresholds per band
+* src/data/rules.json  // if–then rules, include trajectory schema
+
+ageBands.json
+[
+"newborn-2","18m-3","2-5","3-6","4-7","5-8","6-9","7-10","8-11","9-12","10-early-teens","early-teens-older-teens"
+]
+
+quickStart.json
+{
+"sections": [
+{
+"id": "basics",
+"items": [
+{"id":"child_name","type":"text","label":"Child name"},
+{"id":"age_months","type":"number","label":"Child age in months"}
+]
+},
+{
+"id":"milestones",
+"byBand": {
+"18m-3":[
+{"id":"se_parallel_play","type":"single","label":"Plays next to other children","options":["Yes","Sometimes","Not yet"],"domain":"social_emotional"},
+{"id":"c_copy_actions","type":"single","label":"Copies simple actions","options":["Yes","Sometimes","Not yet"],"domain":"cognitive"},
+{"id":"lc_word_count","type":"single","label":"About how many words","options":["10-25","25-50","50+"],"domain":"language_communication"},
+{"id":"m_stack_blocks","type":"single","label":"Stacks blocks or similar","options":["Yes","Sometimes","Not yet"],"domain":"motor"}
+],
+"2-5":[
+{"id":"se_turn_taking","type":"single","label":"Takes turns during play","options":["Yes","Sometimes","Not yet"],"domain":"social_emotional"},
+{"id":"c_pretend_objects","type":"single","label":"Uses objects for pretend","options":["Yes","Sometimes","Not yet"],"domain":"cognitive"},
+{"id":"lc_tell_story","type":"single","label":"Tells simple stories","options":["Yes","Sometimes","Not yet"],"domain":"language_communication"},
+{"id":"m_draws","type":"single","label":"Uses crayons or markers","options":["Yes","Sometimes","Not yet"],"domain":"motor"}
+],
+"3-6":[
+{"id":"se_assign_roles","type":"single","label":"Assigns roles in pretend","options":["Yes","Sometimes","Not yet"],"domain":"social_emotional"},
+{"id":"c_plan_play","type":"single","label":"Plans play in advance","options":["Yes","Sometimes","Not yet"],"domain":"cognitive"},
+{"id":"lc_back_forth","type":"single","label":"Has back-and-forth talks","options":["Yes","Sometimes","Not yet"],"domain":"language_communication"},
+{"id":"m_scissors","type":"single","label":"Uses scissors to cut paper","options":["Yes","Sometimes","Not yet"],"domain":"motor"}
+]
+}
+},
+{
+"id":"schemas",
+"items":[
+{"id":"schema_connecting","type":"checkbox","label":"Connecting"},
+{"id":"schema_disconnecting","type":"checkbox","label":"Disconnecting"},
+{"id":"schema_rotation","type":"checkbox","label":"Rotation"},
+{"id":"schema_enveloping","type":"checkbox","label":"Enveloping"},
+{"id":"schema_trajectory","type":"checkbox","label":"Trajectory"},
+{"id":"schema_orientation","type":"checkbox","label":"Orientation"}
+]
+},
+{
+"id":"barriers",
+"items":[
+{"id":"bar_access","type":"checkbox","label":"Access barriers"},
+{"id":"bar_space","type":"checkbox","label":"Space barriers"},
+{"id":"bar_sensory","type":"checkbox","label":"Sensory barriers"},
+{"id":"bar_social","type":"checkbox","label":"Social barriers"},
+{"id":"bar_attention","type":"checkbox","label":"Attention barriers"}
+]
+},
+{
+"id":"interests",
+"items":[
+{"id":"int_movement","type":"checkbox","label":"Movement"},
+{"id":"int_building","type":"checkbox","label":"Building"},
+{"id":"int_nurturing","type":"checkbox","label":"Nurturing"},
+{"id":"int_vehicles","type":"checkbox","label":"Vehicles"},
+{"id":"int_art","type":"checkbox","label":"Art"},
+{"id":"int_music","type":"checkbox","label":"Music"},
+{"id":"int_books","type":"checkbox","label":"Books"},
+{"id":"int_nature","type":"checkbox","label":"Nature"},
+{"id":"int_pretend","type":"checkbox","label":"Pretend"}
+]
+}
+]
+}
+
+fullIntake.json
+{
+"extends":"quickStart",
+"extraSections":[
+{
+"id":"attention_problem_solving",
+"items":[
+{"id":"att_span","type":"single","label":"Typical focus for self-chosen play","options":["<5","5-10","10-15","15+"],"ageRoutes":{"3-6":["<10","10-20","20-30","30+"],"5-8":["<15","15-30","30-45","45+"],"8+":["<20","20-30","30-45","45+"]}},
+{"id":"att_when_stuck","type":"single","label":"When stuck they","options":["Ask for help","Try a few ways","Try many ways","Give up"]},
+{"id":"ps_style","type":"single","label":"Problem-solving style","options":["Step-by-step","Experiment","Watch first","Jump in"]}
+]
+},
+{
+"id":"sensory",
+"items":[
+{"id":"sens_seek","type":"multicheck","label":"Sensory seeking","options":["deep_pressure","messy_play","constant_moving","loud_environments","crash"]},
+{"id":"sens_avoid","type":"multicheck","label":"Sensory avoiding","options":["covers_ears","avoids_sticky","clothing_tags","busy_overwhelm","avoids_spinning"]},
+{"id":"sens_under","type":"multicheck","label":"Under-responsive","options":["doesnt_notice_called","high_pain_tol","mouths_objects","low_energy","ignores_mess"]}
+]
+},
+{
+"id":"independence_space",
+"items":[
+{"id":"acc_toys","type":"single","label":"Toy accessibility","options":["independent","some_help","adult_help","out_of_reach"]},
+{"id":"cleanup","type":"single","label":"Clean-up independence","options":["independent","helps","resists","adult_does"]},
+{"id":"space_limits","type":"multicheck","label":"Space constraints","options":["limited_floor","shared_space","no_play_area","noise_rules","rental_limits"]},
+{"id":"storage_pref","type":"multicheck","label":"Storage preferences","options":["open_shelf","labeled_bins","rotation","few_out"]}
+]
+}
+]
+}
+
+universalFilters.json
+{
+"domains":["social_emotional","cognitive","language_communication","fine_motor","gross_motor"],
+"schemas":["connecting","disconnecting","rotation","enveloping","orientation","trajectory"],
+"play_types":["functional","constructive","symbolic","socio_dramatic","rules_based"],
+"social_stages":["solitary","parallel","associative","cooperative"],
+"needs":["accessible_storage","fine_motor_tools","gross_motor_climb","nurturing_play","building_foundations","sensory_input","problem_solving_practice"],
+"space":["small_space","shared_space","rental_friendly","noise_sensitive"],
+"sensory":["seeks_deep_pressure","avoids_sticky","loves_messy","avoids_noise","seeks_movement","prefers_calm"],
+"materials":["wood","fabric","paper","silicone","metal","plastic_alternative"],
+"books":["topic_emotions","topic_numbers","topic_science","reading_level_early","reading_level_chapter"],
+"safety":["small_parts_free","battery_free","non_toxic","easy_clean"],
+"budget":["under_25","25_75","75_200","200_plus"],
+"quality":["repairable","replacement_parts_available","durability_high","sustainable"]
+}
+
+scoringBands.json
+{
+"18m-3":{"social_emotional":[10,50,75],"cognitive":[10,50,75],"language_communication":[10,50,75],"motor":[10,50,75]},
+"2-5":{"social_emotional":[10,50,75],"cognitive":[10,50,75],"language_communication":[10,50,75],"motor":[10,50,75]},
+"3-6":{"social_emotional":[10,50,75],"cognitive":[10,50,75],"language_communication":[10,50,75],"motor":[10,50,75]}
+}
+
+rules.json
+[
+{"triggerType":"barrier","condition":"bar_access","needId":"accessible_storage","explanation":"If toys are hard to reach, add low open shelves and clear categories.","tags":["accessible_storage"]},
+{"triggerType":"barrier","condition":"bar_space","needId":"gross_motor_climb","explanation":"If space is tight, add soft climb blocks and foldable options.","tags":["small_space","gross_motor_climb"]},
+{"triggerType":"schema","condition":"schema_enveloping","needId":"nurturing_play","explanation":"If wrapping shows up, offer dolls, blankets, and nesting.","tags":["enveloping","nurturing_play"]},
+{"triggerType":"schema","condition":"schema_connecting","needId":"building_foundations","explanation":"If connecting is strong, add blocks, plates, and firm build surfaces.","tags":["connecting","building_foundations"]},
+{"triggerType":"schema","condition":"schema_trajectory","needId":"sensory_input","explanation":"If trajectory is strong, add safe throwing, pouring, and jumping outlets.","tags":["trajectory","sensory_input"]}
+]
+
+Do not explain. Output created files.
+
+PROMPT 2 — UI and state changes
+Update onboarding to use the new schemas. Keep React + Vite. Use react-router.
+
+Changes:
+
+* src/store/useAppStore.js: extend state with formVersion ("quick"|"full"), answers object keyed by question id, and computed profile.
+* src/pages/Onboarding.jsx: add a Quick vs Full toggle. Render questions from quickStart.json or fullIntake.json by section. Route by age_months to pick milestone items for the band. Validate with zod. On submit, save to store and navigate to /playboard. Fire onboarding_completed.
+
+Do not explain. Output changed files.
+
+PROMPT 3 — scoring and mapping
+Create scoring utilities.
+
+Add src/lib/age.ts with assignAgeBand(ageMonths) that returns an ageBands.json value.
+Add src/lib/scoring.ts with:
+
+* calculateDomainScores(responses, band, scoringBands.json) returns {domain:{score,confidence}}
+* detectSchemas(responses) returns {primary:[], secondary:[]}
+* mapBarriersInterests(responses) returns tag arrays
+* computeFilters(domainScores, schemas, barriers, interests) returns string[] of universalFilters tags
+* projectThreeYears(band, domainScores) returns projected band by domain
+* computeProfile(responses) returns {band, domainScores, schemas, barriers, interests, filters, currentStage, projectedStage3yr, confidence, referOutFlags}
+
+Wire Playboard to call computeProfile on submit and store it.
+
+Do not explain. Output new files and any edits.
+
+PROMPT 4 — playboard and gating
+Update src/pages/Playboard.jsx:
+
+* Pull computed profile from store. Show four cards with current, shift, end, play support, parent support based on band and domain.
+* Generate 1–3 insights by applying rules.json to the responses. Show above the cards.
+* If not subscribed, blur shift and end sections. Show a PaywallNotice with a Subscribe button that toggles subscribed true. Fire paywall_viewed and subscribe_clicked.
+
+Do not explain. Output changed files.
+
+PROMPT 5 — filtering and recommendations
+Update recommendations to use filters.
+
+Changes:
+
+* src/pages/Recommendations.jsx: read filters from profile and child band. Filter needsToProducts.json by matching tags and age. Show 8–12 items. Link out through /api/links?sku=ID&to=encodedUrl. Fire recommendation_clicked.
+
+Do not explain. Output changed files.
+
+If the builder asks to replace the stack, reply:
+Keep React + Vite + Express. Do not migrate.
