@@ -193,9 +193,9 @@ export default function Home() {
               className="inline-block px-10 py-5 bg-olive text-ivory rounded-lg hover:bg-ochre transition text-xl font-semibold shadow-lg hover:shadow-xl"
               data-testid="button-try-free-hero"
             >
-              Try for $0
+              Discover Your Child's Play Board
             </Link>
-            <p className="text-sm mt-4 opacity-70">No credit card required</p>
+            <p className="text-sm mt-4 opacity-70">Start for free. No credit card required.</p>
           </div>
         </div>
       </section>
