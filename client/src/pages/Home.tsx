@@ -42,7 +42,7 @@ export default function Home() {
       <section className="bg-gradient-to-br from-olive/10 via-ivory to-blush/10 py-20">
         <div className="container mx-auto px-4 max-w-7xl">
           <div className="text-center max-w-3xl mx-auto">
-            <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+            <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight font-heading">
               The new way to design your child's play
             </h1>
             <p className="text-xl md:text-2xl mb-8 opacity-80">
