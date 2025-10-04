@@ -10,7 +10,7 @@
       "price": "$89.99",
       "rating": 4.7,
       "reviewCount": 143,
-      "imageUrl": "/attached_assets/liza and toph image_1759618583746.png"
+      "imageUrl": "/default-product.png"
     },
     {
       "skuId": "storage-002",
@@ -22,7 +22,7 @@
       "price": "$34.99",
       "rating": 4.5,
       "reviewCount": 89,
-      "imageUrl": "/attached_assets/liza and toph image_1759618583746.png"
+      "imageUrl": "/default-product.png"
     },
     {
       "skuId": "storage-003",
@@ -34,7 +34,7 @@
       "price": "$49.99",
       "rating": 4.6,
       "reviewCount": 72,
-      "imageUrl": "/attached_assets/liza and toph image_1759618583746.png"
+      "imageUrl": "/default-product.png"
     }
   ],
   "fine-motor-mark-making": [
@@ -48,7 +48,7 @@
       "price": "$12.99",
       "rating": 4.8,
       "reviewCount": 256,
-      "imageUrl": "/attached_assets/liza and toph image_1759618583746.png"
+      "imageUrl": "/default-product.png"
     },
     {
       "skuId": "motor-002",
@@ -60,7 +60,7 @@
       "price": "$18.99",
       "rating": 4.7,
       "reviewCount": 198,
-      "imageUrl": "/attached_assets/liza and toph image_1759618583746.png"
+      "imageUrl": "/default-product.png"
     },
     {
       "skuId": "motor-003",
@@ -72,7 +72,7 @@
       "price": "$64.99",
       "rating": 4.9,
       "reviewCount": 167,
-      "imageUrl": "/attached_assets/liza and toph image_1759618583746.png"
+      "imageUrl": "/default-product.png"
     }
   ],
   "gross-motor-climb": [
@@ -86,7 +86,7 @@
       "price": "$179.99",
       "rating": 4.9,
       "reviewCount": 312,
-      "imageUrl": "/attached_assets/liza and toph image_1759618583746.png"
+      "imageUrl": "/default-product.png"
     },
     {
       "skuId": "climb-002",
@@ -98,7 +98,7 @@
       "price": "$89.99",
       "rating": 4.6,
       "reviewCount": 94,
-      "imageUrl": "/attached_assets/liza and toph image_1759618583746.png"
+      "imageUrl": "/default-product.png"
     }
   ],
   "nurturing-dolls": [
@@ -112,7 +112,7 @@
       "price": "$29.99",
       "rating": 4.8,
       "reviewCount": 421,
-      "imageUrl": "/attached_assets/liza and toph image_1759618583746.png"
+      "imageUrl": "/default-product.png"
     },
     {
       "skuId": "doll-002",
@@ -124,7 +124,7 @@
       "price": "$44.99",
       "rating": 4.9,
       "reviewCount": 289,
-      "imageUrl": "/attached_assets/liza and toph image_1759618583746.png"
+      "imageUrl": "/default-product.png"
     },
     {
       "skuId": "doll-003",
@@ -136,7 +136,7 @@
       "price": "$36.99",
       "rating": 4.7,
       "reviewCount": 156,
-      "imageUrl": "/attached_assets/liza and toph image_1759618583746.png"
+      "imageUrl": "/default-product.png"
     }
   ],
   "building-foundations": [
@@ -150,7 +150,7 @@
       "price": "$54.99",
       "rating": 4.9,
       "reviewCount": 567,
-      "imageUrl": "/attached_assets/liza and toph image_1759618583746.png"
+      "imageUrl": "/default-product.png"
     },
     {
       "skuId": "build-002",
@@ -162,7 +162,7 @@
       "price": "$79.99",
       "rating": 4.8,
       "reviewCount": 738,
-      "imageUrl": "/attached_assets/liza and toph image_1759618583746.png"
+      "imageUrl": "/default-product.png"
     },
     {
       "skuId": "build-003",
@@ -174,7 +174,7 @@
       "price": "$39.99",
       "rating": 4.8,
       "reviewCount": 492,
-      "imageUrl": "/attached_assets/liza and toph image_1759618583746.png"
+      "imageUrl": "/default-product.png"
     }
   ]
 }
