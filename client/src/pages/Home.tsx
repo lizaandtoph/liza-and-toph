@@ -143,9 +143,10 @@ function PlatformCarousel() {
 }
 
 export default function Home() {
-  const { isLoggedIn, child } = useStore();
+  const { isLoggedIn, getActiveChild } = useStore();
+  const child = getActiveChild();
 
-  if (isLoggedIn && child.name) {
+  if (isLoggedIn && child?.name) {
     return (
       <div className="container mx-auto px-4 max-w-7xl py-12">
         <div className="text-center mb-12">
@@ -188,13 +189,22 @@ export default function Home() {
             <p className="text-xl md:text-2xl mb-8 opacity-80">
               Personalized play boards, curated products, and developmental insights tailored to your child's unique journey
             </p>
-            <Link
-              to="/onboarding"
-              className="inline-block px-10 py-5 bg-olive text-ivory rounded-lg hover:bg-ochre transition text-xl font-semibold shadow-lg hover:shadow-xl"
-              data-testid="button-try-free-hero"
-            >
-              Discover Your Child's Play Board
-            </Link>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <Link
+                to="/onboarding"
+                className="inline-block px-10 py-5 bg-olive text-ivory rounded-lg hover:bg-ochre transition text-xl font-semibold shadow-lg hover:shadow-xl"
+                data-testid="button-try-free-hero"
+              >
+                Discover Your Child's Play Board
+              </Link>
+              <Link
+                to="/login"
+                className="inline-block px-10 py-5 border-2 border-olive text-olive rounded-lg hover:bg-olive hover:text-ivory transition text-xl font-semibold"
+                data-testid="button-sign-in"
+              >
+                Sign In
+              </Link>
+            </div>
             <p className="text-sm mt-4 opacity-70">Start for free. No credit card required.</p>
           </div>
         </div>

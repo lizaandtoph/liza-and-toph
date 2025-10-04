@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Layout from './components/Layout';
 import Home from './pages/Home';
+import Login from './pages/Login';
 import Onboarding from './pages/Onboarding';
 import PlayBoard from './pages/PlayBoard';
 import Recommendations from './pages/Recommendations';
@@ -14,6 +15,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
+          <Route path="login" element={<Login />} />
           <Route path="onboarding" element={<Onboarding />} />
           <Route path="playboard" element={<PlayBoard />} />
           <Route path="recommendations" element={<Recommendations />} />

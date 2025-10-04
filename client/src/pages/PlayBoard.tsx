@@ -7,13 +7,13 @@ import rulesData from '../data/rules.json';
 import { Sparkles, Lock, TrendingUp, ShoppingCart } from 'lucide-react';
 
 export default function PlayBoard() {
-  const { getActiveChild, getAnswers, activeChildId, subscribed, setSubscribed, parentName } = useStore();
+  const { getActiveChild, getAnswers, activeChildId, subscribed, setSubscribed, parentAccount } = useStore();
   const [showPaywall, setShowPaywall] = useState(false);
   
   const child = getActiveChild();
   const answers = child ? getAnswers(child.id) : { schemas: [], barriers: [], interests: [] };
   
-  const hasFullAccess = subscribed || (parentName.toLowerCase() === 'topher');
+  const hasFullAccess = subscribed || (parentAccount?.firstName?.toLowerCase() === 'topher');
 
   useEffect(() => {
     if (child) {

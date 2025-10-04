@@ -8,7 +8,10 @@ import { ChevronRight, ChevronLeft } from 'lucide-react';
 import { calculateAgeFromBirthday, categorizeAgeBand, getAgeBandLabel } from '@shared/ageUtils';
 
 const childSchema = z.object({
-  parentName: z.string().min(1, 'Your name is required'),
+  firstName: z.string().min(1, 'First name is required'),
+  lastName: z.string().min(1, 'Last name is required'),
+  email: z.string().email('Valid email is required'),
+  password: z.string().min(6, 'Password must be at least 6 characters'),
   name: z.string().min(1, 'Child name is required'),
   birthday: z.string().min(1, 'Birthday is required'),
 });
@@ -21,10 +24,13 @@ const answersSchema = z.object({
 
 export default function Onboarding() {
   const navigate = useNavigate();
-  const { addChild, setAnswers, setLoggedIn, setParentName } = useStore();
+  const { addChild, setAnswers, setLoggedIn, setParentAccount } = useStore();
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
-    parentName: '',
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
     name: '',
     birthday: '',
     schemas: [] as string[],
@@ -55,7 +61,10 @@ export default function Onboarding() {
     if (step === 1) {
       try {
         childSchema.parse({ 
-          parentName: formData.parentName,
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email,
+          password: formData.password,
           name: formData.name, 
           birthday: formData.birthday
         });
@@ -82,7 +91,10 @@ export default function Onboarding() {
   const handleSubmit = () => {
     try {
       const childData = childSchema.parse({ 
-        parentName: formData.parentName,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        password: formData.password,
         name: formData.name, 
         birthday: formData.birthday
       });
@@ -95,7 +107,12 @@ export default function Onboarding() {
       const { years, months, totalMonths } = calculateAgeFromBirthday(childData.birthday);
       const ageBand = categorizeAgeBand(totalMonths);
       
-      setParentName(childData.parentName);
+      setParentAccount({
+        firstName: childData.firstName,
+        lastName: childData.lastName,
+        email: childData.email,
+        password: childData.password
+      });
       
       addChild({
         name: childData.name,
@@ -157,24 +174,63 @@ export default function Onboarding() {
             Let's Get Started
           </h2>
           <p className="text-center mb-8 opacity-70">
-            Tell us about yourself and your child
+            Create your parent account and tell us about your child
           </p>
           
           <div className="mb-6">
-            <label className="block mb-3 font-semibold text-lg">What's your name?</label>
+            <label className="block mb-3 font-semibold text-lg">Your First Name</label>
             <input
               type="text"
-              value={formData.parentName}
-              onChange={(e) => setFormData({ ...formData, parentName: e.target.value })}
+              value={formData.firstName}
+              onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
               className="w-full px-6 py-4 bg-ivory border-2 border-sand rounded-xl focus:border-olive focus:outline-none text-lg transition"
-              placeholder="Enter your name"
-              data-testid="input-parent-name"
+              placeholder="Enter your first name"
+              data-testid="input-parent-first-name"
             />
-            {errors.parentName && <p className="text-burnt text-sm mt-2" data-testid="error-parent-name">{errors.parentName}</p>}
+            {errors.firstName && <p className="text-burnt text-sm mt-2" data-testid="error-first-name">{errors.firstName}</p>}
           </div>
 
           <div className="mb-6">
-            <label className="block mb-3 font-semibold text-lg">What's your child's name?</label>
+            <label className="block mb-3 font-semibold text-lg">Your Last Name</label>
+            <input
+              type="text"
+              value={formData.lastName}
+              onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+              className="w-full px-6 py-4 bg-ivory border-2 border-sand rounded-xl focus:border-olive focus:outline-none text-lg transition"
+              placeholder="Enter your last name"
+              data-testid="input-parent-last-name"
+            />
+            {errors.lastName && <p className="text-burnt text-sm mt-2" data-testid="error-last-name">{errors.lastName}</p>}
+          </div>
+
+          <div className="mb-6">
+            <label className="block mb-3 font-semibold text-lg">Email Address</label>
+            <input
+              type="email"
+              value={formData.email}
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              className="w-full px-6 py-4 bg-ivory border-2 border-sand rounded-xl focus:border-olive focus:outline-none text-lg transition"
+              placeholder="your@email.com"
+              data-testid="input-parent-email"
+            />
+            {errors.email && <p className="text-burnt text-sm mt-2" data-testid="error-email">{errors.email}</p>}
+          </div>
+
+          <div className="mb-6">
+            <label className="block mb-3 font-semibold text-lg">Password</label>
+            <input
+              type="password"
+              value={formData.password}
+              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+              className="w-full px-6 py-4 bg-ivory border-2 border-sand rounded-xl focus:border-olive focus:outline-none text-lg transition"
+              placeholder="Create a password (min. 6 characters)"
+              data-testid="input-parent-password"
+            />
+            {errors.password && <p className="text-burnt text-sm mt-2" data-testid="error-password">{errors.password}</p>}
+          </div>
+
+          <div className="mb-6">
+            <label className="block mb-3 font-semibold text-lg">Your Child's Name</label>
             <input
               type="text"
               value={formData.name}

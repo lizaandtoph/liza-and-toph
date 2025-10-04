@@ -18,13 +18,20 @@ interface Answers {
   interests: string[];
 }
 
+export interface ParentAccount {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+}
+
 interface Store {
   children: ChildProfile[];
   activeChildId: string | null;
   childAnswers: Record<string, Answers>;
   subscribed: boolean;
   isLoggedIn: boolean;
-  parentName: string;
+  parentAccount: ParentAccount | null;
   addChild: (child: Omit<ChildProfile, 'id'>, answers?: Answers) => string;
   updateChild: (id: string, child: Partial<ChildProfile>) => void;
   setActiveChild: (id: string) => void;
@@ -33,7 +40,7 @@ interface Store {
   getAnswers: (childId: string) => Answers;
   setSubscribed: (subscribed: boolean) => void;
   setLoggedIn: (isLoggedIn: boolean) => void;
-  setParentName: (name: string) => void;
+  setParentAccount: (account: ParentAccount) => void;
   reset: () => void;
 }
 
@@ -45,7 +52,7 @@ export const useStore = create<Store>()(
       childAnswers: {},
       subscribed: false,
       isLoggedIn: false,
-      parentName: '',
+      parentAccount: null,
       
       addChild: (childData, answers) => {
         const id = nanoid();
@@ -95,7 +102,7 @@ export const useStore = create<Store>()(
       
       setSubscribed: (subscribed) => set({ subscribed }),
       setLoggedIn: (isLoggedIn) => set({ isLoggedIn }),
-      setParentName: (name) => set({ parentName: name }),
+      setParentAccount: (account) => set({ parentAccount: account }),
       
       reset: () => set({ 
         children: [],
@@ -103,7 +110,7 @@ export const useStore = create<Store>()(
         childAnswers: {},
         subscribed: false,
         isLoggedIn: false,
-        parentName: ''
+        parentAccount: null
       }),
     }),
     {
