@@ -1,6 +1,115 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useStore } from '../store';
 import { Sparkles, Heart, TrendingUp, ShoppingBag } from 'lucide-react';
+
+function PlatformCarousel() {
+  const [activeTab, setActiveTab] = useState<'shop' | 'ai' | 'resources' | 'expert'>('shop');
+
+  const carouselContent = {
+    shop: {
+      buttonText: 'Shop Now',
+      heading: 'Taking the guess work out of the toy aisle',
+      description: 'In pellentesque leo at nulla laoreet, vel auctor augue porttitor. Nulla ac massa nunc. Nulla scelerisque mattis lorem, sit amet tempus tellus euismod nec. Vivamus.',
+      link: '/shop'
+    },
+    ai: {
+      buttonText: 'Get Started',
+      heading: "Explore your child's Playboard",
+      description: 'Integer vulputate sem nisl, at efficitur mi vehicula eget. Fusce porttitor mauris vitae libero feugiat, ac blandit turpis suscipit. Suspendisse vitae auctor ipsum, at volutpat.',
+      link: '/onboarding'
+    },
+    resources: {
+      buttonText: 'Get Started',
+      heading: 'Playtime essentials',
+      description: 'Integer vulputate sem nisl, at efficitur mi vehicula eget. Fusce porttitor mauris vitae libero feugiat, ac blandit turpis suscipit. Suspendisse vitae auctor ipsum, at volutpat.',
+      link: '/playboard'
+    },
+    expert: {
+      buttonText: 'Get Started',
+      heading: "Support your child's development anywhere",
+      description: 'Integer vulputate sem nisl, at efficitur mi vehicula eget. Fusce porttitor mauris vitae libero feugiat, ac blandit turpis suscipit. Suspendisse vitae auctor ipsum, at volutpat.',
+      link: '/find-pros'
+    }
+  };
+
+  const currentContent = carouselContent[activeTab];
+
+  return (
+    <section className="bg-sand/30 py-20">
+      <div className="container mx-auto px-4 max-w-7xl">
+        <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
+          The ultimate play platform for every stage
+        </h2>
+        
+        {/* Tab Buttons */}
+        <div className="flex flex-wrap justify-center gap-4 mb-12">
+          <button
+            onClick={() => setActiveTab('shop')}
+            className={`px-6 py-3 rounded-xl font-semibold transition ${
+              activeTab === 'shop'
+                ? 'bg-olive text-ivory'
+                : 'bg-white text-espresso hover:bg-olive/10'
+            }`}
+            data-testid="tab-online-shop"
+          >
+            Online shop
+          </button>
+          <button
+            onClick={() => setActiveTab('ai')}
+            className={`px-6 py-3 rounded-xl font-semibold transition ${
+              activeTab === 'ai'
+                ? 'bg-olive text-ivory'
+                : 'bg-white text-espresso hover:bg-olive/10'
+            }`}
+            data-testid="tab-ai-guidance"
+          >
+            AI guidance
+          </button>
+          <button
+            onClick={() => setActiveTab('resources')}
+            className={`px-6 py-3 rounded-xl font-semibold transition ${
+              activeTab === 'resources'
+                ? 'bg-olive text-ivory'
+                : 'bg-white text-espresso hover:bg-olive/10'
+            }`}
+            data-testid="tab-play-resources"
+          >
+            Play resources
+          </button>
+          <button
+            onClick={() => setActiveTab('expert')}
+            className={`px-6 py-3 rounded-xl font-semibold transition ${
+              activeTab === 'expert'
+                ? 'bg-olive text-ivory'
+                : 'bg-white text-espresso hover:bg-olive/10'
+            }`}
+            data-testid="tab-expert-guidance"
+          >
+            Expert-led guidance
+          </button>
+        </div>
+
+        {/* Carousel Content */}
+        <div className="bg-white rounded-2xl shadow-lg p-8 md:p-12 max-w-4xl mx-auto text-center">
+          <h3 className="text-2xl md:text-3xl font-bold mb-6">
+            {currentContent.heading}
+          </h3>
+          <p className="text-lg opacity-80 mb-8 max-w-2xl mx-auto">
+            {currentContent.description}
+          </p>
+          <Link
+            to={currentContent.link}
+            className="inline-block px-8 py-4 bg-olive text-ivory rounded-lg hover:bg-ochre transition text-lg font-semibold shadow-md hover:shadow-lg"
+            data-testid={`button-carousel-cta-${activeTab}`}
+          >
+            {currentContent.buttonText}
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
+}
 
 export default function Home() {
   const { isLoggedIn, child } = useStore();
@@ -155,44 +264,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* How It Works */}
-      <section className="bg-sand/30 py-20">
-        <div className="container mx-auto px-4 max-w-7xl">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-16">
-            How it works
-          </h2>
-          <div className="grid md:grid-cols-4 gap-8">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-olive text-ivory rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
-                1
-              </div>
-              <h3 className="font-semibold mb-2">Tell us about your child</h3>
-              <p className="text-sm opacity-80">Share their age, interests, and play patterns</p>
-            </div>
-            <div className="text-center">
-              <div className="w-16 h-16 bg-olive text-ivory rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
-                2
-              </div>
-              <h3 className="font-semibold mb-2">Get your Play Board</h3>
-              <p className="text-sm opacity-80">Receive personalized developmental insights</p>
-            </div>
-            <div className="text-center">
-              <div className="w-16 h-16 bg-olive text-ivory rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
-                3
-              </div>
-              <h3 className="font-semibold mb-2">Explore recommendations</h3>
-              <p className="text-sm opacity-80">Browse curated toys and activities</p>
-            </div>
-            <div className="text-center">
-              <div className="w-16 h-16 bg-olive text-ivory rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
-                4
-              </div>
-              <h3 className="font-semibold mb-2">Watch them grow</h3>
-              <p className="text-sm opacity-80">Track progress and adapt as they develop</p>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Platform Carousel */}
+      <PlatformCarousel />
 
       {/* CTA Section */}
       <section className="py-20">
