@@ -60,40 +60,97 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Features Section */}
+      {/* Category Selection Section */}
       <section className="py-20">
         <div className="container mx-auto px-4 max-w-7xl">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-16">
-            Everything your child needs to thrive
+            What kind of play are you looking for?
           </h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-[#EDE9DC] p-8 rounded-lg">
-              <div className="w-12 h-12 bg-olive/10 rounded-lg flex items-center justify-center mb-4">
-                <Sparkles className="w-6 h-6 text-olive" />
-              </div>
-              <h3 className="text-xl font-semibold mb-3">Personalized Play Boards</h3>
-              <p className="opacity-80">
-                Get customized play recommendations based on your child's age, interests, and developmental stage
-              </p>
-            </div>
-            <div className="bg-[#EDE9DC] p-8 rounded-lg">
-              <div className="w-12 h-12 bg-ochre/10 rounded-lg flex items-center justify-center mb-4">
-                <TrendingUp className="w-6 h-6 text-ochre" />
-              </div>
-              <h3 className="text-xl font-semibold mb-3">Milestone Tracking</h3>
-              <p className="opacity-80">
-                Understand your child's developmental journey across cognitive, motor, language, and social-emotional domains
-              </p>
-            </div>
-            <div className="bg-[#EDE9DC] p-8 rounded-lg">
-              <div className="w-12 h-12 bg-burnt/10 rounded-lg flex items-center justify-center mb-4">
-                <ShoppingBag className="w-6 h-6 text-burnt" />
-              </div>
-              <h3 className="text-xl font-semibold mb-3">Curated Products</h3>
-              <p className="opacity-80">
-                Discover toys, books, and materials perfectly matched to your child's needs and development
-              </p>
-            </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 max-w-6xl mx-auto">
+            <Link
+              to="/shop"
+              className="px-6 py-4 bg-white border-2 border-sand rounded-xl hover:bg-olive hover:text-ivory hover:border-olive transition text-center font-medium"
+              data-testid="button-category-sensory"
+            >
+              Sensory & Exploratory
+            </Link>
+            <Link
+              to="/shop"
+              className="px-6 py-4 bg-white border-2 border-sand rounded-xl hover:bg-olive hover:text-ivory hover:border-olive transition text-center font-medium"
+              data-testid="button-category-fine-motor"
+            >
+              Fine Motor Development
+            </Link>
+            <Link
+              to="/shop"
+              className="px-6 py-4 bg-white border-2 border-sand rounded-xl hover:bg-olive hover:text-ivory hover:border-olive transition text-center font-medium"
+              data-testid="button-category-gross-motor"
+            >
+              Gross Motor Development
+            </Link>
+            <Link
+              to="/shop"
+              className="px-6 py-4 bg-white border-2 border-sand rounded-xl hover:bg-olive hover:text-ivory hover:border-olive transition text-center font-medium"
+              data-testid="button-category-cognitive"
+            >
+              Cognitive & Problem-Solving
+            </Link>
+            <Link
+              to="/shop"
+              className="px-6 py-4 bg-white border-2 border-sand rounded-xl hover:bg-olive hover:text-ivory hover:border-olive transition text-center font-medium"
+              data-testid="button-category-language"
+            >
+              Language & Communication
+            </Link>
+            <Link
+              to="/shop"
+              className="px-6 py-4 bg-white border-2 border-sand rounded-xl hover:bg-olive hover:text-ivory hover:border-olive transition text-center font-medium"
+              data-testid="button-category-social-emotional"
+            >
+              Social-Emotional Development
+            </Link>
+            <Link
+              to="/shop"
+              className="px-6 py-4 bg-white border-2 border-sand rounded-xl hover:bg-olive hover:text-ivory hover:border-olive transition text-center font-medium"
+              data-testid="button-category-imaginative"
+            >
+              Imaginative & Pretend Play
+            </Link>
+            <Link
+              to="/shop"
+              className="px-6 py-4 bg-white border-2 border-sand rounded-xl hover:bg-olive hover:text-ivory hover:border-olive transition text-center font-medium"
+              data-testid="button-category-construction"
+            >
+              Construction & Building
+            </Link>
+            <Link
+              to="/shop"
+              className="px-6 py-4 bg-white border-2 border-sand rounded-xl hover:bg-olive hover:text-ivory hover:border-olive transition text-center font-medium"
+              data-testid="button-category-stem"
+            >
+              Science & Discovery (STEM)
+            </Link>
+            <Link
+              to="/shop"
+              className="px-6 py-4 bg-white border-2 border-sand rounded-xl hover:bg-olive hover:text-ivory hover:border-olive transition text-center font-medium"
+              data-testid="button-category-creative-arts"
+            >
+              Creative Arts & Expression
+            </Link>
+            <Link
+              to="/shop"
+              className="px-6 py-4 bg-white border-2 border-sand rounded-xl hover:bg-olive hover:text-ivory hover:border-olive transition text-center font-medium"
+              data-testid="button-category-music"
+            >
+              Music & Movement
+            </Link>
+            <Link
+              to="/shop"
+              className="px-6 py-4 bg-white border-2 border-sand rounded-xl hover:bg-olive hover:text-ivory hover:border-olive transition text-center font-medium"
+              data-testid="button-category-games"
+            >
+              Games & Structured Play
+            </Link>
           </div>
         </div>
       </section>
