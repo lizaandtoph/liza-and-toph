@@ -6,7 +6,11 @@
       "url": "https://example.com/aff/storage-shelf",
       "ageMin": 0,
       "ageMax": 8,
-      "domains": ["motor", "cognitive"]
+      "domains": ["motor", "cognitive"],
+      "price": "$89.99",
+      "rating": 4.7,
+      "reviewCount": 143,
+      "imageUrl": "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=600&h=600&fit=crop"
     },
     {
       "skuId": "storage-002",
@@ -14,7 +18,11 @@
       "url": "https://example.com/aff/clear-bins",
       "ageMin": 0,
       "ageMax": 8,
-      "domains": ["cognitive"]
+      "domains": ["cognitive"],
+      "price": "$34.99",
+      "rating": 4.5,
+      "reviewCount": 89,
+      "imageUrl": "https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?w=600&h=600&fit=crop"
     },
     {
       "skuId": "storage-003",
@@ -22,7 +30,11 @@
       "url": "https://example.com/aff/wall-organizer",
       "ageMin": 2,
       "ageMax": 8,
-      "domains": ["cognitive"]
+      "domains": ["cognitive"],
+      "price": "$49.99",
+      "rating": 4.6,
+      "reviewCount": 72,
+      "imageUrl": "https://images.unsplash.com/photo-1581579186913-45ac3e6efe93?w=600&h=600&fit=crop"
     }
   ],
   "fine-motor-mark-making": [
@@ -32,7 +44,11 @@
       "url": "https://example.com/aff/jumbo-crayons",
       "ageMin": 1,
       "ageMax": 5,
-      "domains": ["motor", "cognitive"]
+      "domains": ["motor", "cognitive"],
+      "price": "$12.99",
+      "rating": 4.8,
+      "reviewCount": 256,
+      "imageUrl": "https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?w=600&h=600&fit=crop"
     },
     {
       "skuId": "motor-002",
@@ -40,7 +56,11 @@
       "url": "https://example.com/aff/finger-paints",
       "ageMin": 1,
       "ageMax": 8,
-      "domains": ["motor", "socialEmotional"]
+      "domains": ["motor", "socialEmotional"],
+      "price": "$18.99",
+      "rating": 4.7,
+      "reviewCount": 198,
+      "imageUrl": "https://images.unsplash.com/photo-1596464716127-f2a82984de30?w=600&h=600&fit=crop"
     },
     {
       "skuId": "motor-003",
@@ -48,7 +68,11 @@
       "url": "https://example.com/aff/chalk-easel",
       "ageMin": 2,
       "ageMax": 8,
-      "domains": ["motor", "languageCommunication"]
+      "domains": ["motor", "languageCommunication"],
+      "price": "$64.99",
+      "rating": 4.9,
+      "reviewCount": 167,
+      "imageUrl": "https://images.unsplash.com/photo-1605296867304-46d5465a13f1?w=600&h=600&fit=crop"
     }
   ],
   "gross-motor-climb": [
@@ -58,7 +82,11 @@
       "url": "https://example.com/aff/climbing-triangle",
       "ageMin": 1,
       "ageMax": 5,
-      "domains": ["motor"]
+      "domains": ["motor"],
+      "price": "$179.99",
+      "rating": 4.9,
+      "reviewCount": 312,
+      "imageUrl": "https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=600&h=600&fit=crop"
     },
     {
       "skuId": "climb-002",
@@ -66,7 +94,11 @@
       "url": "https://example.com/aff/balance-beam",
       "ageMin": 2,
       "ageMax": 8,
-      "domains": ["motor", "cognitive"]
+      "domains": ["motor", "cognitive"],
+      "price": "$89.99",
+      "rating": 4.6,
+      "reviewCount": 94,
+      "imageUrl": "https://images.unsplash.com/photo-1624298357597-fd92dfbec01d?w=600&h=600&fit=crop"
     }
   ],
   "nurturing-dolls": [
@@ -76,7 +108,11 @@
       "url": "https://example.com/aff/baby-doll",
       "ageMin": 1,
       "ageMax": 5,
-      "domains": ["socialEmotional", "languageCommunication"]
+      "domains": ["socialEmotional", "languageCommunication"],
+      "price": "$29.99",
+      "rating": 4.8,
+      "reviewCount": 421,
+      "imageUrl": "https://images.unsplash.com/photo-1586985289688-ca3cf47d3e6e?w=600&h=600&fit=crop"
     },
     {
       "skuId": "doll-002",
@@ -84,7 +120,11 @@
       "url": "https://example.com/aff/doll-family",
       "ageMin": 2,
       "ageMax": 8,
-      "domains": ["socialEmotional", "cognitive"]
+      "domains": ["socialEmotional", "cognitive"],
+      "price": "$44.99",
+      "rating": 4.9,
+      "reviewCount": 289,
+      "imageUrl": "https://images.unsplash.com/photo-1560114928-40f1f1eb26a0?w=600&h=600&fit=crop"
     },
     {
       "skuId": "doll-003",
@@ -92,7 +132,11 @@
       "url": "https://example.com/aff/doll-care",
       "ageMin": 2,
       "ageMax": 5,
-      "domains": ["socialEmotional"]
+      "domains": ["socialEmotional"],
+      "price": "$36.99",
+      "rating": 4.7,
+      "reviewCount": 156,
+      "imageUrl": "https://images.unsplash.com/photo-1545558014-8692077e9b5c?w=600&h=600&fit=crop"
     }
   ],
   "building-foundations": [
@@ -102,7 +146,11 @@
       "url": "https://example.com/aff/wooden-blocks",
       "ageMin": 1,
       "ageMax": 8,
-      "domains": ["cognitive", "motor"]
+      "domains": ["cognitive", "motor"],
+      "price": "$54.99",
+      "rating": 4.9,
+      "reviewCount": 567,
+      "imageUrl": "https://images.unsplash.com/photo-1566576721346-d4a3b4eaeb55?w=600&h=600&fit=crop"
     },
     {
       "skuId": "build-002",
@@ -110,7 +158,11 @@
       "url": "https://example.com/aff/magnetic-tiles",
       "ageMin": 2,
       "ageMax": 8,
-      "domains": ["cognitive", "motor"]
+      "domains": ["cognitive", "motor"],
+      "price": "$79.99",
+      "rating": 4.8,
+      "reviewCount": 738,
+      "imageUrl": "https://images.unsplash.com/photo-1587654780291-39c9404d746b?w=600&h=600&fit=crop"
     },
     {
       "skuId": "build-003",
@@ -118,7 +170,11 @@
       "url": "https://example.com/aff/duplo-set",
       "ageMin": 1,
       "ageMax": 5,
-      "domains": ["cognitive", "motor"]
+      "domains": ["cognitive", "motor"],
+      "price": "$39.99",
+      "rating": 4.8,
+      "reviewCount": 492,
+      "imageUrl": "https://images.unsplash.com/photo-1558060370-d644479cb6f7?w=600&h=600&fit=crop"
     }
   ]
 }

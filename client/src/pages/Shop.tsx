@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import { Search, Filter } from 'lucide-react';
+import { Search, Filter, Star } from 'lucide-react';
 import { useStore } from '../store';
 import { logEvent } from '../analytics';
 import needsToProductsData from '../data/needsToProducts.json';
 
 export default function Shop() {
-  const { child } = useStore();
+  const { getActiveChild } = useStore();
+  const child = getActiveChild();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
 
@@ -91,11 +92,30 @@ export default function Shop() {
             className="bg-[#EDE9DC] rounded-lg overflow-hidden shadow-md hover:shadow-lg transition"
             data-testid={`card-product-${product.skuId}`}
           >
-            <div className="p-6">
-              <h3 className="text-lg font-semibold mb-3 line-clamp-2" data-testid={`text-title-${product.skuId}`}>
+            <div className="aspect-square bg-ivory overflow-hidden">
+              <img
+                src={product.imageUrl}
+                alt={product.title}
+                className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                data-testid={`img-product-${product.skuId}`}
+              />
+            </div>
+            <div className="p-4">
+              <h3 className="text-lg font-semibold mb-2 line-clamp-2 min-h-[3.5rem]" data-testid={`text-title-${product.skuId}`}>
                 {product.title}
               </h3>
-              <div className="flex flex-wrap gap-2 mb-4">
+              
+              <div className="flex items-center gap-1 mb-3">
+                <Star className="w-4 h-4 fill-ochre text-ochre" />
+                <span className="font-semibold text-sm" data-testid={`text-rating-${product.skuId}`}>
+                  {product.rating}
+                </span>
+                <span className="text-xs opacity-60" data-testid={`text-reviews-${product.skuId}`}>
+                  ({product.reviewCount})
+                </span>
+              </div>
+
+              <div className="flex flex-wrap gap-2 mb-3">
                 {product.domains.slice(0, 2).map((domain, idx) => (
                   <span
                     key={idx}
@@ -106,26 +126,33 @@ export default function Shop() {
                   </span>
                 ))}
               </div>
-              <p className="text-sm opacity-70 mb-4">
+              
+              <p className="text-xs opacity-70 mb-3">
                 Ages {product.ageMin}-{product.ageMax}
               </p>
-              <button
-                onClick={() => handleProductClick(product.skuId, product.url)}
-                className="w-full px-4 py-3 bg-olive text-ivory rounded-lg hover:bg-ochre transition font-medium"
-                data-testid={`button-view-${product.skuId}`}
-              >
-                View Product
-              </button>
+
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-2xl font-bold text-olive" data-testid={`text-price-${product.skuId}`}>
+                  {product.price}
+                </span>
+                <button
+                  onClick={() => handleProductClick(product.skuId, product.url)}
+                  className="px-4 py-2 bg-olive text-ivory rounded-lg hover:bg-ochre transition font-medium text-sm"
+                  data-testid={`button-view-${product.skuId}`}
+                >
+                  View
+                </button>
+              </div>
             </div>
           </div>
         ))}
       </div>
 
-      {child.name && (
+      {child?.name && (
         <div className="mt-12 bg-gradient-to-r from-olive/10 to-blush/10 p-8 rounded-lg text-center">
           <h2 className="text-2xl font-bold mb-4">Looking for personalized recommendations?</h2>
           <p className="mb-6 opacity-80">
-            View products specifically curated for {child.name}'s Play Board
+            View products specifically curated for {child?.name}'s Play Board
           </p>
           <a
             href="/recommendations"

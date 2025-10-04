@@ -38,6 +38,7 @@ Preferred communication style: Simple, everyday language.
 - Child selector dropdown in Layout component for switching between children
 - "Add Another Child" functionality integrated into navigation
 - Settings page accessible from profile dropdown and secondary navigation
+- Product cards display images, user ratings (with review counts), prices, domain tags, and age ranges on both Shop and Recommendations pages
 
 ## Backend Architecture
 
@@ -58,6 +59,7 @@ Preferred communication style: Simple, everyday language.
 - Interface-based storage abstraction (`IStorage`) allowing easy swap to database
 - Seed data included for milestones and products
 - Type-safe data models shared between client and server via `@shared/schema`
+- Product data in `client/src/data/needsToProducts.json` includes: skuId, title, url, ageMin, ageMax, domains, price, rating, reviewCount, imageUrl
 
 **Schema & Validation**
 - Drizzle ORM schema definitions in PostgreSQL dialect

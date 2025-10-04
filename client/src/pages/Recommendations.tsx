@@ -3,7 +3,7 @@ import { useStore } from '../store';
 import { logEvent } from '../analytics';
 import rulesData from '../data/rules.json';
 import needsToProductsData from '../data/needsToProducts.json';
-import { Sparkles, ExternalLink, ShoppingBag } from 'lucide-react';
+import { Sparkles, ExternalLink, ShoppingBag, Star } from 'lucide-react';
 
 export default function Recommendations() {
   const { getActiveChild, getAnswers, activeChildId } = useStore();
@@ -121,27 +121,51 @@ export default function Recommendations() {
                   className="bg-white border-2 border-sand rounded-2xl shadow-md hover:shadow-xl transition-all overflow-hidden group"
                   data-testid={`card-recommendation-${product.skuId}`}
                 >
-                  <div className="bg-gradient-to-br from-olive/10 to-blush/10 p-4 border-b-2 border-sand">
-                    <h3 className="text-lg font-bold line-clamp-2 min-h-[3.5rem]" data-testid={`text-product-title-${product.skuId}`}>
+                  <div className="aspect-square bg-ivory overflow-hidden border-b-2 border-sand">
+                    <img
+                      src={product.imageUrl}
+                      alt={product.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      data-testid={`img-product-${product.skuId}`}
+                    />
+                  </div>
+                  <div className="p-5">
+                    <h3 className="text-lg font-bold mb-2 line-clamp-2 min-h-[3.5rem]" data-testid={`text-product-title-${product.skuId}`}>
                       {product.title}
                     </h3>
-                  </div>
-                  <div className="p-6">
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {product.domains.slice(0, 3).map((domain, idx) => (
+                    
+                    <div className="flex items-center gap-1 mb-3">
+                      <Star className="w-4 h-4 fill-ochre text-ochre" />
+                      <span className="font-semibold text-sm" data-testid={`text-rating-${product.skuId}`}>
+                        {product.rating}
+                      </span>
+                      <span className="text-xs opacity-60" data-testid={`text-reviews-${product.skuId}`}>
+                        ({product.reviewCount})
+                      </span>
+                    </div>
+
+                    <div className="flex flex-wrap gap-2 mb-3">
+                      {product.domains.slice(0, 2).map((domain, idx) => (
                         <span
                           key={idx}
-                          className="px-3 py-1 bg-ochre/10 text-ochre text-xs font-medium rounded-full"
+                          className="px-2 py-1 bg-ochre/10 text-ochre text-xs font-medium rounded-full"
                           data-testid={`tag-domain-${idx}`}
                         >
                           {domain}
                         </span>
                       ))}
                     </div>
-                    <p className="text-sm opacity-70 mb-4 flex items-center gap-1">
-                      <span>📅</span>
+                    
+                    <p className="text-xs opacity-70 mb-4">
                       Ages {product.ageMin}-{product.ageMax}
                     </p>
+
+                    <div className="flex items-center justify-between gap-2 mb-3">
+                      <span className="text-2xl font-bold text-olive" data-testid={`text-price-${product.skuId}`}>
+                        {product.price}
+                      </span>
+                    </div>
+
                     <button
                       onClick={() => handleClick(product.skuId, product.url)}
                       className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-olive text-ivory rounded-xl hover:bg-ochre transition font-semibold group-hover:shadow-lg"
