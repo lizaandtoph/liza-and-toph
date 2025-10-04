@@ -8,7 +8,8 @@ import { ChevronRight, ChevronLeft } from 'lucide-react';
 import { calculateAgeFromBirthday, categorizeAgeBand, getAgeBandLabel } from '@shared/ageUtils';
 
 const childSchema = z.object({
-  name: z.string().min(1, 'Name is required'),
+  parentName: z.string().min(1, 'Your name is required'),
+  name: z.string().min(1, 'Child name is required'),
   birthday: z.string().min(1, 'Birthday is required'),
 });
 
@@ -20,9 +21,10 @@ const answersSchema = z.object({
 
 export default function Onboarding() {
   const navigate = useNavigate();
-  const { addChild, setAnswers, setLoggedIn } = useStore();
+  const { addChild, setAnswers, setLoggedIn, setParentName } = useStore();
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
+    parentName: '',
     name: '',
     birthday: '',
     schemas: [] as string[],
@@ -53,6 +55,7 @@ export default function Onboarding() {
     if (step === 1) {
       try {
         childSchema.parse({ 
+          parentName: formData.parentName,
           name: formData.name, 
           birthday: formData.birthday
         });
@@ -79,6 +82,7 @@ export default function Onboarding() {
   const handleSubmit = () => {
     try {
       const childData = childSchema.parse({ 
+        parentName: formData.parentName,
         name: formData.name, 
         birthday: formData.birthday
       });
@@ -90,6 +94,8 @@ export default function Onboarding() {
       
       const { years, months, totalMonths } = calculateAgeFromBirthday(childData.birthday);
       const ageBand = categorizeAgeBand(totalMonths);
+      
+      setParentName(childData.parentName);
       
       addChild({
         name: childData.name,
@@ -148,12 +154,25 @@ export default function Onboarding() {
       {step === 1 && (
         <div className="bg-gradient-to-br from-[#EDE9DC] to-ivory p-10 rounded-2xl shadow-lg">
           <h2 className="text-3xl font-bold mb-3 text-center" data-testid="heading-step-1">
-            About Your Child
+            Let's Get Started
           </h2>
           <p className="text-center mb-8 opacity-70">
-            Let's start by learning a bit about your little one
+            Tell us about yourself and your child
           </p>
           
+          <div className="mb-6">
+            <label className="block mb-3 font-semibold text-lg">What's your name?</label>
+            <input
+              type="text"
+              value={formData.parentName}
+              onChange={(e) => setFormData({ ...formData, parentName: e.target.value })}
+              className="w-full px-6 py-4 bg-ivory border-2 border-sand rounded-xl focus:border-olive focus:outline-none text-lg transition"
+              placeholder="Enter your name"
+              data-testid="input-parent-name"
+            />
+            {errors.parentName && <p className="text-burnt text-sm mt-2" data-testid="error-parent-name">{errors.parentName}</p>}
+          </div>
+
           <div className="mb-6">
             <label className="block mb-3 font-semibold text-lg">What's your child's name?</label>
             <input
