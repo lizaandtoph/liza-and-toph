@@ -1,0 +1,79 @@
+Start from scratch. Ignore previous plans. Do not use Next.js. Keep a single repo with React + Vite for the client and Express for the API. Overwrite existing app files if needed.
+
+Goal
+Build “Liza & Toph” MVP. Parents complete a short questionnaire. The app outputs a Play Board with milestones, the developmental journey, if-then insights, and toy/book picks via affiliate links. Privacy-first. No inventory.
+
+Stack
+- React + Vite
+- Express API under /api
+- Tailwind
+- react-router-dom, zustand, zod, lucide-react, class-variance-authority
+
+Brand tokens
+Colors:
+--olive #4A5942
+--ochre #CE8923
+--burnt #D25E1B
+--ivory #FFF9ED
+--espresso #412B15
+--blush #D89B85
+--maroon #63212E
+--sand #E2C48F
+--slateblue #728888
+Fonts: Poppins for UI. Georgia for serif if needed.
+Base: background ivory, text espresso. Rounded 1.3rem. Soft shadow.
+
+Tasks
+1) Configure Tailwind for Vite. Scan index.html and src/**/*.*
+2) Add globals with the brand CSS variables. Set body bg to ivory and text to espresso.
+3) Create a centered layout with Header and Footer. Max width container.
+4) Routes with react-router-dom:
+   - /onboarding
+   - /playboard
+   - /recommendations
+   - /admin (hidden debug)
+5) State with Zustand: child {name, ageBand}, answers {schemas[], barriers[], interests[]}, subscribed boolean.
+6) Data seeds in src/data:
+   - milestones.json with three age bands: newborn-2, 2-5, 5-8. Each has domains: socialEmotional, cognitive, languageCommunication, motor with currentMilestone, shiftSummary, endMilestone, playSupport, parentSupport.
+   - schemas.json with connecting, disconnecting, rotation, enveloping, orientation.
+   - rules.json with at least five rules:
+     * access_to_toys -> accessible-storage
+     * dumps_bins -> accessible-storage
+     * enveloping -> nurturing-dolls
+     * connecting -> building-foundations
+     * space_constrained -> gross-motor-climb
+   - needsToProducts.json with five needs:
+     * accessible-storage
+     * fine-motor-mark-making
+     * gross-motor-climb
+     * nurturing-dolls
+     * building-foundations
+     Each need has 2–3 items with skuId, title, url (use placeholder affiliate URLs), ageMin, ageMax, domains[].
+7) Onboarding page (4 steps with Zod):
+   - Child basics: name, ageBand
+   - Schemas: checkbox group
+   - Barriers: checkbox group [access_to_toys, dumps_bins, space_constrained]
+   - Interests: checkbox group [building, dolls, art, books, gross_motor]
+   Save to store. On submit, route to /playboard. Log console event onboarding_completed.
+8) Play Board page:
+   - Load milestones for ageBand and render four domain cards with currentMilestone, shiftSummary, endMilestone, playSupport, parentSupport.
+   - Compute insights from rules and answers. Show 1–3 if-then insights above the cards.
+   - CTA: “See tailored picks” links to /recommendations. Log playboard_viewed.
+9) Paywall:
+   - If not subscribed, blur shiftSummary, endMilestone, and hide insights. Show PaywallNotice with a “Subscribe” button that toggles subscribed true. Add /admin to flip the flag. Log paywall_viewed and subscribe_clicked.
+10) Recommendations page:
+   - Combine needIds from insights and age band to filter needsToProducts. Show a grid of 8–12 cards with title, tags, and a View button.
+   - Link out through /api/links?sku=ID&to=encodedUrl. Log recommendation_clicked.
+11) Express API:
+   - GET /api/links reads sku and to, logs {event:"affiliate_click", sku, to, at}, then 302 redirects to the decoded URL.
+   - Ensure CORS or same-origin as needed.
+12) UI polish:
+   - Primary button olive with ochre hover, text ivory.
+   - Card background #EDE9DC, text espresso.
+   - Inputs background ivory, border sand, focus border ochre.
+
+Deliverables
+- Install and configure all deps.
+- Show the file tree and all changed files.
+- Provide run instructions. Use a single dev command if possible.
+- Do not explain. Output changed files and scripts only.

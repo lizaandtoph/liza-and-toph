@@ -1,0 +1,92 @@
+{
+  "newborn-2": {
+    "socialEmotional": {
+      "currentMilestone": "Smiles at familiar faces",
+      "shiftSummary": "Begins parallel play alongside peers, showing early sharing behaviors",
+      "endMilestone": "Engages in simple pretend play and takes turns",
+      "playSupport": "Provide soft dolls and stuffed animals for hugging practice",
+      "parentSupport": "Respond to baby's smiles and coos to build secure attachment"
+    },
+    "cognitive": {
+      "currentMilestone": "Tracks objects with eyes",
+      "shiftSummary": "Develops object permanence and cause-effect understanding",
+      "endMilestone": "Sorts shapes and matches colors",
+      "playSupport": "Offer nesting cups and simple shape sorters",
+      "parentSupport": "Play peek-a-boo and hide toys under blankets"
+    },
+    "languageCommunication": {
+      "currentMilestone": "Coos and makes vowel sounds",
+      "shiftSummary": "First words emerge around 12 months, vocabulary expands rapidly",
+      "endMilestone": "Uses 2-word phrases and follows simple instructions",
+      "playSupport": "Read board books with simple pictures daily",
+      "parentSupport": "Narrate daily activities and respond to baby's sounds"
+    },
+    "motor": {
+      "currentMilestone": "Lifts head during tummy time",
+      "shiftSummary": "Progresses from rolling to sitting, crawling, standing, and walking",
+      "endMilestone": "Walks independently and climbs stairs with support",
+      "playSupport": "Create safe spaces for floor play and climbing",
+      "parentSupport": "Supervise tummy time and encourage movement"
+    }
+  },
+  "2-5": {
+    "socialEmotional": {
+      "currentMilestone": "Shows affection openly",
+      "shiftSummary": "Develops empathy, negotiates with peers, manages emotions better",
+      "endMilestone": "Plays cooperatively and shows concern for crying friends",
+      "playSupport": "Provide dress-up clothes and dolls for role-play scenarios",
+      "parentSupport": "Label emotions and model conflict resolution"
+    },
+    "cognitive": {
+      "currentMilestone": "Sorts by color and shape",
+      "shiftSummary": "Understands counting, patterns, and basic problem-solving",
+      "endMilestone": "Counts to 20 and understands more/less concepts",
+      "playSupport": "Offer pattern blocks, puzzles, and building sets",
+      "parentSupport": "Ask open-ended questions during play"
+    },
+    "languageCommunication": {
+      "currentMilestone": "Speaks in 3-4 word sentences",
+      "shiftSummary": "Grammar improves, vocabulary explodes to 1000+ words",
+      "endMilestone": "Tells simple stories and asks 'why' questions",
+      "playSupport": "Provide story books and encourage storytelling",
+      "parentSupport": "Have conversations and expand on child's sentences"
+    },
+    "motor": {
+      "currentMilestone": "Runs and kicks a ball",
+      "shiftSummary": "Refines balance, coordination, and fine motor skills",
+      "endMilestone": "Hops on one foot and uses scissors",
+      "playSupport": "Set up obstacle courses and provide art materials",
+      "parentSupport": "Encourage outdoor play and practice with utensils"
+    }
+  },
+  "5-8": {
+    "socialEmotional": {
+      "currentMilestone": "Wants to please friends",
+      "shiftSummary": "Develops complex friendships, understands rules and fairness",
+      "endMilestone": "Shows increased independence and self-control",
+      "playSupport": "Encourage group games with rules and turn-taking",
+      "parentSupport": "Support friendships and discuss social situations"
+    },
+    "cognitive": {
+      "currentMilestone": "Understands time concepts",
+      "shiftSummary": "Masters reading, writing, and mathematical reasoning",
+      "endMilestone": "Reads fluently and solves multi-step problems",
+      "playSupport": "Provide strategy games, science kits, and chapter books",
+      "parentSupport": "Support homework and encourage curiosity"
+    },
+    "languageCommunication": {
+      "currentMilestone": "Speaks clearly with complex grammar",
+      "shiftSummary": "Develops reading comprehension and writing skills",
+      "endMilestone": "Writes stories and understands figurative language",
+      "playSupport": "Encourage journaling and creative writing",
+      "parentSupport": "Read together and discuss book themes"
+    },
+    "motor": {
+      "currentMilestone": "Rides a bike",
+      "shiftSummary": "Masters complex movements and refined hand-eye coordination",
+      "endMilestone": "Participates in organized sports",
+      "playSupport": "Support sports interests and provide craft materials",
+      "parentSupport": "Encourage physical activity and skill development"
+    }
+  }
+}

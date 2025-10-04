@@ -1,0 +1,22 @@
+{
+  "connecting": {
+    "label": "Connecting",
+    "description": "Joins objects together (blocks, train tracks, puzzles)"
+  },
+  "disconnecting": {
+    "label": "Disconnecting",
+    "description": "Takes things apart or separates them"
+  },
+  "rotation": {
+    "label": "Rotation",
+    "description": "Spins, turns, or rotates objects"
+  },
+  "enveloping": {
+    "label": "Enveloping",
+    "description": "Wraps, covers, or encloses objects"
+  },
+  "orientation": {
+    "label": "Orientation",
+    "description": "Lines up or arranges objects in specific ways"
+  }
+}

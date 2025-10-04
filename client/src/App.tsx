@@ -1,34 +1,23 @@
-import { Switch, Route } from "wouter";
-import { queryClient } from "./lib/queryClient";
-import { QueryClientProvider } from "@tanstack/react-query";
-import { Toaster } from "@/components/ui/toaster";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import NotFound from "@/pages/not-found";
-import Home from "@/pages/home";
-import Questionnaire from "@/pages/questionnaire";
-import PlayBoard from "@/pages/play-board";
-import Navbar from "@/components/navbar";
-
-function Router() {
-  return (
-    <Switch>
-      <Route path="/" component={Home} />
-      <Route path="/questionnaire" component={Questionnaire} />
-      <Route path="/play-board/:id" component={PlayBoard} />
-      <Route component={NotFound} />
-    </Switch>
-  );
-}
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import Layout from './components/Layout';
+import Onboarding from './pages/Onboarding';
+import PlayBoard from './pages/PlayBoard';
+import Recommendations from './pages/Recommendations';
+import Admin from './pages/Admin';
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Navbar />
-        <Router />
-      </TooltipProvider>
-    </QueryClientProvider>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Navigate to="/onboarding" replace />} />
+          <Route path="onboarding" element={<Onboarding />} />
+          <Route path="playboard" element={<PlayBoard />} />
+          <Route path="recommendations" element={<Recommendations />} />
+          <Route path="admin" element={<Admin />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 

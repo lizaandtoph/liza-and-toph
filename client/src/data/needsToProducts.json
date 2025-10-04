@@ -1,0 +1,124 @@
+{
+  "accessible-storage": [
+    {
+      "skuId": "storage-001",
+      "title": "Low Wooden Toy Shelf",
+      "url": "https://example.com/aff/storage-shelf",
+      "ageMin": 0,
+      "ageMax": 8,
+      "domains": ["motor", "cognitive"]
+    },
+    {
+      "skuId": "storage-002",
+      "title": "Clear Toy Bins Set",
+      "url": "https://example.com/aff/clear-bins",
+      "ageMin": 0,
+      "ageMax": 8,
+      "domains": ["cognitive"]
+    },
+    {
+      "skuId": "storage-003",
+      "title": "Wall-Mounted Toy Organizer",
+      "url": "https://example.com/aff/wall-organizer",
+      "ageMin": 2,
+      "ageMax": 8,
+      "domains": ["cognitive"]
+    }
+  ],
+  "fine-motor-mark-making": [
+    {
+      "skuId": "motor-001",
+      "title": "Jumbo Crayons Set",
+      "url": "https://example.com/aff/jumbo-crayons",
+      "ageMin": 1,
+      "ageMax": 5,
+      "domains": ["motor", "cognitive"]
+    },
+    {
+      "skuId": "motor-002",
+      "title": "Washable Finger Paints",
+      "url": "https://example.com/aff/finger-paints",
+      "ageMin": 1,
+      "ageMax": 8,
+      "domains": ["motor", "socialEmotional"]
+    },
+    {
+      "skuId": "motor-003",
+      "title": "Chalk and Easel Set",
+      "url": "https://example.com/aff/chalk-easel",
+      "ageMin": 2,
+      "ageMax": 8,
+      "domains": ["motor", "languageCommunication"]
+    }
+  ],
+  "gross-motor-climb": [
+    {
+      "skuId": "climb-001",
+      "title": "Indoor Climbing Triangle",
+      "url": "https://example.com/aff/climbing-triangle",
+      "ageMin": 1,
+      "ageMax": 5,
+      "domains": ["motor"]
+    },
+    {
+      "skuId": "climb-002",
+      "title": "Balance Beam Set",
+      "url": "https://example.com/aff/balance-beam",
+      "ageMin": 2,
+      "ageMax": 8,
+      "domains": ["motor", "cognitive"]
+    }
+  ],
+  "nurturing-dolls": [
+    {
+      "skuId": "doll-001",
+      "title": "Soft Baby Doll with Accessories",
+      "url": "https://example.com/aff/baby-doll",
+      "ageMin": 1,
+      "ageMax": 5,
+      "domains": ["socialEmotional", "languageCommunication"]
+    },
+    {
+      "skuId": "doll-002",
+      "title": "Diverse Doll Family Set",
+      "url": "https://example.com/aff/doll-family",
+      "ageMin": 2,
+      "ageMax": 8,
+      "domains": ["socialEmotional", "cognitive"]
+    },
+    {
+      "skuId": "doll-003",
+      "title": "Doll Care Playset",
+      "url": "https://example.com/aff/doll-care",
+      "ageMin": 2,
+      "ageMax": 5,
+      "domains": ["socialEmotional"]
+    }
+  ],
+  "building-foundations": [
+    {
+      "skuId": "build-001",
+      "title": "Wooden Block Set",
+      "url": "https://example.com/aff/wooden-blocks",
+      "ageMin": 1,
+      "ageMax": 8,
+      "domains": ["cognitive", "motor"]
+    },
+    {
+      "skuId": "build-002",
+      "title": "Magnetic Tiles",
+      "url": "https://example.com/aff/magnetic-tiles",
+      "ageMin": 2,
+      "ageMax": 8,
+      "domains": ["cognitive", "motor"]
+    },
+    {
+      "skuId": "build-003",
+      "title": "Duplo Building Set",
+      "url": "https://example.com/aff/duplo-set",
+      "ageMin": 1,
+      "ageMax": 5,
+      "domains": ["cognitive", "motor"]
+    }
+  ]
+}

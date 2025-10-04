@@ -1,0 +1,30 @@
+[
+  {
+    "condition": "access_to_toys",
+    "need": "accessible-storage"
+  },
+  {
+    "condition": "dumps_bins",
+    "need": "accessible-storage"
+  },
+  {
+    "condition": "enveloping",
+    "need": "nurturing-dolls"
+  },
+  {
+    "condition": "connecting",
+    "need": "building-foundations"
+  },
+  {
+    "condition": "space_constrained",
+    "need": "gross-motor-climb"
+  },
+  {
+    "condition": "rotation",
+    "need": "fine-motor-mark-making"
+  },
+  {
+    "condition": "orientation",
+    "need": "building-foundations"
+  }
+]

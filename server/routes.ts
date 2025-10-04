@@ -5,6 +5,25 @@ import { insertChildProfileSchema, insertPlayBoardSchema } from "@shared/schema"
 import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Affiliate link tracker
+  app.get("/api/links", (req, res) => {
+    const { sku, to } = req.query;
+    
+    if (!sku || !to || typeof sku !== 'string' || typeof to !== 'string') {
+      return res.status(400).json({ message: "Missing sku or to parameter" });
+    }
+
+    const decodedUrl = decodeURIComponent(to);
+    console.log('[ANALYTICS] affiliate_click', { 
+      event: 'affiliate_click', 
+      sku, 
+      to: decodedUrl, 
+      at: new Date().toISOString() 
+    });
+    
+    res.redirect(302, decodedUrl);
+  });
+
   // Child Profile routes
   app.post("/api/child-profiles", async (req, res) => {
     try {
