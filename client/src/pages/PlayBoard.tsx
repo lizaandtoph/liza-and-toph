@@ -291,6 +291,104 @@ export default function PlayBoard() {
           })}
         </div>
 
+        {/* Developmental Journey Table */}
+        <div className="mt-12">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-bold mb-3">Developmental Journey</h2>
+            <p className="text-lg opacity-80">
+              See how {child.name} is growing across all developmental domains
+            </p>
+          </div>
+          
+          <div className="bg-white border-2 border-sand rounded-2xl shadow-lg overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full" data-testid="table-developmental-journey">
+                <thead>
+                  <tr className="bg-gradient-to-r from-olive/10 to-blush/10">
+                    <th className="px-6 py-4 text-left text-sm font-bold uppercase tracking-wide border-b-2 border-sand">
+                      Developmental Domain
+                    </th>
+                    <th className="px-6 py-4 text-left text-sm font-bold uppercase tracking-wide border-b-2 border-sand text-olive">
+                      Current Stage
+                    </th>
+                    <th className="px-6 py-4 text-left text-sm font-bold uppercase tracking-wide border-b-2 border-sand text-ochre">
+                      The Journey
+                    </th>
+                    <th className="px-6 py-4 text-left text-sm font-bold uppercase tracking-wide border-b-2 border-sand text-burnt">
+                      Looking Ahead
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {domains.map((domain, index) => {
+                    const data = milestones[domain as keyof typeof milestones];
+                    return (
+                      <tr 
+                        key={domain} 
+                        className={index % 2 === 0 ? 'bg-white' : 'bg-sand/10'}
+                        data-testid={`row-journey-${domain}`}
+                      >
+                        <td className="px-6 py-4 border-b border-sand/50">
+                          <div className="flex items-center gap-2">
+                            <span className="text-2xl">{domainIcons[domain]}</span>
+                            <span className="font-semibold">{domainLabels[domain]}</span>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 border-b border-sand/50">
+                          <p className="text-sm leading-relaxed">{data.currentMilestone}</p>
+                        </td>
+                        {subscribed ? (
+                          <>
+                            <td className="px-6 py-4 border-b border-sand/50">
+                              <p className="text-sm leading-relaxed">{data.shiftSummary}</p>
+                            </td>
+                            <td className="px-6 py-4 border-b border-sand/50">
+                              <p className="text-sm leading-relaxed">{data.endMilestone}</p>
+                            </td>
+                          </>
+                        ) : (
+                          <td colSpan={2} className="px-6 py-4 border-b border-sand/50">
+                            <div className="relative h-24 flex items-center justify-center">
+                              <div className="absolute inset-0 bg-gradient-to-r from-blush/5 to-ochre/5 rounded-lg flex items-center justify-center">
+                                <div className="text-center">
+                                  <Lock className="w-6 h-6 text-espresso/40 mx-auto mb-2" />
+                                  <p className="text-sm font-medium text-espresso/70">
+                                    Subscribe to unlock full journey
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+                        )}
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+            
+            {!subscribed && (
+              <div className="border-t-2 border-sand bg-gradient-to-r from-blush/10 to-ochre/10 p-6">
+                <div className="flex items-center justify-between gap-4">
+                  <div>
+                    <p className="font-semibold mb-1">Unlock the complete developmental journey</p>
+                    <p className="text-sm opacity-70">
+                      See the full progression across all stages and get personalized insights
+                    </p>
+                  </div>
+                  <button
+                    onClick={handleSubscribe}
+                    className="px-6 py-3 bg-olive text-ivory rounded-lg hover:bg-ochre transition font-semibold whitespace-nowrap"
+                    data-testid="button-subscribe-table"
+                  >
+                    Get full access • $4.99/mo
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
         {/* CTA Section */}
         <div className="mt-12 bg-gradient-to-br from-olive/10 to-blush/10 rounded-2xl p-8 text-center">
           <h2 className="text-2xl font-bold mb-4">Ready to bring these ideas to life?</h2>
