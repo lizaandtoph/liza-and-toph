@@ -16,6 +16,23 @@ export function calculateAgeInMonths(years: number, months: number): number {
   return years * 12 + months;
 }
 
+export function calculateAgeFromBirthday(birthday: string): { years: number; months: number; totalMonths: number } {
+  const birthDate = new Date(birthday);
+  const today = new Date();
+  
+  let years = today.getFullYear() - birthDate.getFullYear();
+  let months = today.getMonth() - birthDate.getMonth();
+  
+  if (months < 0) {
+    years--;
+    months += 12;
+  }
+  
+  const totalMonths = years * 12 + months;
+  
+  return { years, months, totalMonths };
+}
+
 export function categorizeAgeBand(ageInMonths: number): AgeBand {
   if (ageInMonths < 18) return 'newborn-18m';
   if (ageInMonths < 36) return '18m-3y';

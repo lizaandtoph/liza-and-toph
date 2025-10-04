@@ -4,6 +4,7 @@ import { AgeBand } from '@shared/ageUtils';
 
 interface ChildProfile {
   name: string;
+  birthday?: string;
   ageYears?: number;
   ageMonths?: number;
   ageBand: AgeBand | '';

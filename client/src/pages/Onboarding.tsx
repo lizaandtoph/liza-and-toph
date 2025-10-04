@@ -5,12 +5,11 @@ import { logEvent } from '../analytics';
 import { z } from 'zod';
 import schemasData from '../data/schemas.json';
 import { ChevronRight, ChevronLeft } from 'lucide-react';
-import { calculateAgeInMonths, categorizeAgeBand, getAgeBandLabel } from '@shared/ageUtils';
+import { calculateAgeFromBirthday, categorizeAgeBand, getAgeBandLabel } from '@shared/ageUtils';
 
 const childSchema = z.object({
   name: z.string().min(1, 'Name is required'),
-  ageYears: z.number().min(0, 'Years must be 0 or more').max(18, 'Years must be 18 or less'),
-  ageMonths: z.number().min(0, 'Months must be 0 or more').max(11, 'Months must be 11 or less'),
+  birthday: z.string().min(1, 'Birthday is required'),
 });
 
 const answersSchema = z.object({
@@ -25,8 +24,7 @@ export default function Onboarding() {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     name: '',
-    ageYears: 0,
-    ageMonths: 0,
+    birthday: '',
     schemas: [] as string[],
     barriers: [] as string[],
     interests: [] as string[],
@@ -56,8 +54,7 @@ export default function Onboarding() {
       try {
         childSchema.parse({ 
           name: formData.name, 
-          ageYears: formData.ageYears, 
-          ageMonths: formData.ageMonths 
+          birthday: formData.birthday
         });
         setErrors({});
         setStep(2);
@@ -83,8 +80,7 @@ export default function Onboarding() {
     try {
       const childData = childSchema.parse({ 
         name: formData.name, 
-        ageYears: formData.ageYears, 
-        ageMonths: formData.ageMonths 
+        birthday: formData.birthday
       });
       const answers = answersSchema.parse({
         schemas: formData.schemas,
@@ -92,13 +88,14 @@ export default function Onboarding() {
         interests: formData.interests,
       });
       
-      const totalMonths = calculateAgeInMonths(childData.ageYears, childData.ageMonths);
+      const { years, months, totalMonths } = calculateAgeFromBirthday(childData.birthday);
       const ageBand = categorizeAgeBand(totalMonths);
       
       setChild({
         name: childData.name,
-        ageYears: childData.ageYears,
-        ageMonths: childData.ageMonths,
+        birthday: childData.birthday,
+        ageYears: years,
+        ageMonths: months,
         ageBand,
       });
       setAnswers(answers);
@@ -171,38 +168,22 @@ export default function Onboarding() {
           </div>
 
           <div className="mb-8">
-            <label className="block mb-4 font-semibold text-lg">How old are they?</label>
-            <div className="flex gap-4 max-w-md">
-              <div className="flex-1">
-                <label className="block mb-2 text-sm font-medium">Years</label>
-                <input
-                  type="number"
-                  min="0"
-                  max="18"
-                  value={formData.ageYears}
-                  onChange={(e) => setFormData({ ...formData, ageYears: parseInt(e.target.value) || 0 })}
-                  className="w-full px-4 py-3 bg-ivory border-2 border-sand rounded-xl focus:border-olive focus:outline-none text-lg transition"
-                  data-testid="input-age-years"
-                />
-                {errors.ageYears && <p className="text-burnt text-sm mt-1" data-testid="error-age-years">{errors.ageYears}</p>}
-              </div>
-              <div className="flex-1">
-                <label className="block mb-2 text-sm font-medium">Months</label>
-                <input
-                  type="number"
-                  min="0"
-                  max="11"
-                  value={formData.ageMonths}
-                  onChange={(e) => setFormData({ ...formData, ageMonths: parseInt(e.target.value) || 0 })}
-                  className="w-full px-4 py-3 bg-ivory border-2 border-sand rounded-xl focus:border-olive focus:outline-none text-lg transition"
-                  data-testid="input-age-months"
-                />
-                {errors.ageMonths && <p className="text-burnt text-sm mt-1" data-testid="error-age-months">{errors.ageMonths}</p>}
-              </div>
-            </div>
-            {formData.ageYears > 0 || formData.ageMonths > 0 ? (
+            <label className="block mb-3 font-semibold text-lg">When is their birthday?</label>
+            <input
+              type="date"
+              value={formData.birthday}
+              onChange={(e) => setFormData({ ...formData, birthday: e.target.value })}
+              max={new Date().toISOString().split('T')[0]}
+              className="w-full px-6 py-4 bg-ivory border-2 border-sand rounded-xl focus:border-olive focus:outline-none text-lg transition"
+              data-testid="input-birthday"
+            />
+            {errors.birthday && <p className="text-burnt text-sm mt-2" data-testid="error-birthday">{errors.birthday}</p>}
+            {formData.birthday ? (
               <p className="text-sm mt-3 opacity-70">
-                Age category: <span className="font-semibold">{getAgeBandLabel(categorizeAgeBand(calculateAgeInMonths(formData.ageYears, formData.ageMonths)))}</span>
+                Age: <span className="font-semibold">{(() => {
+                  const { years, months, totalMonths } = calculateAgeFromBirthday(formData.birthday);
+                  return `${years} years, ${months} months`;
+                })()} ({getAgeBandLabel(categorizeAgeBand(calculateAgeFromBirthday(formData.birthday).totalMonths))})</span>
               </p>
             ) : null}
           </div>
