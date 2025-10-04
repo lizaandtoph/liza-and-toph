@@ -23,9 +23,10 @@ Preferred communication style: Simple, everyday language.
 - Custom fonts: Sentient (headings), Poppins (body and subheaders)
 
 **State Management & Data Fetching**
-- Zustand with localStorage persistence for global state (multi-child support, active child selection, per-child questionnaire answers, parent account)
+- Zustand with localStorage persistence for global state (multi-child support, active child selection, per-child questionnaire answers, parent account, saved items)
 - Parent authentication: firstName, lastName, email, password stored in zustand (localStorage-based MVP, not backend)
 - Multi-child architecture: parents can add and manage multiple children, each with unique ID (nanoid), profile, and answers
+- Saved items: brands, professionals, and products favorited by parents (persisted in localStorage)
 - TanStack Query (React Query) for server state management, caching, and data synchronization
 - React Hook Form with Zod for form validation and type-safe form handling
 - Custom hooks for UI concerns (mobile detection, toast notifications)
@@ -33,9 +34,10 @@ Preferred communication style: Simple, everyday language.
 **Component Structure**
 - Reusable UI components in `client/src/components/ui/` following shadcn conventions
 - Feature components for domain logic (MilestoneTimeline, ProductGrid, QuestionnaireStep)
-- Pages organized by route (`home`, `questionnaire`, `play-board`)
+- Pages organized by route (`home`, `login`, `onboarding`, `playboard`, `shop`, `find-pros`, `settings`)
 - Child selector dropdown in Layout component for switching between children
 - "Add Another Child" functionality integrated into navigation
+- Settings page accessible from profile dropdown and secondary navigation
 
 ## Backend Architecture
 
@@ -75,11 +77,16 @@ Preferred communication style: Simple, everyday language.
 - **Parent Accounts**: Stored in localStorage via zustand persist with firstName, lastName, email, password (plaintext MVP limitation)
   - Onboarding Step 1 collects parent account info and first child info together
   - Login page validates credentials against stored parentAccount
+  - Settings page allows editing name, email, and password
   - Special access: firstName "Topher" grants full access without subscription
 - **Child Profiles**: Stores child information with unique ID (nanoid), name, birthday, calculated age, age band, and developmental preferences
   - Multiple children per parent account supported
   - Each child has separate questionnaire answers (schemas, barriers, interests)
   - Active child selection tracked for personalized view
+  - Settings page allows editing child name/birthday and deleting children
+- **Saved Items**: Favorited brands, professionals, and products tracked per parent account
+  - Three categories: brands, professionals, products
+  - Can be viewed and removed from Settings page
 - **Milestones**: Developmental milestones categorized by type (cognitive, motor, language, social-emotional)
 - **Products**: Toy/book recommendations with pricing, ratings, categories, affiliate links
 - **Play Boards**: Aggregated personalized boards combining profiles, milestones, and products
