@@ -303,21 +303,21 @@
     "socialEmotional": {
       "currentMilestone": "Peer group is paramount; experiences intense friendships and emotions; is highly focused on developing an identity separate from their family",
       "shiftSummary": "A shift from trying to fit in with the group to figuring out who they are as an individual. They form more intimate, trusting relationships and develop a stronger, more stable sense of self",
-      "endMilestone": "Has a consolidated sense of personal identity; relationships with peers are based on intimacy and shared values; is comfortable with their developing autonomy",
+      "endMilestone": "Has a consolidated sense of personal identity; relationships with peers are based on intimacy and trust; is making independent decisions and planning for the future",
       "playSupport": "The 'play' is almost entirely social. Clubs, sports teams, and unstructured time with friends are essential for navigating complex peer dynamics and exploring their identity",
       "parentSupport": "Their personal space needs to function as a mini-apartment: a place for sleep, study, and socializing. It must be a space they can control and personalize"
     },
     "cognitive": {
       "currentMilestone": "Thinks abstractly and hypothetically; is better at managing long-term projects; is developing more complex moral reasoning",
       "shiftSummary": "Thinking becomes future-oriented. They move from abstractly understanding 'what if' to applying that thinking to their own life: 'What if I go to this college? What career do I want?'",
-      "endMilestone": "Can think critically about complex global and personal issues; sets long-term goals and makes plans to achieve them; has a well-developed sense of personal values and ethics",
+      "endMilestone": "Can think critically about complex global and personal issues; sets long-term goals and makes plans to achieve them; has a well-developed sense of ethics and values",
       "playSupport": "Debate, role-playing games, and complex, self-directed projects are ideal forms of play for exercising their abstract minds",
       "parentSupport": "Engage them in conversations about their future. Provide them with the tools and resources to explore their passions deeply (e.g., advanced software, books, classes)"
     },
     "languageCommunication": {
       "currentMilestone": "Can read and understand complex texts; can write persuasive essays; can articulate a complex argument",
       "shiftSummary": "Communication becomes a tool for self-advocacy and navigating the adult world. They learn to tailor their communication style to different audiences (teachers, employers, friends)",
-      "endMilestone": "Can communicate ideas clearly and persuasively in both written and spoken form; can understand and analyze complex media; uses language to build and maintain relationships",
+      "endMilestone": "Can communicate ideas clearly and persuasively in both written and spoken form; can understand and analyze complex media; uses language to navigate adult situations",
       "playSupport": "Theater, debate club, and creative writing are powerful ways to practice sophisticated and persuasive communication",
       "parentSupport": "Encourage them to take on roles that require public speaking or formal writing. Help them practice real-world communication, like writing a professional email or preparing for an interview"
     },
@@ -331,31 +331,31 @@
   },
   "preteens-older-teens": {
     "socialEmotional": {
-      "currentMilestone": "Developing strong sense of personal identity; forming intimate, trusting relationships based on shared values",
-      "shiftSummary": "Shift from adolescent identity formation to emerging adult independence. Developing mature relationships and autonomous decision-making",
-      "endMilestone": "Has consolidated personal identity; manages complex relationships; demonstrates emotional maturity and self-awareness",
-      "playSupport": "Deep engagement in a chosen passion (the lead in the play, the captain of the team, the president of the club). This is where they synthesize their identity",
+      "currentMilestone": "Has a consolidated sense of personal identity; relationships with peers are based on intimacy and trust; is making independent decisions and planning for the future",
+      "shiftSummary": "Continues deepening self-understanding and autonomy while building adult relationships and decision-making skills",
+      "endMilestone": "Demonstrates mature emotional intelligence; maintains healthy relationships; makes confident independent life choices",
+      "playSupport": "Deep engagement in a chosen passion (the lead in the play, the captain of the team, the editor of the yearbook) is a key way they build competence and a stable identity. Part-time jobs and volunteer work become new forms of 'productive play'",
       "parentSupport": "Transition from manager to consultant. They need you to be available for advice but respect their increasing autonomy and decision-making"
     },
     "cognitive": {
-      "currentMilestone": "Thinks critically about complex issues; sets long-term goals; has developed personal values and ethics",
-      "shiftSummary": "Thinking becomes real-world preparation. Applying abstract thinking to concrete life decisions about education, career, and relationships",
-      "endMilestone": "Demonstrates mature critical thinking; makes informed life decisions; shows intellectual independence and curiosity",
-      "playSupport": "The 'play' is now real-world preparation. This includes college exploration, passion projects that could be part of a portfolio or resume, internships",
+      "currentMilestone": "Can think critically about complex global and personal issues; sets long-term goals and makes plans to achieve them; has a well-developed sense of ethics and values",
+      "shiftSummary": "Applies critical thinking to real-world decisions about education, career, and personal values with increasing sophistication",
+      "endMilestone": "Makes well-informed life decisions; demonstrates intellectual maturity and independence; pursues passions with purpose",
+      "playSupport": "The 'play' is now real-world preparation. This includes college exploration, passion projects that could be part of a portfolio (a film, a coding project, an art series), entrepreneurial ventures, and deep dives into academic interests",
       "parentSupport": "Help them think through major life decisions while respecting their autonomy. Provide resources and connections but let them drive the process"
     },
     "languageCommunication": {
-      "currentMilestone": "Communicates clearly and persuasively in written and spoken form; understands complex media; uses language effectively",
-      "shiftSummary": "Communication becomes professional and purposeful. Mastering adult communication contexts like interviews, presentations, and formal writing",
-      "endMilestone": "Demonstrates sophisticated communication across contexts; advocates effectively for self; analyzes complex information critically",
-      "playSupport": "Participating in student government, leading a club, presenting a major project, writing a college application essay - all are forms of high-stakes communication practice",
+      "currentMilestone": "Can communicate ideas clearly and persuasively in both written and spoken form; can understand and analyze complex media; uses language to navigate adult situations",
+      "shiftSummary": "Masters professional communication contexts and uses language strategically for self-advocacy and relationship building",
+      "endMilestone": "Demonstrates sophisticated communication across all contexts; effectively advocates for themselves; analyzes and creates complex media",
+      "playSupport": "Participating in student government, leading a club, presenting a major project, writing a college application essay, or even creating a professional social media presence are all ways they use their language skills to shape their future",
       "parentSupport": "Help them practice professional communication. Review their resume, do mock interviews, discuss their ideas for presentations"
     },
     "motor": {
-      "currentMilestone": "Has achieved high level of mastery in chosen physical skills; reached full physical maturity",
-      "shiftSummary": "Focus shifts from skill development to performance, competition, and maintaining lifelong healthy habits",
-      "endMilestone": "Maintains physical health and well-being; may achieve elite performance in chosen activities; understands importance of lifelong fitness",
-      "playSupport": "The 'play' is performance and mastery. This is the varsity game, the senior recital, the final art portfolio. It's the culmination of years of practice",
+      "currentMilestone": "Has reached full physical maturity; has achieved a high level of mastery in chosen physical skills",
+      "shiftSummary": "Focuses on peak performance in chosen activities while establishing lifelong health and wellness habits",
+      "endMilestone": "Maintains optimal physical health; achieves excellence in chosen pursuits; understands importance of lifelong fitness",
+      "playSupport": "The 'play' is performance and mastery. This is the varsity game, the senior recital, the final art portfolio. It's the culmination of years of motor skill development, now used to express their fully-formed identity",
       "parentSupport": "Celebrate their achievements while helping them understand that physical activity is a lifelong practice, not just about winning or performance"
     }
   }
