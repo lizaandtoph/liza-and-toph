@@ -6,9 +6,11 @@ import needsToProductsData from '../data/needsToProducts.json';
 import { Sparkles, ExternalLink, ShoppingBag } from 'lucide-react';
 
 export default function Recommendations() {
-  const { child, answers } = useStore();
+  const { getActiveChild, getAnswers, activeChildId } = useStore();
+  const child = getActiveChild();
+  const answers = child ? getAnswers(child.id) : { schemas: [], barriers: [], interests: [] };
 
-  if (!child.ageBand) {
+  if (!child || !child.ageBand) {
     return (
       <div className="container mx-auto px-4 max-w-4xl py-12 text-center">
         <div className="bg-gradient-to-br from-[#EDE9DC] to-ivory p-12 rounded-2xl shadow-lg">
@@ -45,11 +47,20 @@ export default function Recommendations() {
   const needIds = computeNeeds();
   
   const ageMap: Record<string, [number, number]> = {
-    'newborn-2': [0, 2],
-    '2-5': [2, 5],
-    '5-8': [5, 8],
+    'newborn-18m': [0, 1.5],
+    '18m-3y': [1.5, 3],
+    '2-5y': [2, 5],
+    '3-6y': [3, 6],
+    '4-7y': [4, 7],
+    '5-8y': [5, 8],
+    '6-9y': [6, 9],
+    '7-10y': [7, 10],
+    '8-11y': [8, 11],
+    '9-12y': [9, 12],
+    '10-early-teens': [10, 13],
+    'preteens-older-teens': [11, 17],
   };
-  const [minAge, maxAge] = ageMap[child.ageBand];
+  const [minAge, maxAge] = ageMap[child.ageBand] || [0, 18];
 
   const products = needIds.flatMap((needId) => {
     const items = needsToProductsData[needId as keyof typeof needsToProductsData] || [];
