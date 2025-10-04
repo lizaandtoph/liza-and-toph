@@ -241,11 +241,40 @@ export default function PlayBoard() {
                       </div>
                     </>
                   ) : (
-                    <div className="bg-gradient-to-r from-blush/10 to-ochre/10 border-2 border-burnt/20 rounded-xl p-4 text-center">
-                      <Lock className="w-8 h-8 text-espresso/40 mx-auto mb-2" />
-                      <p className="text-sm font-medium text-espresso/70">
-                        Subscribe to unlock developmental insights
-                      </p>
+                    <div className="relative">
+                      <div>
+                        <p className="text-sm font-semibold text-ochre uppercase tracking-wide mb-1">Developmental Journey</p>
+                        <p className="text-sm leading-relaxed">{data.shiftSummary}</p>
+                      </div>
+                      
+                      {/* Gradient overlay with pricing */}
+                      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/60 to-white pt-8">
+                        <div className="absolute bottom-0 left-0 right-0 bg-white border-2 border-ochre/30 rounded-xl p-4 shadow-lg">
+                          <div className="space-y-3">
+                            <div className="flex items-center justify-between gap-3">
+                              <div>
+                                <p className="text-xs text-espresso/60 mb-1">Monthly</p>
+                                <p className="text-lg font-bold text-espresso">$4.99/mo</p>
+                              </div>
+                              <button
+                                onClick={handleSubscribe}
+                                className="px-4 py-2 bg-olive text-ivory rounded-lg hover:bg-ochre transition font-semibold text-sm whitespace-nowrap"
+                                data-testid="button-subscribe-card"
+                              >
+                                Get full access
+                              </button>
+                            </div>
+                            <p className="text-xs text-espresso/60 leading-relaxed">
+                              Unlock complete developmental insights and personalized recommendations
+                            </p>
+                            <div className="pt-2 border-t border-sand/50">
+                              <p className="text-xs text-espresso/70">
+                                <span className="font-semibold">Annual $99/yr</span> <span className="text-espresso/50">($8/mo)</span>
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   )}
                   <div className="pt-4 border-t border-sand">
