@@ -34,7 +34,7 @@ Preferred communication style: Simple, everyday language.
 **Component Structure**
 - Reusable UI components in `client/src/components/ui/` following shadcn conventions
 - Feature components for domain logic (MilestoneTimeline, ProductGrid, QuestionnaireStep)
-- Pages organized by route (`home`, `login`, `onboarding`, `your-child`, `playboard`, `shop`, `find-pros`, `settings`)
+- Pages organized by route (`home`, `login`, `onboarding`, `your-child`, `playboard`, `shop`, `pros`, `settings`)
 - Child selector dropdown in Layout component for switching between children
 - "Add Another Child" functionality integrated into navigation
 - Your Child page (`/your-child`) displays all children in responsive cards with avatar, name, age/age band, stage nickname, developmental journey teasers, and "View Play Board" CTA
@@ -112,7 +112,9 @@ Preferred communication style: Simple, everyday language.
   - Shop page transforms Product schema to UI format (id→skuId, name→title, affiliateUrl→url)
 - **Professionals**: Healthcare and development professionals directory
   - Schema fields: id, name, specialty, location, rating (string), description
-  - Managed via AdminPros page, displayed on FindPros page
+  - Managed via AdminPros page (/admin-pros), displayed on Professionals page (/pros)
+  - Professionals page features search, specialty filter, and rating filter
+  - /find-pros redirects to /pros for backward compatibility
 - **Play Boards**: Aggregated personalized boards combining profiles, milestones, and products
 
 **Current Implementation**
