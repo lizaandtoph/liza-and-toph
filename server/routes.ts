@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertChildProfileSchema, insertPlayBoardSchema } from "@shared/schema";
+import { insertChildProfileSchema, insertPlayBoardSchema, insertProductSchema, updateProductSchema } from "@shared/schema";
 import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -79,6 +79,72 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       res.json(products);
+    } catch (error) {
+      res.status(500).json({ message: "Server error", error });
+    }
+  });
+
+  // Admin Product routes
+  app.get("/api/admin/products", async (req, res) => {
+    try {
+      const products = await storage.getAllProducts();
+      res.json(products);
+    } catch (error) {
+      res.status(500).json({ message: "Server error", error });
+    }
+  });
+
+  app.get("/api/admin/products/:id", async (req, res) => {
+    try {
+      const { id } = req.params;
+      const product = await storage.getProduct(id);
+      if (!product) {
+        return res.status(404).json({ message: "Product not found" });
+      }
+      res.json(product);
+    } catch (error) {
+      res.status(500).json({ message: "Server error", error });
+    }
+  });
+
+  app.post("/api/admin/products", async (req, res) => {
+    try {
+      const validatedData = insertProductSchema.parse(req.body);
+      const product = await storage.createProduct(validatedData);
+      res.json(product);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid product data", errors: error.errors });
+      }
+      res.status(500).json({ message: "Server error", error });
+    }
+  });
+
+  app.put("/api/admin/products/:id", async (req, res) => {
+    try {
+      const { id } = req.params;
+      const validatedData = updateProductSchema.parse(req.body);
+      const product = await storage.updateProduct(id, validatedData);
+      if (!product) {
+        return res.status(404).json({ message: "Product not found" });
+      }
+      res.json(product);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid product data", errors: error.errors });
+      }
+      res.status(500).json({ message: "Server error", error });
+    }
+  });
+
+  app.delete("/api/admin/products/:id", async (req, res) => {
+    try {
+      const { id } = req.params;
+      const success = await storage.deleteProduct(id);
+      if (!success) {
+        return res.status(404).json({ message: "Product not found" });
+      }
+      res.json({ message: "Product deleted successfully" });
     } catch (error) {
       res.status(500).json({ message: "Server error", error });
     }

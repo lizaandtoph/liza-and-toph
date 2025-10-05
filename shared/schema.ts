@@ -73,12 +73,29 @@ export const insertProductSchema = createInsertSchema(products).omit({
   id: true,
 });
 
+export const updateProductSchema = z.object({
+  name: z.string().optional(),
+  brand: z.string().optional(),
+  description: z.string().optional(),
+  price: z.string().optional(),
+  imageUrl: z.string().optional(),
+  categories: z.array(z.string()).nullable().optional(),
+  ageRange: z.string().optional(),
+  rating: z.string().optional(),
+  reviewCount: z.number().int().optional(),
+  affiliateUrl: z.string().nullable().optional(),
+  isTopPick: z.boolean().nullable().optional(),
+  isBestseller: z.boolean().nullable().optional(),
+  isNew: z.boolean().nullable().optional(),
+});
+
 // Types
 export type InsertChildProfile = z.infer<typeof insertChildProfileSchema>;
 export type ChildProfile = typeof childProfiles.$inferSelect;
 export type Milestone = typeof milestones.$inferSelect;
 export type Product = typeof products.$inferSelect;
 export type InsertProduct = z.infer<typeof insertProductSchema>;
+export type UpdateProduct = z.infer<typeof updateProductSchema>;
 export type PlayBoard = typeof playBoards.$inferSelect;
 export type InsertPlayBoard = z.infer<typeof insertPlayBoardSchema>;
 
