@@ -568,18 +568,6 @@
           ]
         },
         {
-          "id": "attendsDaycare",
-          "text": "Does your child attend daycare, preschool, or other group care?",
-          "type": "radio",
-          "options": ["No", "Yes"]
-        },
-        {
-          "id": "daycareHours",
-          "text": "If yes, how many hours per week?",
-          "type": "number",
-          "conditional": { "field": "attendsDaycare", "value": "Yes" }
-        },
-        {
           "id": "playsWithOthers",
           "text": "How often does your child play with other children outside the home?",
           "type": "radio",
@@ -590,26 +578,6 @@
             "Daily",
             "Multiple times daily"
           ]
-        },
-        {
-          "id": "playChallenges",
-          "text": "What challenges, if any, do you notice during your child's play?",
-          "type": "textarea"
-        },
-        {
-          "id": "safetyConcerns",
-          "text": "Are there any safety concerns that limit your child's play opportunities?",
-          "type": "textarea"
-        },
-        {
-          "id": "parentSupport",
-          "text": "How do you typically support or join in your child's play?",
-          "type": "textarea"
-        },
-        {
-          "id": "developmentGoals",
-          "text": "What would you like to see your child develop further in their play?",
-          "type": "textarea"
         }
       ]
     },
@@ -657,16 +625,6 @@
           "id": "independence",
           "text": "Do you have concerns about how your child learns to do things for themselves?",
           "type": "yesNoDetails"
-        },
-        {
-          "id": "developmentGoals",
-          "text": "What are your main goals for your child's development in the next 6 months?",
-          "type": "textarea"
-        },
-        {
-          "id": "additionalConcerns",
-          "text": "Is there anything else about your child's development or behavior that concerns or puzzles you?",
-          "type": "textarea"
         }
       ]
     }

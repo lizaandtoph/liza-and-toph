@@ -112,13 +112,7 @@ export interface Answers {
     environment?: {
       playMaterials?: string[];
       activePlayTime?: string;
-      attendsDaycare?: boolean;
-      daycareHours?: number;
       playsWithOthers?: string;
-      playChallenges?: string;
-      safetyConcerns?: string;
-      parentSupport?: string;
-      developmentGoals?: string;
     };
     
     // Section 6: Parent Observations and Concerns
@@ -131,8 +125,6 @@ export interface Answers {
       getsAlong?: { hasConcern: boolean; details?: string };
       learning?: { hasConcern: boolean; details?: string };
       independence?: { hasConcern: boolean; details?: string };
-      developmentGoals?: string;
-      additionalConcerns?: string;
     };
   };
 }
