@@ -1,0 +1,56 @@
+{
+  "18m-3yr": {
+    "social_emotional": {
+      "question": "Does your child play next to other children?",
+      "options": ["yes", "sometimes", "not_yet"]
+    },
+    "cognitive": {
+      "question": "Does your child copy simple actions like sweeping?",
+      "options": ["yes", "sometimes", "not_yet"]
+    },
+    "language": {
+      "question": "About how many words does your child say?",
+      "options": ["10-25", "25-50", "50+"]
+    },
+    "motor": {
+      "question": "Can your child stack blocks or similar objects?",
+      "options": ["yes", "sometimes", "not_yet"]
+    }
+  },
+  "2-5yr": {
+    "social_emotional": {
+      "question": "Does your child take turns during play?",
+      "options": ["yes", "sometimes", "not_yet"]
+    },
+    "cognitive": {
+      "question": "Does your child use objects for pretend play?",
+      "options": ["yes", "sometimes", "not_yet"]
+    },
+    "language": {
+      "question": "Does your child tell simple stories?",
+      "options": ["yes", "sometimes", "not_yet"]
+    },
+    "motor": {
+      "question": "Does your child use crayons or markers to draw?",
+      "options": ["yes", "sometimes", "not_yet"]
+    }
+  },
+  "3-6yr": {
+    "social_emotional": {
+      "question": "Does your child assign roles during pretend play?",
+      "options": ["yes", "sometimes", "not_yet"]
+    },
+    "cognitive": {
+      "question": "Does your child plan play scenarios in advance?",
+      "options": ["yes", "sometimes", "not_yet"]
+    },
+    "language": {
+      "question": "Can your child have back-and-forth conversations?",
+      "options": ["yes", "sometimes", "not_yet"]
+    },
+    "motor": {
+      "question": "Can your child use scissors to cut paper?",
+      "options": ["yes", "sometimes", "not_yet"]
+    }
+  }
+}

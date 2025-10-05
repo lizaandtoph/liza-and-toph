@@ -12,10 +12,40 @@ interface ChildProfile {
   ageBand: AgeBand | '';
 }
 
-interface Answers {
+export interface Milestone {
+  question: string;
+  answer: string;
+}
+
+export interface Answers {
+  // Core questionnaire data
   schemas: string[];
   barriers: string[];
   interests: string[];
+  household_size?: number;
+  
+  // Milestone tracking by domain
+  milestones?: {
+    social_emotional?: Milestone;
+    cognitive?: Milestone;
+    language?: Milestone;
+    motor?: Milestone;
+  };
+  
+  // Version tracking to detect if user needs to retake questionnaire
+  questionnaire_version?: number;
+  
+  // Optional: Full questionnaire additions (for future implementation)
+  attention_span?: string;
+  problem_solving_style?: string;
+  problem_solving_approach?: string;
+  sensory_seeking?: string[];
+  sensory_avoiding?: string[];
+  sensory_underresponsive?: string[];
+  toy_accessibility?: string;
+  cleanup_independence?: string;
+  space_constraints?: string[];
+  storage_preference?: string;
 }
 
 export interface ParentAccount {
@@ -74,7 +104,7 @@ export const useStore = create<Store>()(
           activeChildId: id,
           childAnswers: {
             ...state.childAnswers,
-            [id]: answers || { schemas: [], barriers: [], interests: [] }
+            [id]: answers || { schemas: [], barriers: [], interests: [], questionnaire_version: 2 }
           }
         }));
         return id;
@@ -128,7 +158,7 @@ export const useStore = create<Store>()(
       
       getAnswers: (childId) => {
         const state = get();
-        return state.childAnswers[childId] || { schemas: [], barriers: [], interests: [] };
+        return state.childAnswers[childId] || { schemas: [], barriers: [], interests: [], questionnaire_version: 2 };
       },
       
       setSubscribed: (subscribed) => set({ subscribed }),

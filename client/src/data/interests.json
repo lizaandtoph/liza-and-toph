@@ -1,0 +1,47 @@
+{
+  "movement": {
+    "value": "movement",
+    "label": "Movement",
+    "description": "Climbing, jumping, dancing, riding toys"
+  },
+  "building": {
+    "value": "building",
+    "label": "Building",
+    "description": "Blocks, magna-tiles, stacking"
+  },
+  "nurturing": {
+    "value": "nurturing",
+    "label": "Nurturing",
+    "description": "Dolls, stuffed animals, feeding games"
+  },
+  "vehicles": {
+    "value": "vehicles",
+    "label": "Vehicles",
+    "description": "Cars, trains, planes"
+  },
+  "art": {
+    "value": "art",
+    "label": "Art",
+    "description": "Drawing, painting, playdough"
+  },
+  "music": {
+    "value": "music",
+    "label": "Music",
+    "description": "Singing, instruments, dancing"
+  },
+  "books": {
+    "value": "books",
+    "label": "Books",
+    "description": "Looking at pictures, being read to"
+  },
+  "nature": {
+    "value": "nature",
+    "label": "Nature",
+    "description": "Water play, collecting things outside"
+  },
+  "pretend": {
+    "value": "pretend",
+    "label": "Pretend",
+    "description": "Dress-up, kitchen play, acting out stories"
+  }
+}

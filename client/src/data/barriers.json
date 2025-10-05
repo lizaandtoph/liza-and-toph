@@ -1,0 +1,27 @@
+{
+  "access_barriers": {
+    "value": "access_barriers",
+    "label": "Access barriers",
+    "description": "Toys stored too high, containers too heavy to open"
+  },
+  "space_barriers": {
+    "value": "space_barriers",
+    "label": "Space barriers",
+    "description": "Not enough room to move, shared space conflicts"
+  },
+  "sensory_barriers": {
+    "value": "sensory_barriers",
+    "label": "Sensory barriers",
+    "description": "Overwhelmed by noise, avoids messy textures"
+  },
+  "social_barriers": {
+    "value": "social_barriers",
+    "label": "Social barriers",
+    "description": "Difficulty sharing, needs adult help to start play"
+  },
+  "attention_barriers": {
+    "value": "attention_barriers",
+    "label": "Attention barriers",
+    "description": "Gets frustrated quickly, trouble focusing"
+  }
+}

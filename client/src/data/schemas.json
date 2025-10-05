@@ -1,22 +1,26 @@
 {
   "connecting": {
     "label": "Connecting",
-    "description": "Joins objects together (blocks, train tracks, puzzles)"
+    "description": "Linking train tracks, joining blocks, doing puzzles"
   },
   "disconnecting": {
     "label": "Disconnecting",
-    "description": "Takes things apart or separates them"
-  },
-  "rotation": {
-    "label": "Rotation",
-    "description": "Spins, turns, or rotates objects"
+    "description": "Taking things apart, knocking down towers"
   },
   "enveloping": {
     "label": "Enveloping",
-    "description": "Wraps, covers, or encloses objects"
+    "description": "Wrapping toys in blankets, hiding under covers, building forts"
+  },
+  "rotation": {
+    "label": "Rotation",
+    "description": "Spinning wheels, twirling, fascinated by fans"
+  },
+  "trajectory": {
+    "label": "Trajectory",
+    "description": "Throwing, dropping things, jumping, pouring water"
   },
   "orientation": {
     "label": "Orientation",
-    "description": "Lines up or arranges objects in specific ways"
+    "description": "Hanging upside down, looking under furniture"
   }
 }
