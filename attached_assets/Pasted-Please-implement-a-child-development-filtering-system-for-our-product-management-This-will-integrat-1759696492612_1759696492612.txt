@@ -1,0 +1,104 @@
+Please implement a child development filtering system for our product management. This will integrate a parent questionnaire with product recommendations.
+
+STEP 1: Update the products database schema by adding these fields:
+
+// Age filtering
+min_age_months: Number
+max_age_months: Number
+age_range_category: String
+
+// Developmental support (arrays)
+communication_levels: Array // ["emerging", "developing", "proficient", "advanced"]
+motor_levels: Array // ["emerging", "developing", "proficient", "advanced"] 
+cognitive_levels: Array // ["emerging", "developing", "proficient", "advanced"]
+social_emotional_levels: Array // ["emerging", "developing", "proficient", "advanced"]
+
+// Play type tags (multi-select)
+play_type_tags: Array // ["pretend_play", "building_toys", "art_supplies", "active_play", "puzzles", "musical_toys", "sensory_toys", "group_games", "imagination", "construction", "crafts", "sports", "logic_games", "rhythm", "textures", "social_interaction"]
+
+// Complexity and challenge
+complexity_level: String // ["simple", "moderate", "complex", "advanced", "expert"]
+challenge_rating: Number // 1-5
+attention_duration: String // ["quick_activities", "medium_activities", "detailed_activities", "complex_projects", "advanced_building"]
+
+// Temperament compatibility
+stimulation_level: String // ["low", "moderate", "high"]
+structure_preference: String // ["structured", "flexible", "open_ended"]
+energy_requirement: String // ["sedentary", "moderate", "active", "high_energy"]
+sensory_compatibility: Array // ["gentle", "moderate", "intense"]
+
+// Social context
+social_context: Array // ["solo_play", "paired_play", "group_play", "family_play"]
+cooperation_required: Boolean
+
+// Safety and special needs
+safety_considerations: Array // ["choking_hazard", "supervision_required", "small_parts"]
+special_needs_support: Array // ["autism_friendly", "sensory_processing", "speech_therapy", "motor_therapy"]
+intervention_focus: Array // ["communication", "motor_skills", "social_skills", "behavior_support"]
+
+// Environmental factors
+noise_level: String // ["quiet", "moderate", "loud"]
+mess_factor: String // ["minimal", "moderate", "messy"]
+setup_time: String // ["immediate", "quick", "moderate", "extended"]
+space_requirements: String // ["small", "medium", "large", "outdoor"]
+
+STEP 2: Update the product creation/edit forms to include:
+
+Age Section:
+- Min Age (months): number input
+- Max Age (months): number input
+- Age Category: dropdown
+
+Developmental Support Section:
+- Communication Levels: multi-select checkboxes
+- Motor Levels: multi-select checkboxes
+- Cognitive Levels: multi-select checkboxes
+- Social-Emotional Levels: multi-select checkboxes
+
+Play Characteristics Section:
+- Play Type Tags: multi-select with search
+- Complexity Level: radio buttons
+- Challenge Rating: 1-5 slider
+- Attention Duration: dropdown
+
+Temperament Section:
+- Stimulation Level: radio buttons
+- Structure Preference: radio buttons
+- Energy Requirement: radio buttons
+- Sensory Compatibility: multi-select
+
+Social Context Section:
+- Social Context: multi-select
+- Cooperation Required: toggle
+
+Safety Section:
+- Safety Considerations: multi-select
+- Special Needs Support: multi-select
+- Intervention Focus: multi-select
+
+Environment Section:
+- Noise Level: radio buttons
+- Mess Factor: radio buttons
+- Setup Time: radio buttons
+- Space Requirements: radio buttons
+
+STEP 3: Add form validation:
+- min_age_months must be ≤ max_age_months
+- At least one play_type_tag required
+- complexity_level required
+- At least one developmental level per domain required
+
+STEP 4: Update product display to show:
+- Age range (e.g., "12-36 months")
+- Top 3 play type tags
+- Complexity level badge
+- Energy requirement icon
+
+STEP 5: Add search filters for:
+- Age range slider
+- Play type checkboxes
+- Complexity level filter
+- Energy requirement filter
+- Special needs filter
+
+Start with the database schema updates first, then move to the forms. Let me know when each step is complete and I'll help with the next phase.

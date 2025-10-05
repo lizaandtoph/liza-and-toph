@@ -49,6 +49,46 @@ export const products = pgTable("products", {
   isTopPick: boolean("is_top_pick").default(false),
   isBestseller: boolean("is_bestseller").default(false),
   isNew: boolean("is_new").default(false),
+  
+  // Age filtering
+  minAgeMonths: integer("min_age_months"),
+  maxAgeMonths: integer("max_age_months"),
+  ageRangeCategory: text("age_range_category"),
+  
+  // Developmental support (arrays of levels: emerging, developing, proficient, advanced)
+  communicationLevels: jsonb("communication_levels").$type<string[]>(),
+  motorLevels: jsonb("motor_levels").$type<string[]>(),
+  cognitiveLevels: jsonb("cognitive_levels").$type<string[]>(),
+  socialEmotionalLevels: jsonb("social_emotional_levels").$type<string[]>(),
+  
+  // Play type tags
+  playTypeTags: jsonb("play_type_tags").$type<string[]>(),
+  
+  // Complexity and challenge
+  complexityLevel: text("complexity_level"), // simple, moderate, complex, advanced, expert
+  challengeRating: integer("challenge_rating"), // 1-5
+  attentionDuration: text("attention_duration"), // quick_activities, medium_activities, detailed_activities, complex_projects, advanced_building
+  
+  // Temperament compatibility
+  stimulationLevel: text("stimulation_level"), // low, moderate, high
+  structurePreference: text("structure_preference"), // structured, flexible, open_ended
+  energyRequirement: text("energy_requirement"), // sedentary, moderate, active, high_energy
+  sensoryCompatibility: jsonb("sensory_compatibility").$type<string[]>(), // gentle, moderate, intense
+  
+  // Social context
+  socialContext: jsonb("social_context").$type<string[]>(), // solo_play, paired_play, group_play, family_play
+  cooperationRequired: boolean("cooperation_required"),
+  
+  // Safety and special needs
+  safetyConsiderations: jsonb("safety_considerations").$type<string[]>(), // choking_hazard, supervision_required, small_parts
+  specialNeedsSupport: jsonb("special_needs_support").$type<string[]>(), // autism_friendly, sensory_processing, speech_therapy, motor_therapy
+  interventionFocus: jsonb("intervention_focus").$type<string[]>(), // communication, motor_skills, social_skills, behavior_support
+  
+  // Environmental factors
+  noiseLevel: text("noise_level"), // quiet, moderate, loud
+  messFactor: text("mess_factor"), // minimal, moderate, messy
+  setupTime: text("setup_time"), // immediate, quick, moderate, extended
+  spaceRequirements: text("space_requirements"), // small, medium, large, outdoor
 });
 
 export const playBoards = pgTable("play_boards", {
@@ -178,6 +218,46 @@ export const updateProductSchema = z.object({
   isTopPick: z.boolean().nullable().optional(),
   isBestseller: z.boolean().nullable().optional(),
   isNew: z.boolean().nullable().optional(),
+  
+  // Age filtering
+  minAgeMonths: z.number().int().nullable().optional(),
+  maxAgeMonths: z.number().int().nullable().optional(),
+  ageRangeCategory: z.string().nullable().optional(),
+  
+  // Developmental support
+  communicationLevels: z.array(z.string()).nullable().optional(),
+  motorLevels: z.array(z.string()).nullable().optional(),
+  cognitiveLevels: z.array(z.string()).nullable().optional(),
+  socialEmotionalLevels: z.array(z.string()).nullable().optional(),
+  
+  // Play type tags
+  playTypeTags: z.array(z.string()).nullable().optional(),
+  
+  // Complexity and challenge
+  complexityLevel: z.string().nullable().optional(),
+  challengeRating: z.number().int().min(1).max(5).nullable().optional(),
+  attentionDuration: z.string().nullable().optional(),
+  
+  // Temperament compatibility
+  stimulationLevel: z.string().nullable().optional(),
+  structurePreference: z.string().nullable().optional(),
+  energyRequirement: z.string().nullable().optional(),
+  sensoryCompatibility: z.array(z.string()).nullable().optional(),
+  
+  // Social context
+  socialContext: z.array(z.string()).nullable().optional(),
+  cooperationRequired: z.boolean().nullable().optional(),
+  
+  // Safety and special needs
+  safetyConsiderations: z.array(z.string()).nullable().optional(),
+  specialNeedsSupport: z.array(z.string()).nullable().optional(),
+  interventionFocus: z.array(z.string()).nullable().optional(),
+  
+  // Environmental factors
+  noiseLevel: z.string().nullable().optional(),
+  messFactor: z.string().nullable().optional(),
+  setupTime: z.string().nullable().optional(),
+  spaceRequirements: z.string().nullable().optional(),
 });
 
 export const insertProfessionalSchema = createInsertSchema(professionals).omit({
