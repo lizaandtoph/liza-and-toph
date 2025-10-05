@@ -1,52 +1,14 @@
 import { Search, MapPin, Star } from 'lucide-react';
 import { useState } from 'react';
-
-interface Professional {
-  id: string;
-  name: string;
-  specialty: string;
-  location: string;
-  rating: number;
-  description: string;
-}
+import { useQuery } from '@tanstack/react-query';
+import { type Professional } from '@shared/schema';
 
 export default function FindPros() {
   const [searchQuery, setSearchQuery] = useState('');
 
-  const professionals: Professional[] = [
-    {
-      id: '1',
-      name: 'Dr. Sarah Mitchell',
-      specialty: 'Child Development Specialist',
-      location: 'San Francisco, CA',
-      rating: 4.9,
-      description: 'Board-certified pediatric occupational therapist with 15 years of experience in early childhood development.',
-    },
-    {
-      id: '2',
-      name: 'Emily Rodriguez, MS',
-      specialty: 'Play Therapist',
-      location: 'Austin, TX',
-      rating: 4.8,
-      description: 'Licensed play therapist specializing in developmental play and sensory integration.',
-    },
-    {
-      id: '3',
-      name: 'Dr. James Chen',
-      specialty: 'Pediatric Psychologist',
-      location: 'Seattle, WA',
-      rating: 5.0,
-      description: 'Clinical psychologist focusing on early intervention and developmental assessment.',
-    },
-    {
-      id: '4',
-      name: 'Maria Santos, OT',
-      specialty: 'Occupational Therapist',
-      location: 'Denver, CO',
-      rating: 4.7,
-      description: 'Pediatric OT with expertise in fine motor development and sensory processing.',
-    },
-  ];
+  const { data: professionals = [], isLoading } = useQuery<Professional[]>({
+    queryKey: ['/api/admin/professionals'],
+  });
 
   const filteredPros = professionals.filter((pro) =>
     pro.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -79,11 +41,15 @@ export default function FindPros() {
       </div>
 
       {/* Professionals List */}
-      {filteredPros.length === 0 && (
+      {isLoading ? (
+        <div className="text-center py-12">
+          <p className="text-lg opacity-70">Loading professionals...</p>
+        </div>
+      ) : filteredPros.length === 0 ? (
         <div className="text-center py-12">
           <p className="text-lg opacity-70">No professionals found matching your search.</p>
         </div>
-      )}
+      ) : null}
 
       <div className="space-y-6">
         {filteredPros.map((pro) => (
