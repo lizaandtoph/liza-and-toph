@@ -1,8 +1,12 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertChildProfileSchema, insertPlayBoardSchema, insertProductSchema, updateProductSchema, insertProfessionalSchema, updateProfessionalSchema } from "@shared/schema";
+import { insertChildProfileSchema, insertPlayBoardSchema, insertProductSchema, updateProductSchema, insertProfessionalSchema, updateProfessionalSchema, registerUserSchema, loginUserSchema, insertProSchema, updateProSchema, insertServiceOfferingSchema, insertServiceAreaSchema, insertGalleryImageSchema, insertReviewSchema, insertMessageSchema } from "@shared/schema";
 import { z } from "zod";
+import { requireAuth, requireRole, requireOwnershipOrAdmin, generateToken, hashPassword, comparePassword, type AuthRequest } from "./auth";
+import multer from "multer";
+import path from "path";
+import fs from "fs";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Affiliate link tracker
@@ -277,6 +281,315 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
     } catch (error) {
       res.status(500).json({ message: "Server error", error });
+    }
+  });
+
+  // Configure Multer for file uploads
+  const uploadsDir = path.join(process.cwd(), "uploads");
+  if (!fs.existsSync(uploadsDir)) {
+    fs.mkdirSync(uploadsDir, { recursive: true });
+  }
+
+  const upload = multer({
+    storage: multer.diskStorage({
+      destination: uploadsDir,
+      filename: (req, file, cb) => {
+        const uniqueName = `${Date.now()}-${Math.random().toString(36).substring(7)}${path.extname(file.originalname)}`;
+        cb(null, uniqueName);
+      },
+    }),
+    limits: { fileSize: 5 * 1024 * 1024 },
+    fileFilter: (req, file, cb) => {
+      const allowedTypes = /jpeg|jpg|png|webp/;
+      const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
+      const mimetype = allowedTypes.test(file.mimetype);
+      if (extname && mimetype) {
+        cb(null, true);
+      } else {
+        cb(new Error("Only jpg, png, and webp images are allowed"));
+      }
+    },
+  });
+
+  // Auth routes
+  app.post("/api/auth/register", async (req, res) => {
+    try {
+      const validatedData = registerUserSchema.parse(req.body);
+      const existing = await storage.getUserByEmail(validatedData.email);
+      if (existing) {
+        return res.status(400).json({ error: "Email already registered" });
+      }
+
+      const hashedPassword = await hashPassword(validatedData.password);
+      const user = await storage.createUser({
+        ...validatedData,
+        password: hashedPassword,
+      });
+
+      const token = generateToken(user);
+      res.cookie("token", token, { httpOnly: true, maxAge: 7 * 24 * 60 * 60 * 1000 });
+      res.json({ user: { id: user.id, email: user.email, role: user.role, proId: user.proId }, token });
+    } catch (error) {
+      res.status(400).json({ error: "Invalid registration data" });
+    }
+  });
+
+  app.post("/api/auth/login", async (req, res) => {
+    try {
+      const validatedData = loginUserSchema.parse(req.body);
+      const user = await storage.getUserByEmail(validatedData.email);
+      if (!user) {
+        return res.status(401).json({ error: "Invalid credentials" });
+      }
+
+      const valid = await comparePassword(validatedData.password, user.passwordHash);
+      if (!valid) {
+        return res.status(401).json({ error: "Invalid credentials" });
+      }
+
+      const token = generateToken(user);
+      res.cookie("token", token, { httpOnly: true, maxAge: 7 * 24 * 60 * 60 * 1000 });
+      res.json({ user: { id: user.id, email: user.email, role: user.role, proId: user.proId }, token });
+    } catch (error) {
+      res.status(400).json({ error: "Invalid login data" });
+    }
+  });
+
+  app.post("/api/auth/logout", (req, res) => {
+    res.clearCookie("token");
+    res.json({ message: "Logged out successfully" });
+  });
+
+  app.get("/api/auth/me", requireAuth, (req: AuthRequest, res) => {
+    res.json({ user: req.user });
+  });
+
+  // Pro directory routes (public)
+  app.get("/api/pros", async (req, res) => {
+    try {
+      const { q, zip, radius, category, ratingMin, priceRange } = req.query;
+      const filters = {
+        q: q as string | undefined,
+        zip: zip as string | undefined,
+        radius: radius ? parseInt(radius as string) : undefined,
+        category: category as string | undefined,
+        ratingMin: ratingMin ? parseFloat(ratingMin as string) : undefined,
+        priceRange: priceRange as string | undefined,
+      };
+
+      const pros = await storage.getAllPros(filters);
+      res.json(pros);
+    } catch (error) {
+      res.status(500).json({ error: "Server error" });
+    }
+  });
+
+  app.get("/api/pros/:slug", async (req, res) => {
+    try {
+      const { slug } = req.params;
+      const pro = await storage.getProBySlug(slug);
+      if (!pro) {
+        return res.status(404).json({ error: "Pro not found" });
+      }
+
+      const [services, areas, gallery, reviews] = await Promise.all([
+        storage.getServiceOfferingsByProId(pro.id),
+        storage.getServiceAreasByProId(pro.id),
+        storage.getGalleryImagesByProId(pro.id),
+        storage.getReviewsByProId(pro.id),
+      ]);
+
+      res.json({ ...pro, services, areas, gallery, reviews });
+    } catch (error) {
+      res.status(500).json({ error: "Server error" });
+    }
+  });
+
+  app.post("/api/pros/:id", requireAuth as any, requireOwnershipOrAdmin, async (req: AuthRequest, res) => {
+    try {
+      const { id } = req.params;
+      const validatedData = updateProSchema.parse(req.body);
+      const pro = await storage.updatePro(id, validatedData);
+      if (!pro) {
+        return res.status(404).json({ error: "Pro not found" });
+      }
+      res.json(pro);
+    } catch (error) {
+      res.status(400).json({ error: "Invalid pro data" });
+    }
+  });
+
+  // Service offerings routes
+  app.post("/api/pros/:id/services", requireAuth as any, requireOwnershipOrAdmin, async (req: AuthRequest, res) => {
+    try {
+      const { id } = req.params;
+      const validatedData = insertServiceOfferingSchema.parse({ ...req.body, proId: id });
+      const service = await storage.createServiceOffering(validatedData);
+      res.json(service);
+    } catch (error) {
+      res.status(400).json({ error: "Invalid service data" });
+    }
+  });
+
+  app.delete("/api/pros/:id/services/:serviceId", requireAuth as any, requireOwnershipOrAdmin, async (req: AuthRequest, res) => {
+    try {
+      const { serviceId } = req.params;
+      const success = await storage.deleteServiceOffering(serviceId);
+      if (!success) {
+        return res.status(404).json({ error: "Service not found" });
+      }
+      res.json({ message: "Service deleted" });
+    } catch (error) {
+      res.status(500).json({ error: "Server error" });
+    }
+  });
+
+  // Service areas routes
+  app.post("/api/pros/:id/areas", requireAuth as any, requireOwnershipOrAdmin, async (req: AuthRequest, res) => {
+    try {
+      const { id } = req.params;
+      const validatedData = insertServiceAreaSchema.parse({ ...req.body, proId: id });
+      const area = await storage.createServiceArea(validatedData);
+      res.json(area);
+    } catch (error) {
+      res.status(400).json({ error: "Invalid area data" });
+    }
+  });
+
+  app.delete("/api/pros/:id/areas/:areaId", requireAuth as any, requireOwnershipOrAdmin, async (req: AuthRequest, res) => {
+    try {
+      const { areaId } = req.params;
+      const success = await storage.deleteServiceArea(areaId);
+      if (!success) {
+        return res.status(404).json({ error: "Area not found" });
+      }
+      res.json({ message: "Area deleted" });
+    } catch (error) {
+      res.status(500).json({ error: "Server error" });
+    }
+  });
+
+  // Gallery routes
+  app.post("/api/pros/:id/gallery", requireAuth as any, requireOwnershipOrAdmin, upload.single("image"), async (req: AuthRequest, res) => {
+    try {
+      const { id } = req.params;
+      if (!req.file) {
+        return res.status(400).json({ error: "No image file provided" });
+      }
+
+      const imageUrl = `/uploads/${req.file.filename}`;
+      const validatedData = insertGalleryImageSchema.parse({
+        proId: id,
+        url: imageUrl,
+        title: req.body.title || null,
+        description: req.body.description || null,
+        tags: req.body.tags ? JSON.parse(req.body.tags) : null,
+      });
+
+      const image = await storage.createGalleryImage(validatedData);
+      res.json(image);
+    } catch (error) {
+      res.status(400).json({ error: "Invalid gallery image data" });
+    }
+  });
+
+  app.delete("/api/pros/:id/gallery/:imgId", requireAuth as any, requireOwnershipOrAdmin, async (req: AuthRequest, res) => {
+    try {
+      const { imgId } = req.params;
+      const images = await storage.getGalleryImagesByProId(req.params.id);
+      const image = images.find(img => img.id === imgId);
+      
+      if (image) {
+        const filePath = path.join(uploadsDir, path.basename(image.url));
+        if (fs.existsSync(filePath)) {
+          fs.unlinkSync(filePath);
+        }
+      }
+
+      const success = await storage.deleteGalleryImage(imgId);
+      if (!success) {
+        return res.status(404).json({ error: "Image not found" });
+      }
+      res.json({ message: "Image deleted" });
+    } catch (error) {
+      res.status(500).json({ error: "Server error" });
+    }
+  });
+
+  // Review routes
+  app.get("/api/pros/:id/reviews", async (req, res) => {
+    try {
+      const { id } = req.params;
+      const reviews = await storage.getReviewsByProId(id);
+      res.json(reviews);
+    } catch (error) {
+      res.status(500).json({ error: "Server error" });
+    }
+  });
+
+  app.post("/api/pros/:id/reviews", async (req, res) => {
+    try {
+      const { id } = req.params;
+      const validatedData = insertReviewSchema.parse({ ...req.body, proId: id });
+      const review = await storage.createReview(validatedData);
+      res.json(review);
+    } catch (error) {
+      res.status(400).json({ error: "Invalid review data" });
+    }
+  });
+
+  // Message routes
+  app.get("/api/pros/:id/messages", requireAuth as any, requireOwnershipOrAdmin, async (req: AuthRequest, res) => {
+    try {
+      const { id } = req.params;
+      const messages = await storage.getMessagesByProId(id);
+      res.json(messages);
+    } catch (error) {
+      res.status(500).json({ error: "Server error" });
+    }
+  });
+
+  app.post("/api/pros/:id/messages", async (req, res) => {
+    try {
+      const { id } = req.params;
+      const validatedData = insertMessageSchema.parse({ ...req.body, proId: id });
+      const message = await storage.createMessage(validatedData);
+      res.json(message);
+    } catch (error) {
+      res.status(400).json({ error: "Invalid message data" });
+    }
+  });
+
+  // Subscription routes
+  app.get("/api/subscriptions/:proId", requireAuth as any, async (req: AuthRequest, res) => {
+    try {
+      const { proId } = req.params;
+      const subscription = await storage.getSubscriptionByProId(proId);
+      res.json(subscription || { status: "inactive" });
+    } catch (error) {
+      res.status(500).json({ error: "Server error" });
+    }
+  });
+
+  app.post("/api/subscriptions/:proId/activate", requireAuth as any, async (req: AuthRequest, res) => {
+    try {
+      const { proId } = req.params;
+      let subscription = await storage.getSubscriptionByProId(proId);
+      
+      if (subscription) {
+        subscription = await storage.updateSubscriptionStatus(proId, "active");
+      } else {
+        subscription = await storage.createSubscription({
+          proId,
+          status: "active",
+          plan: "professional",
+          currentPeriodEnd: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+        });
+      }
+
+      res.json(subscription);
+    } catch (error) {
+      res.status(500).json({ error: "Server error" });
     }
   });
 
