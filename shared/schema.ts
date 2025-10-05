@@ -56,6 +56,15 @@ export const playBoards = pgTable("play_boards", {
   updatedAt: timestamp("updated_at").default(sql`now()`),
 });
 
+export const professionals = pgTable("professionals", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  name: text("name").notNull(),
+  specialty: text("specialty").notNull(),
+  location: text("location").notNull(),
+  rating: text("rating").notNull(),
+  description: text("description").notNull(),
+});
+
 // Insert schemas
 export const insertChildProfileSchema = createInsertSchema(childProfiles).omit({
   id: true,
@@ -89,6 +98,18 @@ export const updateProductSchema = z.object({
   isNew: z.boolean().nullable().optional(),
 });
 
+export const insertProfessionalSchema = createInsertSchema(professionals).omit({
+  id: true,
+});
+
+export const updateProfessionalSchema = z.object({
+  name: z.string().optional(),
+  specialty: z.string().optional(),
+  location: z.string().optional(),
+  rating: z.string().optional(),
+  description: z.string().optional(),
+});
+
 // Types
 export type InsertChildProfile = z.infer<typeof insertChildProfileSchema>;
 export type ChildProfile = typeof childProfiles.$inferSelect;
@@ -98,6 +119,9 @@ export type InsertProduct = z.infer<typeof insertProductSchema>;
 export type UpdateProduct = z.infer<typeof updateProductSchema>;
 export type PlayBoard = typeof playBoards.$inferSelect;
 export type InsertPlayBoard = z.infer<typeof insertPlayBoardSchema>;
+export type Professional = typeof professionals.$inferSelect;
+export type InsertProfessional = z.infer<typeof insertProfessionalSchema>;
+export type UpdateProfessional = z.infer<typeof updateProfessionalSchema>;
 
 // User types from existing schema
 export const insertUserSchema = createInsertSchema(users).pick({
