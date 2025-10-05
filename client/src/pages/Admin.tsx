@@ -76,6 +76,46 @@ export default function Admin() {
       isTopPick: false,
       isBestseller: false,
       isNew: false,
+      
+      // Age filtering
+      minAgeMonths: null,
+      maxAgeMonths: null,
+      ageRangeCategory: null,
+      
+      // Developmental support
+      communicationLevels: [],
+      motorLevels: [],
+      cognitiveLevels: [],
+      socialEmotionalLevels: [],
+      
+      // Play type tags
+      playTypeTags: [],
+      
+      // Complexity and challenge
+      complexityLevel: null,
+      challengeRating: null,
+      attentionDuration: null,
+      
+      // Temperament compatibility
+      stimulationLevel: null,
+      structurePreference: null,
+      energyRequirement: null,
+      sensoryCompatibility: [],
+      
+      // Social context
+      socialContext: [],
+      cooperationRequired: null,
+      
+      // Safety and special needs
+      safetyConsiderations: [],
+      specialNeedsSupport: [],
+      interventionFocus: [],
+      
+      // Environmental factors
+      noiseLevel: null,
+      messFactor: null,
+      setupTime: null,
+      spaceRequirements: null,
     },
   });
 
@@ -115,6 +155,46 @@ export default function Admin() {
       isTopPick: product.isTopPick || false,
       isBestseller: product.isBestseller || false,
       isNew: product.isNew || false,
+      
+      // Age filtering
+      minAgeMonths: product.minAgeMonths || null,
+      maxAgeMonths: product.maxAgeMonths || null,
+      ageRangeCategory: product.ageRangeCategory || null,
+      
+      // Developmental support
+      communicationLevels: product.communicationLevels || [],
+      motorLevels: product.motorLevels || [],
+      cognitiveLevels: product.cognitiveLevels || [],
+      socialEmotionalLevels: product.socialEmotionalLevels || [],
+      
+      // Play type tags
+      playTypeTags: product.playTypeTags || [],
+      
+      // Complexity and challenge
+      complexityLevel: product.complexityLevel || null,
+      challengeRating: product.challengeRating || null,
+      attentionDuration: product.attentionDuration || null,
+      
+      // Temperament compatibility
+      stimulationLevel: product.stimulationLevel || null,
+      structurePreference: product.structurePreference || null,
+      energyRequirement: product.energyRequirement || null,
+      sensoryCompatibility: product.sensoryCompatibility || [],
+      
+      // Social context
+      socialContext: product.socialContext || [],
+      cooperationRequired: product.cooperationRequired || null,
+      
+      // Safety and special needs
+      safetyConsiderations: product.safetyConsiderations || [],
+      specialNeedsSupport: product.specialNeedsSupport || [],
+      interventionFocus: product.interventionFocus || [],
+      
+      // Environmental factors
+      noiseLevel: product.noiseLevel || null,
+      messFactor: product.messFactor || null,
+      setupTime: product.setupTime || null,
+      spaceRequirements: product.spaceRequirements || null,
     });
   };
 
@@ -129,6 +209,40 @@ export default function Admin() {
   ];
 
   const categories = ['cognitive', 'motor', 'social-emotional', 'language', 'creative'];
+  
+  // Developmental filtering constants
+  const developmentalLevels = ['emerging', 'developing', 'proficient', 'advanced'];
+  
+  const playTypes = [
+    'sensory', 'exploratory', 'functional', 'constructive', 'pretend', 'symbolic',
+    'gross_motor', 'fine_motor', 'cognitive', 'social', 'language', 'creative'
+  ];
+  
+  const complexityLevels = ['simple', 'moderate', 'complex', 'advanced', 'expert'];
+  
+  const attentionDurations = [
+    'quick_activities',
+    'medium_activities',
+    'detailed_activities',
+    'complex_projects',
+    'advanced_building'
+  ];
+  
+  const stimulationLevels = ['low', 'moderate', 'high'];
+  const structurePreferences = ['structured', 'flexible', 'open_ended'];
+  const energyRequirements = ['sedentary', 'moderate', 'active', 'high_energy'];
+  const sensoryTypes = ['gentle', 'moderate', 'intense'];
+  
+  const socialContexts = ['solo_play', 'paired_play', 'group_play', 'family_play'];
+  
+  const safetyTypes = ['choking_hazard', 'supervision_required', 'small_parts', 'age_appropriate'];
+  const specialNeedsTypes = ['autism_friendly', 'sensory_processing', 'speech_therapy', 'motor_therapy'];
+  const interventionTypes = ['communication', 'motor_skills', 'social_skills', 'behavior_support'];
+  
+  const noiseLevels = ['quiet', 'moderate', 'loud'];
+  const messFactors = ['minimal', 'moderate', 'messy'];
+  const setupTimes = ['immediate', 'quick', 'moderate', 'extended'];
+  const spaceOptions = ['small', 'medium', 'large', 'outdoor'];
 
   return (
     <div className="container mx-auto px-4 max-w-7xl py-8">
@@ -441,6 +555,566 @@ export default function Admin() {
                 />
               </div>
 
+              {/* Developmental Filtering Section */}
+              <div className="border-t pt-6 mt-6">
+                <h3 className="text-lg font-semibold mb-4">Developmental Filtering</h3>
+                
+                {/* Age Filtering */}
+                <div className="space-y-4 mb-6">
+                  <h4 className="font-medium text-sm text-muted-foreground">Age Range (Months)</h4>
+                  <div className="grid grid-cols-2 gap-4">
+                    <FormField
+                      control={createForm.control}
+                      name="minAgeMonths"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Min Age (Months)</FormLabel>
+                          <FormControl>
+                            <Input {...field} type="number" value={field.value ?? ''} onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value) : null)} data-testid="input-minAgeMonths" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={createForm.control}
+                      name="maxAgeMonths"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Max Age (Months)</FormLabel>
+                          <FormControl>
+                            <Input {...field} type="number" value={field.value ?? ''} onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value) : null)} data-testid="input-maxAgeMonths" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </div>
+
+                {/* Developmental Support */}
+                <div className="space-y-4 mb-6">
+                  <h4 className="font-medium text-sm text-muted-foreground">Developmental Support Levels</h4>
+                  <FormField
+                    control={createForm.control}
+                    name="communicationLevels"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Communication Levels</FormLabel>
+                        <div className="grid grid-cols-4 gap-2 mt-2">
+                          {developmentalLevels.map((level) => (
+                            <div key={level} className="flex items-center space-x-2">
+                              <Checkbox
+                                checked={field.value?.includes(level) || false}
+                                onCheckedChange={(checked) => {
+                                  const current = field.value || [];
+                                  field.onChange(checked ? [...current, level] : current.filter((l) => l !== level));
+                                }}
+                                data-testid={`checkbox-communication-${level}`}
+                              />
+                              <label className="capitalize text-sm">{level}</label>
+                            </div>
+                          ))}
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <FormField
+                    control={createForm.control}
+                    name="motorLevels"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Motor Levels</FormLabel>
+                        <div className="grid grid-cols-4 gap-2 mt-2">
+                          {developmentalLevels.map((level) => (
+                            <div key={level} className="flex items-center space-x-2">
+                              <Checkbox
+                                checked={field.value?.includes(level) || false}
+                                onCheckedChange={(checked) => {
+                                  const current = field.value || [];
+                                  field.onChange(checked ? [...current, level] : current.filter((l) => l !== level));
+                                }}
+                                data-testid={`checkbox-motor-${level}`}
+                              />
+                              <label className="capitalize text-sm">{level}</label>
+                            </div>
+                          ))}
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <FormField
+                    control={createForm.control}
+                    name="cognitiveLevels"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Cognitive Levels</FormLabel>
+                        <div className="grid grid-cols-4 gap-2 mt-2">
+                          {developmentalLevels.map((level) => (
+                            <div key={level} className="flex items-center space-x-2">
+                              <Checkbox
+                                checked={field.value?.includes(level) || false}
+                                onCheckedChange={(checked) => {
+                                  const current = field.value || [];
+                                  field.onChange(checked ? [...current, level] : current.filter((l) => l !== level));
+                                }}
+                                data-testid={`checkbox-cognitive-${level}`}
+                              />
+                              <label className="capitalize text-sm">{level}</label>
+                            </div>
+                          ))}
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <FormField
+                    control={createForm.control}
+                    name="socialEmotionalLevels"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Social-Emotional Levels</FormLabel>
+                        <div className="grid grid-cols-4 gap-2 mt-2">
+                          {developmentalLevels.map((level) => (
+                            <div key={level} className="flex items-center space-x-2">
+                              <Checkbox
+                                checked={field.value?.includes(level) || false}
+                                onCheckedChange={(checked) => {
+                                  const current = field.value || [];
+                                  field.onChange(checked ? [...current, level] : current.filter((l) => l !== level));
+                                }}
+                                data-testid={`checkbox-socialEmotional-${level}`}
+                              />
+                              <label className="capitalize text-sm">{level}</label>
+                            </div>
+                          ))}
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                {/* Play Characteristics */}
+                <div className="space-y-4 mb-6">
+                  <h4 className="font-medium text-sm text-muted-foreground">Play Characteristics</h4>
+                  <FormField
+                    control={createForm.control}
+                    name="playTypeTags"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Play Types</FormLabel>
+                        <div className="grid grid-cols-3 gap-2 mt-2">
+                          {playTypes.map((type) => (
+                            <div key={type} className="flex items-center space-x-2">
+                              <Checkbox
+                                checked={field.value?.includes(type) || false}
+                                onCheckedChange={(checked) => {
+                                  const current = field.value || [];
+                                  field.onChange(checked ? [...current, type] : current.filter((t) => t !== type));
+                                }}
+                                data-testid={`checkbox-playType-${type}`}
+                              />
+                              <label className="capitalize text-sm">{type.replace('_', ' ')}</label>
+                            </div>
+                          ))}
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <div className="grid grid-cols-2 gap-4">
+                    <FormField
+                      control={createForm.control}
+                      name="complexityLevel"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Complexity Level</FormLabel>
+                          <Select onValueChange={field.onChange} value={field.value || undefined}>
+                            <FormControl>
+                              <SelectTrigger data-testid="select-complexityLevel">
+                                <SelectValue placeholder="Select complexity" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent className="bg-[#fff9ed]">
+                              {complexityLevels.map((level) => (
+                                <SelectItem key={level} value={level}>{level}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    
+                    <FormField
+                      control={createForm.control}
+                      name="challengeRating"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Challenge Rating (1-5)</FormLabel>
+                          <FormControl>
+                            <Input {...field} type="number" min="1" max="5" value={field.value ?? ''} onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value) : null)} data-testid="input-challengeRating" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  
+                  <FormField
+                    control={createForm.control}
+                    name="attentionDuration"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Attention Duration</FormLabel>
+                        <Select onValueChange={field.onChange} value={field.value || undefined}>
+                          <FormControl>
+                            <SelectTrigger data-testid="select-attentionDuration">
+                              <SelectValue placeholder="Select duration" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent className="bg-[#fff9ed]">
+                            {attentionDurations.map((duration) => (
+                              <SelectItem key={duration} value={duration}>{duration.replace(/_/g, ' ')}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                {/* Temperament & Energy */}
+                <div className="space-y-4 mb-6">
+                  <h4 className="font-medium text-sm text-muted-foreground">Temperament & Energy</h4>
+                  <div className="grid grid-cols-2 gap-4">
+                    <FormField
+                      control={createForm.control}
+                      name="stimulationLevel"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Stimulation Level</FormLabel>
+                          <Select onValueChange={field.onChange} value={field.value || undefined}>
+                            <FormControl>
+                              <SelectTrigger data-testid="select-stimulationLevel">
+                                <SelectValue placeholder="Select level" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent className="bg-[#fff9ed]">
+                              {stimulationLevels.map((level) => (
+                                <SelectItem key={level} value={level}>{level}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    
+                    <FormField
+                      control={createForm.control}
+                      name="structurePreference"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Structure Preference</FormLabel>
+                          <Select onValueChange={field.onChange} value={field.value || undefined}>
+                            <FormControl>
+                              <SelectTrigger data-testid="select-structurePreference">
+                                <SelectValue placeholder="Select preference" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent className="bg-[#fff9ed]">
+                              {structurePreferences.map((pref) => (
+                                <SelectItem key={pref} value={pref}>{pref.replace('_', ' ')}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  
+                  <FormField
+                    control={createForm.control}
+                    name="energyRequirement"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Energy Requirement</FormLabel>
+                        <Select onValueChange={field.onChange} value={field.value || undefined}>
+                          <FormControl>
+                            <SelectTrigger data-testid="select-energyRequirement">
+                              <SelectValue placeholder="Select requirement" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent className="bg-[#fff9ed]">
+                            {energyRequirements.map((req) => (
+                              <SelectItem key={req} value={req}>{req.replace('_', ' ')}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <FormField
+                    control={createForm.control}
+                    name="sensoryCompatibility"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Sensory Compatibility</FormLabel>
+                        <div className="grid grid-cols-3 gap-2 mt-2">
+                          {sensoryTypes.map((type) => (
+                            <div key={type} className="flex items-center space-x-2">
+                              <Checkbox
+                                checked={field.value?.includes(type) || false}
+                                onCheckedChange={(checked) => {
+                                  const current = field.value || [];
+                                  field.onChange(checked ? [...current, type] : current.filter((t) => t !== type));
+                                }}
+                                data-testid={`checkbox-sensory-${type}`}
+                              />
+                              <label className="capitalize text-sm">{type}</label>
+                            </div>
+                          ))}
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                {/* Social & Safety */}
+                <div className="space-y-4 mb-6">
+                  <h4 className="font-medium text-sm text-muted-foreground">Social & Safety</h4>
+                  <FormField
+                    control={createForm.control}
+                    name="socialContext"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Social Context</FormLabel>
+                        <div className="grid grid-cols-2 gap-2 mt-2">
+                          {socialContexts.map((context) => (
+                            <div key={context} className="flex items-center space-x-2">
+                              <Checkbox
+                                checked={field.value?.includes(context) || false}
+                                onCheckedChange={(checked) => {
+                                  const current = field.value || [];
+                                  field.onChange(checked ? [...current, context] : current.filter((c) => c !== context));
+                                }}
+                                data-testid={`checkbox-socialContext-${context}`}
+                              />
+                              <label className="capitalize text-sm">{context.replace('_', ' ')}</label>
+                            </div>
+                          ))}
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <FormField
+                    control={createForm.control}
+                    name="cooperationRequired"
+                    render={({ field }) => (
+                      <FormItem className="flex items-center space-x-2">
+                        <FormControl>
+                          <Checkbox checked={field.value || false} onCheckedChange={field.onChange} data-testid="checkbox-cooperationRequired" />
+                        </FormControl>
+                        <FormLabel className="!mt-0">Cooperation Required</FormLabel>
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <FormField
+                    control={createForm.control}
+                    name="safetyConsiderations"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Safety Considerations</FormLabel>
+                        <div className="grid grid-cols-2 gap-2 mt-2">
+                          {safetyTypes.map((safety) => (
+                            <div key={safety} className="flex items-center space-x-2">
+                              <Checkbox
+                                checked={field.value?.includes(safety) || false}
+                                onCheckedChange={(checked) => {
+                                  const current = field.value || [];
+                                  field.onChange(checked ? [...current, safety] : current.filter((s) => s !== safety));
+                                }}
+                                data-testid={`checkbox-safety-${safety}`}
+                              />
+                              <label className="capitalize text-sm">{safety.replace('_', ' ')}</label>
+                            </div>
+                          ))}
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <FormField
+                    control={createForm.control}
+                    name="specialNeedsSupport"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Special Needs Support</FormLabel>
+                        <div className="grid grid-cols-2 gap-2 mt-2">
+                          {specialNeedsTypes.map((need) => (
+                            <div key={need} className="flex items-center space-x-2">
+                              <Checkbox
+                                checked={field.value?.includes(need) || false}
+                                onCheckedChange={(checked) => {
+                                  const current = field.value || [];
+                                  field.onChange(checked ? [...current, need] : current.filter((n) => n !== need));
+                                }}
+                                data-testid={`checkbox-specialNeeds-${need}`}
+                              />
+                              <label className="capitalize text-sm">{need.replace('_', ' ')}</label>
+                            </div>
+                          ))}
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <FormField
+                    control={createForm.control}
+                    name="interventionFocus"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Intervention Focus</FormLabel>
+                        <div className="grid grid-cols-2 gap-2 mt-2">
+                          {interventionTypes.map((intervention) => (
+                            <div key={intervention} className="flex items-center space-x-2">
+                              <Checkbox
+                                checked={field.value?.includes(intervention) || false}
+                                onCheckedChange={(checked) => {
+                                  const current = field.value || [];
+                                  field.onChange(checked ? [...current, intervention] : current.filter((i) => i !== intervention));
+                                }}
+                                data-testid={`checkbox-intervention-${intervention}`}
+                              />
+                              <label className="capitalize text-sm">{intervention.replace('_', ' ')}</label>
+                            </div>
+                          ))}
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                {/* Environment */}
+                <div className="space-y-4 mb-6">
+                  <h4 className="font-medium text-sm text-muted-foreground">Environmental Factors</h4>
+                  <div className="grid grid-cols-2 gap-4">
+                    <FormField
+                      control={createForm.control}
+                      name="noiseLevel"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Noise Level</FormLabel>
+                          <Select onValueChange={field.onChange} value={field.value || undefined}>
+                            <FormControl>
+                              <SelectTrigger data-testid="select-noiseLevel">
+                                <SelectValue placeholder="Select level" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent className="bg-[#fff9ed]">
+                              {noiseLevels.map((level) => (
+                                <SelectItem key={level} value={level}>{level}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    
+                    <FormField
+                      control={createForm.control}
+                      name="messFactor"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Mess Factor</FormLabel>
+                          <Select onValueChange={field.onChange} value={field.value || undefined}>
+                            <FormControl>
+                              <SelectTrigger data-testid="select-messFactor">
+                                <SelectValue placeholder="Select factor" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent className="bg-[#fff9ed]">
+                              {messFactors.map((factor) => (
+                                <SelectItem key={factor} value={factor}>{factor}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-4">
+                    <FormField
+                      control={createForm.control}
+                      name="setupTime"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Setup Time</FormLabel>
+                          <Select onValueChange={field.onChange} value={field.value || undefined}>
+                            <FormControl>
+                              <SelectTrigger data-testid="select-setupTime">
+                                <SelectValue placeholder="Select time" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent className="bg-[#fff9ed]">
+                              {setupTimes.map((time) => (
+                                <SelectItem key={time} value={time}>{time}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    
+                    <FormField
+                      control={createForm.control}
+                      name="spaceRequirements"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Space Requirements</FormLabel>
+                          <Select onValueChange={field.onChange} value={field.value || undefined}>
+                            <FormControl>
+                              <SelectTrigger data-testid="select-spaceRequirements">
+                                <SelectValue placeholder="Select requirement" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent className="bg-[#fff9ed]">
+                              {spaceOptions.map((option) => (
+                                <SelectItem key={option} value={option}>{option}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </div>
+              </div>
+
               <div className="flex justify-end gap-2 pt-4">
                 <Button type="button" variant="outline" onClick={() => setIsCreateOpen(false)} data-testid="button-cancel-create">
                   Cancel
@@ -687,6 +1361,566 @@ export default function Admin() {
                     </FormItem>
                   )}
                 />
+              </div>
+
+              {/* Developmental Filtering Section */}
+              <div className="border-t pt-6 mt-6">
+                <h3 className="text-lg font-semibold mb-4">Developmental Filtering</h3>
+                
+                {/* Age Filtering */}
+                <div className="space-y-4 mb-6">
+                  <h4 className="font-medium text-sm text-muted-foreground">Age Range (Months)</h4>
+                  <div className="grid grid-cols-2 gap-4">
+                    <FormField
+                      control={editForm.control}
+                      name="minAgeMonths"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Min Age (Months)</FormLabel>
+                          <FormControl>
+                            <Input {...field} type="number" value={field.value ?? ''} onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value) : null)} data-testid="input-edit-minAgeMonths" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={editForm.control}
+                      name="maxAgeMonths"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Max Age (Months)</FormLabel>
+                          <FormControl>
+                            <Input {...field} type="number" value={field.value ?? ''} onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value) : null)} data-testid="input-edit-maxAgeMonths" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </div>
+
+                {/* Developmental Support */}
+                <div className="space-y-4 mb-6">
+                  <h4 className="font-medium text-sm text-muted-foreground">Developmental Support Levels</h4>
+                  <FormField
+                    control={editForm.control}
+                    name="communicationLevels"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Communication Levels</FormLabel>
+                        <div className="grid grid-cols-4 gap-2 mt-2">
+                          {developmentalLevels.map((level) => (
+                            <div key={level} className="flex items-center space-x-2">
+                              <Checkbox
+                                checked={field.value?.includes(level) || false}
+                                onCheckedChange={(checked) => {
+                                  const current = field.value || [];
+                                  field.onChange(checked ? [...current, level] : current.filter((l) => l !== level));
+                                }}
+                                data-testid={`checkbox-edit-communication-${level}`}
+                              />
+                              <label className="capitalize text-sm">{level}</label>
+                            </div>
+                          ))}
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <FormField
+                    control={editForm.control}
+                    name="motorLevels"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Motor Levels</FormLabel>
+                        <div className="grid grid-cols-4 gap-2 mt-2">
+                          {developmentalLevels.map((level) => (
+                            <div key={level} className="flex items-center space-x-2">
+                              <Checkbox
+                                checked={field.value?.includes(level) || false}
+                                onCheckedChange={(checked) => {
+                                  const current = field.value || [];
+                                  field.onChange(checked ? [...current, level] : current.filter((l) => l !== level));
+                                }}
+                                data-testid={`checkbox-edit-motor-${level}`}
+                              />
+                              <label className="capitalize text-sm">{level}</label>
+                            </div>
+                          ))}
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <FormField
+                    control={editForm.control}
+                    name="cognitiveLevels"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Cognitive Levels</FormLabel>
+                        <div className="grid grid-cols-4 gap-2 mt-2">
+                          {developmentalLevels.map((level) => (
+                            <div key={level} className="flex items-center space-x-2">
+                              <Checkbox
+                                checked={field.value?.includes(level) || false}
+                                onCheckedChange={(checked) => {
+                                  const current = field.value || [];
+                                  field.onChange(checked ? [...current, level] : current.filter((l) => l !== level));
+                                }}
+                                data-testid={`checkbox-edit-cognitive-${level}`}
+                              />
+                              <label className="capitalize text-sm">{level}</label>
+                            </div>
+                          ))}
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <FormField
+                    control={editForm.control}
+                    name="socialEmotionalLevels"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Social-Emotional Levels</FormLabel>
+                        <div className="grid grid-cols-4 gap-2 mt-2">
+                          {developmentalLevels.map((level) => (
+                            <div key={level} className="flex items-center space-x-2">
+                              <Checkbox
+                                checked={field.value?.includes(level) || false}
+                                onCheckedChange={(checked) => {
+                                  const current = field.value || [];
+                                  field.onChange(checked ? [...current, level] : current.filter((l) => l !== level));
+                                }}
+                                data-testid={`checkbox-edit-socialEmotional-${level}`}
+                              />
+                              <label className="capitalize text-sm">{level}</label>
+                            </div>
+                          ))}
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                {/* Play Characteristics */}
+                <div className="space-y-4 mb-6">
+                  <h4 className="font-medium text-sm text-muted-foreground">Play Characteristics</h4>
+                  <FormField
+                    control={editForm.control}
+                    name="playTypeTags"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Play Types</FormLabel>
+                        <div className="grid grid-cols-3 gap-2 mt-2">
+                          {playTypes.map((type) => (
+                            <div key={type} className="flex items-center space-x-2">
+                              <Checkbox
+                                checked={field.value?.includes(type) || false}
+                                onCheckedChange={(checked) => {
+                                  const current = field.value || [];
+                                  field.onChange(checked ? [...current, type] : current.filter((t) => t !== type));
+                                }}
+                                data-testid={`checkbox-edit-playType-${type}`}
+                              />
+                              <label className="capitalize text-sm">{type.replace('_', ' ')}</label>
+                            </div>
+                          ))}
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <div className="grid grid-cols-2 gap-4">
+                    <FormField
+                      control={editForm.control}
+                      name="complexityLevel"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Complexity Level</FormLabel>
+                          <Select onValueChange={field.onChange} value={field.value || undefined}>
+                            <FormControl>
+                              <SelectTrigger data-testid="select-edit-complexityLevel">
+                                <SelectValue placeholder="Select complexity" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent className="bg-[#fff9ed]">
+                              {complexityLevels.map((level) => (
+                                <SelectItem key={level} value={level}>{level}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    
+                    <FormField
+                      control={editForm.control}
+                      name="challengeRating"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Challenge Rating (1-5)</FormLabel>
+                          <FormControl>
+                            <Input {...field} type="number" min="1" max="5" value={field.value ?? ''} onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value) : null)} data-testid="input-edit-challengeRating" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  
+                  <FormField
+                    control={editForm.control}
+                    name="attentionDuration"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Attention Duration</FormLabel>
+                        <Select onValueChange={field.onChange} value={field.value || undefined}>
+                          <FormControl>
+                            <SelectTrigger data-testid="select-edit-attentionDuration">
+                              <SelectValue placeholder="Select duration" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent className="bg-[#fff9ed]">
+                            {attentionDurations.map((duration) => (
+                              <SelectItem key={duration} value={duration}>{duration.replace(/_/g, ' ')}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                {/* Temperament & Energy */}
+                <div className="space-y-4 mb-6">
+                  <h4 className="font-medium text-sm text-muted-foreground">Temperament & Energy</h4>
+                  <div className="grid grid-cols-2 gap-4">
+                    <FormField
+                      control={editForm.control}
+                      name="stimulationLevel"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Stimulation Level</FormLabel>
+                          <Select onValueChange={field.onChange} value={field.value || undefined}>
+                            <FormControl>
+                              <SelectTrigger data-testid="select-edit-stimulationLevel">
+                                <SelectValue placeholder="Select level" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent className="bg-[#fff9ed]">
+                              {stimulationLevels.map((level) => (
+                                <SelectItem key={level} value={level}>{level}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    
+                    <FormField
+                      control={editForm.control}
+                      name="structurePreference"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Structure Preference</FormLabel>
+                          <Select onValueChange={field.onChange} value={field.value || undefined}>
+                            <FormControl>
+                              <SelectTrigger data-testid="select-edit-structurePreference">
+                                <SelectValue placeholder="Select preference" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent className="bg-[#fff9ed]">
+                              {structurePreferences.map((pref) => (
+                                <SelectItem key={pref} value={pref}>{pref.replace('_', ' ')}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  
+                  <FormField
+                    control={editForm.control}
+                    name="energyRequirement"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Energy Requirement</FormLabel>
+                        <Select onValueChange={field.onChange} value={field.value || undefined}>
+                          <FormControl>
+                            <SelectTrigger data-testid="select-edit-energyRequirement">
+                              <SelectValue placeholder="Select requirement" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent className="bg-[#fff9ed]">
+                            {energyRequirements.map((req) => (
+                              <SelectItem key={req} value={req}>{req.replace('_', ' ')}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <FormField
+                    control={editForm.control}
+                    name="sensoryCompatibility"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Sensory Compatibility</FormLabel>
+                        <div className="grid grid-cols-3 gap-2 mt-2">
+                          {sensoryTypes.map((type) => (
+                            <div key={type} className="flex items-center space-x-2">
+                              <Checkbox
+                                checked={field.value?.includes(type) || false}
+                                onCheckedChange={(checked) => {
+                                  const current = field.value || [];
+                                  field.onChange(checked ? [...current, type] : current.filter((t) => t !== type));
+                                }}
+                                data-testid={`checkbox-edit-sensory-${type}`}
+                              />
+                              <label className="capitalize text-sm">{type}</label>
+                            </div>
+                          ))}
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                {/* Social & Safety */}
+                <div className="space-y-4 mb-6">
+                  <h4 className="font-medium text-sm text-muted-foreground">Social & Safety</h4>
+                  <FormField
+                    control={editForm.control}
+                    name="socialContext"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Social Context</FormLabel>
+                        <div className="grid grid-cols-2 gap-2 mt-2">
+                          {socialContexts.map((context) => (
+                            <div key={context} className="flex items-center space-x-2">
+                              <Checkbox
+                                checked={field.value?.includes(context) || false}
+                                onCheckedChange={(checked) => {
+                                  const current = field.value || [];
+                                  field.onChange(checked ? [...current, context] : current.filter((c) => c !== context));
+                                }}
+                                data-testid={`checkbox-edit-socialContext-${context}`}
+                              />
+                              <label className="capitalize text-sm">{context.replace('_', ' ')}</label>
+                            </div>
+                          ))}
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <FormField
+                    control={editForm.control}
+                    name="cooperationRequired"
+                    render={({ field }) => (
+                      <FormItem className="flex items-center space-x-2">
+                        <FormControl>
+                          <Checkbox checked={field.value || false} onCheckedChange={field.onChange} data-testid="checkbox-edit-cooperationRequired" />
+                        </FormControl>
+                        <FormLabel className="!mt-0">Cooperation Required</FormLabel>
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <FormField
+                    control={editForm.control}
+                    name="safetyConsiderations"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Safety Considerations</FormLabel>
+                        <div className="grid grid-cols-2 gap-2 mt-2">
+                          {safetyTypes.map((safety) => (
+                            <div key={safety} className="flex items-center space-x-2">
+                              <Checkbox
+                                checked={field.value?.includes(safety) || false}
+                                onCheckedChange={(checked) => {
+                                  const current = field.value || [];
+                                  field.onChange(checked ? [...current, safety] : current.filter((s) => s !== safety));
+                                }}
+                                data-testid={`checkbox-edit-safety-${safety}`}
+                              />
+                              <label className="capitalize text-sm">{safety.replace('_', ' ')}</label>
+                            </div>
+                          ))}
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <FormField
+                    control={editForm.control}
+                    name="specialNeedsSupport"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Special Needs Support</FormLabel>
+                        <div className="grid grid-cols-2 gap-2 mt-2">
+                          {specialNeedsTypes.map((need) => (
+                            <div key={need} className="flex items-center space-x-2">
+                              <Checkbox
+                                checked={field.value?.includes(need) || false}
+                                onCheckedChange={(checked) => {
+                                  const current = field.value || [];
+                                  field.onChange(checked ? [...current, need] : current.filter((n) => n !== need));
+                                }}
+                                data-testid={`checkbox-edit-specialNeeds-${need}`}
+                              />
+                              <label className="capitalize text-sm">{need.replace('_', ' ')}</label>
+                            </div>
+                          ))}
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <FormField
+                    control={editForm.control}
+                    name="interventionFocus"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Intervention Focus</FormLabel>
+                        <div className="grid grid-cols-2 gap-2 mt-2">
+                          {interventionTypes.map((intervention) => (
+                            <div key={intervention} className="flex items-center space-x-2">
+                              <Checkbox
+                                checked={field.value?.includes(intervention) || false}
+                                onCheckedChange={(checked) => {
+                                  const current = field.value || [];
+                                  field.onChange(checked ? [...current, intervention] : current.filter((i) => i !== intervention));
+                                }}
+                                data-testid={`checkbox-edit-intervention-${intervention}`}
+                              />
+                              <label className="capitalize text-sm">{intervention.replace('_', ' ')}</label>
+                            </div>
+                          ))}
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                {/* Environment */}
+                <div className="space-y-4 mb-6">
+                  <h4 className="font-medium text-sm text-muted-foreground">Environmental Factors</h4>
+                  <div className="grid grid-cols-2 gap-4">
+                    <FormField
+                      control={editForm.control}
+                      name="noiseLevel"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Noise Level</FormLabel>
+                          <Select onValueChange={field.onChange} value={field.value || undefined}>
+                            <FormControl>
+                              <SelectTrigger data-testid="select-edit-noiseLevel">
+                                <SelectValue placeholder="Select level" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent className="bg-[#fff9ed]">
+                              {noiseLevels.map((level) => (
+                                <SelectItem key={level} value={level}>{level}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    
+                    <FormField
+                      control={editForm.control}
+                      name="messFactor"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Mess Factor</FormLabel>
+                          <Select onValueChange={field.onChange} value={field.value || undefined}>
+                            <FormControl>
+                              <SelectTrigger data-testid="select-edit-messFactor">
+                                <SelectValue placeholder="Select factor" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent className="bg-[#fff9ed]">
+                              {messFactors.map((factor) => (
+                                <SelectItem key={factor} value={factor}>{factor}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-4">
+                    <FormField
+                      control={editForm.control}
+                      name="setupTime"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Setup Time</FormLabel>
+                          <Select onValueChange={field.onChange} value={field.value || undefined}>
+                            <FormControl>
+                              <SelectTrigger data-testid="select-edit-setupTime">
+                                <SelectValue placeholder="Select time" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent className="bg-[#fff9ed]">
+                              {setupTimes.map((time) => (
+                                <SelectItem key={time} value={time}>{time}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    
+                    <FormField
+                      control={editForm.control}
+                      name="spaceRequirements"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Space Requirements</FormLabel>
+                          <Select onValueChange={field.onChange} value={field.value || undefined}>
+                            <FormControl>
+                              <SelectTrigger data-testid="select-edit-spaceRequirements">
+                                <SelectValue placeholder="Select requirement" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent className="bg-[#fff9ed]">
+                              {spaceOptions.map((option) => (
+                                <SelectItem key={option} value={option}>{option}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </div>
               </div>
 
               <div className="flex justify-end gap-2 pt-4">
