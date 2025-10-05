@@ -38,6 +38,28 @@
   --maroon: #63212E;
   --sand: #E2C48F;
   --slateblue: #728888;
+
+  /* Shadcn UI variables */
+  --background: #FFF9ED;
+  --foreground: #412B15;
+  --card: #FFF9ED;
+  --card-foreground: #412B15;
+  --popover: #FFF9ED;
+  --popover-foreground: #412B15;
+  --primary: #4A5942;
+  --primary-foreground: #FFF9ED;
+  --secondary: #E2C48F;
+  --secondary-foreground: #412B15;
+  --muted: #E2C48F;
+  --muted-foreground: #63212E;
+  --accent: #CE8923;
+  --accent-foreground: #FFF9ED;
+  --destructive: #D25E1B;
+  --destructive-foreground: #FFF9ED;
+  --border: #E2C48F;
+  --input: #E2C48F;
+  --ring: #4A5942;
+  --radius: 0.5rem;
 }
 
 @layer base {
