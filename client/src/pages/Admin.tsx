@@ -295,7 +295,7 @@ export default function Admin() {
                           <SelectValue />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent>
+                      <SelectContent className="bg-[#fff9ed] max-h-[300px] overflow-y-auto">
                         {ageRanges.map((range) => (
                           <SelectItem key={range} value={range}>
                             {range}
@@ -543,7 +543,7 @@ export default function Admin() {
                           <SelectValue />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent>
+                      <SelectContent className="bg-[#fff9ed] max-h-[300px] overflow-y-auto">
                         {ageRanges.map((range) => (
                           <SelectItem key={range} value={range}>
                             {range}
