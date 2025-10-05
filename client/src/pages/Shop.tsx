@@ -74,6 +74,14 @@ export default function Shop() {
     { value: 'motor', label: 'Movement & Motor Skills' },
   ];
 
+  const getProductBadge = (product: Product) => {
+    if (product.isLizaTophCertified) return { text: 'LIZA & TOPH CERTIFIED', className: 'bg-purple-600 text-white' };
+    if (product.isTopPick) return { text: 'TOP PICK', className: 'bg-accent text-accent-foreground' };
+    if (product.isBestseller) return { text: 'BESTSELLER', className: 'bg-secondary text-white' };
+    if (product.isNew) return { text: 'NEW', className: 'bg-accent text-accent-foreground' };
+    return null;
+  };
+
   const filteredProducts = products.filter((product) => {
     // Search and category
     const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
@@ -355,68 +363,76 @@ export default function Shop() {
       ) : null}
 
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {filteredProducts.map((product) => (
-          <div
-            key={product.id}
-            className="bg-[#EDE9DC] rounded-lg overflow-hidden shadow-md hover:shadow-lg transition"
-            data-testid={`card-product-${product.id}`}
-          >
-            <div className="aspect-square bg-ivory overflow-hidden">
-              <img
-                src={product.imageUrl}
-                alt={product.name}
-                className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                data-testid={`img-product-${product.id}`}
-              />
-            </div>
-            <div className="p-4">
-              <h3 className="text-lg font-semibold mb-2 line-clamp-2 min-h-[3.5rem]" data-testid={`text-title-${product.id}`}>
-                {product.name}
-              </h3>
-              
-              <div className="flex items-center gap-1 mb-3">
-                <Star className="w-4 h-4 fill-ochre text-ochre" />
-                <span className="font-semibold text-sm" data-testid={`text-rating-${product.id}`}>
-                  {product.rating}
-                </span>
-                <span className="text-xs opacity-60" data-testid={`text-reviews-${product.id}`}>
-                  ({product.reviewCount})
-                </span>
+        {filteredProducts.map((product) => {
+          const badge = getProductBadge(product);
+          return (
+            <div
+              key={product.id}
+              className="bg-[#EDE9DC] rounded-lg overflow-hidden shadow-md hover:shadow-lg transition"
+              data-testid={`card-product-${product.id}`}
+            >
+              <div className="aspect-square bg-ivory overflow-hidden relative">
+                <img
+                  src={product.imageUrl}
+                  alt={product.name}
+                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                  data-testid={`img-product-${product.id}`}
+                />
+                {badge && (
+                  <div className={`absolute top-3 right-3 ${badge.className} text-xs font-bold px-2 py-1 rounded`} data-testid={`badge-${product.id}`}>
+                    {badge.text}
+                  </div>
+                )}
               </div>
-
-              <div className="flex flex-wrap gap-2 mb-3">
-                {product.categories?.slice(0, 2).map((category, idx) => (
-                  <span
-                    key={idx}
-                    className="px-2 py-1 bg-sand text-espresso text-xs rounded"
-                    data-testid={`tag-category-${idx}`}
-                  >
-                    {category}
+              <div className="p-4">
+                <h3 className="text-lg font-semibold mb-2 line-clamp-2 min-h-[3.5rem]" data-testid={`text-title-${product.id}`}>
+                  {product.name}
+                </h3>
+                
+                <div className="flex items-center gap-1 mb-3">
+                  <Star className="w-4 h-4 fill-ochre text-ochre" />
+                  <span className="font-semibold text-sm" data-testid={`text-rating-${product.id}`}>
+                    {product.rating}
                   </span>
-                )) ?? null}
-              </div>
-              
-              {(product.minAgeMonths || product.maxAgeMonths) && (
-                <p className="text-xs opacity-70 mb-3">
-                  Ages {product.minAgeMonths || 0}-{product.maxAgeMonths || 60} months
-                </p>
-              )}
+                  <span className="text-xs opacity-60" data-testid={`text-reviews-${product.id}`}>
+                    ({product.reviewCount})
+                  </span>
+                </div>
 
-              <div className="flex items-center justify-between gap-2">
-                <span className="text-2xl font-bold text-olive" data-testid={`text-price-${product.id}`}>
-                  {product.price}
-                </span>
-                <button
-                  onClick={() => handleProductClick(product.id, product.affiliateUrl || '#')}
-                  className="px-4 py-2 bg-olive text-ivory rounded-lg hover:bg-ochre transition font-medium text-sm"
-                  data-testid={`button-view-${product.id}`}
-                >
-                  View
-                </button>
+                <div className="flex flex-wrap gap-2 mb-3">
+                  {product.categories?.slice(0, 2).map((category, idx) => (
+                    <span
+                      key={idx}
+                      className="px-2 py-1 bg-sand text-espresso text-xs rounded"
+                      data-testid={`tag-category-${idx}`}
+                    >
+                      {category}
+                    </span>
+                  )) ?? null}
+                </div>
+                
+                {(product.minAgeMonths || product.maxAgeMonths) && (
+                  <p className="text-xs opacity-70 mb-3">
+                    Ages {product.minAgeMonths || 0}-{product.maxAgeMonths || 60} months
+                  </p>
+                )}
+
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-2xl font-bold text-olive" data-testid={`text-price-${product.id}`}>
+                    {product.price}
+                  </span>
+                  <button
+                    onClick={() => handleProductClick(product.id, product.affiliateUrl || '#')}
+                    className="px-4 py-2 bg-olive text-ivory rounded-lg hover:bg-ochre transition font-medium text-sm"
+                    data-testid={`button-view-${product.id}`}
+                  >
+                    View
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {child?.name && (
