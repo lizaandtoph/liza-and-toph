@@ -12,6 +12,8 @@ import Admin from './pages/Admin';
 import AdminPros from './pages/AdminPros';
 import ProsDirectory from './pages/ProsDirectory';
 import ProProfile from './pages/ProProfile';
+import ProEdit from './pages/ProEdit';
+import AdminProsManagement from './pages/AdminProsManagement';
 
 function App() {
   return (
@@ -26,9 +28,11 @@ function App() {
         <Route path="/find-pros" component={FindPros} />
         <Route path="/pros" component={ProsDirectory} />
         <Route path="/pros/:slug" component={ProProfile} />
+        <Route path="/pro/edit" component={ProEdit} />
         <Route path="/settings" component={Settings} />
         <Route path="/admin" component={Admin} />
         <Route path="/admin-pros" component={AdminPros} />
+        <Route path="/admin/pros-management" component={AdminProsManagement} />
       </Switch>
     </Layout>
   );
