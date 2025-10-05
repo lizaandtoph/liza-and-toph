@@ -1,15 +1,22 @@
 import { Link, useLocation } from 'wouter';
-import { Baby, Heart, ShoppingCart, HardHat, Settings as SettingsIcon, User, ChevronDown, Plus } from 'lucide-react';
+import { Baby, Heart, ShoppingCart, HardHat, Settings as SettingsIcon, User, ChevronDown, Plus, AlertCircle, X } from 'lucide-react';
 import { useStore } from '../store';
 import logoImage from '@assets/symbol_orange_mono_1759602921856.png';
 import { useState, useEffect, useRef } from 'react';
 
+const CURRENT_QUESTIONNAIRE_VERSION = 2;
+
 export default function Layout({ children: pageContent }: { children: React.ReactNode }) {
   const [location] = useLocation();
-  const { isLoggedIn, children, getActiveChild, setActiveChild } = useStore();
+  const { isLoggedIn, children, getActiveChild, setActiveChild, getAnswers, dismissedQuestionnaireUpdates, dismissQuestionnaireUpdate } = useStore();
   const [showChildDropdown, setShowChildDropdown] = useState(false);
   const activeChild = getActiveChild();
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const activeChildAnswers = activeChild ? getAnswers(activeChild.id) : null;
+  const needsQuestionnaireUpdate = activeChildAnswers && 
+    (!activeChildAnswers.questionnaire_version || activeChildAnswers.questionnaire_version < CURRENT_QUESTIONNAIRE_VERSION);
+  const dismissedVersion = activeChild ? (dismissedQuestionnaireUpdates[activeChild.id] || 0) : 0;
+  const showUpdateBanner = needsQuestionnaireUpdate && dismissedVersion < CURRENT_QUESTIONNAIRE_VERSION;
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -165,8 +172,39 @@ export default function Layout({ children: pageContent }: { children: React.Reac
         </div>
       </nav>
       
+      {/* Questionnaire Update Banner */}
+      {isLoggedIn && showUpdateBanner && (
+        <div className="fixed top-[60px] md:top-[108px] left-0 right-0 bg-ochre text-ivory py-3 px-4 shadow-md z-30">
+          <div className="container mx-auto max-w-7xl flex items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <AlertCircle className="w-5 h-5 flex-shrink-0" />
+              <p className="text-sm sm:text-base font-medium">
+                <strong>New questionnaire available!</strong> Update {activeChild?.name}'s profile to get more personalized recommendations.
+              </p>
+            </div>
+            <div className="flex items-center gap-2">
+              <Link
+                to="/settings"
+                className="px-4 py-2 bg-ivory text-olive rounded-lg hover:bg-sand transition font-semibold text-sm whitespace-nowrap"
+                data-testid="button-update-questionnaire"
+              >
+                Update Now
+              </Link>
+              <button
+                onClick={() => activeChild && dismissQuestionnaireUpdate(activeChild.id, CURRENT_QUESTIONNAIRE_VERSION)}
+                className="p-2 hover:bg-ivory/10 rounded-lg transition"
+                aria-label="Dismiss"
+                data-testid="button-dismiss-update-banner"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Main Content */}
-      <main className="flex-1 pt-[60px] md:pt-[108px]">
+      <main className={`flex-1 pt-[60px] md:pt-[108px] ${isLoggedIn && showUpdateBanner ? 'mt-[52px]' : ''}`}>
         {pageContent}
       </main>
 

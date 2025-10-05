@@ -276,6 +276,57 @@ export default function PlayBoard() {
             </p>
           </div>
 
+          {hasFullAccess && answers.milestones && (
+            <div className="bg-white/80 backdrop-blur-sm border-2 border-olive/20 rounded-2xl p-8 shadow-lg max-w-3xl mx-auto mb-8">
+              <div className="flex items-center gap-2 mb-6">
+                <TrendingUp className="w-6 h-6 text-ochre" />
+                <h3 className="text-2xl font-semibold">Milestone Tracker</h3>
+              </div>
+              <div className="grid md:grid-cols-2 gap-4">
+                {answers.milestones.social_emotional?.answer && (
+                  <div className="p-4 bg-gradient-to-br from-blush/20 to-ivory border-2 border-sand rounded-xl">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-2xl">😊</span>
+                      <h4 className="font-semibold">Social-Emotional</h4>
+                    </div>
+                    <p className="text-sm text-muted-foreground mb-2">{answers.milestones.social_emotional.question}</p>
+                    <p className="font-medium capitalize">{answers.milestones.social_emotional.answer.replace('_', ' ')}</p>
+                  </div>
+                )}
+                {answers.milestones.cognitive?.answer && (
+                  <div className="p-4 bg-gradient-to-br from-blush/20 to-ivory border-2 border-sand rounded-xl">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-2xl">🧠</span>
+                      <h4 className="font-semibold">Cognitive</h4>
+                    </div>
+                    <p className="text-sm text-muted-foreground mb-2">{answers.milestones.cognitive.question}</p>
+                    <p className="font-medium capitalize">{answers.milestones.cognitive.answer.replace('_', ' ')}</p>
+                  </div>
+                )}
+                {answers.milestones.language?.answer && (
+                  <div className="p-4 bg-gradient-to-br from-blush/20 to-ivory border-2 border-sand rounded-xl">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-2xl">💬</span>
+                      <h4 className="font-semibold">Language & Communication</h4>
+                    </div>
+                    <p className="text-sm text-muted-foreground mb-2">{answers.milestones.language.question}</p>
+                    <p className="font-medium capitalize">{answers.milestones.language.answer.replace('_', ' ').replace('+', '+')}</p>
+                  </div>
+                )}
+                {answers.milestones.motor?.answer && (
+                  <div className="p-4 bg-gradient-to-br from-blush/20 to-ivory border-2 border-sand rounded-xl">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-2xl">🤸</span>
+                      <h4 className="font-semibold">Motor Development</h4>
+                    </div>
+                    <p className="text-sm text-muted-foreground mb-2">{answers.milestones.motor.question}</p>
+                    <p className="font-medium capitalize">{answers.milestones.motor.answer.replace('_', ' ')}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
           {hasFullAccess && insights.length > 0 && (
             <div className="bg-white/80 backdrop-blur-sm border-2 border-olive/20 rounded-2xl p-8 shadow-lg max-w-3xl mx-auto">
               <div className="flex items-center gap-2 mb-4">

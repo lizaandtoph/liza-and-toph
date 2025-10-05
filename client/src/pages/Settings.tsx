@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useStore } from '../store';
 import { useLocation } from 'wouter';
-import { User, Mail, Lock, CreditCard, Baby, Trash2, Save, X, Heart, Briefcase, ShoppingBag, Edit2 } from 'lucide-react';
+import { User, Mail, Lock, CreditCard, Baby, Trash2, Save, X, Heart, Briefcase, ShoppingBag, Edit2, RefreshCw, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -20,6 +20,8 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 
+const CURRENT_QUESTIONNAIRE_VERSION = 2;
+
 export default function Settings() {
   const { 
     parentAccount, 
@@ -30,7 +32,8 @@ export default function Settings() {
     updateChild,
     deleteChild,
     savedItems,
-    removeSavedItem
+    removeSavedItem,
+    getAnswers
   } = useStore();
   
   const { toast } = useToast();
@@ -495,37 +498,87 @@ export default function Settings() {
                         </div>
                       </div>
                     ) : (
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <p className="font-semibold text-lg" data-testid={`text-child-name-${child.id}`}>
-                            {child.name}
-                          </p>
-                          {child.ageBand && (
-                            <p className="text-sm text-muted-foreground" data-testid={`text-child-age-${child.id}`}>
-                              Age: {child.ageYears}y {child.ageMonths}m ({child.ageBand})
+                      <div>
+                        <div className="flex items-center justify-between mb-3">
+                          <div>
+                            <p className="font-semibold text-lg" data-testid={`text-child-name-${child.id}`}>
+                              {child.name}
                             </p>
-                          )}
+                            {child.ageBand && (
+                              <p className="text-sm text-muted-foreground" data-testid={`text-child-age-${child.id}`}>
+                                Age: {child.ageYears}y {child.ageMonths}m ({child.ageBand})
+                              </p>
+                            )}
+                          </div>
+                          <div className="flex gap-2">
+                            <Button 
+                              variant="outline" 
+                              size="sm"
+                              onClick={() => handleChildEdit(child.id)}
+                              data-testid={`button-edit-child-${child.id}`}
+                            >
+                              <Edit2 className="w-4 h-4 mr-2" />
+                              Edit
+                            </Button>
+                            <Button 
+                              variant="destructive" 
+                              size="sm"
+                              onClick={() => confirmDeleteChild(child.id)}
+                              data-testid={`button-delete-child-${child.id}`}
+                            >
+                              <Trash2 className="w-4 h-4 mr-2" />
+                              Remove
+                            </Button>
+                          </div>
                         </div>
-                        <div className="flex gap-2">
-                          <Button 
-                            variant="outline" 
-                            size="sm"
-                            onClick={() => handleChildEdit(child.id)}
-                            data-testid={`button-edit-child-${child.id}`}
-                          >
-                            <Edit2 className="w-4 h-4 mr-2" />
-                            Edit
-                          </Button>
-                          <Button 
-                            variant="destructive" 
-                            size="sm"
-                            onClick={() => confirmDeleteChild(child.id)}
-                            data-testid={`button-delete-child-${child.id}`}
-                          >
-                            <Trash2 className="w-4 h-4 mr-2" />
-                            Remove
-                          </Button>
-                        </div>
+                        
+                        {(() => {
+                          const answers = getAnswers(child.id);
+                          const currentVersion = answers?.questionnaire_version || 1;
+                          const isOutdated = currentVersion < CURRENT_QUESTIONNAIRE_VERSION;
+                          
+                          return (
+                            <div className={`p-3 rounded-lg border-2 ${isOutdated ? 'bg-ochre/10 border-ochre' : 'bg-green-50 border-green-500'}`}>
+                              <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-2">
+                                  {isOutdated ? (
+                                    <>
+                                      <RefreshCw className="w-4 h-4 text-ochre" />
+                                      <div>
+                                        <p className="font-medium text-sm">Questionnaire Update Available</p>
+                                        <p className="text-xs text-muted-foreground">
+                                          Version {currentVersion} → {CURRENT_QUESTIONNAIRE_VERSION}
+                                        </p>
+                                      </div>
+                                    </>
+                                  ) : (
+                                    <>
+                                      <CheckCircle className="w-4 h-4 text-green-600" />
+                                      <div>
+                                        <p className="font-medium text-sm">Questionnaire Up to Date</p>
+                                        <p className="text-xs text-muted-foreground">
+                                          Version {currentVersion}
+                                        </p>
+                                      </div>
+                                    </>
+                                  )}
+                                </div>
+                                {isOutdated && (
+                                  <Button 
+                                    variant="default"
+                                    size="sm"
+                                    onClick={() => setLocation('/onboarding')}
+                                    className="bg-ochre hover:bg-burnt"
+                                    data-testid={`button-retake-questionnaire-${child.id}`}
+                                  >
+                                    <RefreshCw className="w-4 h-4 mr-2" />
+                                    Update
+                                  </Button>
+                                )}
+                              </div>
+                            </div>
+                          );
+                        })()}
                       </div>
                     )}
                   </div>

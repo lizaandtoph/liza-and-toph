@@ -69,6 +69,7 @@ interface Store {
   isLoggedIn: boolean;
   parentAccount: ParentAccount | null;
   savedItems: SavedItems;
+  dismissedQuestionnaireUpdates: Record<string, number>;
   addChild: (child: Omit<ChildProfile, 'id'>, answers?: Answers) => string;
   updateChild: (id: string, child: Partial<ChildProfile>) => void;
   deleteChild: (id: string) => void;
@@ -82,6 +83,7 @@ interface Store {
   updateParentAccount: (updates: Partial<ParentAccount>) => void;
   addSavedItem: (category: keyof SavedItems, item: string) => void;
   removeSavedItem: (category: keyof SavedItems, item: string) => void;
+  dismissQuestionnaireUpdate: (childId: string, version: number) => void;
   reset: () => void;
 }
 
@@ -95,6 +97,7 @@ export const useStore = create<Store>()(
       isLoggedIn: false,
       parentAccount: null,
       savedItems: { brands: [], professionals: [], products: [] },
+      dismissedQuestionnaireUpdates: {},
       
       addChild: (childData, answers) => {
         const id = nanoid();
@@ -191,6 +194,15 @@ export const useStore = create<Store>()(
         }));
       },
       
+      dismissQuestionnaireUpdate: (childId, version) => {
+        set((state) => ({
+          dismissedQuestionnaireUpdates: {
+            ...state.dismissedQuestionnaireUpdates,
+            [childId]: version
+          }
+        }));
+      },
+      
       reset: () => set({ 
         children: [],
         activeChildId: null,
@@ -198,7 +210,8 @@ export const useStore = create<Store>()(
         subscribed: false,
         isLoggedIn: false,
         parentAccount: null,
-        savedItems: { brands: [], professionals: [], products: [] }
+        savedItems: { brands: [], professionals: [], products: [] },
+        dismissedQuestionnaireUpdates: {}
       }),
     }),
     {
