@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useStore } from '../store';
-import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'wouter';
 import { User, Mail, Lock, CreditCard, Baby, Trash2, Save, X, Heart, Briefcase, ShoppingBag, Edit2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -34,7 +34,7 @@ export default function Settings() {
   } = useStore();
   
   const { toast } = useToast();
-  const navigate = useNavigate();
+  const [, setLocation] = useLocation();
 
   const [editingAccount, setEditingAccount] = useState(false);
   const [accountForm, setAccountForm] = useState({
@@ -201,7 +201,7 @@ export default function Settings() {
         <Card>
           <CardContent className="pt-6 text-center">
             <p className="text-lg mb-4">Please log in to access settings</p>
-            <Button onClick={() => navigate('/login')} data-testid="button-login">
+            <Button onClick={() => setLocation('/login')} data-testid="button-login">
               Go to Login
             </Button>
           </CardContent>

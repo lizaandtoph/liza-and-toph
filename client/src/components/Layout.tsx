@@ -1,11 +1,11 @@
-import { Link, Outlet, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'wouter';
 import { Baby, Heart, ShoppingCart, HardHat, Settings as SettingsIcon, User, ChevronDown, Plus } from 'lucide-react';
 import { useStore } from '../store';
 import logoImage from '@assets/symbol_orange_mono_1759602921856.png';
 import { useState, useEffect, useRef } from 'react';
 
-export default function Layout() {
-  const location = useLocation();
+export default function Layout({ children: pageContent }: { children: React.ReactNode }) {
+  const [location] = useLocation();
   const { isLoggedIn, children, getActiveChild, setActiveChild } = useStore();
   const [showChildDropdown, setShowChildDropdown] = useState(false);
   const activeChild = getActiveChild();
@@ -29,12 +29,13 @@ export default function Layout() {
     { to: '/playboard', label: 'Play Board', icon: Heart },
     { to: '/shop', label: 'Shop', icon: ShoppingCart },
     { to: '/find-pros', label: 'Find Pros', icon: HardHat },
+    { to: '/pros', label: 'Professionals', icon: HardHat },
     { to: '/settings', label: 'Settings', icon: SettingsIcon },
   ];
 
   const isActive = (path: string) => {
-    if (path === '/') return location.pathname === '/';
-    return location.pathname.startsWith(path);
+    if (path === '/') return location === '/';
+    return location.startsWith(path);
   };
 
   return (
@@ -167,7 +168,7 @@ export default function Layout() {
       
       {/* Main Content */}
       <main className="flex-1 pt-[60px] md:pt-[108px]">
-        <Outlet />
+        {pageContent}
       </main>
 
       {/* Secondary Navigation - Mobile (Fixed Bottom) */}

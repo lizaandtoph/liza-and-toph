@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'wouter';
 import { useStore } from '../store';
 import { logEvent } from '../analytics';
 import { z } from 'zod';
@@ -28,7 +28,7 @@ const answersSchema = z.object({
 });
 
 export default function Onboarding() {
-  const navigate = useNavigate();
+  const [, setLocation] = useLocation();
   const { addChild, setAnswers, setLoggedIn, setParentAccount, parentAccount } = useStore();
   const hasParentAccount = !!parentAccount;
   const [step, setStep] = useState(1);
@@ -152,7 +152,7 @@ export default function Onboarding() {
       
       setLoggedIn(true);
       logEvent('onboarding_completed', { ageBand });
-      navigate('/playboard');
+      setLocation('/playboard');
     } catch (e) {
       console.error('Validation error:', e);
     }

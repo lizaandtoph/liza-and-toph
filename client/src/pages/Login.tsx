@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useLocation, Link } from 'wouter';
 import { useStore } from '../store';
 import { z } from 'zod';
 import { ChevronRight } from 'lucide-react';
@@ -10,7 +10,7 @@ const loginSchema = z.object({
 });
 
 export default function Login() {
-  const navigate = useNavigate();
+  const [, setLocation] = useLocation();
   const { parentAccount, setLoggedIn } = useStore();
   const [formData, setFormData] = useState({
     email: '',
@@ -36,7 +36,7 @@ export default function Login() {
         parentAccount.password === loginData.password
       ) {
         setLoggedIn(true);
-        navigate('/playboard');
+        setLocation('/playboard');
       } else {
         setLoginError('Incorrect email or password');
       }

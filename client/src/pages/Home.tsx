@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'wouter';
 import { useStore } from '../store';
 import { Sparkles, Heart, TrendingUp, ShoppingBag } from 'lucide-react';
 import useEmblaCarousel from 'embla-carousel-react';

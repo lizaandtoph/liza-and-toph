@@ -197,6 +197,93 @@ export class MemStorage implements IStorage {
     sampleProducts.forEach(product => {
       this.products.set(product.id, product);
     });
+
+    // Seed pros with related data
+    const pro1Id = "pro1";
+    const pro2Id = "pro2";
+    const pro3Id = "pro3";
+
+    const samplePros: Pro[] = [
+      {
+        id: pro1Id,
+        name: "SafetyFirst Childproofing",
+        slug: "safetyfirst-childproofing",
+        about: "We specialize in comprehensive childproofing solutions for families with young children. Our certified professionals assess your home and install safety products to create a secure environment for your little ones.",
+        address: "123 Main St, San Francisco, CA 94102",
+        phone: "(415) 555-0100",
+        emailPublic: "contact@safetyfirst.com",
+        website: "https://safetyfirst.com",
+        logoUrl: "https://images.unsplash.com/photo-1544547606-4be292f1a140?w=400",
+        coverUrl: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=1200",
+        rating: 4.9,
+        reviewCount: 45,
+        priceRange: "$$$",
+        badges: ["Verified", "Top Rated", "Background Checked"],
+        licenseNumber: "CA-12345",
+      },
+      {
+        id: pro2Id,
+        name: "PlaySpace Installers",
+        slug: "playspace-installers",
+        about: "Expert installation of play equipment, nursery furniture, and learning spaces. We help create safe, engaging environments where children can learn and grow.",
+        address: "456 Oak Ave, Palo Alto, CA 94301",
+        phone: "(650) 555-0200",
+        emailPublic: "hello@playspace.com",
+        website: "https://playspace.com",
+        logoUrl: "https://images.unsplash.com/photo-1560448204-603b3fc33ddc?w=400",
+        coverUrl: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200",
+        rating: 4.7,
+        reviewCount: 32,
+        priceRange: "$$",
+        badges: ["Certified Installer"],
+        licenseNumber: null,
+      },
+      {
+        id: pro3Id,
+        name: "Family Safety Consultants",
+        slug: "family-safety-consultants",
+        about: "Comprehensive safety assessments and custom solutions for growing families. We provide personalized consultations and ongoing support to ensure your home evolves with your child's development.",
+        address: "789 Elm St, Mountain View, CA 94040",
+        phone: "(408) 555-0300",
+        emailPublic: "info@familysafety.com",
+        website: "https://familysafety.com",
+        logoUrl: "https://images.unsplash.com/photo-1561154464-82e9adf32764?w=400",
+        coverUrl: "https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=1200",
+        rating: 4.8,
+        reviewCount: 28,
+        priceRange: "$$$$",
+        badges: ["10+ Years Experience", "Certified Professional"],
+        licenseNumber: "CA-67890",
+      },
+    ];
+
+    samplePros.forEach(pro => this._pros.set(pro.id, pro));
+
+    // Seed service offerings
+    const services: ServiceOffering[] = [
+      { id: "s1", proId: pro1Id, title: "Home Safety Assessment", category: "Safety", description: "Complete home evaluation and safety recommendations", minPrice: 150, maxPrice: 300 },
+      { id: "s2", proId: pro1Id, title: "Childproofing Installation", category: "Installation", description: "Professional installation of gates, locks, and safety devices", minPrice: 500, maxPrice: 2000 },
+      { id: "s3", proId: pro2Id, title: "Play Equipment Assembly", category: "Installation", description: "Expert assembly of play gyms, cribs, and nursery furniture", minPrice: 200, maxPrice: 800 },
+      { id: "s4", proId: pro3Id, title: "Safety Consulting", category: "Consulting", description: "Personalized safety strategy for your growing family", minPrice: 250, maxPrice: 500 },
+    ];
+    services.forEach(s => this._serviceOfferings.set(s.id, s));
+
+    // Seed service areas
+    const areas: ServiceArea[] = [
+      { id: "a1", proId: pro1Id, zip: "94102", radiusMiles: 25, label: "San Francisco & Bay Area" },
+      { id: "a2", proId: pro2Id, zip: "94301", radiusMiles: 20, label: "South Bay" },
+      { id: "a3", proId: pro3Id, zip: "94040", radiusMiles: 30, label: "Peninsula & South Bay" },
+    ];
+    areas.forEach(a => this._serviceAreas.set(a.id, a));
+
+    // Seed reviews
+    const reviews: Review[] = [
+      { id: "r1", proId: pro1Id, rating: 5, authorName: "Sarah M.", body: "Excellent service! They made our home so much safer for our toddler.", createdAt: new Date("2024-09-15") },
+      { id: "r2", proId: pro1Id, rating: 5, authorName: "John D.", body: "Very thorough assessment and professional installation. Highly recommend!", createdAt: new Date("2024-09-20") },
+      { id: "r3", proId: pro2Id, rating: 4, authorName: "Emily R.", body: "Great work assembling our play gym. Quick and efficient.", createdAt: new Date("2024-09-10") },
+      { id: "r4", proId: pro3Id, rating: 5, authorName: "Michael P.", body: "The consultation was invaluable. They thought of things we never considered.", createdAt: new Date("2024-09-18") },
+    ];
+    reviews.forEach(r => this._reviews.set(r.id, r));
   }
 
   async getUser(id: string): Promise<User | undefined> {
@@ -210,11 +297,21 @@ export class MemStorage implements IStorage {
   }
 
   async getUserByEmail(email: string): Promise<User | undefined> {
-    throw new Error("MemStorage not implemented for pro directory features");
+    return Array.from(this.users.values()).find(user => user.email === email);
   }
 
   async createUser(userData: RegisterUser): Promise<User> {
-    throw new Error("MemStorage not implemented for pro directory features");
+    const id = randomUUID();
+    const user: User = {
+      id,
+      email: userData.email,
+      passwordHash: userData.password,
+      role: userData.role,
+      proId: userData.proId || null,
+      createdAt: new Date(),
+    };
+    this.users.set(id, user);
+    return user;
   }
 
   async createChildProfile(profile: InsertChildProfile): Promise<ChildProfile> {
@@ -333,30 +430,165 @@ export class MemStorage implements IStorage {
     return this.professionals.delete(id);
   }
 
-  async getAllPros(): Promise<Pro[]> { throw new Error("Not implemented"); }
-  async getProBySlug(): Promise<Pro | undefined> { throw new Error("Not implemented"); }
-  async getProById(): Promise<Pro | undefined> { throw new Error("Not implemented"); }
-  async createPro(): Promise<Pro> { throw new Error("Not implemented"); }
-  async updatePro(): Promise<Pro | undefined> { throw new Error("Not implemented"); }
-  async deletePro(): Promise<boolean> { throw new Error("Not implemented"); }
-  async getServiceOfferingsByProId(): Promise<ServiceOffering[]> { throw new Error("Not implemented"); }
-  async createServiceOffering(): Promise<ServiceOffering> { throw new Error("Not implemented"); }
-  async updateServiceOffering(): Promise<ServiceOffering | undefined> { throw new Error("Not implemented"); }
-  async deleteServiceOffering(): Promise<boolean> { throw new Error("Not implemented"); }
-  async getServiceAreasByProId(): Promise<ServiceArea[]> { throw new Error("Not implemented"); }
-  async createServiceArea(): Promise<ServiceArea> { throw new Error("Not implemented"); }
-  async deleteServiceArea(): Promise<boolean> { throw new Error("Not implemented"); }
-  async getGalleryImagesByProId(): Promise<GalleryImage[]> { throw new Error("Not implemented"); }
-  async createGalleryImage(): Promise<GalleryImage> { throw new Error("Not implemented"); }
-  async deleteGalleryImage(): Promise<boolean> { throw new Error("Not implemented"); }
-  async getReviewsByProId(): Promise<Review[]> { throw new Error("Not implemented"); }
-  async createReview(): Promise<Review> { throw new Error("Not implemented"); }
-  async getMessagesByProId(): Promise<Message[]> { throw new Error("Not implemented"); }
-  async createMessage(): Promise<Message> { throw new Error("Not implemented"); }
-  async updateMessageStatus(): Promise<Message | undefined> { throw new Error("Not implemented"); }
-  async getSubscriptionByProId(): Promise<Subscription | undefined> { throw new Error("Not implemented"); }
-  async createSubscription(): Promise<Subscription> { throw new Error("Not implemented"); }
-  async updateSubscriptionStatus(): Promise<Subscription | undefined> { throw new Error("Not implemented"); }
+  async getAllPros(filters?: { q?: string; zip?: string; radius?: number; category?: string; ratingMin?: number; priceRange?: string }): Promise<Pro[]> {
+    let pros = Array.from(this._pros.values());
+    if (filters?.q) {
+      const query = filters.q.toLowerCase();
+      pros = pros.filter(p => p.name.toLowerCase().includes(query) || p.about.toLowerCase().includes(query));
+    }
+    if (filters?.ratingMin) {
+      pros = pros.filter(p => p.rating && p.rating >= filters.ratingMin!);
+    }
+    if (filters?.priceRange) {
+      pros = pros.filter(p => p.priceRange === filters.priceRange);
+    }
+    return pros;
+  }
+
+  async getProBySlug(slug: string): Promise<Pro | undefined> {
+    return Array.from(this._pros.values()).find(p => p.slug === slug);
+  }
+
+  async getProById(id: string): Promise<Pro | undefined> {
+    return this._pros.get(id);
+  }
+
+  async createPro(proData: InsertPro): Promise<Pro> {
+    const id = randomUUID();
+    const pro: Pro = {
+      id,
+      name: proData.name,
+      slug: proData.slug,
+      about: proData.about,
+      address: proData.address || null,
+      phone: proData.phone || null,
+      emailPublic: proData.emailPublic || null,
+      website: proData.website || null,
+      logoUrl: proData.logoUrl || null,
+      coverUrl: proData.coverUrl || null,
+      rating: proData.rating || null,
+      reviewCount: proData.reviewCount || 0,
+      priceRange: proData.priceRange || null,
+      badges: proData.badges || null,
+      licenseNumber: proData.licenseNumber || null,
+    };
+    this._pros.set(id, pro);
+    return pro;
+  }
+
+  async updatePro(id: string, proData: UpdatePro): Promise<Pro | undefined> {
+    const existing = this._pros.get(id);
+    if (!existing) return undefined;
+    const updated = { ...existing, ...proData };
+    this._pros.set(id, updated);
+    return updated;
+  }
+
+  async deletePro(id: string): Promise<boolean> {
+    return this._pros.delete(id);
+  }
+
+  async getServiceOfferingsByProId(proId: string): Promise<ServiceOffering[]> {
+    return Array.from(this._serviceOfferings.values()).filter(s => s.proId === proId);
+  }
+
+  async createServiceOffering(data: InsertServiceOffering): Promise<ServiceOffering> {
+    const id = randomUUID();
+    const service: ServiceOffering = { id, ...data };
+    this._serviceOfferings.set(id, service);
+    return service;
+  }
+
+  async updateServiceOffering(id: string, data: Partial<InsertServiceOffering>): Promise<ServiceOffering | undefined> {
+    const existing = this._serviceOfferings.get(id);
+    if (!existing) return undefined;
+    const updated = { ...existing, ...data };
+    this._serviceOfferings.set(id, updated);
+    return updated;
+  }
+
+  async deleteServiceOffering(id: string): Promise<boolean> {
+    return this._serviceOfferings.delete(id);
+  }
+
+  async getServiceAreasByProId(proId: string): Promise<ServiceArea[]> {
+    return Array.from(this._serviceAreas.values()).filter(a => a.proId === proId);
+  }
+
+  async createServiceArea(data: InsertServiceArea): Promise<ServiceArea> {
+    const id = randomUUID();
+    const area: ServiceArea = { id, ...data };
+    this._serviceAreas.set(id, area);
+    return area;
+  }
+
+  async deleteServiceArea(id: string): Promise<boolean> {
+    return this._serviceAreas.delete(id);
+  }
+
+  async getGalleryImagesByProId(proId: string): Promise<GalleryImage[]> {
+    return Array.from(this._galleryImages.values()).filter(img => img.proId === proId);
+  }
+
+  async createGalleryImage(data: InsertGalleryImage): Promise<GalleryImage> {
+    const id = randomUUID();
+    const image: GalleryImage = { id, ...data, createdAt: new Date() };
+    this._galleryImages.set(id, image);
+    return image;
+  }
+
+  async deleteGalleryImage(id: string): Promise<boolean> {
+    return this._galleryImages.delete(id);
+  }
+
+  async getReviewsByProId(proId: string): Promise<Review[]> {
+    return Array.from(this._reviews.values()).filter(r => r.proId === proId).sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+  }
+
+  async createReview(data: InsertReview): Promise<Review> {
+    const id = randomUUID();
+    const review: Review = { id, ...data, createdAt: new Date() };
+    this._reviews.set(id, review);
+    return review;
+  }
+
+  async getMessagesByProId(proId: string): Promise<Message[]> {
+    return Array.from(this._messages.values()).filter(m => m.proId === proId).sort((a, b) => b.sentAt.getTime() - a.sentAt.getTime());
+  }
+
+  async createMessage(data: InsertMessage): Promise<Message> {
+    const id = randomUUID();
+    const message: Message = { id, ...data, status: "new", sentAt: new Date() };
+    this._messages.set(id, message);
+    return message;
+  }
+
+  async updateMessageStatus(id: string, status: string): Promise<Message | undefined> {
+    const existing = this._messages.get(id);
+    if (!existing) return undefined;
+    const updated = { ...existing, status };
+    this._messages.set(id, updated);
+    return updated;
+  }
+
+  async getSubscriptionByProId(proId: string): Promise<Subscription | undefined> {
+    return Array.from(this._subscriptions.values()).find(s => s.proId === proId);
+  }
+
+  async createSubscription(data: InsertSubscription): Promise<Subscription> {
+    const id = randomUUID();
+    const subscription: Subscription = { id, ...data, createdAt: new Date(), updatedAt: new Date() };
+    this._subscriptions.set(id, subscription);
+    return subscription;
+  }
+
+  async updateSubscriptionStatus(proId: string, status: string): Promise<Subscription | undefined> {
+    const existing = Array.from(this._subscriptions.values()).find(s => s.proId === proId);
+    if (!existing) return undefined;
+    const updated = { ...existing, status, updatedAt: new Date() };
+    this._subscriptions.set(existing.id, updated);
+    return updated;
+  }
 }
 
 export class DbStorage implements IStorage {
