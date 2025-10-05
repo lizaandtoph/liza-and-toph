@@ -33,6 +33,7 @@ export const milestones = pgTable("milestones", {
 export const products = pgTable("products", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   name: text("name").notNull(),
+  brand: text("brand").notNull(),
   description: text("description").notNull(),
   price: text("price").notNull(),
   imageUrl: text("image_url").notNull(),
@@ -68,11 +69,16 @@ export const insertPlayBoardSchema = createInsertSchema(playBoards).omit({
   updatedAt: true,
 });
 
+export const insertProductSchema = createInsertSchema(products).omit({
+  id: true,
+});
+
 // Types
 export type InsertChildProfile = z.infer<typeof insertChildProfileSchema>;
 export type ChildProfile = typeof childProfiles.$inferSelect;
 export type Milestone = typeof milestones.$inferSelect;
 export type Product = typeof products.$inferSelect;
+export type InsertProduct = z.infer<typeof insertProductSchema>;
 export type PlayBoard = typeof playBoards.$inferSelect;
 export type InsertPlayBoard = z.infer<typeof insertPlayBoardSchema>;
 
