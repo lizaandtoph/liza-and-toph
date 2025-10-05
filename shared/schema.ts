@@ -49,6 +49,7 @@ export const products = pgTable("products", {
   isTopPick: boolean("is_top_pick").default(false),
   isBestseller: boolean("is_bestseller").default(false),
   isNew: boolean("is_new").default(false),
+  isLizaTophCertified: boolean("is_liza_toph_certified").default(false),
   
   // Age filtering
   minAgeMonths: integer("min_age_months"),
@@ -265,6 +266,7 @@ export const updateProductSchema = z.object({
   isTopPick: z.boolean().nullable().optional(),
   isBestseller: z.boolean().nullable().optional(),
   isNew: z.boolean().nullable().optional(),
+  isLizaTophCertified: z.boolean().nullable().optional(),
   
   // Age filtering
   minAgeMonths: z.number().int().nullable().optional(),

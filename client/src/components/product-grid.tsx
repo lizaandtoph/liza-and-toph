@@ -36,6 +36,7 @@ export default function ProductGrid({ products }: ProductGridProps) {
   };
 
   const getProductBadge = (product: Product) => {
+    if (product.isLizaTophCertified) return { text: 'LIZA & TOPH CERTIFIED', className: 'bg-purple-600 text-white' };
     if (product.isTopPick) return { text: 'TOP PICK', className: 'bg-accent text-accent-foreground' };
     if (product.isBestseller) return { text: 'BESTSELLER', className: 'bg-secondary text-white' };
     if (product.isNew) return { text: 'NEW', className: 'bg-accent text-accent-foreground' };

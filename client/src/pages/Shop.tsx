@@ -23,6 +23,7 @@ export default function Shop() {
   const [selectedEnergy, setSelectedEnergy] = useState<string | null>(null);
   const [selectedSpecialNeeds, setSelectedSpecialNeeds] = useState<string[]>([]);
   const [selectedSocialContext, setSelectedSocialContext] = useState<string[]>([]);
+  const [lizaTophCertifiedOnly, setLizaTophCertifiedOnly] = useState(false);
   
   const playTypes = ['sensory', 'exploratory', 'functional', 'constructive', 'pretend', 'symbolic', 'gross_motor', 'fine_motor', 'cognitive', 'social', 'language', 'creative'];
   const complexityLevels = ['simple', 'moderate', 'complex', 'advanced', 'expert'];
@@ -101,8 +102,12 @@ export default function Shop() {
     const matchesSocialContext = selectedSocialContext.length === 0 ||
       (product.socialContext?.some(ctx => selectedSocialContext.includes(ctx)) ?? false);
     
+    // Liza & Toph Certified filter
+    const matchesLizaTophCertified = !lizaTophCertifiedOnly || product.isLizaTophCertified === true;
+    
     return matchesSearch && matchesCategory && matchesAge && matchesPlayType && 
-           matchesComplexity && matchesEnergy && matchesSpecialNeeds && matchesSocialContext;
+           matchesComplexity && matchesEnergy && matchesSpecialNeeds && matchesSocialContext &&
+           matchesLizaTophCertified;
   });
   
   const clearFilters = () => {
@@ -113,6 +118,7 @@ export default function Shop() {
     setSelectedSpecialNeeds([]);
     setSelectedSocialContext([]);
     setSelectedCategory('all');
+    setLizaTophCertifiedOnly(false);
   };
   
   const activeFilterCount = 
@@ -122,7 +128,8 @@ export default function Shop() {
     (selectedEnergy ? 1 : 0) +
     selectedSpecialNeeds.length +
     selectedSocialContext.length +
-    (selectedCategory !== 'all' ? 1 : 0);
+    (selectedCategory !== 'all' ? 1 : 0) +
+    (lizaTophCertifiedOnly ? 1 : 0);
 
   const handleProductClick = (skuId: string, url: string) => {
     logEvent('shop_product_clicked', { sku: skuId });
@@ -304,6 +311,19 @@ export default function Shop() {
                     <label className="text-sm capitalize">{context.replace('_', ' ')}</label>
                   </div>
                 ))}
+              </div>
+            </div>
+            
+            {/* Liza and Toph Certified */}
+            <div>
+              <label className="font-medium text-sm mb-2 block">Liza and Toph Certified</label>
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  checked={lizaTophCertifiedOnly}
+                  onCheckedChange={(checked) => setLizaTophCertifiedOnly(checked as boolean)}
+                  data-testid="checkbox-liza-toph-certified"
+                />
+                <label className="text-sm">Show only Liza and Toph Certified products</label>
               </div>
             </div>
             
