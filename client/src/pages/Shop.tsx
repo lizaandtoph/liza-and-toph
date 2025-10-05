@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { Search, Filter, Star } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
+import { type Product } from '@shared/schema';
 import { useStore } from '../store';
 import { logEvent } from '../analytics';
-import needsToProductsData from '../data/needsToProducts.json';
 
 export default function Shop() {
   const { getActiveChild } = useStore();
@@ -10,10 +11,33 @@ export default function Shop() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
 
-  const allProducts = Object.values(needsToProductsData).flat();
-  const uniqueProducts = Array.from(
-    new Map(allProducts.map((p) => [p.skuId, p])).values()
-  );
+  const { data: products = [], isLoading } = useQuery<Product[]>({
+    queryKey: ['/api/admin/products'],
+  });
+
+  const parseAgeRange = (ageRange: string) => {
+    const match = ageRange.match(/(\d+)-(\d+)/);
+    if (match) {
+      return { ageMin: parseInt(match[1]), ageMax: parseInt(match[2]) };
+    }
+    return { ageMin: 0, ageMax: 24 };
+  };
+
+  const transformedProducts = products.map((p) => {
+    const { ageMin, ageMax } = parseAgeRange(p.ageRange);
+    return {
+      skuId: p.id,
+      title: p.name,
+      url: p.affiliateUrl || '#',
+      ageMin,
+      ageMax,
+      domains: p.categories || [],
+      price: p.price,
+      rating: parseFloat(p.rating) || 5.0,
+      reviewCount: p.reviewCount,
+      imageUrl: p.imageUrl,
+    };
+  });
 
   const categories = [
     { value: 'all', label: 'All Products' },
@@ -24,7 +48,7 @@ export default function Shop() {
     { value: 'motor', label: 'Movement & Motor Skills' },
   ];
 
-  const filteredProducts = uniqueProducts.filter((product) => {
+  const filteredProducts = transformedProducts.filter((product) => {
     const matchesSearch = product.title.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = selectedCategory === 'all' || 
       product.domains.some(d => d.toLowerCase().includes(selectedCategory));
@@ -79,11 +103,15 @@ export default function Shop() {
       </div>
 
       {/* Products Grid */}
-      {filteredProducts.length === 0 && (
+      {isLoading ? (
+        <div className="text-center py-12">
+          <p className="text-lg opacity-70">Loading products...</p>
+        </div>
+      ) : filteredProducts.length === 0 ? (
         <div className="text-center py-12">
           <p className="text-lg opacity-70">No products found matching your criteria.</p>
         </div>
-      )}
+      ) : null}
 
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {filteredProducts.map((product) => (
