@@ -25,7 +25,7 @@ export default function Layout({ children: pageContent }: { children: React.Reac
   }, [showChildDropdown]);
 
   const secondaryNavLinks = [
-    { to: '/onboarding', label: 'Your Child', icon: Baby },
+    { to: '/your-child', label: 'Your Child', icon: Baby },
     { to: '/playboard', label: 'Play Board', icon: Heart },
     { to: '/shop', label: 'Shop', icon: ShoppingCart },
     { to: '/find-pros', label: 'Find Pros', icon: HardHat },
