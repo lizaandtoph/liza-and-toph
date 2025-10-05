@@ -122,17 +122,30 @@ export default function PlayBoard() {
   const insights = computeInsights();
 
   const parseAgeRange = (ageRange: string) => {
-    const cleanRange = ageRange.replace(/\s*(months?|years?)\s*/gi, '').trim();
-    const match = cleanRange.match(/(\d+)-(\d+)/);
-    if (match) {
-      return { ageMin: parseInt(match[1]), ageMax: parseInt(match[2]) };
+    const parts = ageRange.toLowerCase().split(/[-–—]/);
+    
+    const parseAgeValue = (str: string): number => {
+      const match = str.match(/(\d+\.?\d*)\s*(months?|years?|m|y)?/i);
+      if (!match) return 0;
+      
+      const value = parseFloat(match[1]);
+      const unit = match[2];
+      
+      if (unit && (unit.startsWith('m') || unit === 'months' || unit === 'month')) {
+        return value / 12;
+      }
+      return value;
+    };
+    
+    if (parts.length === 2) {
+      return {
+        ageMin: parseAgeValue(parts[0].trim()),
+        ageMax: parseAgeValue(parts[1].trim())
+      };
     }
-    const singleMatch = cleanRange.match(/(\d+)/);
-    if (singleMatch) {
-      const age = parseInt(singleMatch[1]);
-      return { ageMin: age, ageMax: age };
-    }
-    return { ageMin: 0, ageMax: 24 };
+    
+    const singleAge = parseAgeValue(ageRange);
+    return { ageMin: singleAge, ageMax: singleAge };
   };
 
   const getRecommendedProducts = () => {
@@ -149,20 +162,37 @@ export default function PlayBoard() {
 
     const childAge = child.ageYears || 0;
     
-    return products
+    const productsWithScores = products
       .map((p) => {
         const { ageMin, ageMax } = parseAgeRange(p.ageRange);
+        
+        let relevanceScore = 0;
+        if (p.categories && Array.isArray(p.categories)) {
+          p.categories.forEach(category => {
+            const categoryLower = category.toLowerCase();
+            if (childNeeds.has('accessible-storage') && categoryLower.includes('storage')) relevanceScore += 2;
+            if (childNeeds.has('fine-motor-mark-making') && (categoryLower.includes('art') || categoryLower.includes('motor'))) relevanceScore += 2;
+            if (childNeeds.has('gross-motor-climb') && (categoryLower.includes('climb') || categoryLower.includes('motor'))) relevanceScore += 2;
+            if (childNeeds.has('nurturing-dolls') && (categoryLower.includes('doll') || categoryLower.includes('pretend'))) relevanceScore += 2;
+            if (childNeeds.has('building-foundations') && categoryLower.includes('building')) relevanceScore += 2;
+          });
+        }
+        
         return {
           ...p,
           ageMin,
           ageMax,
+          relevanceScore,
         };
       })
       .filter((p) => {
         const ageMatch = childAge >= p.ageMin && childAge <= p.ageMax;
         return ageMatch;
       })
+      .sort((a, b) => b.relevanceScore - a.relevanceScore)
       .slice(0, 6);
+    
+    return productsWithScores;
   };
 
   const recommendedProducts = getRecommendedProducts();
