@@ -144,7 +144,7 @@ export default function Layout({ children: pageContent }: { children: React.Reac
 
       {/* Secondary Navigation - Desktop (Below Header) */}
       <nav className="hidden md:block bg-white border-b-2 border-sand fixed top-[60px] left-0 right-0 z-40">
-        <div className="container mx-auto px-4 max-w-7xl">
+        <div className="container mx-auto px-4 max-w-7xl mt-[10px] mb-[10px]">
           <div className="flex items-center justify-center gap-8 py-3">
             {secondaryNavLinks.map((link) => (
               <Link
