@@ -46,6 +46,95 @@ export interface Answers {
   cleanup_independence?: string;
   space_constraints?: string[];
   storage_preference?: string;
+  
+  // Full Questionnaire Data
+  fullQuestionnaire?: {
+    // Section 1: Basic Information
+    basicInfo?: {
+      gender?: string;
+      premature?: boolean;
+      weeksEarly?: number;
+      primaryLanguages?: string;
+      completedBy?: string;
+      relationshipDuration?: string;
+      completionDate?: string;
+    };
+    
+    // Section 2: Developmental Milestones
+    developmental?: {
+      communication?: Record<string, string>;
+      grossMotor?: Record<string, string>;
+      fineMotor?: Record<string, string>;
+      problemSolving?: Record<string, string>;
+      personalSocial?: Record<string, string>;
+    };
+    
+    // Section 3: Play Behavior and Preferences
+    playBehavior?: {
+      playTypes?: string[];
+      focusTime?: string;
+      playPreference?: string;
+      initiatesPlay?: number;
+      transitionReaction?: string;
+      elaboratePlay?: number;
+      activityPreference?: string;
+      watchesOthers?: number;
+      parallelPlay?: number;
+      sharesTurns?: number;
+      cooperativePlay?: number;
+      conflictHandling?: string;
+      invitesOthers?: number;
+      followsRules?: number;
+      symbolicPlay?: number;
+      rolePlaying?: number;
+      createsArt?: number;
+      makesSongs?: number;
+      buildsStructures?: number;
+      creativeUse?: number;
+      dramaticPlay?: number;
+    };
+    
+    // Section 4: Temperament and Behavioral Characteristics
+    temperament?: {
+      excitementIntensity?: number;
+      frustrationEase?: number;
+      calmingSpeed?: number;
+      newSituationReaction?: number;
+      focusAbility?: number;
+      activityLevel?: number;
+      routineChangeSensitivity?: number;
+      emotionExpression?: number;
+      transitionAdaptation?: number;
+      environmentSensitivity?: number;
+    };
+    
+    // Section 5: Play Environment and Context
+    environment?: {
+      playMaterials?: string[];
+      activePlayTime?: string;
+      attendsDaycare?: boolean;
+      daycareHours?: number;
+      playsWithOthers?: string;
+      playChallenges?: string;
+      safetyConcerns?: string;
+      parentSupport?: string;
+      developmentGoals?: string;
+    };
+    
+    // Section 6: Parent Observations and Concerns
+    concerns?: {
+      speech?: { hasConcern: boolean; details?: string };
+      understanding?: { hasConcern: boolean; details?: string };
+      handsFingers?: { hasConcern: boolean; details?: string };
+      armsLegs?: { hasConcern: boolean; details?: string };
+      behavior?: { hasConcern: boolean; details?: string };
+      getsAlong?: { hasConcern: boolean; details?: string };
+      learning?: { hasConcern: boolean; details?: string };
+      independence?: { hasConcern: boolean; details?: string };
+      developmentGoals?: string;
+      additionalConcerns?: string;
+    };
+  };
 }
 
 export interface ParentAccount {

@@ -1,0 +1,674 @@
+{
+  "sections": [
+    {
+      "id": "basicInfo",
+      "title": "Basic Information",
+      "description": "Help us understand your child's background",
+      "questions": [
+        {
+          "id": "gender",
+          "text": "Child's Gender",
+          "type": "radio",
+          "options": ["Male", "Female", "Non-binary", "Prefer not to answer"]
+        },
+        {
+          "id": "premature",
+          "text": "Was your child born 3 or more weeks premature?",
+          "type": "radio",
+          "options": ["No", "Yes"]
+        },
+        {
+          "id": "weeksEarly",
+          "text": "If yes, how many weeks early?",
+          "type": "number",
+          "conditional": { "field": "premature", "value": "Yes" }
+        },
+        {
+          "id": "primaryLanguages",
+          "text": "Primary language(s) spoken at home",
+          "type": "text"
+        },
+        {
+          "id": "completedBy",
+          "text": "Who is completing this questionnaire?",
+          "type": "radio",
+          "options": [
+            "Mother/Female caregiver",
+            "Father/Male caregiver",
+            "Grandparent",
+            "Other family member",
+            "Childcare provider",
+            "Other"
+          ]
+        },
+        {
+          "id": "relationshipDuration",
+          "text": "How long have you known this child?",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "id": "developmental",
+      "title": "Developmental Milestones Assessment",
+      "description": "Response Scale: Yes | Sometimes | Not Yet | Don't Know",
+      "subsections": [
+        {
+          "id": "communication",
+          "title": "Communication & Language Development",
+          "questions": [
+            {
+              "id": "pointsToBodyParts",
+              "text": "When you ask your child to point to parts of the body, such as nose, hair, or tummy, does your child point correctly?",
+              "type": "scale",
+              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
+            },
+            {
+              "id": "says50Words",
+              "text": "Does your child say about 50 or more words?",
+              "type": "scale",
+              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
+            },
+            {
+              "id": "twoWordSentences",
+              "text": "Does your child put two words together to make simple sentences like \"Daddy go\" or \"More cookie\"?",
+              "type": "scale",
+              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
+            },
+            {
+              "id": "communicatesWants",
+              "text": "When your child wants something, do they usually let you know by pointing and making sounds or using words?",
+              "type": "scale",
+              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
+            },
+            {
+              "id": "followsInstructions",
+              "text": "Does your child follow simple instructions like \"Come here\" or \"Give me the ball\"?",
+              "type": "scale",
+              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
+            },
+            {
+              "id": "namesBodyParts",
+              "text": "Can your child name at least three body parts when you ask?",
+              "type": "scale",
+              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
+            },
+            {
+              "id": "asksQuestions",
+              "text": "Does your child ask questions using words like \"what,\" \"where,\" or \"who\"?",
+              "type": "scale",
+              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
+            }
+          ]
+        },
+        {
+          "id": "grossMotor",
+          "title": "Gross Motor Skills",
+          "questions": [
+            {
+              "id": "walksWithoutFalling",
+              "text": "Does your child walk without falling down or running into things?",
+              "type": "scale",
+              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
+            },
+            {
+              "id": "climbsFurniture",
+              "text": "Does your child climb on furniture or playground equipment?",
+              "type": "scale",
+              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
+            },
+            {
+              "id": "kicksBall",
+              "text": "Can your child kick a ball forward?",
+              "type": "scale",
+              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
+            },
+            {
+              "id": "walksUpstairs",
+              "text": "Does your child walk up stairs using the railing or wall for support?",
+              "type": "scale",
+              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
+            },
+            {
+              "id": "runs",
+              "text": "Can your child run without falling frequently?",
+              "type": "scale",
+              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
+            },
+            {
+              "id": "jumps",
+              "text": "Does your child jump with both feet leaving the ground?",
+              "type": "scale",
+              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
+            },
+            {
+              "id": "pedalsTricycle",
+              "text": "Can your child pedal a tricycle or similar riding toy?",
+              "type": "scale",
+              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
+            }
+          ]
+        },
+        {
+          "id": "fineMotor",
+          "title": "Fine Motor Skills",
+          "questions": [
+            {
+              "id": "stacksBlocks",
+              "text": "Can your child stack at least four small blocks on top of each other?",
+              "type": "scale",
+              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
+            },
+            {
+              "id": "turnsPages",
+              "text": "Does your child turn pages in a book by themselves?",
+              "type": "scale",
+              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
+            },
+            {
+              "id": "scribbles",
+              "text": "Can your child draw or scribble with a crayon or pencil?",
+              "type": "scale",
+              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
+            },
+            {
+              "id": "usesUtensils",
+              "text": "Does your child use a spoon or fork to feed themselves?",
+              "type": "scale",
+              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
+            },
+            {
+              "id": "turnsDoorknobs",
+              "text": "Can your child turn doorknobs or lids on containers?",
+              "type": "scale",
+              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
+            },
+            {
+              "id": "stringsBeads",
+              "text": "Does your child string beads or put shapes in a shape-sorter?",
+              "type": "scale",
+              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
+            },
+            {
+              "id": "usesScissors",
+              "text": "Can your child use scissors to cut paper (with supervision)?",
+              "type": "scale",
+              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
+            }
+          ]
+        },
+        {
+          "id": "problemSolving",
+          "title": "Problem-Solving & Cognitive Development",
+          "questions": [
+            {
+              "id": "matchesObjects",
+              "text": "Does your child match similar objects or put objects in categories?",
+              "type": "scale",
+              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
+            },
+            {
+              "id": "pointsToObjects",
+              "text": "When looking at picture books, does your child point to and name familiar objects?",
+              "type": "scale",
+              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
+            },
+            {
+              "id": "pretendPlay",
+              "text": "Does your child pretend to feed a doll, stuffed animal, or you?",
+              "type": "scale",
+              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
+            },
+            {
+              "id": "showsObjects",
+              "text": "Does your child show you objects by bringing them to you or holding them up?",
+              "type": "scale",
+              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
+            },
+            {
+              "id": "completesPuzzles",
+              "text": "Can your child complete simple puzzles (3-6 pieces)?",
+              "type": "scale",
+              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
+            },
+            {
+              "id": "imitatesActivities",
+              "text": "Does your child imitate activities they see you do (like talking on phone, cooking)?",
+              "type": "scale",
+              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
+            },
+            {
+              "id": "followsSequence",
+              "text": "Can your child follow a simple sequence like \"First put on socks, then shoes\"?",
+              "type": "scale",
+              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
+            }
+          ]
+        },
+        {
+          "id": "personalSocial",
+          "title": "Personal-Social Development",
+          "questions": [
+            {
+              "id": "playsAlongside",
+              "text": "Does your child play alongside other children?",
+              "type": "scale",
+              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
+            },
+            {
+              "id": "showsAffection",
+              "text": "Does your child show affection toward familiar people?",
+              "type": "scale",
+              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
+            },
+            {
+              "id": "canBeComforted",
+              "text": "When upset, can your child be comforted by familiar adults?",
+              "type": "scale",
+              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
+            },
+            {
+              "id": "showsIndependence",
+              "text": "Does your child show independence in familiar situations?",
+              "type": "scale",
+              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
+            },
+            {
+              "id": "removesClothing",
+              "text": "Can your child take off some clothing items by themselves?",
+              "type": "scale",
+              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
+            },
+            {
+              "id": "helpsWithTasks",
+              "text": "Does your child help with simple household tasks when asked?",
+              "type": "scale",
+              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
+            },
+            {
+              "id": "showsConcern",
+              "text": "Does your child show concern when others are hurt or upset?",
+              "type": "scale",
+              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "playBehavior",
+      "title": "Play Behavior and Preferences",
+      "description": "Response Scale: Never (1) | Rarely (2) | Sometimes (3) | Often (4) | Always (5)",
+      "questions": [
+        {
+          "id": "playTypes",
+          "text": "What types of play does your child enjoy most? (Check all that apply)",
+          "type": "checkbox",
+          "options": [
+            "Pretend/imaginative play",
+            "Building/construction",
+            "Arts and crafts",
+            "Physical/active play",
+            "Puzzle/problem-solving",
+            "Music/movement",
+            "Sensory play (sand, water, textures)",
+            "Social play with others"
+          ]
+        },
+        {
+          "id": "focusTime",
+          "text": "How long can your child typically focus on one play activity before switching?",
+          "type": "radio",
+          "options": [
+            "Less than 5 minutes",
+            "5-15 minutes",
+            "15-30 minutes",
+            "30-60 minutes",
+            "More than 1 hour"
+          ]
+        },
+        {
+          "id": "playPreference",
+          "text": "Does your child prefer to play:",
+          "type": "radio",
+          "options": [
+            "Alone most of the time",
+            "With one other child",
+            "In small groups (2-3 children)",
+            "In larger groups (4+ children)",
+            "No clear preference"
+          ]
+        },
+        {
+          "id": "initiatesPlay",
+          "text": "Does your child initiate play activities independently?",
+          "type": "rating",
+          "scale": 5
+        },
+        {
+          "id": "transitionReaction",
+          "text": "How does your child typically react when play time ends?",
+          "type": "radio",
+          "options": [
+            "Transitions easily",
+            "Needs warning but transitions well",
+            "Sometimes resistant but manageable",
+            "Often upset or has tantrums",
+            "Extremely difficult transitions"
+          ]
+        },
+        {
+          "id": "elaboratePlay",
+          "text": "Does your child create elaborate stories or scenarios during pretend play?",
+          "type": "rating",
+          "scale": 5
+        },
+        {
+          "id": "activityPreference",
+          "text": "Does your child prefer:",
+          "type": "radio",
+          "options": [
+            "Structured activities with clear rules",
+            "Open-ended free play",
+            "A mix of both",
+            "Depends on the activity"
+          ]
+        },
+        {
+          "id": "watchesOthers",
+          "text": "Does your child watch other children play without joining in?",
+          "type": "rating",
+          "scale": 5
+        },
+        {
+          "id": "parallelPlay",
+          "text": "Does your child play near other children but not directly with them (parallel play)?",
+          "type": "rating",
+          "scale": 5
+        },
+        {
+          "id": "sharesTurns",
+          "text": "Does your child share toys and take turns during play?",
+          "type": "rating",
+          "scale": 5
+        },
+        {
+          "id": "cooperativePlay",
+          "text": "Does your child engage in cooperative play with shared goals?",
+          "type": "rating",
+          "scale": 5
+        },
+        {
+          "id": "conflictHandling",
+          "text": "How does your child handle conflicts during play?",
+          "type": "radio",
+          "options": [
+            "Resolves conflicts independently",
+            "Seeks adult help",
+            "Becomes upset but recovers quickly",
+            "Has difficulty with conflict resolution",
+            "Avoids situations that might cause conflict"
+          ]
+        },
+        {
+          "id": "invitesOthers",
+          "text": "Does your child invite others to join in their play?",
+          "type": "rating",
+          "scale": 5
+        },
+        {
+          "id": "followsRules",
+          "text": "Can your child follow simple game rules?",
+          "type": "rating",
+          "scale": 5
+        },
+        {
+          "id": "symbolicPlay",
+          "text": "Does your child use objects to represent other things (like a block as a phone)?",
+          "type": "rating",
+          "scale": 5
+        },
+        {
+          "id": "rolePlaying",
+          "text": "Does your child engage in role-playing (pretending to be animals, characters, adults)?",
+          "type": "rating",
+          "scale": 5
+        },
+        {
+          "id": "createsArt",
+          "text": "Does your child create art, drawings, or crafts during play?",
+          "type": "rating",
+          "scale": 5
+        },
+        {
+          "id": "makesSongs",
+          "text": "Does your child make up songs, stories, or dances?",
+          "type": "rating",
+          "scale": 5
+        },
+        {
+          "id": "buildsStructures",
+          "text": "Does your child build structures with blocks, LEGO, or similar materials?",
+          "type": "rating",
+          "scale": 5
+        },
+        {
+          "id": "creativeUse",
+          "text": "Does your child show creativity in how they use toys?",
+          "type": "rating",
+          "scale": 5
+        },
+        {
+          "id": "dramaticPlay",
+          "text": "Does your child engage in dramatic play scenarios (playing house, school, etc.)?",
+          "type": "rating",
+          "scale": 5
+        }
+      ]
+    },
+    {
+      "id": "temperament",
+      "title": "Temperament and Behavioral Characteristics",
+      "description": "Response Scale: 1 (Much less than typical) | 2 (Less than typical) | 3 (About typical) | 4 (More than typical) | 5 (Much more than typical)",
+      "questions": [
+        {
+          "id": "excitementIntensity",
+          "text": "When your child is excited about an upcoming activity, how intense is their excitement?",
+          "type": "rating",
+          "scale": 5
+        },
+        {
+          "id": "frustrationEase",
+          "text": "How easily does your child become frustrated when they cannot do something they want to do?",
+          "type": "rating",
+          "scale": 5
+        },
+        {
+          "id": "calmingSpeed",
+          "text": "How quickly does your child calm down after being upset?",
+          "type": "rating",
+          "scale": 5
+        },
+        {
+          "id": "newSituationReaction",
+          "text": "How does your child typically react to new people or situations?",
+          "type": "rating",
+          "scale": 5
+        },
+        {
+          "id": "focusAbility",
+          "text": "How well can your child focus on activities that interest them?",
+          "type": "rating",
+          "scale": 5
+        },
+        {
+          "id": "activityLevel",
+          "text": "How active is your child compared to other children their age?",
+          "type": "rating",
+          "scale": 5
+        },
+        {
+          "id": "routineChangeSensitivity",
+          "text": "How sensitive is your child to changes in routine?",
+          "type": "rating",
+          "scale": 5
+        },
+        {
+          "id": "emotionExpression",
+          "text": "How does your child express emotions (easily, intensely, quietly)?",
+          "type": "rating",
+          "scale": 5
+        },
+        {
+          "id": "transitionAdaptation",
+          "text": "How well does your child adapt to transitions between activities?",
+          "type": "rating",
+          "scale": 5
+        },
+        {
+          "id": "environmentSensitivity",
+          "text": "How does your child respond to loud noises or busy environments?",
+          "type": "rating",
+          "scale": 5
+        }
+      ]
+    },
+    {
+      "id": "environment",
+      "title": "Play Environment and Context",
+      "description": "Tell us about your child's play environment",
+      "questions": [
+        {
+          "id": "playMaterials",
+          "text": "What types of play materials does your child have access to at home? (Check all that apply)",
+          "type": "checkbox",
+          "options": [
+            "Books and literacy materials",
+            "Art supplies (crayons, paper, paints)",
+            "Building materials (blocks, LEGO, etc.)",
+            "Pretend play items (dolls, dress-up, kitchen sets)",
+            "Puzzles and problem-solving games",
+            "Music instruments or music players",
+            "Sports equipment or active play items",
+            "Electronic toys or tablets",
+            "Sensory play materials (play dough, sand, water)",
+            "Science/nature exploration materials"
+          ]
+        },
+        {
+          "id": "activePlayTime",
+          "text": "How much time does your child typically spend in active physical play each day?",
+          "type": "radio",
+          "options": [
+            "Less than 30 minutes",
+            "30-60 minutes",
+            "1-2 hours",
+            "2-3 hours",
+            "More than 3 hours"
+          ]
+        },
+        {
+          "id": "attendsDaycare",
+          "text": "Does your child attend daycare, preschool, or other group care?",
+          "type": "radio",
+          "options": ["No", "Yes"]
+        },
+        {
+          "id": "daycareHours",
+          "text": "If yes, how many hours per week?",
+          "type": "number",
+          "conditional": { "field": "attendsDaycare", "value": "Yes" }
+        },
+        {
+          "id": "playsWithOthers",
+          "text": "How often does your child play with other children outside the home?",
+          "type": "radio",
+          "options": [
+            "Never or rarely",
+            "1-2 times per week",
+            "3-4 times per week",
+            "Daily",
+            "Multiple times daily"
+          ]
+        },
+        {
+          "id": "playChallenges",
+          "text": "What challenges, if any, do you notice during your child's play?",
+          "type": "textarea"
+        },
+        {
+          "id": "safetyConcerns",
+          "text": "Are there any safety concerns that limit your child's play opportunities?",
+          "type": "textarea"
+        },
+        {
+          "id": "parentSupport",
+          "text": "How do you typically support or join in your child's play?",
+          "type": "textarea"
+        },
+        {
+          "id": "developmentGoals",
+          "text": "What would you like to see your child develop further in their play?",
+          "type": "textarea"
+        }
+      ]
+    },
+    {
+      "id": "concerns",
+      "title": "Parent Observations and Concerns",
+      "description": "Please answer Yes or No, and provide details if you answer Yes",
+      "questions": [
+        {
+          "id": "speech",
+          "text": "Do you have concerns about how your child talks and makes speech sounds?",
+          "type": "yesNoDetails"
+        },
+        {
+          "id": "understanding",
+          "text": "Do you have concerns about how your child understands what you say?",
+          "type": "yesNoDetails"
+        },
+        {
+          "id": "handsFingers",
+          "text": "Do you have concerns about how your child uses their hands and fingers to do things?",
+          "type": "yesNoDetails"
+        },
+        {
+          "id": "armsLegs",
+          "text": "Do you have concerns about how your child uses their arms and legs?",
+          "type": "yesNoDetails"
+        },
+        {
+          "id": "behavior",
+          "text": "Do you have concerns about how your child behaves?",
+          "type": "yesNoDetails"
+        },
+        {
+          "id": "getsAlong",
+          "text": "Do you have concerns about how your child gets along with others?",
+          "type": "yesNoDetails"
+        },
+        {
+          "id": "learning",
+          "text": "Do you have concerns about how your child is learning preschool or school skills?",
+          "type": "yesNoDetails"
+        },
+        {
+          "id": "independence",
+          "text": "Do you have concerns about how your child learns to do things for themselves?",
+          "type": "yesNoDetails"
+        },
+        {
+          "id": "developmentGoals",
+          "text": "What are your main goals for your child's development in the next 6 months?",
+          "type": "textarea"
+        },
+        {
+          "id": "additionalConcerns",
+          "text": "Is there anything else about your child's development or behavior that concerns or puzzles you?",
+          "type": "textarea"
+        }
+      ]
+    }
+  ]
+}
