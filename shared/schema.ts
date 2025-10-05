@@ -202,7 +202,54 @@ export const insertPlayBoardSchema = createInsertSchema(playBoards).omit({
 
 export const insertProductSchema = createInsertSchema(products).omit({
   id: true,
-});
+}).refine(
+  (data) => {
+    if (data.minAgeMonths != null && data.maxAgeMonths != null) {
+      return data.minAgeMonths <= data.maxAgeMonths;
+    }
+    return true;
+  },
+  {
+    message: "Minimum age must be less than or equal to maximum age",
+    path: ["minAgeMonths"],
+  }
+).refine(
+  (data) => !data.playTypeTags || data.playTypeTags.length > 0,
+  {
+    message: "At least one play type must be selected",
+    path: ["playTypeTags"],
+  }
+).refine(
+  (data) => data.complexityLevel != null && data.complexityLevel.length > 0,
+  {
+    message: "Complexity level is required",
+    path: ["complexityLevel"],
+  }
+).refine(
+  (data) => !data.communicationLevels || data.communicationLevels.length > 0,
+  {
+    message: "At least one communication level must be selected",
+    path: ["communicationLevels"],
+  }
+).refine(
+  (data) => !data.motorLevels || data.motorLevels.length > 0,
+  {
+    message: "At least one motor level must be selected",
+    path: ["motorLevels"],
+  }
+).refine(
+  (data) => !data.cognitiveLevels || data.cognitiveLevels.length > 0,
+  {
+    message: "At least one cognitive level must be selected",
+    path: ["cognitiveLevels"],
+  }
+).refine(
+  (data) => !data.socialEmotionalLevels || data.socialEmotionalLevels.length > 0,
+  {
+    message: "At least one social-emotional level must be selected",
+    path: ["socialEmotionalLevels"],
+  }
+);
 
 export const updateProductSchema = z.object({
   name: z.string().optional(),
@@ -258,7 +305,18 @@ export const updateProductSchema = z.object({
   messFactor: z.string().nullable().optional(),
   setupTime: z.string().nullable().optional(),
   spaceRequirements: z.string().nullable().optional(),
-});
+}).refine(
+  (data) => {
+    if (data.minAgeMonths != null && data.maxAgeMonths != null) {
+      return data.minAgeMonths <= data.maxAgeMonths;
+    }
+    return true;
+  },
+  {
+    message: "Minimum age must be less than or equal to maximum age",
+    path: ["minAgeMonths"],
+  }
+);
 
 export const insertProfessionalSchema = createInsertSchema(professionals).omit({
   id: true,

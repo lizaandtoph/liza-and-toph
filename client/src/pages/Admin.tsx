@@ -490,7 +490,7 @@ export default function Admin() {
                               if (checked) {
                                 field.onChange([...current, category]);
                               } else {
-                                field.onChange(current.filter((c: string) => c !== category));
+                                field.onChange((current as string[]).filter((c: string) => c !== category));
                               }
                             }}
                             data-testid={`checkbox-category-${category}`}
@@ -499,7 +499,7 @@ export default function Admin() {
                             const current = field.value || [];
                             const isChecked = current.includes(category);
                             if (isChecked) {
-                              field.onChange(current.filter((c: string) => c !== category));
+                              field.onChange((current as string[]).filter((c: string) => c !== category));
                             } else {
                               field.onChange([...current, category]);
                             }
@@ -608,7 +608,7 @@ export default function Admin() {
                                 checked={field.value?.includes(level) || false}
                                 onCheckedChange={(checked) => {
                                   const current = field.value || [];
-                                  field.onChange(checked ? [...current, level] : current.filter((l) => l !== level));
+                                  field.onChange(checked ? [...current, level] : (current as string[]).filter((l: string) => l !== level));
                                 }}
                                 data-testid={`checkbox-communication-${level}`}
                               />
@@ -634,7 +634,7 @@ export default function Admin() {
                                 checked={field.value?.includes(level) || false}
                                 onCheckedChange={(checked) => {
                                   const current = field.value || [];
-                                  field.onChange(checked ? [...current, level] : current.filter((l) => l !== level));
+                                  field.onChange(checked ? [...current, level] : (current as string[]).filter((l: string) => l !== level));
                                 }}
                                 data-testid={`checkbox-motor-${level}`}
                               />
@@ -660,7 +660,7 @@ export default function Admin() {
                                 checked={field.value?.includes(level) || false}
                                 onCheckedChange={(checked) => {
                                   const current = field.value || [];
-                                  field.onChange(checked ? [...current, level] : current.filter((l) => l !== level));
+                                  field.onChange(checked ? [...current, level] : (current as string[]).filter((l: string) => l !== level));
                                 }}
                                 data-testid={`checkbox-cognitive-${level}`}
                               />
@@ -686,7 +686,7 @@ export default function Admin() {
                                 checked={field.value?.includes(level) || false}
                                 onCheckedChange={(checked) => {
                                   const current = field.value || [];
-                                  field.onChange(checked ? [...current, level] : current.filter((l) => l !== level));
+                                  field.onChange(checked ? [...current, level] : (current as string[]).filter((l: string) => l !== level));
                                 }}
                                 data-testid={`checkbox-socialEmotional-${level}`}
                               />
@@ -716,7 +716,7 @@ export default function Admin() {
                                 checked={field.value?.includes(type) || false}
                                 onCheckedChange={(checked) => {
                                   const current = field.value || [];
-                                  field.onChange(checked ? [...current, type] : current.filter((t) => t !== type));
+                                  field.onChange(checked ? [...current, type] : (current as string[]).filter((t: string) => t !== type));
                                 }}
                                 data-testid={`checkbox-playType-${type}`}
                               />
@@ -879,7 +879,7 @@ export default function Admin() {
                                 checked={field.value?.includes(type) || false}
                                 onCheckedChange={(checked) => {
                                   const current = field.value || [];
-                                  field.onChange(checked ? [...current, type] : current.filter((t) => t !== type));
+                                  field.onChange(checked ? [...current, type] : (current as string[]).filter((t: string) => t !== type));
                                 }}
                                 data-testid={`checkbox-sensory-${type}`}
                               />
@@ -909,7 +909,7 @@ export default function Admin() {
                                 checked={field.value?.includes(context) || false}
                                 onCheckedChange={(checked) => {
                                   const current = field.value || [];
-                                  field.onChange(checked ? [...current, context] : current.filter((c) => c !== context));
+                                  field.onChange(checked ? [...current, context] : (current as string[]).filter((c: string) => c !== context));
                                 }}
                                 data-testid={`checkbox-socialContext-${context}`}
                               />
@@ -948,7 +948,7 @@ export default function Admin() {
                                 checked={field.value?.includes(safety) || false}
                                 onCheckedChange={(checked) => {
                                   const current = field.value || [];
-                                  field.onChange(checked ? [...current, safety] : current.filter((s) => s !== safety));
+                                  field.onChange(checked ? [...current, safety] : (current as string[]).filter((s: string) => s !== safety));
                                 }}
                                 data-testid={`checkbox-safety-${safety}`}
                               />
@@ -974,7 +974,7 @@ export default function Admin() {
                                 checked={field.value?.includes(need) || false}
                                 onCheckedChange={(checked) => {
                                   const current = field.value || [];
-                                  field.onChange(checked ? [...current, need] : current.filter((n) => n !== need));
+                                  field.onChange(checked ? [...current, need] : (current as string[]).filter((n: string) => n !== need));
                                 }}
                                 data-testid={`checkbox-specialNeeds-${need}`}
                               />
@@ -1000,7 +1000,7 @@ export default function Admin() {
                                 checked={field.value?.includes(intervention) || false}
                                 onCheckedChange={(checked) => {
                                   const current = field.value || [];
-                                  field.onChange(checked ? [...current, intervention] : current.filter((i) => i !== intervention));
+                                  field.onChange(checked ? [...current, intervention] : (current as string[]).filter((i: string) => i !== intervention));
                                 }}
                                 data-testid={`checkbox-intervention-${intervention}`}
                               />
@@ -1298,7 +1298,7 @@ export default function Admin() {
                               if (checked) {
                                 field.onChange([...current, category]);
                               } else {
-                                field.onChange(current.filter((c: string) => c !== category));
+                                field.onChange((current as string[]).filter((c: string) => c !== category));
                               }
                             }}
                             data-testid={`checkbox-edit-category-${category}`}
@@ -1307,7 +1307,7 @@ export default function Admin() {
                             const current = field.value || [];
                             const isChecked = current.includes(category);
                             if (isChecked) {
-                              field.onChange(current.filter((c: string) => c !== category));
+                              field.onChange((current as string[]).filter((c: string) => c !== category));
                             } else {
                               field.onChange([...current, category]);
                             }
@@ -1416,7 +1416,7 @@ export default function Admin() {
                                 checked={field.value?.includes(level) || false}
                                 onCheckedChange={(checked) => {
                                   const current = field.value || [];
-                                  field.onChange(checked ? [...current, level] : current.filter((l) => l !== level));
+                                  field.onChange(checked ? [...current, level] : (current as string[]).filter((l: string) => l !== level));
                                 }}
                                 data-testid={`checkbox-edit-communication-${level}`}
                               />
@@ -1442,7 +1442,7 @@ export default function Admin() {
                                 checked={field.value?.includes(level) || false}
                                 onCheckedChange={(checked) => {
                                   const current = field.value || [];
-                                  field.onChange(checked ? [...current, level] : current.filter((l) => l !== level));
+                                  field.onChange(checked ? [...current, level] : (current as string[]).filter((l: string) => l !== level));
                                 }}
                                 data-testid={`checkbox-edit-motor-${level}`}
                               />
@@ -1468,7 +1468,7 @@ export default function Admin() {
                                 checked={field.value?.includes(level) || false}
                                 onCheckedChange={(checked) => {
                                   const current = field.value || [];
-                                  field.onChange(checked ? [...current, level] : current.filter((l) => l !== level));
+                                  field.onChange(checked ? [...current, level] : (current as string[]).filter((l: string) => l !== level));
                                 }}
                                 data-testid={`checkbox-edit-cognitive-${level}`}
                               />
@@ -1494,7 +1494,7 @@ export default function Admin() {
                                 checked={field.value?.includes(level) || false}
                                 onCheckedChange={(checked) => {
                                   const current = field.value || [];
-                                  field.onChange(checked ? [...current, level] : current.filter((l) => l !== level));
+                                  field.onChange(checked ? [...current, level] : (current as string[]).filter((l: string) => l !== level));
                                 }}
                                 data-testid={`checkbox-edit-socialEmotional-${level}`}
                               />
@@ -1524,7 +1524,7 @@ export default function Admin() {
                                 checked={field.value?.includes(type) || false}
                                 onCheckedChange={(checked) => {
                                   const current = field.value || [];
-                                  field.onChange(checked ? [...current, type] : current.filter((t) => t !== type));
+                                  field.onChange(checked ? [...current, type] : (current as string[]).filter((t: string) => t !== type));
                                 }}
                                 data-testid={`checkbox-edit-playType-${type}`}
                               />
@@ -1687,7 +1687,7 @@ export default function Admin() {
                                 checked={field.value?.includes(type) || false}
                                 onCheckedChange={(checked) => {
                                   const current = field.value || [];
-                                  field.onChange(checked ? [...current, type] : current.filter((t) => t !== type));
+                                  field.onChange(checked ? [...current, type] : (current as string[]).filter((t: string) => t !== type));
                                 }}
                                 data-testid={`checkbox-edit-sensory-${type}`}
                               />
@@ -1717,7 +1717,7 @@ export default function Admin() {
                                 checked={field.value?.includes(context) || false}
                                 onCheckedChange={(checked) => {
                                   const current = field.value || [];
-                                  field.onChange(checked ? [...current, context] : current.filter((c) => c !== context));
+                                  field.onChange(checked ? [...current, context] : (current as string[]).filter((c: string) => c !== context));
                                 }}
                                 data-testid={`checkbox-edit-socialContext-${context}`}
                               />
@@ -1756,7 +1756,7 @@ export default function Admin() {
                                 checked={field.value?.includes(safety) || false}
                                 onCheckedChange={(checked) => {
                                   const current = field.value || [];
-                                  field.onChange(checked ? [...current, safety] : current.filter((s) => s !== safety));
+                                  field.onChange(checked ? [...current, safety] : (current as string[]).filter((s: string) => s !== safety));
                                 }}
                                 data-testid={`checkbox-edit-safety-${safety}`}
                               />
@@ -1782,7 +1782,7 @@ export default function Admin() {
                                 checked={field.value?.includes(need) || false}
                                 onCheckedChange={(checked) => {
                                   const current = field.value || [];
-                                  field.onChange(checked ? [...current, need] : current.filter((n) => n !== need));
+                                  field.onChange(checked ? [...current, need] : (current as string[]).filter((n: string) => n !== need));
                                 }}
                                 data-testid={`checkbox-edit-specialNeeds-${need}`}
                               />
@@ -1808,7 +1808,7 @@ export default function Admin() {
                                 checked={field.value?.includes(intervention) || false}
                                 onCheckedChange={(checked) => {
                                   const current = field.value || [];
-                                  field.onChange(checked ? [...current, intervention] : current.filter((i) => i !== intervention));
+                                  field.onChange(checked ? [...current, intervention] : (current as string[]).filter((i: string) => i !== intervention));
                                 }}
                                 data-testid={`checkbox-edit-intervention-${intervention}`}
                               />
