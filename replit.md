@@ -34,9 +34,15 @@ Preferred communication style: Simple, everyday language.
 **Component Structure**
 - Reusable UI components in `client/src/components/ui/` following shadcn conventions
 - Feature components for domain logic (MilestoneTimeline, ProductGrid, QuestionnaireStep)
-- Pages organized by route (`home`, `login`, `onboarding`, `playboard`, `shop`, `find-pros`, `settings`)
+- Pages organized by route (`home`, `login`, `onboarding`, `your-child`, `playboard`, `shop`, `find-pros`, `settings`)
 - Child selector dropdown in Layout component for switching between children
 - "Add Another Child" functionality integrated into navigation
+- Your Child page (`/your-child`) displays all children in responsive cards with avatar, name, age/age band, stage nickname, developmental journey teasers, and "View Play Board" CTA
+  - Shows empty state with "Add Your Child" button when no children exist
+  - Responsive layout: single column on mobile, 2-column grid on desktop
+  - Each child card links to their individual Play Board via `/playboard/:childId`
+  - "Add Another Child" card routes to onboarding for new profiles
+- Play Board page supports both `/playboard` (uses active child) and `/playboard/:childId` (sets specific child as active)
 - Settings page accessible from profile dropdown and secondary navigation
 - Product cards display images, user ratings (with review counts), prices, domain tags, and age ranges on both Shop and Recommendations pages
 
