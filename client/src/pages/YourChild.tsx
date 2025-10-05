@@ -3,7 +3,7 @@ import { useStore } from '../store';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { User, Plus } from 'lucide-react';
+import { User, Plus, FileText } from 'lucide-react';
 import { calculateAgeFromBirthday, getAgeBandLabel } from '@shared/ageUtils';
 
 const getStageNicknames = (ageBand: string): { current: string; shift: string } => {
@@ -97,7 +97,7 @@ const getShiftTeaser = (ageBand: string): string => {
 };
 
 export default function YourChild() {
-  const { children } = useStore();
+  const { children, getAnswers } = useStore();
 
   if (children.length === 0) {
     return (
@@ -206,14 +206,39 @@ export default function YourChild() {
                     </div>
                   </div>
 
-                  <Link to={`/playboard/${child.id}`}>
-                    <Button 
-                      className="w-full bg-olive hover:bg-ochre text-ivory py-6 text-base rounded-[1.3rem] transition-colors"
-                      data-testid={`button-view-playboard-${child.id}`}
-                    >
-                      View Play Board
-                    </Button>
-                  </Link>
+                  <div className="space-y-3">
+                    <Link to={`/playboard/${child.id}`}>
+                      <Button 
+                        className="w-full bg-olive hover:bg-ochre text-ivory py-6 text-base rounded-[1.3rem] transition-colors"
+                        data-testid={`button-view-playboard-${child.id}`}
+                      >
+                        View Play Board
+                      </Button>
+                    </Link>
+                    {!getAnswers(child.id)?.fullQuestionnaire ? (
+                      <Link to={`/full-questionnaire/${child.id}`}>
+                        <Button 
+                          variant="outline"
+                          className="w-full py-6 text-base rounded-[1.3rem] border-olive text-olive hover:bg-olive/5"
+                          data-testid={`button-full-assessment-${child.id}`}
+                        >
+                          <FileText className="w-4 h-4 mr-2" />
+                          Complete Full Assessment
+                        </Button>
+                      </Link>
+                    ) : (
+                      <Link to={`/questionnaire-results/${child.id}`}>
+                        <Button 
+                          variant="outline"
+                          className="w-full py-6 text-base rounded-[1.3rem] border-green-600 text-green-600 hover:bg-green-50"
+                          data-testid={`button-view-results-${child.id}`}
+                        >
+                          <FileText className="w-4 h-4 mr-2" />
+                          View Assessment Results
+                        </Button>
+                      </Link>
+                    )}
+                  </div>
                 </CardContent>
               </Card>
             );

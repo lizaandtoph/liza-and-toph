@@ -4,7 +4,7 @@ import { useStore } from '../store';
 import { logEvent } from '../analytics';
 import milestonesData from '../data/milestones.json';
 import rulesData from '../data/rules.json';
-import { Sparkles, Lock, TrendingUp, ShoppingCart, Star } from 'lucide-react';
+import { Sparkles, Lock, TrendingUp, ShoppingCart, Star, FileText } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { type Product } from '@shared/schema';
 
@@ -271,9 +271,20 @@ export default function PlayBoard() {
             <h1 className="text-4xl md:text-5xl font-bold mb-3" data-testid="text-playboard-title">
               {child.name}'s Play Board
             </h1>
-            <p className="text-lg opacity-80" data-testid="text-age-range">
+            <p className="text-lg opacity-80 mb-4" data-testid="text-age-range">
               Age: {child.ageBand.replace('-', ' - ')} years
             </p>
+            {!answers.fullQuestionnaire && (
+              <Link to={`/full-questionnaire/${child.id}`}>
+                <button 
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-white/90 hover:bg-white text-olive border-2 border-olive/30 rounded-xl font-semibold transition-all shadow-sm hover:shadow-md"
+                  data-testid="button-complete-assessment"
+                >
+                  <FileText className="w-5 h-5" />
+                  Complete Full Development Assessment
+                </button>
+              </Link>
+            )}
           </div>
 
           {hasFullAccess && answers.milestones && (
