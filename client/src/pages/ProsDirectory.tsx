@@ -132,6 +132,12 @@ export default function ProsDirectory() {
                     <Button 
                       data-testid={`button-contact-${pro.id}`} 
                       className="flex-1 bg-olive hover:bg-ochre text-white"
+                      onClick={() => {
+                        if (pro.email) {
+                          window.location.href = `mailto:${pro.email}`;
+                        }
+                      }}
+                      disabled={!pro.email}
                     >
                       Contact
                     </Button>

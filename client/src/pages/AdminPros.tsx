@@ -259,6 +259,20 @@ export default function AdminPros() {
                 )}
               />
 
+              <FormField
+                control={createForm.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input {...field} value={field.value || ''} type="email" placeholder="contact@example.com" data-testid="input-create-email" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
               <div className="flex justify-end gap-2">
                 <Button type="button" variant="outline" onClick={() => setIsCreateOpen(false)} data-testid="button-cancel-create">
                   Cancel
@@ -344,6 +358,20 @@ export default function AdminPros() {
                     <FormLabel>Description</FormLabel>
                     <FormControl>
                       <Textarea {...field} placeholder="Board-certified pediatric therapist..." rows={4} data-testid="input-edit-description" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={editForm.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input {...field} value={field.value || ''} type="email" placeholder="contact@example.com" data-testid="input-edit-email" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

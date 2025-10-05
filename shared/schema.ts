@@ -108,6 +108,7 @@ export const professionals = pgTable("professionals", {
   location: text("location").notNull(),
   rating: text("rating").notNull(),
   description: text("description").notNull(),
+  email: text("email"),
 });
 
 export const pros = pgTable("pros", {
@@ -330,6 +331,7 @@ export const updateProfessionalSchema = z.object({
   location: z.string().optional(),
   rating: z.string().optional(),
   description: z.string().optional(),
+  email: z.string().email().nullable().optional(),
 });
 
 export const insertProSchema = createInsertSchema(pros).omit({

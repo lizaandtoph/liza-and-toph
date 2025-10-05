@@ -111,9 +111,10 @@ Preferred communication style: Simple, everyday language.
   - Managed via Admin page, displayed on Shop page
   - Shop page transforms Product schema to UI format (id→skuId, name→title, affiliateUrl→url)
 - **Professionals**: Healthcare and development professionals directory
-  - Schema fields: id, name, specialty, location, rating (string), description
+  - Schema fields: id, name, specialty, location, rating (string), description, email (nullable)
   - Managed via AdminPros page (/admin-pros), displayed on Professionals page (/pros)
   - Professionals page features search, specialty filter, and rating filter
+  - Contact button opens mailto: link using professional's email (disabled if no email)
   - /find-pros redirects to /pros for backward compatibility
 - **Play Boards**: Aggregated personalized boards combining profiles, milestones, and products
 
