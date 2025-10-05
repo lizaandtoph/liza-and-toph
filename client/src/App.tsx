@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Route, Switch } from 'wouter';
 import Layout from './components/Layout';
 import Home from './pages/Home';
 import Login from './pages/Login';
@@ -10,25 +10,27 @@ import FindPros from './pages/FindPros';
 import Settings from './pages/Settings';
 import Admin from './pages/Admin';
 import AdminPros from './pages/AdminPros';
+import ProsDirectory from './pages/ProsDirectory';
+import ProProfile from './pages/ProProfile';
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
-          <Route path="login" element={<Login />} />
-          <Route path="onboarding" element={<Onboarding />} />
-          <Route path="playboard" element={<PlayBoard />} />
-          <Route path="recommendations" element={<Recommendations />} />
-          <Route path="shop" element={<Shop />} />
-          <Route path="find-pros" element={<FindPros />} />
-          <Route path="settings" element={<Settings />} />
-          <Route path="admin" element={<Admin />} />
-          <Route path="admin-pros" element={<AdminPros />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    <Layout>
+      <Switch>
+        <Route path="/" component={Home} />
+        <Route path="/login" component={Login} />
+        <Route path="/onboarding" component={Onboarding} />
+        <Route path="/playboard" component={PlayBoard} />
+        <Route path="/recommendations" component={Recommendations} />
+        <Route path="/shop" component={Shop} />
+        <Route path="/find-pros" component={FindPros} />
+        <Route path="/pros" component={ProsDirectory} />
+        <Route path="/pros/:slug" component={ProProfile} />
+        <Route path="/settings" component={Settings} />
+        <Route path="/admin" component={Admin} />
+        <Route path="/admin-pros" component={AdminPros} />
+      </Switch>
+    </Layout>
   );
 }
 
