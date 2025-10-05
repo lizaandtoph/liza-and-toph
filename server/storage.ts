@@ -1,4 +1,4 @@
-import { type User, type InsertUser, type ChildProfile, type InsertChildProfile, type Milestone, type Product, type InsertProduct, type PlayBoard, type InsertPlayBoard, users, childProfiles, milestones, products, playBoards } from "@shared/schema";
+import { type User, type InsertUser, type ChildProfile, type InsertChildProfile, type Milestone, type Product, type InsertProduct, type PlayBoard, type InsertPlayBoard, type Professional, type InsertProfessional, users, childProfiles, milestones, products, playBoards, professionals } from "@shared/schema";
 import { randomUUID } from "crypto";
 import { neon } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-http";
@@ -25,6 +25,12 @@ export interface IStorage {
   
   createPlayBoard(playBoard: InsertPlayBoard): Promise<PlayBoard>;
   getPlayBoard(id: string): Promise<PlayBoard | undefined>;
+  
+  getAllProfessionals(): Promise<Professional[]>;
+  getProfessional(id: string): Promise<Professional | undefined>;
+  createProfessional(professional: InsertProfessional): Promise<Professional>;
+  updateProfessional(id: string, professional: Partial<InsertProfessional>): Promise<Professional | undefined>;
+  deleteProfessional(id: string): Promise<boolean>;
 }
 
 export class MemStorage implements IStorage {
@@ -33,6 +39,7 @@ export class MemStorage implements IStorage {
   private milestones: Map<string, Milestone>;
   private products: Map<string, Product>;
   private playBoards: Map<string, PlayBoard>;
+  private professionals: Map<string, Professional>;
 
   constructor() {
     this.users = new Map();
@@ -40,6 +47,7 @@ export class MemStorage implements IStorage {
     this.milestones = new Map();
     this.products = new Map();
     this.playBoards = new Map();
+    this.professionals = new Map();
     this.seedData();
   }
 
@@ -250,6 +258,33 @@ export class MemStorage implements IStorage {
   async getPlayBoard(id: string): Promise<PlayBoard | undefined> {
     return this.playBoards.get(id);
   }
+
+  async getAllProfessionals(): Promise<Professional[]> {
+    return Array.from(this.professionals.values());
+  }
+
+  async getProfessional(id: string): Promise<Professional | undefined> {
+    return this.professionals.get(id);
+  }
+
+  async createProfessional(professionalData: InsertProfessional): Promise<Professional> {
+    const id = randomUUID();
+    const professional: Professional = { id, ...professionalData };
+    this.professionals.set(id, professional);
+    return professional;
+  }
+
+  async updateProfessional(id: string, professionalData: Partial<InsertProfessional>): Promise<Professional | undefined> {
+    const existing = this.professionals.get(id);
+    if (!existing) return undefined;
+    const updated = { ...existing, ...professionalData };
+    this.professionals.set(id, updated);
+    return updated;
+  }
+
+  async deleteProfessional(id: string): Promise<boolean> {
+    return this.professionals.delete(id);
+  }
 }
 
 export class DbStorage implements IStorage {
@@ -369,6 +404,43 @@ export class DbStorage implements IStorage {
     ];
 
     await this.db.insert(products).values(sampleProducts);
+
+    const sampleProfessionals = [
+      {
+        id: "pr1",
+        name: "Dr. Sarah Mitchell",
+        specialty: "Child Development Specialist",
+        location: "San Francisco, CA",
+        rating: "4.9",
+        description: "Board-certified pediatric occupational therapist with 15 years of experience in early childhood development.",
+      },
+      {
+        id: "pr2",
+        name: "Emily Rodriguez, MS",
+        specialty: "Play Therapist",
+        location: "Austin, TX",
+        rating: "4.8",
+        description: "Licensed play therapist specializing in developmental play and sensory integration.",
+      },
+      {
+        id: "pr3",
+        name: "Dr. James Chen",
+        specialty: "Pediatric Psychologist",
+        location: "Seattle, WA",
+        rating: "5.0",
+        description: "Clinical psychologist focusing on early intervention and developmental assessment.",
+      },
+      {
+        id: "pr4",
+        name: "Maria Santos, OT",
+        specialty: "Occupational Therapist",
+        location: "Denver, CO",
+        rating: "4.7",
+        description: "Pediatric OT with expertise in fine motor development and sensory processing.",
+      },
+    ];
+
+    await this.db.insert(professionals).values(sampleProfessionals);
   }
 
   async getUser(id: string): Promise<User | undefined> {
@@ -463,6 +535,35 @@ export class DbStorage implements IStorage {
     await this.ensureInitialized();
     const result = await this.db.select().from(playBoards).where(eq(playBoards.id, id)).limit(1);
     return result[0];
+  }
+
+  async getAllProfessionals(): Promise<Professional[]> {
+    await this.ensureInitialized();
+    return await this.db.select().from(professionals);
+  }
+
+  async getProfessional(id: string): Promise<Professional | undefined> {
+    await this.ensureInitialized();
+    const result = await this.db.select().from(professionals).where(eq(professionals.id, id)).limit(1);
+    return result[0];
+  }
+
+  async createProfessional(professionalData: InsertProfessional): Promise<Professional> {
+    await this.ensureInitialized();
+    const result = await this.db.insert(professionals).values(professionalData).returning();
+    return result[0];
+  }
+
+  async updateProfessional(id: string, professionalData: Partial<InsertProfessional>): Promise<Professional | undefined> {
+    await this.ensureInitialized();
+    const result = await this.db.update(professionals).set(professionalData).where(eq(professionals.id, id)).returning();
+    return result[0];
+  }
+
+  async deleteProfessional(id: string): Promise<boolean> {
+    await this.ensureInitialized();
+    const result = await this.db.delete(professionals).where(eq(professionals.id, id)).returning();
+    return result.length > 0;
   }
 }
 
