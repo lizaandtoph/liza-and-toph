@@ -1,15 +1,34 @@
 import { useState } from 'react';
-import { Search, Filter, Star } from 'lucide-react';
+import { Search, Filter, Star, ChevronDown, ChevronUp, X } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { type Product } from '@shared/schema';
 import { useStore } from '../store';
 import { logEvent } from '../analytics';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Slider } from '@/components/ui/slider';
+import { Checkbox } from '@/components/ui/checkbox';
 
 export default function Shop() {
   const { getActiveChild } = useStore();
   const child = getActiveChild();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [showFilters, setShowFilters] = useState(false);
+  
+  // Filter states
+  const [ageRange, setAgeRange] = useState<[number, number]>([0, 60]);
+  const [selectedPlayTypes, setSelectedPlayTypes] = useState<string[]>([]);
+  const [selectedComplexity, setSelectedComplexity] = useState<string | null>(null);
+  const [selectedEnergy, setSelectedEnergy] = useState<string | null>(null);
+  const [selectedSpecialNeeds, setSelectedSpecialNeeds] = useState<string[]>([]);
+  const [selectedSocialContext, setSelectedSocialContext] = useState<string[]>([]);
+  
+  const playTypes = ['sensory', 'exploratory', 'functional', 'constructive', 'pretend', 'symbolic', 'gross_motor', 'fine_motor', 'cognitive', 'social', 'language', 'creative'];
+  const complexityLevels = ['simple', 'moderate', 'complex', 'advanced', 'expert'];
+  const energyRequirements = ['sedentary', 'moderate', 'active', 'high_energy'];
+  const specialNeedsTypes = ['autism_friendly', 'sensory_processing', 'speech_therapy', 'motor_therapy'];
+  const socialContexts = ['solo_play', 'paired_play', 'group_play', 'family_play'];
 
   const { data: products = [], isLoading } = useQuery<Product[]>({
     queryKey: ['/api/products'],
@@ -54,12 +73,56 @@ export default function Shop() {
     { value: 'motor', label: 'Movement & Motor Skills' },
   ];
 
-  const filteredProducts = transformedProducts.filter((product) => {
-    const matchesSearch = product.title.toLowerCase().includes(searchQuery.toLowerCase());
+  const filteredProducts = products.filter((product) => {
+    // Search and category
+    const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = selectedCategory === 'all' || 
-      product.domains.some(d => d.toLowerCase().includes(selectedCategory));
-    return matchesSearch && matchesCategory;
+      (product.categories?.some(d => d.toLowerCase().includes(selectedCategory)) ?? false);
+    
+    // Age range filter (check for overlap)
+    const matchesAge = (product.maxAgeMonths == null || product.maxAgeMonths >= ageRange[0]) &&
+                       (product.minAgeMonths == null || product.minAgeMonths <= ageRange[1]);
+    
+    // Play types filter
+    const matchesPlayType = selectedPlayTypes.length === 0 || 
+      (product.playTypeTags?.some(tag => selectedPlayTypes.includes(tag)) ?? false);
+    
+    // Complexity filter
+    const matchesComplexity = !selectedComplexity || product.complexityLevel === selectedComplexity;
+    
+    // Energy filter
+    const matchesEnergy = !selectedEnergy || product.energyRequirement === selectedEnergy;
+    
+    // Special needs filter
+    const matchesSpecialNeeds = selectedSpecialNeeds.length === 0 ||
+      (product.specialNeedsSupport?.some(need => selectedSpecialNeeds.includes(need)) ?? false);
+    
+    // Social context filter
+    const matchesSocialContext = selectedSocialContext.length === 0 ||
+      (product.socialContext?.some(ctx => selectedSocialContext.includes(ctx)) ?? false);
+    
+    return matchesSearch && matchesCategory && matchesAge && matchesPlayType && 
+           matchesComplexity && matchesEnergy && matchesSpecialNeeds && matchesSocialContext;
   });
+  
+  const clearFilters = () => {
+    setAgeRange([0, 60]);
+    setSelectedPlayTypes([]);
+    setSelectedComplexity(null);
+    setSelectedEnergy(null);
+    setSelectedSpecialNeeds([]);
+    setSelectedSocialContext([]);
+    setSelectedCategory('all');
+  };
+  
+  const activeFilterCount = 
+    (ageRange[0] !== 0 || ageRange[1] !== 60 ? 1 : 0) +
+    selectedPlayTypes.length +
+    (selectedComplexity ? 1 : 0) +
+    (selectedEnergy ? 1 : 0) +
+    selectedSpecialNeeds.length +
+    selectedSocialContext.length +
+    (selectedCategory !== 'all' ? 1 : 0);
 
   const handleProductClick = (skuId: string, url: string) => {
     logEvent('shop_product_clicked', { sku: skuId });
@@ -78,7 +141,7 @@ export default function Shop() {
 
       {/* Search and Filter Bar */}
       <div className="bg-[#EDE9DC] p-6 rounded-lg mb-8">
-        <div className="flex flex-col md:flex-row gap-4">
+        <div className="flex flex-col md:flex-row gap-4 mb-4">
           <div className="flex-1 relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-espresso/50" />
             <input
@@ -91,7 +154,6 @@ export default function Shop() {
             />
           </div>
           <div className="flex items-center gap-2">
-            <Filter className="w-5 h-5 text-espresso/50" />
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
@@ -104,8 +166,161 @@ export default function Shop() {
                 </option>
               ))}
             </select>
+            <Button 
+              onClick={() => setShowFilters(!showFilters)}
+              variant="outline"
+              className="flex items-center gap-2"
+              data-testid="button-toggle-filters"
+            >
+              <Filter className="w-4 h-4" />
+              Filters
+              {activeFilterCount > 0 && (
+                <Badge className="ml-1">{activeFilterCount}</Badge>
+              )}
+              {showFilters ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+            </Button>
           </div>
         </div>
+        
+        {/* Advanced Filters Panel */}
+        {showFilters && (
+          <div className="border-t border-sand pt-4 mt-4 space-y-6">
+            {/* Age Range Slider */}
+            <div>
+              <div className="flex justify-between items-center mb-2">
+                <label className="font-medium text-sm">Age Range (months)</label>
+                <span className="text-sm text-muted-foreground">{ageRange[0]} - {ageRange[1]}</span>
+              </div>
+              <Slider
+                value={ageRange}
+                onValueChange={(value) => setAgeRange(value as [number, number])}
+                min={0}
+                max={60}
+                step={1}
+                className="w-full"
+                data-testid="slider-age-range"
+              />
+            </div>
+            
+            {/* Play Types */}
+            <div>
+              <label className="font-medium text-sm mb-2 block">Play Types</label>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                {playTypes.map(type => (
+                  <div key={type} className="flex items-center space-x-2">
+                    <Checkbox
+                      checked={selectedPlayTypes.includes(type)}
+                      onCheckedChange={(checked) => {
+                        if (checked) {
+                          setSelectedPlayTypes([...selectedPlayTypes, type]);
+                        } else {
+                          setSelectedPlayTypes(selectedPlayTypes.filter(t => t !== type));
+                        }
+                      }}
+                      data-testid={`checkbox-playtype-${type}`}
+                    />
+                    <label className="text-sm capitalize">{type.replace('_', ' ')}</label>
+                  </div>
+                ))}
+              </div>
+            </div>
+            
+            {/* Complexity Level */}
+            <div>
+              <label className="font-medium text-sm mb-2 block">Complexity Level</label>
+              <div className="flex flex-wrap gap-2">
+                {complexityLevels.map(level => (
+                  <Badge
+                    key={level}
+                    variant={selectedComplexity === level ? "default" : "outline"}
+                    className="cursor-pointer"
+                    onClick={() => setSelectedComplexity(selectedComplexity === level ? null : level)}
+                    data-testid={`badge-complexity-${level}`}
+                  >
+                    {level}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+            
+            {/* Energy Requirement */}
+            <div>
+              <label className="font-medium text-sm mb-2 block">Energy Requirement</label>
+              <div className="flex flex-wrap gap-2">
+                {energyRequirements.map(energy => (
+                  <Badge
+                    key={energy}
+                    variant={selectedEnergy === energy ? "default" : "outline"}
+                    className="cursor-pointer"
+                    onClick={() => setSelectedEnergy(selectedEnergy === energy ? null : energy)}
+                    data-testid={`badge-energy-${energy}`}
+                  >
+                    {energy.replace('_', ' ')}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+            
+            {/* Special Needs Support */}
+            <div>
+              <label className="font-medium text-sm mb-2 block">Special Needs Support</label>
+              <div className="grid grid-cols-2 gap-2">
+                {specialNeedsTypes.map(need => (
+                  <div key={need} className="flex items-center space-x-2">
+                    <Checkbox
+                      checked={selectedSpecialNeeds.includes(need)}
+                      onCheckedChange={(checked) => {
+                        if (checked) {
+                          setSelectedSpecialNeeds([...selectedSpecialNeeds, need]);
+                        } else {
+                          setSelectedSpecialNeeds(selectedSpecialNeeds.filter(n => n !== need));
+                        }
+                      }}
+                      data-testid={`checkbox-specialneeds-${need}`}
+                    />
+                    <label className="text-sm capitalize">{need.replace('_', ' ')}</label>
+                  </div>
+                ))}
+              </div>
+            </div>
+            
+            {/* Social Context */}
+            <div>
+              <label className="font-medium text-sm mb-2 block">Social Context</label>
+              <div className="grid grid-cols-2 gap-2">
+                {socialContexts.map(context => (
+                  <div key={context} className="flex items-center space-x-2">
+                    <Checkbox
+                      checked={selectedSocialContext.includes(context)}
+                      onCheckedChange={(checked) => {
+                        if (checked) {
+                          setSelectedSocialContext([...selectedSocialContext, context]);
+                        } else {
+                          setSelectedSocialContext(selectedSocialContext.filter(c => c !== context));
+                        }
+                      }}
+                      data-testid={`checkbox-socialcontext-${context}`}
+                    />
+                    <label className="text-sm capitalize">{context.replace('_', ' ')}</label>
+                  </div>
+                ))}
+              </div>
+            </div>
+            
+            {/* Clear Filters Button */}
+            <div className="flex justify-end">
+              <Button
+                variant="outline"
+                onClick={clearFilters}
+                className="flex items-center gap-2"
+                data-testid="button-clear-filters"
+              >
+                <X className="w-4 h-4" />
+                Clear All Filters
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Products Grid */}
@@ -122,57 +337,59 @@ export default function Shop() {
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {filteredProducts.map((product) => (
           <div
-            key={product.skuId}
+            key={product.id}
             className="bg-[#EDE9DC] rounded-lg overflow-hidden shadow-md hover:shadow-lg transition"
-            data-testid={`card-product-${product.skuId}`}
+            data-testid={`card-product-${product.id}`}
           >
             <div className="aspect-square bg-ivory overflow-hidden">
               <img
                 src={product.imageUrl}
-                alt={product.title}
+                alt={product.name}
                 className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                data-testid={`img-product-${product.skuId}`}
+                data-testid={`img-product-${product.id}`}
               />
             </div>
             <div className="p-4">
-              <h3 className="text-lg font-semibold mb-2 line-clamp-2 min-h-[3.5rem]" data-testid={`text-title-${product.skuId}`}>
-                {product.title}
+              <h3 className="text-lg font-semibold mb-2 line-clamp-2 min-h-[3.5rem]" data-testid={`text-title-${product.id}`}>
+                {product.name}
               </h3>
               
               <div className="flex items-center gap-1 mb-3">
                 <Star className="w-4 h-4 fill-ochre text-ochre" />
-                <span className="font-semibold text-sm" data-testid={`text-rating-${product.skuId}`}>
+                <span className="font-semibold text-sm" data-testid={`text-rating-${product.id}`}>
                   {product.rating}
                 </span>
-                <span className="text-xs opacity-60" data-testid={`text-reviews-${product.skuId}`}>
+                <span className="text-xs opacity-60" data-testid={`text-reviews-${product.id}`}>
                   ({product.reviewCount})
                 </span>
               </div>
 
               <div className="flex flex-wrap gap-2 mb-3">
-                {product.domains.slice(0, 2).map((domain, idx) => (
+                {product.categories?.slice(0, 2).map((category, idx) => (
                   <span
                     key={idx}
                     className="px-2 py-1 bg-sand text-espresso text-xs rounded"
-                    data-testid={`tag-domain-${idx}`}
+                    data-testid={`tag-category-${idx}`}
                   >
-                    {domain}
+                    {category}
                   </span>
-                ))}
+                )) ?? null}
               </div>
               
-              <p className="text-xs opacity-70 mb-3">
-                Ages {product.ageMin}-{product.ageMax}
-              </p>
+              {(product.minAgeMonths || product.maxAgeMonths) && (
+                <p className="text-xs opacity-70 mb-3">
+                  Ages {product.minAgeMonths || 0}-{product.maxAgeMonths || 60} months
+                </p>
+              )}
 
               <div className="flex items-center justify-between gap-2">
-                <span className="text-2xl font-bold text-olive" data-testid={`text-price-${product.skuId}`}>
+                <span className="text-2xl font-bold text-olive" data-testid={`text-price-${product.id}`}>
                   {product.price}
                 </span>
                 <button
-                  onClick={() => handleProductClick(product.skuId, product.url)}
+                  onClick={() => handleProductClick(product.id, product.affiliateUrl || '#')}
                   className="px-4 py-2 bg-olive text-ivory rounded-lg hover:bg-ochre transition font-medium text-sm"
-                  data-testid={`button-view-${product.skuId}`}
+                  data-testid={`button-view-${product.id}`}
                 >
                   View
                 </button>

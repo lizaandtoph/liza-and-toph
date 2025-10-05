@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Star, ShoppingCart, Brain, Hand, Heart, MessageCircle, BookOpen, Layers } from "lucide-react";
+import { Star, ShoppingCart, Brain, Hand, Heart, MessageCircle, BookOpen, Layers, Zap, Activity, Baby } from "lucide-react";
 import type { Product } from "@shared/schema";
 
 interface ProductGridProps {
@@ -39,6 +39,39 @@ export default function ProductGrid({ products }: ProductGridProps) {
     if (product.isTopPick) return { text: 'TOP PICK', className: 'bg-accent text-accent-foreground' };
     if (product.isBestseller) return { text: 'BESTSELLER', className: 'bg-secondary text-white' };
     if (product.isNew) return { text: 'NEW', className: 'bg-accent text-accent-foreground' };
+    return null;
+  };
+
+  const getComplexityColor = (level: string | null | undefined) => {
+    if (!level) return 'bg-gray-100 text-gray-700';
+    switch (level) {
+      case 'simple': return 'bg-green-100 text-green-700';
+      case 'moderate': return 'bg-blue-100 text-blue-700';
+      case 'complex': return 'bg-yellow-100 text-yellow-700';
+      case 'advanced': return 'bg-orange-100 text-orange-700';
+      case 'expert': return 'bg-red-100 text-red-700';
+      default: return 'bg-gray-100 text-gray-700';
+    }
+  };
+
+  const getEnergyIcon = (requirement: string | null | undefined) => {
+    if (!requirement) return null;
+    switch (requirement) {
+      case 'sedentary': return <Hand className="w-3 h-3" />;
+      case 'moderate': return <Activity className="w-3 h-3" />;
+      case 'active': return <Zap className="w-3 h-3" />;
+      case 'high_energy': return <Zap className="w-3 h-3 fill-current" />;
+      default: return null;
+    }
+  };
+
+  const formatAgeRange = (minMonths: number | null | undefined, maxMonths: number | null | undefined) => {
+    if (minMonths == null && maxMonths == null) return null;
+    if (minMonths != null && maxMonths != null) {
+      return `${minMonths}-${maxMonths} months`;
+    }
+    if (minMonths != null) return `${minMonths}+ months`;
+    if (maxMonths != null) return `up to ${maxMonths} months`;
     return null;
   };
 
@@ -89,7 +122,7 @@ export default function ProductGrid({ products }: ProductGridProps) {
                 )}
               </div>
               <CardContent className="p-5">
-                <div className="flex items-center space-x-2 mb-2">
+                <div className="flex items-center flex-wrap gap-1.5 mb-2">
                   {product.categories?.map(category => (
                     <Badge key={category} className={getCategoryColor(category)}>
                       {category}
@@ -102,6 +135,50 @@ export default function ProductGrid({ products }: ProductGridProps) {
                 <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
                   {product.description}
                 </p>
+                
+                {/* Age Range, Play Types, Complexity */}
+                <div className="space-y-2 mb-3">
+                  {formatAgeRange(product.minAgeMonths, product.maxAgeMonths) && (
+                    <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                      <Baby className="w-3 h-3" />
+                      <span>{formatAgeRange(product.minAgeMonths, product.maxAgeMonths)}</span>
+                    </div>
+                  )}
+                  
+                  {product.playTypeTags && product.playTypeTags.length > 0 && (
+                    <div className="flex items-center flex-wrap gap-1">
+                      {product.playTypeTags.slice(0, 3).map(tag => (
+                        <Badge key={tag} variant="outline" className="text-xs px-1.5 py-0">
+                          {tag.replace('_', ' ')}
+                        </Badge>
+                      ))}
+                      {product.playTypeTags.length > 3 && (
+                        <span className="text-xs text-muted-foreground">+{product.playTypeTags.length - 3}</span>
+                      )}
+                    </div>
+                  )}
+                  
+                  <div className="flex items-center gap-2 flex-wrap">
+                    {product.complexityLevel && (
+                      <Badge className={`text-xs ${getComplexityColor(product.complexityLevel)}`}>
+                        {product.complexityLevel}
+                      </Badge>
+                    )}
+                    
+                    {product.energyRequirement && (
+                      <Badge variant="outline" className="text-xs px-1.5 py-0 flex items-center gap-1">
+                        {getEnergyIcon(product.energyRequirement)}
+                        <span>{product.energyRequirement.replace('_', ' ')}</span>
+                      </Badge>
+                    )}
+                    
+                    {product.specialNeedsSupport && product.specialNeedsSupport.length > 0 && (
+                      <Badge className="text-xs bg-purple-100 text-purple-700">
+                        ♿ {product.specialNeedsSupport.length} support(s)
+                      </Badge>
+                    )}
+                  </div>
+                </div>
                 <div className="flex items-center justify-between mb-4">
                   <div>
                     <div className="flex items-center space-x-1 text-accent mb-1">
