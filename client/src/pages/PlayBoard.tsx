@@ -4,7 +4,9 @@ import { useStore } from '../store';
 import { logEvent } from '../analytics';
 import milestonesData from '../data/milestones.json';
 import rulesData from '../data/rules.json';
-import { Sparkles, Lock, TrendingUp, ShoppingCart } from 'lucide-react';
+import { Sparkles, Lock, TrendingUp, ShoppingCart, Star } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
+import { type Product } from '@shared/schema';
 
 export default function PlayBoard() {
   const [, params] = useRoute('/playboard/:childId');
@@ -26,6 +28,10 @@ export default function PlayBoard() {
   const hasFullAccess = subscribed || 
     (parentAccount?.firstName?.toLowerCase() === 'topher') ||
     (parentAccount?.email?.toLowerCase() === 'cpm@mcginnisenterprise.com');
+
+  const { data: products = [] } = useQuery<Product[]>({
+    queryKey: ['/api/products'],
+  });
 
   useEffect(() => {
     if (child) {
@@ -114,6 +120,58 @@ export default function PlayBoard() {
   };
 
   const insights = computeInsights();
+
+  const parseAgeRange = (ageRange: string) => {
+    const cleanRange = ageRange.replace(/\s*(months?|years?)\s*/gi, '').trim();
+    const match = cleanRange.match(/(\d+)-(\d+)/);
+    if (match) {
+      return { ageMin: parseInt(match[1]), ageMax: parseInt(match[2]) };
+    }
+    const singleMatch = cleanRange.match(/(\d+)/);
+    if (singleMatch) {
+      const age = parseInt(singleMatch[1]);
+      return { ageMin: age, ageMax: age };
+    }
+    return { ageMin: 0, ageMax: 24 };
+  };
+
+  const getRecommendedProducts = () => {
+    if (!child) return [];
+    
+    const allConditions = [...answers.schemas, ...answers.barriers];
+    const childNeeds = new Set<string>();
+    
+    rulesData.forEach((rule) => {
+      if (allConditions.includes(rule.condition)) {
+        childNeeds.add(rule.need);
+      }
+    });
+
+    const childAge = child.ageYears || 0;
+    
+    return products
+      .map((p) => {
+        const { ageMin, ageMax } = parseAgeRange(p.ageRange);
+        return {
+          ...p,
+          ageMin,
+          ageMax,
+        };
+      })
+      .filter((p) => {
+        const ageMatch = childAge >= p.ageMin && childAge <= p.ageMax;
+        return ageMatch;
+      })
+      .slice(0, 6);
+  };
+
+  const recommendedProducts = getRecommendedProducts();
+
+  const handleProductClick = (skuId: string, url: string) => {
+    logEvent('playboard_product_clicked', { sku: skuId });
+    const encodedUrl = encodeURIComponent(url || '#');
+    window.open(`/api/links?sku=${skuId}&to=${encodedUrl}`, '_blank');
+  };
 
   const journeyDescriptions: Record<string, { title: string; description: string }> = {
     'newborn-18m': {
@@ -471,21 +529,93 @@ export default function PlayBoard() {
           })}
         </div>
 
-        {/* CTA Section */}
-        <div className="mt-12 bg-gradient-to-br from-olive/10 to-blush/10 rounded-2xl p-8 text-center">
-          <h2 className="text-2xl font-bold mb-4">Ready to bring these ideas to life?</h2>
-          <p className="mb-6 text-lg opacity-80">
-            Explore curated toys and products perfectly matched to {child.name}'s development
-          </p>
-          <Link
-            to="/recommendations"
-            className="inline-flex items-center gap-2 px-8 py-4 bg-olive text-ivory rounded-xl hover:bg-ochre transition text-lg font-semibold shadow-lg hover:shadow-xl"
-            data-testid="button-view-recommendations"
-          >
-            <ShoppingCart className="w-5 h-5" />
-            See Tailored Picks
-          </Link>
-        </div>
+        {/* Recommended Products Section */}
+        {recommendedProducts.length > 0 && (
+          <div className="mt-12" data-testid="section-recommended-products">
+            <div className="text-center mb-8">
+              <h2 className="text-3xl font-bold mb-3">Ready to bring these ideas to life?</h2>
+              <p className="text-lg opacity-80 mb-6">
+                Explore curated toys and products perfectly matched to {child.name}'s development
+              </p>
+            </div>
+
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+              {recommendedProducts.map((product) => (
+                <div
+                  key={product.id}
+                  className="bg-[#EDE9DC] rounded-xl overflow-hidden shadow-md hover:shadow-lg transition"
+                  data-testid={`card-product-${product.id}`}
+                >
+                  <div className="aspect-square bg-ivory overflow-hidden">
+                    <img
+                      src={product.imageUrl}
+                      alt={product.name}
+                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                      data-testid={`img-product-${product.id}`}
+                    />
+                  </div>
+                  <div className="p-4">
+                    <h3 className="text-lg font-semibold mb-2 line-clamp-2 min-h-[3.5rem]" data-testid={`text-title-${product.id}`}>
+                      {product.name}
+                    </h3>
+                    
+                    <div className="flex items-center gap-1 mb-3">
+                      <Star className="w-4 h-4 fill-ochre text-ochre" />
+                      <span className="font-semibold text-sm" data-testid={`text-rating-${product.id}`}>
+                        {parseFloat(product.rating) || 5.0}
+                      </span>
+                      <span className="text-xs opacity-60" data-testid={`text-reviews-${product.id}`}>
+                        ({product.reviewCount})
+                      </span>
+                    </div>
+
+                    {product.categories && product.categories.length > 0 && (
+                      <div className="flex flex-wrap gap-2 mb-3">
+                        {product.categories.slice(0, 2).map((category, idx) => (
+                          <span
+                            key={idx}
+                            className="px-2 py-1 bg-sand text-espresso text-xs rounded"
+                            data-testid={`tag-category-${idx}`}
+                          >
+                            {category}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                    
+                    <p className="text-xs opacity-70 mb-3">
+                      Ages {product.ageMin}-{product.ageMax}
+                    </p>
+
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-2xl font-bold text-olive" data-testid={`text-price-${product.id}`}>
+                        {product.price}
+                      </span>
+                      <button
+                        onClick={() => handleProductClick(product.id, product.affiliateUrl || '#')}
+                        className="px-4 py-2 bg-olive text-ivory rounded-lg hover:bg-ochre transition font-medium text-sm"
+                        data-testid={`button-view-${product.id}`}
+                      >
+                        View
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="text-center">
+              <Link
+                to="/shop"
+                className="inline-flex items-center gap-2 px-8 py-4 bg-olive text-ivory rounded-xl hover:bg-ochre transition text-lg font-semibold shadow-lg hover:shadow-xl"
+                data-testid="button-shop-all"
+              >
+                <ShoppingCart className="w-5 h-5" />
+                Shop All Products
+              </Link>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
