@@ -12,13 +12,19 @@ export default function Shop() {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
 
   const { data: products = [], isLoading } = useQuery<Product[]>({
-    queryKey: ['/api/admin/products'],
+    queryKey: ['/api/products'],
   });
 
   const parseAgeRange = (ageRange: string) => {
-    const match = ageRange.match(/(\d+)-(\d+)/);
+    const cleanRange = ageRange.replace(/\s*(months?|years?)\s*/gi, '').trim();
+    const match = cleanRange.match(/(\d+)-(\d+)/);
     if (match) {
       return { ageMin: parseInt(match[1]), ageMax: parseInt(match[2]) };
+    }
+    const singleMatch = cleanRange.match(/(\d+)/);
+    if (singleMatch) {
+      const age = parseInt(singleMatch[1]);
+      return { ageMin: age, ageMax: age };
     }
     return { ageMin: 0, ageMax: 24 };
   };

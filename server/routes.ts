@@ -64,7 +64,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Product routes
+  // Product routes (public)
   app.get("/api/products", async (req, res) => {
     try {
       const { ageRange, category } = req.query;
@@ -79,6 +79,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       res.json(products);
+    } catch (error) {
+      res.status(500).json({ message: "Server error", error });
+    }
+  });
+
+  // Professional routes (public)
+  app.get("/api/professionals", async (req, res) => {
+    try {
+      const professionals = await storage.getAllProfessionals();
+      res.json(professionals);
     } catch (error) {
       res.status(500).json({ message: "Server error", error });
     }

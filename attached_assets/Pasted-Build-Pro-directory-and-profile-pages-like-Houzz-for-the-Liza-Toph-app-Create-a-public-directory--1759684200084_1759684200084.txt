@@ -1,0 +1,179 @@
+Build Pro directory and profile pages like Houzz for the Liza & Toph app. Create a public directory, detailed pro profiles, and a self-serve edit dashboard. Only a professional with an active subscription edits their own profile. Admin can edit any profile. Do not include video meetings. Keep the current React + Vite + Express stack and Tailwind with our brand tokens.
+
+Start from the current React + Vite + Express repo. Keep stack. Use Tailwind and existing brand tokens. Build Pro pages similar to Houzz pro profiles. No video meetings.
+
+Goals
+
+Public Pro directory with filters.
+
+Public Pro profile pages that mirror Houzz sections.
+
+Pro-only edit dashboard to manage their own profile.
+
+Admin can edit any profile.
+
+Editing requires an active Pro subscription. Gate edits if inactive.
+
+Routes
+/pros directory with filters
+/pros/:slug public pro profile
+/pro/edit pro dashboard to edit only their profile
+/admin/pros admin list and edit any profile
+
+UI requirements
+Directory page
+
+Filters: location (zip and radius), category, rating, price range, service area.
+
+Grid cards: logo, name, rating, primary categories, city, CTAs: Request Quote, Call, Website.
+
+Profile page
+
+Header: logo, name, rating, review count, location, badges, CTAs: Request Quote, Call, Website.
+
+About: paragraph, services offered list, service areas map or list, price range, license number, credentials.
+
+Projects gallery: grid of images with captions.
+
+Reviews: list with rating, text, author, date, rating summary.
+
+Q&A section placeholder collapsed.
+
+Sidebar: contact info, hours, social links, share button.
+
+Footer: related categories and nearby pros.
+
+Edit dashboard (/pro/edit)
+
+Tabs: Profile, Services, Areas, Gallery, Credentials, Settings.
+
+Profile: name, slug, logo upload, cover upload, about, phone, public email, website, address, hours.
+
+Services: ServiceOffering rows {category, title, description, minPrice, maxPrice}.
+
+Areas: add cities or zips and a radius. Map preview placeholder.
+
+Gallery: upload images, titles, descriptions, tags.
+
+Credentials: license number, badges.
+
+Settings: show subscription status. If inactive, show paywall panel with “Activate subscription” button that flips a boolean for now.
+
+Live preview card on the right.
+
+Auth and roles
+
+Roles: parent, pro, admin.
+
+Email and password auth with JWT cookie. Seed one admin and two pro users.
+
+Pro user links to one Pro record.
+
+Middleware:
+requireAuth
+requireRole(role)
+requireOwnershipOrAdmin(req.user, proId) to guard PUT and POST on pro resources.
+
+Subscription gate
+
+Table: Subscription { id, proId, status: active or inactive, plan, currentPeriodEnd }.
+
+Only status active allows edits on /pro/edit. If inactive, block inputs and show paywall panel.
+
+Add a stub endpoint to set active for testing.
+
+Data model (SQLite with Prisma)
+
+User { id, email, passwordHash, role, proId }
+
+Pro { id, slug unique, name, logoUrl, coverUrl, about, phone, emailPublic, website, address, lat, lng, priceRange enum, licenseNumber, badges json, rating float default 0, reviewCount int default 0 }
+
+ServiceOffering { id, proId fk, category, title, description, minPrice int, maxPrice int }
+
+ServiceArea { id, proId fk, label, zip, radiusMiles }
+
+GalleryImage { id, proId fk, url, title, description, tags json }
+
+Review { id, proId fk, authorName, rating int, body, createdAt }
+
+Message { id, proId fk, fromName, fromEmail, phone, subject, body, createdAt, status enum new or read }
+
+Subscription { id, proId fk, status, plan, currentPeriodEnd }
+
+API endpoints
+GET /api/pros list with filters: q, zip, radius, category, ratingMin, price
+GET /api/pros/:slug read public profile
+POST /api/pros/:id update profile (auth: pro owns or admin)
+POST /api/pros/:id/services add or update services (auth guard)
+POST /api/pros/:id/areas add or update areas (auth guard)
+POST /api/pros/:id/gallery upload image with Multer to /uploads, save record (auth guard)
+DELETE /api/pros/:id/gallery/:imgId remove image (auth guard)
+POST /api/pros/:id/reviews add review
+GET /api/pros/:id/reviews list reviews
+POST /api/pros/:id/messages create message request; store plus log to server
+GET /api/subscriptions/:proId read subscription
+POST /api/subscriptions/:proId/activate set status active for test
+
+Security and ownership
+
+On write routes, enforce requireOwnershipOrAdmin. Ownership means req.user.proId equals :id.
+
+Admin bypasses checks.
+
+Sanitize slug input. Prevent collisions.
+
+Uploads
+
+Use Multer to save to /uploads with unique filenames. Return URL. Limit 5 MB per image. Accept jpg, png, webp.
+
+Directory filters logic
+
+If zip and radius provided, filter by ServiceArea where zip within radius using a simple mock distance.
+
+Filter by category if provided.
+
+Filter by rating greater than or equal to ratingMin.
+
+Filter by price band.
+
+UI components
+
+ProCard, RatingStars, Badge, PillFilter, GalleryGrid, ReviewList, ContactDrawer, PaywallPanel.
+
+Tailwind with brand tokens. Primary button olive with ochre hover. Text espresso on ivory.
+
+Seed script
+
+Create 3 Pro entries with services, areas, gallery, and reviews.
+
+Create 2 Pro users linked to those Pros. One Subscription active, one inactive.
+
+Create 1 Admin user.
+
+Tasks
+
+Add Prisma with SQLite. Generate schema and migrations. Seed data.
+
+Build API endpoints and RBAC middleware.
+
+Build pages: directory, profile, edit dashboard, admin list.
+
+Wire uploads with Multer.
+
+Add simple message form on profile. Store to Message table and log to server.
+
+Gate /pro/edit behind auth and active subscription.
+
+Add top nav link Pros and profile pages in site chrome.
+
+Deliverables
+
+Prisma schema, migrations, and seed script.
+
+API routes with RBAC and ownership checks.
+
+React pages and components as described.
+
+Minimal tests for list, profile, edit blocked when inactive, edit allowed when active and owner.
+
+Run scripts to start client and server. Show changed files. Do not explain.

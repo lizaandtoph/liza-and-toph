@@ -7,7 +7,7 @@ export default function FindPros() {
   const [searchQuery, setSearchQuery] = useState('');
 
   const { data: professionals = [], isLoading } = useQuery<Professional[]>({
-    queryKey: ['/api/admin/professionals'],
+    queryKey: ['/api/professionals'],
   });
 
   const filteredPros = professionals.filter((pro) =>
