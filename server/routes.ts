@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertChildProfileSchema, insertPlayBoardSchema, insertProductSchema, updateProductSchema } from "@shared/schema";
+import { insertChildProfileSchema, insertPlayBoardSchema, insertProductSchema, updateProductSchema, insertProfessionalSchema, updateProfessionalSchema } from "@shared/schema";
 import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -145,6 +145,72 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: "Product not found" });
       }
       res.json({ message: "Product deleted successfully" });
+    } catch (error) {
+      res.status(500).json({ message: "Server error", error });
+    }
+  });
+
+  // Admin Professional routes
+  app.get("/api/admin/professionals", async (req, res) => {
+    try {
+      const professionals = await storage.getAllProfessionals();
+      res.json(professionals);
+    } catch (error) {
+      res.status(500).json({ message: "Server error", error });
+    }
+  });
+
+  app.get("/api/admin/professionals/:id", async (req, res) => {
+    try {
+      const { id } = req.params;
+      const professional = await storage.getProfessional(id);
+      if (!professional) {
+        return res.status(404).json({ message: "Professional not found" });
+      }
+      res.json(professional);
+    } catch (error) {
+      res.status(500).json({ message: "Server error", error });
+    }
+  });
+
+  app.post("/api/admin/professionals", async (req, res) => {
+    try {
+      const validatedData = insertProfessionalSchema.parse(req.body);
+      const professional = await storage.createProfessional(validatedData);
+      res.json(professional);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid professional data", errors: error.errors });
+      }
+      res.status(500).json({ message: "Server error", error });
+    }
+  });
+
+  app.put("/api/admin/professionals/:id", async (req, res) => {
+    try {
+      const { id } = req.params;
+      const validatedData = updateProfessionalSchema.parse(req.body);
+      const professional = await storage.updateProfessional(id, validatedData);
+      if (!professional) {
+        return res.status(404).json({ message: "Professional not found" });
+      }
+      res.json(professional);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid professional data", errors: error.errors });
+      }
+      res.status(500).json({ message: "Server error", error });
+    }
+  });
+
+  app.delete("/api/admin/professionals/:id", async (req, res) => {
+    try {
+      const { id } = req.params;
+      const success = await storage.deleteProfessional(id);
+      if (!success) {
+        return res.status(404).json({ message: "Professional not found" });
+      }
+      res.json({ message: "Professional deleted successfully" });
     } catch (error) {
       res.status(500).json({ message: "Server error", error });
     }
