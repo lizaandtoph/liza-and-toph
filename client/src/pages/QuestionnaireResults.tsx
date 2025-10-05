@@ -295,23 +295,6 @@ export default function QuestionnaireResults() {
         </Card>
       )}
 
-      {fullQ.environment?.developmentGoals && (
-        <Card className="mb-6">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Target className="w-5 h-5 text-olive" />
-              Development Goals
-            </CardTitle>
-            <CardDescription>What you'd like to see develop</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <p className="whitespace-pre-wrap" data-testid="text-development-goals">
-              {fullQ.environment.developmentGoals}
-            </p>
-          </CardContent>
-        </Card>
-      )}
-
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
