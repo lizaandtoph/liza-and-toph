@@ -1,0 +1,601 @@
+Ultimate Liza & Toph Platform Intake Questionnaire Design
+1. Current Questionnaire Inventory
+PARENT Discovery Questionnaire Sections:
+Keep (Developmental Focus):
+
+Primary contact information and household composition
+
+Child's name, age, and personality description
+
+Preferred play styles and current interests
+
+Skills being mastered and frustration triggers
+
+Texture/material preferences and sensory patterns
+
+Current space functionality challenges
+
+Toy storage and accessibility issues
+
+Drop (Design-Only):
+
+Visual inspiration boards and aesthetic preferences
+
+Design vs functionality balance questions
+
+Perfect Saturday morning vision (aesthetic elements)
+
+Color and style preferences
+
+PARENT Play Observation Framework Sections:
+Keep All - These Are Developmentally Rich:
+
+Dominant play schemas (connecting, disconnecting, rotation, enveloping, orientation)
+
+Problem-solving patterns and attention span observations
+
+Gross/fine motor preferences and sensory seeking/avoiding
+
+Material accessibility and selection patterns
+
+Social interaction styles and caregiver role needs
+
+INTERNAL Document Flow:
+Parent Inputs → Milestones Analysis → If-Then Rules → Product Recommendations
+
+Current stage identification using age bands and developmental markers
+
+Shift detection through schema patterns and skill observations
+
+3-year projections based on developmental trajectory
+
+Universal filter tags for shop/content personalization
+
+2. Platform Age-Banded Questionnaires
+Age Routing System:
+newborn–2: Sensory Being → Independent Explorer
+
+18m–3: Physical Explorer → Budding Storyteller
+
+2–5: Eager Imitator → Imaginative Creator
+
+3–6: Magical Thinker → Early Planner
+
+4–7: Enthusiastic Friend → Rule-Follower
+
+5–8: Imagination → Skill Master
+
+6–9: Concrete Thinker → Strategic Problem-Solver
+
+7–10: Competent Peer → Independent Expert
+
+8–11: Team Player → Budding Individual
+
+9–12: Rule Master → Abstract Thinker
+
+10–early teens: Confident Peer → Identity Seeker
+
+early–older teens: Emerging Individual → Young Adult
+
+3. Quick Start Questionnaire (4 minutes)
+Section A: Child Basics (45 seconds)
+A1. Child's name: [Text field]
+A2. Child's age: [Dropdown with age routing to appropriate band]
+A3. How many children in your household? [1/2/3/4+]
+
+Section B: Milestone Check by Domain (90 seconds)
+Age-specific questions based on CDC milestones
+
+Social-Emotional Domain:
+
+18m-3yr: "Does your child play next to other children?" [Yes/Sometimes/Not yet]
+
+2-5yr: "Does your child take turns during play?" [Yes/Sometimes/Not yet]
+
+3-6yr: "Does your child assign roles during pretend play?" [Yes/Sometimes/Not yet]
+
+Cognitive Domain:
+
+18m-3yr: "Does your child copy simple actions like sweeping?" [Yes/Sometimes/Not yet]
+
+2-5yr: "Does your child use objects for pretend play?" [Yes/Sometimes/Not yet]
+
+3-6yr: "Does your child plan play scenarios in advance?" [Yes/Sometimes/Not yet]
+
+Language & Communication:
+
+18m-3yr: "About how many words does your child say?" [10-25/25-50/50+]
+
+2-5yr: "Does your child tell simple stories?" [Yes/Sometimes/Not yet]
+
+3-6yr: "Can your child have back-and-forth conversations?" [Yes/Sometimes/Not yet]
+
+Motor Development:
+
+18m-3yr: "Can your child stack blocks or similar objects?" [Yes/Sometimes/Not yet]
+
+2-5yr: "Does your child use crayons or markers to draw?" [Yes/Sometimes/Not yet]
+
+3-6yr: "Can your child use scissors to cut paper?" [Yes/Sometimes/Not yet]
+
+Section C: Play Schemas Checklist (60 seconds)
+"Which of these behaviors do you see your child do often?" [Check all that apply]
+
+Connecting: Linking train tracks, joining blocks, doing puzzles
+Disconnecting: Taking things apart, knocking down towers
+Enveloping: Wrapping toys in blankets, hiding under covers, building forts
+Rotation: Spinning wheels, twirling, fascinated by fans
+Trajectory: Throwing, dropping things, jumping, pouring water
+Orientation: Hanging upside down, looking under furniture
+
+Section D: Barriers Checklist (45 seconds)
+"What makes play challenging for your child?" [Check all that apply]
+
+Access barriers: Toys stored too high, containers too heavy to open
+Space barriers: Not enough room to move, shared space conflicts
+Sensory barriers: Overwhelmed by noise, avoids messy textures
+Social barriers: Difficulty sharing, needs adult help to start play
+Attention barriers: Gets frustrated quickly, trouble focusing
+
+Section E: Current Interests (30 seconds)
+"What does your child love right now?" [Check up to 5]
+
+Movement: Climbing, jumping, dancing, riding toys
+Building: Blocks, magna-tiles, stacking
+Nurturing: Dolls, stuffed animals, feeding games
+Vehicles: Cars, trains, planes
+Art: Drawing, painting, playdough
+Music: Singing, instruments, dancing
+Books: Looking at pictures, being read to
+Nature: Water play, collecting things outside
+Pretend: Dress-up, kitchen play, acting out stories
+
+4. Full Intake Questionnaire (10 minutes)
+Includes all Quick Start sections plus:
+Section F: Attention & Problem-Solving Patterns (90 seconds)
+F1. Attention span for self-chosen activities:
+
+Under 3yr: Under 5 minutes / 5-10 minutes / 10-15 minutes / 15+ minutes
+
+3-6yr: Under 10 minutes / 10-20 minutes / 20-30 minutes / 30+ minutes
+
+6+yr: Under 15 minutes / 15-30 minutes / 30-45 minutes / 45+ minutes
+
+F2. When your child can't figure something out, they typically:
+
+Ask for help immediately
+
+Try a different way once or twice
+
+Keep trying many different approaches
+
+Get frustrated and give up
+
+F3. Problem-solving approach:
+
+Prefers step-by-step guidance
+
+Likes to experiment on their own
+
+Wants to watch others first
+
+Jumps right in without planning
+
+Section G: Sensory Processing Patterns (2 minutes)
+Based on Dunn's Sensory Processing Framework
+
+G1. Sensory seeking behaviors: [Check all that apply]
+
+Seeks deep pressure (tight hugs, heavy blankets)
+
+Loves messy play (paint, mud, playdough)
+
+Constantly moving, touching things
+
+Enjoys loud, stimulating environments
+
+Crashes into furniture or people
+
+G2. Sensory avoiding behaviors: [Check all that apply]
+
+Covers ears with loud noises
+
+Avoids sticky or wet textures
+
+Dislikes clothing tags or seams
+
+Overwhelmed in busy environments
+
+Avoids swinging or spinning
+
+G3. Sensory under-responsiveness: [Check all that apply]
+
+Seems not to notice when called
+
+High tolerance for pain
+
+Mouths objects frequently
+
+Low energy, appears sleepy
+
+Doesn't notice messy hands/face
+
+Section H: Independence & Space Factors (90 seconds)
+H1. Toy accessibility:
+
+Child can get most toys independently
+
+Child can get some toys with help
+
+Most toys require adult assistance
+
+All toys are stored out of reach
+
+H2. Clean-up independence:
+
+Child tidies toys without reminders
+
+Child helps when asked
+
+Child resists clean-up
+
+Adult does most toy organization
+
+H3. Space constraints: [Check all that apply]
+
+Limited floor space for active play
+
+Shared space with adults/siblings
+
+No dedicated play area
+
+Noise restrictions (apartment/neighbors)
+
+Rental limitations on modifications
+
+H4. Storage preferences:
+
+Open shelving where child can see toys
+
+Labeled bins and containers
+
+Rotating toy system
+
+Most toys put away, few out at time
+
+5. Scoring & Mapping Specifications
+Developmental Domain Scoring:
+Each domain receives a confidence score based on milestone alignment:
+
+Advanced (75%+ milestones above age): Suggest activities 6+ months ahead
+
+On Track (50-75% age-appropriate milestones): Current age band activities
+
+Emerging (25-50% milestones): Support with current + easier options
+
+Refer Out (<25% milestones): Educational note to discuss with pediatrician
+
+Schema Pattern Detection:
+Primary Schema (3+ behaviors checked): Strong interest, recommend schema-specific products
+Secondary Schema (2 behaviors): Emerging interest, include some options
+Broad Exploration (1 each across multiple): Offer variety across schemas
+
+Attention Band Classification:
+Newborn-2yr: 5-15 minutes = typical, <5 min = support needed, >15 min = advanced
+
+2-5yr: 10-25 minutes = typical, <10 min = support needed, >25 min = advanced
+
+5-8yr: 15-35 minutes = typical, <15 min = support needed, >35 min = advanced
+
+8+yr: 20-45 minutes = typical, <20 min = support needed, >45 min = advanced
+
+6. Milestone Projection Rules
+Current Stage Identification:
+Use age band + milestone performance + schema patterns to determine:
+
+Current archetype (e.g., "Physical Explorer" for 18m-3yr band)
+
+Confidence level in placement (high/medium/low based on milestone alignment)
+
+Shift Detection:
+Ahead indicators: Meeting milestones 6+ months early, advanced schema complexity
+
+Behind indicators: Missing 50%+ age milestones, simpler schema patterns
+
+Typical progression: Meeting age-appropriate milestones with expected schema development
+
+3-Year Projection:
+Advanced trajectory: Move 1.5 bands forward
+
+Typical trajectory: Move 1 band forward per year of projection
+
+Supported trajectory: Current band plus enhanced scaffolding recommendations
+
+7. If-Then Rules for Parent Guidance
+Storage & Access Rules:
+IF child dumps bins to find toys → NEED: visible, accessible storage → ACTION: low, forward-facing shelving with clear containers
+
+IF child can't reach desired toys → NEED: independence-building → ACTION: step stool + lower storage solutions
+
+Schema-Based Rules:
+IF strong enveloping schema → NEED: nurturing materials + cozy spaces → ACTION: dolls, blankets, hideaways, fort-building materials
+
+IF strong connecting schema → NEED: building foundations + joining materials → ACTION: magnetic tiles, train tracks, firm building surfaces
+
+Sensory Rules:
+IF sensory seeking behaviors → NEED: heavy work + input opportunities → ACTION: crash pads, weighted items, climbing structures
+
+IF sensory avoiding patterns → NEED: calm environment + gradual exposure → ACTION: noise-reducing headphones, texture alternatives
+
+Space Rules:
+IF limited space + gross motor needs → NEED: vertical + multi-use solutions → ACTION: climbing blocks, wall-mounted storage, foldable equipment
+
+IF shared space conflicts → NEED: boundaries + portable play → ACTION: play mats, carry caddies, quiet activity options
+
+8. Universal Filter Tag System
+Developmental Domains:
+social_emotional, cognitive, language_communication, fine_motor, gross_motor
+
+Play Schemas:
+connecting, disconnecting, rotation, enveloping, orientation, trajectory
+
+Play Types:
+functional, constructive, symbolic, socio_dramatic, rules_based
+
+Social Stages:
+solitary, parallel, associative, cooperative
+
+Developmental Needs:
+accessible_storage, fine_motor_tools, gross_motor_climb, nurturing_play, building_foundations, sensory_input, problem_solving_practice
+
+Space Considerations:
+small_space, shared_space, rental_friendly, noise_sensitive
+
+Sensory Preferences:
+seeks_deep_pressure, avoids_sticky, loves_messy, avoids_noise, seeks_movement, prefers_calm
+
+Material Types:
+wood, fabric, paper, silicone, metal, plastic_alternative
+
+Book Categories:
+topic_emotions, topic_numbers, topic_science, reading_level_early, reading_level_chapter
+
+Safety & Practical:
+small_parts_free, battery_free, non_toxic, easy_clean
+
+Budget Ranges:
+under_25, 25_75, 75_200, 200_plus
+
+Quality Values:
+repairable, replacement_parts_available, durability_high, sustainable
+
+9. Shop Mapping Specifications
+Signal → Filter Mapping:
+Child Signal	Product Filters Applied
+Enveloping schema + nurturing interests	nurturing_play + fabric + small_space_friendly
+Connecting schema + fine motor emerging	building_foundations + fine_motor_tools + age_appropriate
+Sensory seeking + gross motor advanced	seeks_movement + gross_motor_climb + durability_high
+Limited space + noise restrictions	small_space + noise_sensitive + rental_friendly
+Advanced cognitive + symbolic play	problem_solving_practice + symbolic + reading_level_advanced
+Age Band Integration:
+All recommendations filtered by appropriate age safety and developmental fit
+
+"Age to retire" guidance from toy database prevents showing outgrown items
+
+Progressive complexity matching child's demonstrated skill level
+
+10. Output Schemas
+JSON Schema - Quick Start:
+json
+{
+  "child": {
+    "name": "string",
+    "age_months": "number", 
+    "age_band": "string",
+    "household_size": "number"
+  },
+  "milestones": {
+    "social_emotional": {"score": "number", "confidence": "string"},
+    "cognitive": {"score": "number", "confidence": "string"}, 
+    "language_communication": {"score": "number", "confidence": "string"},
+    "motor": {"score": "number", "confidence": "string"}
+  },
+  "schemas": {
+    "primary": ["string"], 
+    "secondary": ["string"],
+    "patterns": ["string"]
+  },
+  "barriers": ["string"],
+  "interests": ["string"],
+  "completion_time": "number"
+}
+CSV Column Plan:
+text
+child_id,name,age_months,age_band,social_emotional_score,cognitive_score,language_score,motor_score,primary_schemas,barriers,interests,attention_span_band,sensory_patterns,space_constraints,filter_tags,current_stage,projected_stage_3yr,confidence_level,completion_date
+Scoring Function Outline:
+python
+def calculate_child_profile(responses):
+    # 1. Age band assignment
+    age_band = assign_age_band(responses['age_months'])
+    
+    # 2. Domain scoring vs age norms  
+    domain_scores = {}
+    for domain in ['social_emotional', 'cognitive', 'language', 'motor']:
+        raw_score = sum(responses[f'{domain}_items'])
+        domain_scores[domain] = normalize_by_age_band(raw_score, age_band)
+    
+    # 3. Schema pattern detection
+    schema_patterns = detect_primary_schemas(responses['schema_checklist'])
+    
+    # 4. Barrier and interest mapping
+    barrier_tags = map_barriers_to_tags(responses['barriers'])
+    interest_tags = map_interests_to_tags(responses['interests'])
+    
+    # 5. Generate filter combinations
+    filter_tags = combine_filters(domain_scores, schema_patterns, barrier_tags, interest_tags)
+    
+    # 6. Stage projection
+    current_stage = determine_current_stage(age_band, domain_scores)
+    projected_stage = project_future_stage(current_stage, domain_scores, 36) # 3 years
+    
+    return {
+        'current_stage': current_stage,
+        'projected_stage': projected_stage, 
+        'filter_tags': filter_tags,
+        'confidence': calculate_confidence(domain_scores),
+        'refer_out_flags': check_refer_out_thresholds(domain_scores, age_band)
+    }
+11. Worked Examples
+Example 1: 20-month Mae with Enveloping + Access Barriers
+Inputs:
+
+Age: 20 months (18m-3yr band)
+
+Milestones: Social-emotional 85%, Cognitive 75%, Language 60%, Motor 90%
+
+Primary schema: Enveloping (wraps dolls, hides under blankets)
+
+Barriers: Toys stored too high, needs adult help accessing materials
+
+Interests: Dolls, climbing, books
+
+Computed Analysis:
+
+Current Stage: Physical Explorer (advanced motor, typical cognitive/social)
+
+Shift Underway: Moving toward Budding Storyteller (strong nurturing play emerging)
+
+3-Year Projection: Early Planner stage (advanced trajectory due to high motor/social scores)
+
+Confidence: High (clear developmental pattern)
+
+Three Key Insights:
+
+Strong nurturing instincts indicate readiness for complex care-taking play scenarios
+
+Motor advancement suggests need for challenging physical activities
+
+Access barriers limiting independent exploration and schema satisfaction
+
+Filter Tags Applied:
+nurturing_play + accessible_storage + gross_motor + enveloping + fabric + 18m_3yr + advanced_motor
+
+Three SKU Matches:
+
+Low wooden shelf with fabric bins (accessible_storage + rental_friendly)
+
+Baby doll care set with blanket (nurturing_play + enveloping + fabric)
+
+Soft climbing blocks (gross_motor + advanced_motor + small_space)
+
+Example 2: 4-year Alex with Connecting + Small Space
+Inputs:
+
+Age: 4 years (3-6yr band)
+
+Milestones: All domains 70-80% (typical development)
+
+Primary schema: Connecting (loves train tracks, magnetic tiles, puzzles)
+
+Barriers: Limited floor space, shared living area
+
+Interests: Building, vehicles, music
+
+Computed Analysis:
+
+Current Stage: Magical Thinker (typical for age)
+
+Shift Underway: Developing Early Planner skills (systematic building projects)
+
+3-Year Projection: Rule-Follower (typical trajectory)
+
+Confidence: Medium-High (consistent pattern across domains)
+
+Three Key Insights:
+
+Connecting schema driving systematic construction and engineering thinking
+
+Space limitations requiring vertical and portable building solutions
+
+Transitioning from free-form to more planned, rule-based construction
+
+Filter Tags Applied:
+building_foundations + connecting + small_space + constructive + 3_6yr + shared_space
+
+Three SKU Matches:
+
+Vertical magnetic tile storage with building mat (small_space + building_foundations)
+
+Wooden train set with storage box (connecting + shared_space + portable)
+
+Modular building system (constructive + systematic + space_efficient)
+
+Example 3: 7-year Sam with Symbolic Play + Noise Sensitivity
+Inputs:
+
+Age: 7 years (6-9yr band)
+
+Milestones: Cognitive 90%, Social-emotional 85%, Language 80%, Motor 70%
+
+Primary play: Elaborate pretend scenarios, storytelling, role-playing
+
+Barriers: Overwhelmed by loud environments, avoids group activities
+
+Interests: Stories, art, quiet building projects
+
+Computed Analysis:
+
+Current Stage: Advanced Concrete Thinker (cognitive ahead of age)
+
+Shift Underway: Early Strategic Problem-Solver (complex narrative planning)
+
+3-Year Projection: Independent Expert (advanced trajectory)
+
+Confidence: High (strong cognitive/language, clear preferences)
+
+Three Key Insights:
+
+Advanced symbolic thinking ready for complex narrative and planning challenges
+
+Sensory sensitivity requiring calm, controlled environments for deep focus
+
+Preference for solitary or small-group creative work over large social settings
+
+Filter Tags Applied:
+symbolic + avoids_noise + advanced_cognitive + creative + 6_9yr + problem_solving_practice
+
+Three SKU Matches:
+
+Storytelling puppet theater with quiet space design (symbolic + avoids_noise)
+
+Advanced art supplies with organization system (creative + problem_solving_practice)
+
+Noise-reducing headphones for focus (avoids_noise + sensory_support)
+
+12. Privacy & Ethics Framework
+Educational Guidance Only:
+Clear disclaimer: "This assessment provides educational guidance only and is not a diagnostic tool"
+
+Refer-out language: "If you have concerns about your child's development, please consult your pediatrician"
+
+Consent & Data Use:
+Explicit consent for storing responses to improve recommendations
+
+Option to delete data after receiving recommendations
+
+Clear explanation of how data improves future product matching
+
+Minimal Data Retention:
+Core profile data retained for purchase matching only
+
+Detailed responses deleted after 90 days unless consent given for research
+
+No sharing of individual data with third parties
+
+Refer-Out Triggers:
+Under 25th percentile in multiple domains: "We recommend discussing these observations with your child's doctor"
+
+Significant regression from previous assessments: "Please consult your healthcare provider"
+
+Safety concerns (self-injury, extreme behaviors): "Contact your pediatrician promptly"
+
