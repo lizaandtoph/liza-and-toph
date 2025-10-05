@@ -9,6 +9,7 @@ import Shop from './pages/Shop';
 import FindPros from './pages/FindPros';
 import Settings from './pages/Settings';
 import Admin from './pages/Admin';
+import AdminPros from './pages/AdminPros';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           <Route path="find-pros" element={<FindPros />} />
           <Route path="settings" element={<Settings />} />
           <Route path="admin" element={<Admin />} />
+          <Route path="admin-pros" element={<AdminPros />} />
         </Route>
       </Routes>
     </BrowserRouter>
