@@ -49,17 +49,27 @@ Preferred communication style: Simple, everyday language.
 
 **API Design**
 - RESTful API endpoints under `/api/` prefix
+- **Public endpoints** (used by public-facing pages):
+  - `GET /api/professionals` - List all professionals for Find Pros page
+  - `GET /api/products` - List all products for Shop page (with optional ageRange/category filters)
+  - `GET /api/milestones?ageRange=...` - Milestones with filtering
+- **Admin endpoints** (used by admin management pages):
+  - `GET /api/admin/professionals` - Admin professional list
+  - `POST /api/admin/professionals` - Create professional
+  - `GET /api/admin/products` - Admin product list
+  - `POST /api/admin/products` - Create product
 - Routes for child profiles (`POST /api/child-profiles`, `GET /api/child-profiles/:id`)
-- Routes for milestones with filtering (`GET /api/milestones?ageRange=...`)
-- Routes for products with category and age-range filtering
 - Routes for play boards (personalized recommendation boards)
 
 **Data Layer**
 - In-memory storage implementation (`MemStorage`) for development/prototyping
 - Interface-based storage abstraction (`IStorage`) allowing easy swap to database
-- Seed data included for milestones and products
+- Seed data included for milestones, products, and professionals
 - Type-safe data models shared between client and server via `@shared/schema`
-- Product data in `client/src/data/needsToProducts.json` includes: skuId, title, url, ageMin, ageMax, domains, price, rating, reviewCount, imageUrl
+- **Products & Professionals**: Now managed via database with admin pages
+  - Admin pages (AdminPros, Admin) manage data
+  - Public pages (FindPros, Shop) fetch from public API endpoints
+  - Age range parsing handles formats like "6-12 months", "0-6 years", or plain numbers
 
 **Schema & Validation**
 - Drizzle ORM schema definitions in PostgreSQL dialect
@@ -91,6 +101,12 @@ Preferred communication style: Simple, everyday language.
   - Can be viewed and removed from Settings page
 - **Milestones**: Developmental milestones categorized by type (cognitive, motor, language, social-emotional)
 - **Products**: Toy/book recommendations with pricing, ratings, categories, affiliate links
+  - Schema fields: id, name, brand, description, price, imageUrl, categories (array), ageRange, rating, reviewCount, affiliateUrl, isTopPick, isBestseller, isNew
+  - Managed via Admin page, displayed on Shop page
+  - Shop page transforms Product schema to UI format (id→skuId, name→title, affiliateUrl→url)
+- **Professionals**: Healthcare and development professionals directory
+  - Schema fields: id, name, specialty, location, rating (string), description
+  - Managed via AdminPros page, displayed on FindPros page
 - **Play Boards**: Aggregated personalized boards combining profiles, milestones, and products
 
 **Current Implementation**
