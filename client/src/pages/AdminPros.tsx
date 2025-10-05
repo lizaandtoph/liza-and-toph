@@ -26,6 +26,7 @@ export default function AdminPros() {
     mutationFn: (data: InsertProfessional) => apiRequest('POST', '/api/admin/professionals', data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/admin/professionals'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/professionals'] });
       setIsCreateOpen(false);
       createForm.reset();
       toast({ title: 'Professional created successfully' });
@@ -39,6 +40,7 @@ export default function AdminPros() {
     mutationFn: ({ id, data }: { id: string; data: any }) => apiRequest('PUT', `/api/admin/professionals/${id}`, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/admin/professionals'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/professionals'] });
       setEditingProfessional(null);
       toast({ title: 'Professional updated successfully' });
     },
@@ -51,6 +53,7 @@ export default function AdminPros() {
     mutationFn: (id: string) => apiRequest('DELETE', `/api/admin/professionals/${id}`),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/admin/professionals'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/professionals'] });
       toast({ title: 'Professional deleted successfully' });
     },
     onError: () => {

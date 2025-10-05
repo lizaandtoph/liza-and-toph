@@ -1,4 +1,4 @@
-import { Route, Switch } from 'wouter';
+import { Route, Switch, Redirect } from 'wouter';
 import Layout from './components/Layout';
 import Home from './pages/Home';
 import Login from './pages/Login';
@@ -7,7 +7,6 @@ import YourChild from './pages/YourChild';
 import PlayBoard from './pages/PlayBoard';
 import Recommendations from './pages/Recommendations';
 import Shop from './pages/Shop';
-import FindPros from './pages/FindPros';
 import Settings from './pages/Settings';
 import Admin from './pages/Admin';
 import AdminPros from './pages/AdminPros';
@@ -28,7 +27,9 @@ function App() {
         <Route path="/playboard" component={PlayBoard} />
         <Route path="/recommendations" component={Recommendations} />
         <Route path="/shop" component={Shop} />
-        <Route path="/find-pros" component={FindPros} />
+        <Route path="/find-pros">
+          {() => <Redirect to="/pros" />}
+        </Route>
         <Route path="/pros" component={ProsDirectory} />
         <Route path="/pros/:slug" component={ProProfile} />
         <Route path="/pro/edit" component={ProEdit} />

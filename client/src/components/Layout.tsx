@@ -28,7 +28,6 @@ export default function Layout({ children: pageContent }: { children: React.Reac
     { to: '/your-child', label: 'Your Child', icon: Baby },
     { to: '/playboard', label: 'Play Board', icon: Heart },
     { to: '/shop', label: 'Shop', icon: ShoppingCart },
-    { to: '/find-pros', label: 'Find Pros', icon: HardHat },
     { to: '/pros', label: 'Professionals', icon: HardHat },
     { to: '/settings', label: 'Settings', icon: SettingsIcon },
   ];
