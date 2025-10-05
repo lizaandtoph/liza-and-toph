@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'wouter';
+import { Link, useRoute } from 'wouter';
 import { useStore } from '../store';
 import { logEvent } from '../analytics';
 import milestonesData from '../data/milestones.json';
@@ -7,8 +7,18 @@ import rulesData from '../data/rules.json';
 import { Sparkles, Lock, TrendingUp, ShoppingCart } from 'lucide-react';
 
 export default function PlayBoard() {
-  const { getActiveChild, getAnswers, activeChildId, subscribed, setSubscribed, parentAccount } = useStore();
+  const [, params] = useRoute('/playboard/:childId');
+  const { getActiveChild, getAnswers, activeChildId, subscribed, setSubscribed, parentAccount, children, setActiveChild } = useStore();
   const [showPaywall, setShowPaywall] = useState(false);
+  
+  useEffect(() => {
+    if (params?.childId && params.childId !== activeChildId) {
+      const childExists = children.find(c => c.id === params.childId);
+      if (childExists) {
+        setActiveChild(params.childId);
+      }
+    }
+  }, [params?.childId, activeChildId, children, setActiveChild]);
   
   const child = getActiveChild();
   const answers = child ? getAnswers(child.id) : { schemas: [], barriers: [], interests: [] };

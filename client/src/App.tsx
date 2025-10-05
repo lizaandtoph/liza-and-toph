@@ -3,6 +3,7 @@ import Layout from './components/Layout';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Onboarding from './pages/Onboarding';
+import YourChild from './pages/YourChild';
 import PlayBoard from './pages/PlayBoard';
 import Recommendations from './pages/Recommendations';
 import Shop from './pages/Shop';
@@ -22,6 +23,8 @@ function App() {
         <Route path="/" component={Home} />
         <Route path="/login" component={Login} />
         <Route path="/onboarding" component={Onboarding} />
+        <Route path="/your-child" component={YourChild} />
+        <Route path="/playboard/:childId" component={PlayBoard} />
         <Route path="/playboard" component={PlayBoard} />
         <Route path="/recommendations" component={Recommendations} />
         <Route path="/shop" component={Shop} />
