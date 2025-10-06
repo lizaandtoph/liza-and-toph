@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useStore } from '../store';
+import { useAuth } from '../hooks/useAuth';
 import { useLocation } from 'wouter';
 import { User, Mail, Lock, CreditCard, Baby, Trash2, Save, X, Heart, Briefcase, ShoppingBag, Edit2, RefreshCw, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -24,10 +25,6 @@ const CURRENT_QUESTIONNAIRE_VERSION = 2;
 
 export default function Settings() {
   const { 
-    parentAccount, 
-    updateParentAccount, 
-    subscribed, 
-    setSubscribed,
     children,
     updateChild,
     deleteChild,
@@ -36,22 +33,35 @@ export default function Settings() {
     getAnswers
   } = useStore();
   
+  const { user, isAuthenticated, isLoading } = useAuth();
   const { toast } = useToast();
   const [, setLocation] = useLocation();
 
+  // Redirect to login if not authenticated
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      setLocation('/login');
+    }
+  }, [isAuthenticated, isLoading, setLocation]);
+
   const [editingAccount, setEditingAccount] = useState(false);
   const [accountForm, setAccountForm] = useState({
-    firstName: parentAccount?.firstName || '',
-    lastName: parentAccount?.lastName || '',
-    email: parentAccount?.email || '',
+    firstName: user?.firstName || '',
+    lastName: user?.lastName || '',
+    email: user?.email || '',
   });
 
-  const [editingPassword, setEditingPassword] = useState(false);
-  const [passwordForm, setPasswordForm] = useState({
-    currentPassword: '',
-    newPassword: '',
-    confirmPassword: ''
-  });
+  // Update form when user data loads
+  useEffect(() => {
+    if (user) {
+      setAccountForm({
+        firstName: user.firstName || '',
+        lastName: user.lastName || '',
+        email: user.email || '',
+      });
+    }
+  }, [user]);
+
 
   const [editingChild, setEditingChild] = useState<string | null>(null);
   const [childForm, setChildForm] = useState({ name: '', birthday: '' });
@@ -86,12 +96,6 @@ export default function Settings() {
         email: accountForm.email
       });
 
-      updateParentAccount({
-        firstName: accountForm.firstName,
-        lastName: accountForm.lastName,
-        email: accountForm.email
-      });
-
       setEditingAccount(false);
       toast({
         title: 'Success',
@@ -106,51 +110,6 @@ export default function Settings() {
     }
   };
 
-  const handlePasswordUpdate = () => {
-    if (!passwordForm.currentPassword || !passwordForm.newPassword || !passwordForm.confirmPassword) {
-      toast({
-        title: 'Error',
-        description: 'All password fields are required',
-        variant: 'destructive'
-      });
-      return;
-    }
-
-    if (passwordForm.currentPassword !== parentAccount?.password) {
-      toast({
-        title: 'Error',
-        description: 'Current password is incorrect',
-        variant: 'destructive'
-      });
-      return;
-    }
-
-    if (passwordForm.newPassword.length < 6) {
-      toast({
-        title: 'Error',
-        description: 'New password must be at least 6 characters',
-        variant: 'destructive'
-      });
-      return;
-    }
-
-    if (passwordForm.newPassword !== passwordForm.confirmPassword) {
-      toast({
-        title: 'Error',
-        description: 'Passwords do not match',
-        variant: 'destructive'
-      });
-      return;
-    }
-
-    updateParentAccount({ password: passwordForm.newPassword });
-    setPasswordForm({ currentPassword: '', newPassword: '', confirmPassword: '' });
-    setEditingPassword(false);
-    toast({
-      title: 'Success',
-      description: 'Password updated successfully'
-    });
-  };
 
   const handleChildEdit = (childId: string) => {
     const child = children.find(c => c.id === childId);
@@ -206,26 +165,29 @@ export default function Settings() {
   };
 
   const handleCancelSubscription = () => {
-    setSubscribed(false);
+    // TODO: Implement subscription cancellation with backend
     toast({
       title: 'Subscription Cancelled',
       description: 'Your subscription has been cancelled'
     });
   };
 
-  if (!parentAccount) {
+  // Show loading state while checking auth
+  if (isLoading) {
     return (
       <div className="container mx-auto px-4 py-12 max-w-4xl">
         <Card>
           <CardContent className="pt-6 text-center">
-            <p className="text-lg mb-4">Please log in to access settings</p>
-            <Button onClick={() => setLocation('/login')} data-testid="button-login">
-              Go to Login
-            </Button>
+            <p className="text-lg">Loading...</p>
           </CardContent>
         </Card>
       </div>
     );
+  }
+
+  // Redirect happens via useEffect, this is just a safety check
+  if (!isAuthenticated || !user) {
+    return null;
   }
 
   return (
@@ -255,12 +217,12 @@ export default function Settings() {
                   <div>
                     <Label className="text-sm text-muted-foreground">Name</Label>
                     <p className="text-lg" data-testid="text-parent-name">
-                      {parentAccount.firstName} {parentAccount.lastName}
+                      {user.firstName} {user.lastName}
                     </p>
                   </div>
                   <div>
                     <Label className="text-sm text-muted-foreground">Email</Label>
-                    <p className="text-lg" data-testid="text-parent-email">{parentAccount.email}</p>
+                    <p className="text-lg" data-testid="text-parent-email">{user.email}</p>
                   </div>
                   <Button onClick={() => setEditingAccount(true)} data-testid="button-edit-account">
                     <Edit2 className="w-4 h-4 mr-2" />
@@ -309,9 +271,9 @@ export default function Settings() {
                       onClick={() => {
                         setEditingAccount(false);
                         setAccountForm({
-                          firstName: parentAccount.firstName,
-                          lastName: parentAccount.lastName,
-                          email: parentAccount.email
+                          firstName: user.firstName || '',
+                          lastName: user.lastName || '',
+                          email: user.email || ''
                         });
                       }}
                       data-testid="button-cancel-account"
@@ -325,73 +287,6 @@ export default function Settings() {
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Lock className="w-5 h-5" />
-                Password
-              </CardTitle>
-              <CardDescription>Change your password</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {!editingPassword ? (
-                <Button onClick={() => setEditingPassword(true)} data-testid="button-change-password">
-                  <Lock className="w-4 h-4 mr-2" />
-                  Change Password
-                </Button>
-              ) : (
-                <div className="space-y-4">
-                  <div>
-                    <Label htmlFor="currentPassword">Current Password</Label>
-                    <Input
-                      id="currentPassword"
-                      type="password"
-                      value={passwordForm.currentPassword}
-                      onChange={(e) => setPasswordForm({ ...passwordForm, currentPassword: e.target.value })}
-                      data-testid="input-current-password"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="newPassword">New Password</Label>
-                    <Input
-                      id="newPassword"
-                      type="password"
-                      value={passwordForm.newPassword}
-                      onChange={(e) => setPasswordForm({ ...passwordForm, newPassword: e.target.value })}
-                      data-testid="input-new-password"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="confirmPassword">Confirm New Password</Label>
-                    <Input
-                      id="confirmPassword"
-                      type="password"
-                      value={passwordForm.confirmPassword}
-                      onChange={(e) => setPasswordForm({ ...passwordForm, confirmPassword: e.target.value })}
-                      data-testid="input-confirm-password"
-                    />
-                  </div>
-                  <div className="flex gap-2">
-                    <Button onClick={handlePasswordUpdate} data-testid="button-save-password">
-                      <Save className="w-4 h-4 mr-2" />
-                      Update Password
-                    </Button>
-                    <Button 
-                      variant="outline" 
-                      onClick={() => {
-                        setEditingPassword(false);
-                        setPasswordForm({ currentPassword: '', newPassword: '', confirmPassword: '' });
-                      }}
-                      data-testid="button-cancel-password"
-                    >
-                      <X className="w-4 h-4 mr-2" />
-                      Cancel
-                    </Button>
-                  </div>
-                </div>
-              )}
-            </CardContent>
-          </Card>
         </TabsContent>
 
         <TabsContent value="subscription" className="space-y-6">
