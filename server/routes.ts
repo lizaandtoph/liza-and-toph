@@ -427,9 +427,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.json({ message: "Logged out successfully" });
   });
 
-  app.get("/api/auth/me", isAuthenticated, async (req: AuthRequest, res) => {
+  app.get("/api/auth/me", isAuthenticated, async (req: any, res) => {
     try {
-      const user = req.user!;
+      const userId = req.user?.claims?.sub;
+      if (!userId) {
+        return res.status(401).json({ error: "Not authenticated" });
+      }
+      
+      const user = await storage.getUser(userId);
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+      
       const children = await storage.getChildrenByUserId(user.id);
       res.json({ 
         user: { 
@@ -443,22 +452,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
         children 
       });
     } catch (error) {
+      console.error("Error in /api/auth/me:", error);
       res.status(500).json({ error: "Server error" });
     }
   });
 
-  app.patch("/api/auth/account", isAuthenticated, async (req: AuthRequest, res) => {
+  app.patch("/api/auth/account", isAuthenticated, async (req: any, res) => {
     try {
+      const userId = req.user?.claims?.sub;
+      if (!userId) {
+        return res.status(401).json({ error: "Not authenticated" });
+      }
+      
       const validatedData = updateUserAccountSchema.parse(req.body);
       
       if (validatedData.email) {
         const existing = await storage.getUserByEmail(validatedData.email);
-        if (existing && existing.id !== req.user!.id) {
+        if (existing && existing.id !== userId) {
           return res.status(400).json({ error: "Email already in use" });
         }
       }
 
-      const updatedUser = await storage.updateUserAccount(req.user!.id, validatedData);
+      const updatedUser = await storage.updateUserAccount(userId, validatedData);
       if (!updatedUser) {
         return res.status(404).json({ error: "User not found" });
       }
@@ -474,24 +489,35 @@ export async function registerRoutes(app: Express): Promise<Server> {
         } 
       });
     } catch (error) {
+      console.error("Error in /api/auth/account:", error);
       res.status(400).json({ error: "Invalid update data" });
     }
   });
 
-  app.get("/api/auth/children", isAuthenticated, async (req: AuthRequest, res) => {
+  app.get("/api/auth/children", isAuthenticated, async (req: any, res) => {
     try {
-      const children = await storage.getChildrenByUserId(req.user!.id);
+      const userId = req.user?.claims?.sub;
+      if (!userId) {
+        return res.status(401).json({ error: "Not authenticated" });
+      }
+      
+      const children = await storage.getChildrenByUserId(userId);
       res.json(children);
     } catch (error) {
       res.status(500).json({ error: "Server error" });
     }
   });
 
-  app.post("/api/auth/children", isAuthenticated, async (req: AuthRequest, res) => {
+  app.post("/api/auth/children", isAuthenticated, async (req: any, res) => {
     try {
+      const userId = req.user?.claims?.sub;
+      if (!userId) {
+        return res.status(401).json({ error: "Not authenticated" });
+      }
+      
       const childData = insertChildProfileSchema.parse({
         ...req.body,
-        userId: req.user!.id,
+        userId: userId,
       });
       const child = await storage.createChildProfile(childData);
       res.json(child);
