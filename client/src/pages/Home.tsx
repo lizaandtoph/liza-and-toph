@@ -187,7 +187,7 @@ export default function Home() {
               The new way to design your child's play
             </h1>
             <p className="text-xl md:text-2xl mb-8 opacity-80">
-              Personalized play boards, curated products, and developmental insights tailored to your child's unique journey
+              The first evidence-based platform that matches the perfect toys to your child's unique stage of development.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Link
