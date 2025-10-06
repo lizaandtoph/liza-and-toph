@@ -149,6 +149,16 @@ export default function Login() {
           </button>
         </form>
 
+        <div className="mt-4 text-center">
+          <Link
+            to="/forgot-password"
+            className="text-sm text-olive hover:text-ochre transition hover:underline"
+            data-testid="link-forgot-password"
+          >
+            Forgot password?
+          </Link>
+        </div>
+
         <div className="mt-6 text-center">
           <p className="text-sm opacity-70">
             Don't have an account?{' '}
