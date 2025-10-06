@@ -92,12 +92,9 @@ export default function Admin() {
       name: '',
       brand: '',
       description: '',
-      price: '',
       imageUrl: '',
       categories: [],
       ageRange: '6-12 months',
-      rating: '5.0',
-      reviewCount: 0,
       affiliateUrl: '',
       isTopPick: false,
       isBestseller: false,
@@ -171,12 +168,9 @@ export default function Admin() {
       name: product.name,
       brand: product.brand,
       description: product.description,
-      price: product.price,
       imageUrl: product.imageUrl,
       categories: product.categories || [],
       ageRange: product.ageRange,
-      rating: product.rating,
-      reviewCount: product.reviewCount,
       affiliateUrl: product.affiliateUrl || '',
       isTopPick: product.isTopPick || false,
       isBestseller: product.isBestseller || false,
@@ -333,8 +327,6 @@ export default function Admin() {
                     </div>
                     <p className="text-sm mb-3" data-testid={`text-product-description-${product.id}`}>{product.description}</p>
                     <div className="flex gap-4 text-sm">
-                      <span data-testid={`text-product-price-${product.id}`}><strong>Price:</strong> {product.price}</span>
-                      <span data-testid={`text-product-rating-${product.id}`}><strong>Rating:</strong> {product.rating} ({product.reviewCount} reviews)</span>
                       <span><strong>Age:</strong> {product.ageRange}</span>
                     </div>
                     {product.affiliateUrl && (
@@ -401,20 +393,6 @@ export default function Admin() {
 
               <FormField
                 control={createForm.control}
-                name="price"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Price</FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder="$19.99" data-testid="input-price" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={createForm.control}
                 name="imageUrl"
                 render={({ field }) => (
                   <FormItem>
@@ -447,44 +425,6 @@ export default function Admin() {
                         ))}
                       </SelectContent>
                     </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={createForm.control}
-                name="rating"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Rating (1-5)</FormLabel>
-                    <FormControl>
-                      <Input {...field} type="number" step="0.1" min="1" max="5" data-testid="input-rating" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={createForm.control}
-                name="reviewCount"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Review Count</FormLabel>
-                    <FormControl>
-                      <Input 
-                        {...field} 
-                        type="number" 
-                        min="0"
-                        value={field.value || 0}
-                        onChange={(e) => {
-                          const value = e.target.value === '' ? 0 : parseInt(e.target.value);
-                          field.onChange(isNaN(value) ? 0 : value);
-                        }}
-                        data-testid="input-reviewCount" 
-                      />
-                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -1209,20 +1149,6 @@ export default function Admin() {
 
               <FormField
                 control={editForm.control}
-                name="price"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Price</FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder="$19.99" data-testid="input-edit-price" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={editForm.control}
                 name="imageUrl"
                 render={({ field }) => (
                   <FormItem>
@@ -1255,44 +1181,6 @@ export default function Admin() {
                         ))}
                       </SelectContent>
                     </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={editForm.control}
-                name="rating"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Rating (1-5)</FormLabel>
-                    <FormControl>
-                      <Input {...field} type="number" step="0.1" min="1" max="5" data-testid="input-edit-rating" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={editForm.control}
-                name="reviewCount"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Review Count</FormLabel>
-                    <FormControl>
-                      <Input 
-                        {...field} 
-                        type="number" 
-                        min="0"
-                        value={field.value || 0}
-                        onChange={(e) => {
-                          const value = e.target.value === '' ? 0 : parseInt(e.target.value);
-                          field.onChange(isNaN(value) ? 0 : value);
-                        }}
-                        data-testid="input-edit-reviewCount" 
-                      />
-                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
