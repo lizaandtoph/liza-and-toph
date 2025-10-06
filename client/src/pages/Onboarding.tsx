@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useLocation } from 'wouter';
 import { useStore, type Answers } from '../store';
 import { logEvent } from '../analytics';
@@ -9,6 +9,7 @@ import barriersData from '../data/barriers.json';
 import interestsData from '../data/interests.json';
 import { ChevronRight, ChevronLeft } from 'lucide-react';
 import { calculateAgeFromBirthday, categorizeAgeBand, getAgeBandLabel } from '@shared/ageUtils';
+import { useAuth } from '../hooks/useAuth';
 
 const QUESTIONNAIRE_VERSION = 2;
 
@@ -22,7 +23,6 @@ const childWithParentSchema = z.object({
   firstName: z.string().min(1, 'First name is required'),
   lastName: z.string().min(1, 'Last name is required'),
   email: z.string().email('Valid email is required'),
-  password: z.string().min(6, 'Password must be at least 6 characters'),
   name: z.string().min(1, 'Child name is required'),
   birthday: z.string().min(1, 'Birthday is required'),
   household_size: z.number().min(1).max(10),
@@ -31,13 +31,13 @@ const childWithParentSchema = z.object({
 export default function Onboarding() {
   const [, setLocation] = useLocation();
   const { setLoggedIn, setParentAccount, parentAccount, loadChildren } = useStore();
+  const { user, isAuthenticated, isLoading } = useAuth();
   const hasParentAccount = !!parentAccount;
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
     email: '',
-    password: '',
     name: '',
     birthday: '',
     household_size: 1,
@@ -52,6 +52,18 @@ export default function Onboarding() {
     },
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  // Pre-fill parent info from Replit Auth (only runs once when data loads)
+  useEffect(() => {
+    if (isAuthenticated && user && !formData.firstName && !formData.lastName && !formData.email) {
+      setFormData(prev => ({
+        ...prev,
+        firstName: user.firstName || '',
+        lastName: user.lastName || '',
+        email: user.email || '',
+      }));
+    }
+  }, [isAuthenticated, user, formData.firstName, formData.lastName, formData.email]);
 
   const childAgeBand = useMemo(() => {
     if (!formData.birthday) return null;
@@ -96,7 +108,6 @@ export default function Onboarding() {
             firstName: formData.firstName,
             lastName: formData.lastName,
             email: formData.email,
-            password: formData.password,
             name: formData.name, 
             birthday: formData.birthday,
             household_size: formData.household_size
@@ -142,7 +153,6 @@ export default function Onboarding() {
           firstName: formData.firstName,
           lastName: formData.lastName,
           email: formData.email,
-          password: formData.password,
           name: formData.name, 
           birthday: formData.birthday,
           household_size: formData.household_size
@@ -151,30 +161,14 @@ export default function Onboarding() {
         childBirthday = childData.birthday;
         householdSize = childData.household_size;
 
-        const registerResponse = await fetch('/api/auth/register', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            email: childData.email,
-            password: childData.password,
-            firstName: childData.firstName,
-            lastName: childData.lastName,
-            role: 'parent',
-          }),
-        });
-
-        if (!registerResponse.ok) {
-          const errorData = await registerResponse.json();
-          console.error('Registration failed:', errorData);
-          return;
-        }
-        
-        setParentAccount({
-          firstName: childData.firstName,
-          lastName: childData.lastName,
-          email: childData.email,
-          password: childData.password
-        });
+        // Use auth data if available, otherwise use form data
+        const parentData = {
+          firstName: (isAuthenticated && user?.firstName) || childData.firstName,
+          lastName: (isAuthenticated && user?.lastName) || childData.lastName,
+          email: (isAuthenticated && user?.email) || childData.email,
+          password: '' // Not needed with Replit Auth
+        };
+        setParentAccount(parentData);
       }
       
       const { years, months, totalMonths } = calculateAgeFromBirthday(childBirthday);
@@ -295,9 +289,10 @@ export default function Onboarding() {
                   type="text"
                   value={formData.firstName}
                   onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-                  className="w-full px-6 py-4 bg-ivory border-2 border-sand rounded-xl focus:border-olive focus:outline-none text-lg transition"
-                  placeholder="Enter your first name"
+                  className="w-full px-6 py-4 bg-ivory border-2 border-sand rounded-xl focus:border-olive focus:outline-none text-lg transition disabled:opacity-60 disabled:cursor-not-allowed"
+                  placeholder={isLoading ? "Loading..." : "Enter your first name"}
                   data-testid="input-parent-first-name"
+                  disabled={isLoading || isAuthenticated}
                 />
                 {errors.firstName && <p className="text-burnt text-sm mt-2" data-testid="error-first-name">{errors.firstName}</p>}
               </div>
@@ -308,9 +303,10 @@ export default function Onboarding() {
                   type="text"
                   value={formData.lastName}
                   onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
-                  className="w-full px-6 py-4 bg-ivory border-2 border-sand rounded-xl focus:border-olive focus:outline-none text-lg transition"
-                  placeholder="Enter your last name"
+                  className="w-full px-6 py-4 bg-ivory border-2 border-sand rounded-xl focus:border-olive focus:outline-none text-lg transition disabled:opacity-60 disabled:cursor-not-allowed"
+                  placeholder={isLoading ? "Loading..." : "Enter your last name"}
                   data-testid="input-parent-last-name"
+                  disabled={isLoading || isAuthenticated}
                 />
                 {errors.lastName && <p className="text-burnt text-sm mt-2" data-testid="error-last-name">{errors.lastName}</p>}
               </div>
@@ -321,30 +317,18 @@ export default function Onboarding() {
                   type="email"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full px-6 py-4 bg-ivory border-2 border-sand rounded-xl focus:border-olive focus:outline-none text-lg transition"
-                  placeholder="your@email.com"
+                  className="w-full px-6 py-4 bg-ivory border-2 border-sand rounded-xl focus:border-olive focus:outline-none text-lg transition disabled:opacity-60 disabled:cursor-not-allowed"
+                  placeholder={isLoading ? "Loading..." : "your@email.com"}
                   data-testid="input-parent-email"
+                  disabled={isLoading || isAuthenticated}
                 />
                 {errors.email && <p className="text-burnt text-sm mt-2" data-testid="error-email">{errors.email}</p>}
-              </div>
-
-              <div className="mb-6">
-                <label className="block mb-3 font-semibold text-lg">Password</label>
-                <input
-                  type="password"
-                  value={formData.password}
-                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                  className="w-full px-6 py-4 bg-ivory border-2 border-sand rounded-xl focus:border-olive focus:outline-none text-lg transition"
-                  placeholder="Create a password (min. 6 characters)"
-                  data-testid="input-parent-password"
-                />
-                {errors.password && <p className="text-burnt text-sm mt-2" data-testid="error-password">{errors.password}</p>}
               </div>
             </>
           )}
 
           <div className="mb-6">
-            <label className="block mb-3 font-semibold text-lg">Your Child's Name</label>
+            <label className="block mb-3 font-semibold text-lg">Your Child's First Name</label>
             <input
               type="text"
               value={formData.name}
