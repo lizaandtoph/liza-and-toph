@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'wouter';
-import { Baby, Heart, ShoppingCart, HardHat, Settings as SettingsIcon, User, ChevronDown, Plus, AlertCircle, X } from 'lucide-react';
+import { Baby, Heart, ShoppingCart, HardHat, Settings as SettingsIcon, User, ChevronDown, Plus, AlertCircle, X, LogOut } from 'lucide-react';
 import { useStore } from '../store';
 import logoImage from '@assets/symbol_orange_mono_1759602921856.png';
 import { useState, useEffect, useRef } from 'react';
@@ -7,8 +7,8 @@ import { useState, useEffect, useRef } from 'react';
 const CURRENT_QUESTIONNAIRE_VERSION = 2;
 
 export default function Layout({ children: pageContent }: { children: React.ReactNode }) {
-  const [location] = useLocation();
-  const { isLoggedIn, children, getActiveChild, setActiveChild, getAnswers, dismissedQuestionnaireUpdates, dismissQuestionnaireUpdate } = useStore();
+  const [location, setLocation] = useLocation();
+  const { isLoggedIn, children, getActiveChild, setActiveChild, getAnswers, dismissedQuestionnaireUpdates, dismissQuestionnaireUpdate, reset } = useStore();
   const [showChildDropdown, setShowChildDropdown] = useState(false);
   const activeChild = getActiveChild();
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -17,6 +17,17 @@ export default function Layout({ children: pageContent }: { children: React.Reac
     (!activeChildAnswers.questionnaire_version || activeChildAnswers.questionnaire_version < CURRENT_QUESTIONNAIRE_VERSION);
   const dismissedVersion = activeChild ? (dismissedQuestionnaireUpdates[activeChild.id] || 0) : 0;
   const showUpdateBanner = needsQuestionnaireUpdate && dismissedVersion < CURRENT_QUESTIONNAIRE_VERSION;
+
+  const handleLogout = async () => {
+    try {
+      await fetch('/api/auth/logout', { method: 'POST' });
+    } catch (error) {
+      console.error('Logout error:', error);
+    } finally {
+      reset();
+      setLocation('/login');
+    }
+  };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -133,6 +144,15 @@ export default function Layout({ children: pageContent }: { children: React.Reac
                             <User className="w-4 h-4" />
                             <span>Settings</span>
                           </Link>
+                          <div className="border-t border-sand my-2"></div>
+                          <button
+                            onClick={handleLogout}
+                            className="w-full text-left px-3 py-2 rounded-lg hover:bg-burnt/10 transition flex items-center gap-2 text-burnt font-semibold"
+                            data-testid="button-logout"
+                          >
+                            <LogOut className="w-4 h-4" />
+                            <span>Log Out</span>
+                          </button>
                         </div>
                       </div>
                     )}
