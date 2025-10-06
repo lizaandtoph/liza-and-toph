@@ -312,6 +312,45 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Science Behind Your Recommendations Section */}
+      <section className="py-20 bg-gradient-to-br from-blush/10 via-ivory to-olive/5">
+        <div className="container mx-auto px-4 max-w-5xl">
+          <div className="text-center mb-12">
+            <p className="text-sm font-semibold text-olive uppercase tracking-wider mb-4">
+              Intelligent by Design
+            </p>
+            <h1 className="text-4xl md:text-5xl font-bold mb-8">
+              The Science Behind Your Recommendations
+            </h1>
+            <h2 className="text-2xl md:text-3xl font-semibold text-olive mb-8">
+              The Smart Engine Behind Every Recommendation
+            </h2>
+          </div>
+
+          <div className="max-w-3xl mx-auto space-y-6 text-lg opacity-90">
+            <p>
+              At the heart of Liza & Toph is a powerful, proprietary engine designed to think like a developmental psychologist. We use a sophisticated, data-driven approach to translate your unique observations into a clear and actionable play plan.
+            </p>
+
+            <h3 className="text-xl font-bold mt-8 mb-4">
+              It's More Than an Algorithm—It's a Methodology
+            </h3>
+
+            <p>
+              When you complete your child's profile, our system doesn't just look for keywords. It analyzes 93 distinct data points across five critical developmental domains, from fine motor skills to social-emotional growth.
+            </p>
+
+            <p>
+              Our AI then cross-references this unique developmental snapshot against our extensive product database, which is cataloged with over 105 developmental filters and 210 product attributes. This allows us to go beyond simple age recommendations to find the toy that matches your child's specific needs and passions.
+            </p>
+
+            <p className="font-semibold">
+              The result is a level of personalization that is simply unmatched—a set of recommendations as unique as your child.
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* Platform Carousel */}
       <PlatformCarousel />
 
