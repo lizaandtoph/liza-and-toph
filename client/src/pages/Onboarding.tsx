@@ -30,7 +30,7 @@ const childWithParentSchema = z.object({
 
 export default function Onboarding() {
   const [, setLocation] = useLocation();
-  const { addChild, setLoggedIn, setParentAccount, parentAccount } = useStore();
+  const { setLoggedIn, setParentAccount, parentAccount, loadChildren } = useStore();
   const hasParentAccount = !!parentAccount;
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
@@ -122,7 +122,7 @@ export default function Onboarding() {
     setStep(step - 1);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     try {
       let childName: string;
       let childBirthday: string;
@@ -150,6 +150,24 @@ export default function Onboarding() {
         childName = childData.name;
         childBirthday = childData.birthday;
         householdSize = childData.household_size;
+
+        const registerResponse = await fetch('/api/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: childData.email,
+            password: childData.password,
+            firstName: childData.firstName,
+            lastName: childData.lastName,
+            role: 'parent',
+          }),
+        });
+
+        if (!registerResponse.ok) {
+          const errorData = await registerResponse.json();
+          console.error('Registration failed:', errorData);
+          return;
+        }
         
         setParentAccount({
           firstName: childData.firstName,
@@ -162,22 +180,56 @@ export default function Onboarding() {
       const { years, months, totalMonths } = calculateAgeFromBirthday(childBirthday);
       const ageBand = categorizeAgeBand(totalMonths);
       
-      const answers: Answers = {
-        schemas: formData.schemas,
-        barriers: formData.barriers,
-        interests: formData.interests,
-        household_size: householdSize,
-        milestones: formData.milestones,
-        questionnaire_version: QUESTIONNAIRE_VERSION,
-      };
-      
-      addChild({
-        name: childName,
-        birthday: childBirthday,
-        ageYears: years,
-        ageMonths: months,
-        ageBand,
-      }, answers);
+      const childResponse = await fetch('/api/auth/children', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: childName,
+          birthday: childBirthday,
+          ageYears: years,
+          ageMonths: months,
+          ageBand,
+          schemas: formData.schemas,
+          barriers: formData.barriers,
+          interests: formData.interests,
+          householdSize: householdSize,
+          milestones: formData.milestones,
+          questionnaireVersion: QUESTIONNAIRE_VERSION,
+        }),
+      });
+
+      if (!childResponse.ok) {
+        console.error('Failed to create child');
+        return;
+      }
+
+      const meResponse = await fetch('/api/auth/me');
+      const meData = await meResponse.json();
+
+      if (meResponse.ok && meData.children) {
+        const children = meData.children.map((c: any) => ({
+          id: c.id,
+          name: c.name,
+          birthday: c.birthday || '',
+          ageYears: c.ageYears || 0,
+          ageMonths: c.ageMonths || 0,
+          ageBand: c.ageBand || '',
+        }));
+
+        const answersMap: Record<string, Answers> = {};
+        meData.children.forEach((child: any) => {
+          answersMap[child.id] = {
+            schemas: child.schemas || [],
+            barriers: child.barriers || [],
+            interests: child.interests || [],
+            household_size: child.householdSize || 1,
+            milestones: child.milestones || {},
+            questionnaire_version: child.questionnaireVersion || 2,
+          };
+        });
+
+        loadChildren(children, answersMap);
+      }
       
       setLoggedIn(true);
       logEvent('onboarding_completed', { ageBand, version: QUESTIONNAIRE_VERSION });
