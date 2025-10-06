@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Search, Filter, Star, ChevronDown, ChevronUp, X } from 'lucide-react';
+import { Search, Filter, ChevronDown, ChevronUp, X } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { type Product } from '@shared/schema';
 import { useStore } from '../store';
@@ -392,19 +392,9 @@ export default function Shop() {
                 )}
               </div>
               <div className="p-4">
-                <h3 className="text-lg font-semibold mb-2 line-clamp-2 min-h-[3.5rem]" data-testid={`text-title-${product.id}`}>
+                <h3 className="text-lg font-semibold mb-3 line-clamp-2 min-h-[3.5rem]" data-testid={`text-title-${product.id}`}>
                   {product.name}
                 </h3>
-                
-                <div className="flex items-center gap-1 mb-3">
-                  <Star className="w-4 h-4 fill-ochre text-ochre" />
-                  <span className="font-semibold text-sm" data-testid={`text-rating-${product.id}`}>
-                    {product.rating}
-                  </span>
-                  <span className="text-xs opacity-60" data-testid={`text-reviews-${product.id}`}>
-                    ({product.reviewCount})
-                  </span>
-                </div>
 
                 <div className="flex flex-wrap gap-2 mb-3">
                   {product.categories?.slice(0, 2).map((category, idx) => (
@@ -424,18 +414,13 @@ export default function Shop() {
                   </p>
                 )}
 
-                <div className="flex items-center justify-between gap-2">
-                  <span className="text-2xl font-bold text-olive" data-testid={`text-price-${product.id}`}>
-                    {product.price}
-                  </span>
-                  <button
-                    onClick={() => handleProductClick(product.id, product.affiliateUrl || '#')}
-                    className="px-4 py-2 bg-olive text-ivory rounded-lg hover:bg-ochre transition font-medium text-sm"
-                    data-testid={`button-view-${product.id}`}
-                  >
-                    View
-                  </button>
-                </div>
+                <button
+                  onClick={() => handleProductClick(product.id, product.affiliateUrl || '#')}
+                  className="w-full px-4 py-2 bg-olive text-ivory rounded-lg hover:bg-ochre transition font-medium text-sm"
+                  data-testid={`button-view-${product.id}`}
+                >
+                  View Product
+                </button>
               </div>
             </div>
           );
