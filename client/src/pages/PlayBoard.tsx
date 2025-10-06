@@ -26,6 +26,7 @@ export default function PlayBoard() {
   const answers = child ? getAnswers(child.id) : { schemas: [], barriers: [], interests: [] };
   
   const hasFullAccess = subscribed || 
+    (parentAccount?.role === 'admin') ||
     (parentAccount?.firstName?.toLowerCase() === 'topher') ||
     (parentAccount?.email?.toLowerCase() === 'cpm@mcginnisenterprise.com');
 
