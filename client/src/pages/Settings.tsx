@@ -30,7 +30,9 @@ export default function Settings() {
     deleteChild,
     savedItems,
     removeSavedItem,
-    getAnswers
+    getAnswers,
+    subscribed,
+    setSubscribed
   } = useStore();
   
   const { user, isAuthenticated, isLoading } = useAuth();
