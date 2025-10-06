@@ -72,97 +72,96 @@ export default function Layout({ children: pageContent }: { children: React.Reac
           <div className="flex items-center gap-4">
             {!isLoggedIn ? (
               <Link
-                to="/onboarding"
-                className="px-6 py-2.5 bg-ochre text-ivory rounded-lg hover:bg-burnt transition font-semibold text-base"
-                data-testid="button-try-free"
+                to="/login"
+                className="w-10 h-10 bg-ochre rounded-full flex items-center justify-center hover:bg-burnt transition"
+                data-testid="link-sign-in"
               >
-                Try for Free
+                <User className="w-6 h-6 text-ivory" />
               </Link>
             ) : (
               <div className="flex items-center gap-3 relative">
-                {children.length > 0 && (
-                  <div className="relative" ref={dropdownRef}>
-                    <button
-                      onClick={() => setShowChildDropdown(!showChildDropdown)}
-                      className="flex items-center gap-2 px-3 py-2 bg-ivory/10 hover:bg-ivory/20 rounded-lg transition"
-                      data-testid="button-child-selector"
-                    >
-                      <div className="w-8 h-8 bg-ochre rounded-full flex items-center justify-center">
-                        <User className="w-5 h-5 text-ivory" />
-                      </div>
+                <div className="relative" ref={dropdownRef}>
+                  <button
+                    onClick={() => setShowChildDropdown(!showChildDropdown)}
+                    className="flex items-center gap-2 px-3 py-2 bg-ivory/10 hover:bg-ivory/20 rounded-lg transition"
+                    data-testid="button-child-selector"
+                  >
+                    <div className="w-8 h-8 bg-ochre rounded-full flex items-center justify-center">
+                      <User className="w-5 h-5 text-ivory" />
+                    </div>
+                    {children.length > 0 && (
                       <span className="font-semibold text-base hidden sm:inline" data-testid="text-active-child-name">
                         {activeChild?.name || 'Select Child'}
                       </span>
-                      <ChevronDown className="w-4 h-4" />
-                    </button>
-
-                    {showChildDropdown && (
-                      <div className="absolute top-full right-0 mt-2 bg-white text-espresso rounded-lg shadow-lg border-2 border-sand min-w-[200px] z-50">
-                        <div className="p-2">
-                          <p className="text-xs uppercase tracking-wide text-espresso/60 px-3 py-2 font-semibold">
-                            Your Children
-                          </p>
-                          {children.map((child) => (
-                            <button
-                              key={child.id}
-                              onClick={() => {
-                                setActiveChild(child.id);
-                                setShowChildDropdown(false);
-                              }}
-                              className={`w-full text-left px-3 py-2 rounded-lg transition flex items-center gap-2 ${
-                                activeChild?.id === child.id
-                                  ? 'bg-olive/10 text-olive font-semibold'
-                                  : 'hover:bg-sand/50'
-                              }`}
-                              data-testid={`option-child-${child.id}`}
-                            >
-                              <User className="w-4 h-4" />
-                              <span>{child.name}</span>
-                              {child.ageBand && (
-                                <span className="text-xs opacity-70 ml-auto">
-                                  {child.ageBand.replace('-', ' - ')}
-                                </span>
-                              )}
-                            </button>
-                          ))}
-                          <div className="border-t border-sand my-2"></div>
-                          <Link
-                            to="/onboarding"
-                            onClick={() => setShowChildDropdown(false)}
-                            className="w-full text-left px-3 py-2 rounded-lg hover:bg-olive/10 transition flex items-center gap-2 text-olive font-semibold"
-                            data-testid="button-add-child"
-                          >
-                            <Plus className="w-4 h-4" />
-                            <span>Add Another Child</span>
-                          </Link>
-                          <Link
-                            to="/settings"
-                            onClick={() => setShowChildDropdown(false)}
-                            className="w-full text-left px-3 py-2 rounded-lg hover:bg-olive/10 transition flex items-center gap-2"
-                            data-testid="button-settings-dropdown"
-                          >
-                            <User className="w-4 h-4" />
-                            <span>Settings</span>
-                          </Link>
-                          <div className="border-t border-sand my-2"></div>
-                          <button
-                            onClick={handleLogout}
-                            className="w-full text-left px-3 py-2 rounded-lg hover:bg-burnt/10 transition flex items-center gap-2 text-burnt font-semibold"
-                            data-testid="button-logout"
-                          >
-                            <LogOut className="w-4 h-4" />
-                            <span>Log Out</span>
-                          </button>
-                        </div>
-                      </div>
                     )}
-                  </div>
-                )}
-                {children.length === 0 && (
-                  <div className="w-10 h-10 bg-ochre rounded-full flex items-center justify-center">
-                    <User className="w-6 h-6 text-ivory" />
-                  </div>
-                )}
+                    <ChevronDown className="w-4 h-4" />
+                  </button>
+
+                  {showChildDropdown && (
+                    <div className="absolute top-full right-0 mt-2 bg-white text-espresso rounded-lg shadow-lg border-2 border-sand min-w-[200px] z-50">
+                      <div className="p-2">
+                        {children.length > 0 && (
+                          <>
+                            <p className="text-xs uppercase tracking-wide text-espresso/60 px-3 py-2 font-semibold">
+                              Your Children
+                            </p>
+                            {children.map((child) => (
+                              <button
+                                key={child.id}
+                                onClick={() => {
+                                  setActiveChild(child.id);
+                                  setShowChildDropdown(false);
+                                }}
+                                className={`w-full text-left px-3 py-2 rounded-lg transition flex items-center gap-2 ${
+                                  activeChild?.id === child.id
+                                    ? 'bg-olive/10 text-olive font-semibold'
+                                    : 'hover:bg-sand/50'
+                                }`}
+                                data-testid={`option-child-${child.id}`}
+                              >
+                                <User className="w-4 h-4" />
+                                <span>{child.name}</span>
+                                {child.ageBand && (
+                                  <span className="text-xs opacity-70 ml-auto">
+                                    {child.ageBand.replace('-', ' - ')}
+                                  </span>
+                                )}
+                              </button>
+                            ))}
+                            <div className="border-t border-sand my-2"></div>
+                          </>
+                        )}
+                        <Link
+                          to="/onboarding"
+                          onClick={() => setShowChildDropdown(false)}
+                          className="w-full text-left px-3 py-2 rounded-lg hover:bg-olive/10 transition flex items-center gap-2 text-olive font-semibold"
+                          data-testid="button-add-child"
+                        >
+                          <Plus className="w-4 h-4" />
+                          <span>Add Another Child</span>
+                        </Link>
+                        <Link
+                          to="/settings"
+                          onClick={() => setShowChildDropdown(false)}
+                          className="w-full text-left px-3 py-2 rounded-lg hover:bg-olive/10 transition flex items-center gap-2"
+                          data-testid="button-settings-dropdown"
+                        >
+                          <User className="w-4 h-4" />
+                          <span>Settings</span>
+                        </Link>
+                        <div className="border-t border-sand my-2"></div>
+                        <button
+                          onClick={handleLogout}
+                          className="w-full text-left px-3 py-2 rounded-lg hover:bg-burnt/10 transition flex items-center gap-2 text-burnt font-semibold"
+                          data-testid="button-logout"
+                        >
+                          <LogOut className="w-4 h-4" />
+                          <span>Log Out</span>
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
             )}
           </div>
