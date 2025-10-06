@@ -3,7 +3,7 @@ import { useStore } from '../store';
 import { logEvent } from '../analytics';
 import rulesData from '../data/rules.json';
 import needsToProductsData from '../data/needsToProducts.json';
-import { Sparkles, ExternalLink, ShoppingBag, Star } from 'lucide-react';
+import { Sparkles, ExternalLink, ShoppingBag } from 'lucide-react';
 
 export default function Recommendations() {
   const { getActiveChild, getAnswers, activeChildId } = useStore();
@@ -130,19 +130,9 @@ export default function Recommendations() {
                     />
                   </div>
                   <div className="p-5">
-                    <h3 className="text-lg font-bold mb-2 line-clamp-2 min-h-[3.5rem]" data-testid={`text-product-title-${product.skuId}`}>
+                    <h3 className="text-lg font-bold mb-3 line-clamp-2 min-h-[3.5rem]" data-testid={`text-product-title-${product.skuId}`}>
                       {product.title}
                     </h3>
-                    
-                    <div className="flex items-center gap-1 mb-3">
-                      <Star className="w-4 h-4 fill-ochre text-ochre" />
-                      <span className="font-semibold text-sm" data-testid={`text-rating-${product.skuId}`}>
-                        {product.rating}
-                      </span>
-                      <span className="text-xs opacity-60" data-testid={`text-reviews-${product.skuId}`}>
-                        ({product.reviewCount})
-                      </span>
-                    </div>
 
                     <div className="flex flex-wrap gap-2 mb-3">
                       {product.domains.slice(0, 2).map((domain, idx) => (
@@ -159,12 +149,6 @@ export default function Recommendations() {
                     <p className="text-xs opacity-70 mb-4">
                       Ages {product.ageMin}-{product.ageMax}
                     </p>
-
-                    <div className="flex items-center justify-between gap-2 mb-3">
-                      <span className="text-2xl font-bold text-olive" data-testid={`text-price-${product.skuId}`}>
-                        {product.price}
-                      </span>
-                    </div>
 
                     <button
                       onClick={() => handleClick(product.skuId, product.url)}
