@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useLocation } from 'wouter';
 import { Package, Plus, Edit2, Trash2, X } from 'lucide-react';
 import { insertProductSchema, updateProductSchema, type Product, type InsertProduct } from '@shared/schema';
 import { Button } from '@/components/ui/button';
@@ -16,9 +17,33 @@ import { apiRequest, queryClient } from '@/lib/queryClient';
 import { Checkbox } from '@/components/ui/checkbox';
 
 export default function Admin() {
+  const [, setLocation] = useLocation();
   const { toast } = useToast();
+  const [authUser, setAuthUser] = useState<any>(null);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const res = await fetch("/api/auth/me", { credentials: "include" });
+        if (!res.ok) {
+          setLocation("/login");
+          return;
+        }
+        const data = await res.json();
+        if (data.user.role !== "admin") {
+          toast({ title: "Admin access required", variant: "destructive" });
+          setLocation("/");
+          return;
+        }
+        setAuthUser(data.user);
+      } catch {
+        setLocation("/login");
+      }
+    };
+    checkAuth();
+  }, []);
 
   const { data: products = [], isLoading } = useQuery<Product[]>({
     queryKey: ['/api/admin/products'],
@@ -243,6 +268,10 @@ export default function Admin() {
   const messFactors = ['minimal', 'moderate', 'messy'];
   const setupTimes = ['immediate', 'quick', 'moderate', 'extended'];
   const spaceOptions = ['small', 'medium', 'large', 'outdoor'];
+
+  if (!authUser) {
+    return <div className="min-h-screen bg-[#FFFEF5] flex items-center justify-center"><p>Loading...</p></div>;
+  }
 
   return (
     <div className="container mx-auto px-4 max-w-7xl py-8">
