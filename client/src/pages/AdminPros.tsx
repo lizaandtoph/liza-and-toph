@@ -45,6 +45,7 @@ export default function AdminPros() {
 
   const { data: professionals = [], isLoading } = useQuery<Professional[]>({
     queryKey: ['/api/admin/professionals'],
+    enabled: !!authUser,
   });
 
   const createProfessionalMutation = useMutation({

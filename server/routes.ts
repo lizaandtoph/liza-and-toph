@@ -99,7 +99,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Admin Product routes
-  app.get("/api/admin/products", async (req, res) => {
+  app.get("/api/admin/products", requireAuth, requireRole("admin"), async (req, res) => {
     try {
       const products = await storage.getAllProducts();
       res.json(products);
@@ -108,7 +108,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get("/api/admin/products/:id", async (req, res) => {
+  app.get("/api/admin/products/:id", requireAuth, requireRole("admin"), async (req, res) => {
     try {
       const { id } = req.params;
       const product = await storage.getProduct(id);
@@ -121,7 +121,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/admin/products", async (req, res) => {
+  app.post("/api/admin/products", requireAuth, requireRole("admin"), async (req, res) => {
     try {
       const validatedData = insertProductSchema.parse(req.body);
       const product = await storage.createProduct(validatedData);
@@ -134,7 +134,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.put("/api/admin/products/:id", async (req, res) => {
+  app.put("/api/admin/products/:id", requireAuth, requireRole("admin"), async (req, res) => {
     try {
       const { id } = req.params;
       const validatedData = updateProductSchema.parse(req.body);
@@ -151,7 +151,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.delete("/api/admin/products/:id", async (req, res) => {
+  app.delete("/api/admin/products/:id", requireAuth, requireRole("admin"), async (req, res) => {
     try {
       const { id } = req.params;
       const success = await storage.deleteProduct(id);
@@ -165,7 +165,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Admin Professional routes
-  app.get("/api/admin/professionals", async (req, res) => {
+  app.get("/api/admin/professionals", requireAuth, requireRole("admin"), async (req, res) => {
     try {
       const professionals = await storage.getAllProfessionals();
       res.json(professionals);
@@ -174,7 +174,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get("/api/admin/professionals/:id", async (req, res) => {
+  app.get("/api/admin/professionals/:id", requireAuth, requireRole("admin"), async (req, res) => {
     try {
       const { id } = req.params;
       const professional = await storage.getProfessional(id);
@@ -187,7 +187,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/admin/professionals", async (req, res) => {
+  app.post("/api/admin/professionals", requireAuth, requireRole("admin"), async (req, res) => {
     try {
       const validatedData = insertProfessionalSchema.parse(req.body);
       const professional = await storage.createProfessional(validatedData);
@@ -200,7 +200,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.put("/api/admin/professionals/:id", async (req, res) => {
+  app.put("/api/admin/professionals/:id", requireAuth, requireRole("admin"), async (req, res) => {
     try {
       const { id } = req.params;
       const validatedData = updateProfessionalSchema.parse(req.body);
@@ -217,7 +217,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.delete("/api/admin/professionals/:id", async (req, res) => {
+  app.delete("/api/admin/professionals/:id", requireAuth, requireRole("admin"), async (req, res) => {
     try {
       const { id } = req.params;
       const success = await storage.deleteProfessional(id);

@@ -47,6 +47,7 @@ export default function Admin() {
 
   const { data: products = [], isLoading } = useQuery<Product[]>({
     queryKey: ['/api/admin/products'],
+    enabled: !!authUser,
   });
 
   const createProductMutation = useMutation({
