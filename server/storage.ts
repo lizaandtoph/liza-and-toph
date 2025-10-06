@@ -9,6 +9,7 @@ export interface IStorage {
   getUserByUsername(username: string): Promise<User | undefined>;
   getUserByEmail(email: string): Promise<User | undefined>;
   createUser(user: RegisterUser): Promise<User>;
+  upsertUser(user: { id: string; email?: string | null; firstName?: string | null; lastName?: string | null; profileImageUrl?: string | null }): Promise<User>;
   getChildrenByUserId(userId: string): Promise<ChildProfile[]>;
   
   createChildProfile(profile: InsertChildProfile): Promise<ChildProfile>;
@@ -234,6 +235,25 @@ export class MemStorage implements IStorage {
       password: null,
     };
     this.users.set(id, user);
+    return user;
+  }
+
+  async upsertUser(userData: { id: string; email?: string | null; firstName?: string | null; lastName?: string | null; profileImageUrl?: string | null }): Promise<User> {
+    const existingUser = this.users.get(userData.id);
+    const now = new Date();
+    
+    const user: User = {
+      id: userData.id,
+      email: userData.email ?? existingUser?.email ?? null,
+      firstName: userData.firstName ?? existingUser?.firstName ?? null,
+      lastName: userData.lastName ?? existingUser?.lastName ?? null,
+      profileImageUrl: userData.profileImageUrl ?? existingUser?.profileImageUrl ?? null,
+      role: existingUser?.role ?? "parent",
+      proId: existingUser?.proId ?? null,
+      createdAt: existingUser?.createdAt ?? now,
+      updatedAt: now,
+    };
+    this.users.set(userData.id, user);
     return user;
   }
 
@@ -693,6 +713,22 @@ export class DbStorage implements IStorage {
       proId: userData.proId || null,
     }).returning();
     return result[0];
+  }
+
+  async upsertUser(userData: { id: string; email?: string | null; firstName?: string | null; lastName?: string | null; profileImageUrl?: string | null }): Promise<User> {
+    await this.ensureInitialized();
+    const [user] = await this.db
+      .insert(users)
+      .values(userData)
+      .onConflictDoUpdate({
+        target: users.id,
+        set: {
+          ...userData,
+          updatedAt: new Date(),
+        },
+      })
+      .returning();
+    return user;
   }
 
   async getChildrenByUserId(userId: string): Promise<ChildProfile[]> {

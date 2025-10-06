@@ -1,18 +1,30 @@
 import { sql } from "drizzle-orm";
-import { pgTable, text, varchar, integer, jsonb, timestamp, boolean, doublePrecision } from "drizzle-orm/pg-core";
+import { pgTable, text, varchar, integer, jsonb, timestamp, boolean, doublePrecision, index } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
+// Session storage table for Replit Auth
+export const sessions = pgTable(
+  "sessions",
+  {
+    sid: varchar("sid").primaryKey(),
+    sess: jsonb("sess").notNull(),
+    expire: timestamp("expire").notNull(),
+  },
+  (table) => [index("IDX_session_expire").on(table.expire)],
+);
+
+// User storage table for Replit Auth
 export const users = pgTable("users", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  email: text("email").notNull().unique(),
-  passwordHash: text("password_hash").notNull(),
-  firstName: text("first_name"),
-  lastName: text("last_name"),
+  email: varchar("email").unique(),
+  firstName: varchar("first_name"),
+  lastName: varchar("last_name"),
+  profileImageUrl: varchar("profile_image_url"),
   role: text("role").notNull().default("parent"), // parent, pro, admin
   proId: varchar("pro_id"),
-  username: text("username"),
-  password: text("password"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
 });
 
 export const childProfiles = pgTable("child_profiles", {
@@ -469,6 +481,7 @@ export const insertPasswordResetTokenSchema = createInsertSchema(passwordResetTo
 
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
+export type UpsertUser = typeof users.$inferInsert;
 export type RegisterUser = z.infer<typeof registerUserSchema>;
 export type LoginUser = z.infer<typeof loginUserSchema>;
 export type UpdateUserAccount = z.infer<typeof updateUserAccountSchema>;
