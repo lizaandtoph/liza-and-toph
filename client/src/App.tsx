@@ -16,6 +16,8 @@ import ProEdit from './pages/ProEdit';
 import AdminProsManagement from './pages/AdminProsManagement';
 import FullQuestionnaire from './pages/FullQuestionnaire';
 import QuestionnaireResults from './pages/QuestionnaireResults';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
 
 function App() {
   return (
@@ -23,6 +25,8 @@ function App() {
       <Switch>
         <Route path="/" component={Home} />
         <Route path="/login" component={Login} />
+        <Route path="/forgot-password" component={ForgotPassword} />
+        <Route path="/reset-password/:token" component={ResetPassword} />
         <Route path="/onboarding" component={Onboarding} />
         <Route path="/your-child" component={YourChild} />
         <Route path="/playboard/:childId" component={PlayBoard} />
