@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useLocation } from 'wouter';
 import { Users, Plus, Edit2, Trash2, MapPin, Star } from 'lucide-react';
 import { insertProfessionalSchema, updateProfessionalSchema, type Professional, type InsertProfessional } from '@shared/schema';
 import { Button } from '@/components/ui/button';
@@ -14,9 +15,33 @@ import { useToast } from '@/hooks/use-toast';
 import { apiRequest, queryClient } from '@/lib/queryClient';
 
 export default function AdminPros() {
+  const [, setLocation] = useLocation();
   const { toast } = useToast();
+  const [authUser, setAuthUser] = useState<any>(null);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [editingProfessional, setEditingProfessional] = useState<Professional | null>(null);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const res = await fetch("/api/auth/me", { credentials: "include" });
+        if (!res.ok) {
+          setLocation("/login");
+          return;
+        }
+        const data = await res.json();
+        if (data.user.role !== "admin") {
+          toast({ title: "Admin access required", variant: "destructive" });
+          setLocation("/");
+          return;
+        }
+        setAuthUser(data.user);
+      } catch {
+        setLocation("/login");
+      }
+    };
+    checkAuth();
+  }, []);
 
   const { data: professionals = [], isLoading } = useQuery<Professional[]>({
     queryKey: ['/api/admin/professionals'],
@@ -102,6 +127,10 @@ export default function AdminPros() {
       description: professional.description,
     });
   };
+
+  if (!authUser) {
+    return <div className="min-h-screen bg-[#FFFEF5] flex items-center justify-center"><p>Loading...</p></div>;
+  }
 
   return (
     <div className="container mx-auto px-4 max-w-7xl py-8">
