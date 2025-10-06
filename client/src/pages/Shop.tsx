@@ -153,8 +153,11 @@ export default function Shop() {
     <div className="container mx-auto px-4 max-w-7xl py-8">
       <div className="mb-8">
         <h1 className="text-4xl font-bold mb-4" data-testid="text-shop-title">Shop Curated Products</h1>
-        <p className="text-lg opacity-80">
-          Discover toys, books, and materials carefully selected for developmental play
+        <p className="text-lg opacity-80 mb-2">
+          Discover toys, books, and materials carefully selected for developmental play.
+        </p>
+        <p className="text-sm opacity-60">
+          As we develop the market place, product links below may be affiliate links from platforms such as Amazon. As affiliates, we earn from qualifying purchases.
         </p>
       </div>
 

@@ -626,8 +626,11 @@ export default function PlayBoard() {
           <div className="mt-12" data-testid="section-recommended-products">
             <div className="text-center mb-8">
               <h2 className="text-3xl font-bold mb-3">Ready to bring these ideas to life?</h2>
-              <p className="text-lg opacity-80 mb-6">
+              <p className="text-lg opacity-80 mb-2">
                 Explore curated toys and products perfectly matched to {child.name}'s development
+              </p>
+              <p className="text-sm opacity-60">
+                As we develop the market place, product links below may be affiliate links from platforms such as Amazon. As affiliates, we earn from qualifying purchases.
               </p>
             </div>
 
