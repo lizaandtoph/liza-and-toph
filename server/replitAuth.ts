@@ -58,13 +58,16 @@ function updateUserSession(
 async function upsertUser(
   claims: any,
 ) {
-  await storage.upsertUser({
+  const userData = {
     id: claims["sub"],
     email: claims["email"],
     firstName: claims["first_name"],
     lastName: claims["last_name"],
     profileImageUrl: claims["profile_image_url"],
-  });
+  };
+  console.log('[Replit Auth] Upserting user:', userData);
+  const result = await storage.upsertUser(userData);
+  console.log('[Replit Auth] User after upsert - role:', result.role, 'proId:', result.proId);
 }
 
 export async function setupAuth(app: Express) {
