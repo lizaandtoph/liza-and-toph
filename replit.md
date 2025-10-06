@@ -24,12 +24,15 @@ Preferred communication style: Simple, everyday language.
 
 **State Management & Data Fetching**
 - Zustand with localStorage persistence for global state (multi-child support, active child selection, per-child questionnaire answers, parent account, saved items)
-- Parent authentication: firstName, lastName, email, password stored in zustand (localStorage-based MVP, not backend)
+- **Authentication**: Replit Auth (OAuth/OpenID Connect) with session-based authentication stored in PostgreSQL
+  - `useAuth` hook provides user data (firstName, lastName, email) from authenticated session
+  - Parent info pre-filled in onboarding from Replit Auth data (fields disabled to prevent editing)
+  - No password management in app - handled by Replit Auth
 - Multi-child architecture: parents can add and manage multiple children, each with unique ID (nanoid), profile, and answers
 - Saved items: brands, professionals, and products favorited by parents (persisted in localStorage)
 - TanStack Query (React Query) for server state management, caching, and data synchronization
 - React Hook Form with Zod for form validation and type-safe form handling
-- Custom hooks for UI concerns (mobile detection, toast notifications)
+- Custom hooks for UI concerns (mobile detection, toast notifications, authentication)
 
 **Component Structure**
 - Reusable UI components in `client/src/components/ui/` following shadcn conventions
@@ -92,11 +95,12 @@ Preferred communication style: Simple, everyday language.
 - Schema-first approach with shared type definitions
 
 **Data Models**
-- **Parent Accounts**: Stored in localStorage via zustand persist with firstName, lastName, email, password (plaintext MVP limitation)
-  - Onboarding Step 1 collects parent account info and first child info together
-  - Login page validates credentials against stored parentAccount
-  - Settings page allows editing name, email, and password
+- **Parent Accounts**: Authenticated via Replit Auth (OAuth), user data stored in PostgreSQL users table
+  - Onboarding Step 1 pre-fills parent info (firstName, lastName, email) from authenticated Replit Auth user
+  - Parent info fields disabled during onboarding to prevent editing auth-provided data
+  - Settings page displays user info from Replit Auth (name and email) - password managed by Replit
   - Special access: firstName "Topher" OR email "cpm@mcginnisenterprise.com" grants full access without subscription
+  - Child's first name (not full name) collected in onboarding
 - **Child Profiles**: Stores child information with unique ID (nanoid), name, birthday, calculated age, age band, and developmental preferences
   - Multiple children per parent account supported
   - Each child has separate questionnaire answers (schemas, barriers, interests)
@@ -119,11 +123,13 @@ Preferred communication style: Simple, everyday language.
 - **Play Boards**: Aggregated personalized boards combining profiles, milestones, and products
 
 **Current Implementation**
-- Development uses in-memory storage with seed data
-- Production-ready schema exists for PostgreSQL migration
+- Development uses in-memory storage with seed data for products and professionals
+- PostgreSQL database for users, sessions, and child profiles
 - Storage interface allows seamless transition from mock to real database
-- Parent authentication stored in localStorage (MVP only, not backend-persisted)
-- Known MVP limitations: passwords stored plaintext, no multi-device sync, no password reset
+- **Authentication**: Replit Auth (OAuth) with PostgreSQL session store (connect-pg-simple)
+  - Session cookies configured with `sameSite: 'lax'` and conditional `secure` flag for production
+  - Passport.js for OAuth strategy and session serialization
+  - Localhost/127.0.0.1 strategy support for local development
 
 ## External Dependencies
 
