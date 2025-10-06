@@ -221,8 +221,11 @@ export default function Home() {
       <section className="py-20">
         <div className="container mx-auto px-4 max-w-7xl">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-16">
-            What kind of play are you looking for?
+            Your playroom is full of toys. So why are they bored?
           </h2>
+          <p>Parents spend billions on toys each year, yet most of them end up in the bottom of a bin, untouched. The problem isn't the toys—it's the mismatch. A toy that doesn't align with a child's specific developmental needs, interests, or temperament is just beautiful clutter.
+         <br>
+          Even more importantly, 1 in 6 children has a developmental delay that often goes unnoticed until school. These are critical years where the right support could make all the difference.</p>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 max-w-6xl mx-auto">
             <Link
               to="/shop"
