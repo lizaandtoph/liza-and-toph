@@ -265,7 +265,7 @@ export default function Layout({ children: pageContent }: { children: React.Reac
               <ul className="space-y-2 text-sm">
                 <li><Link to="/shop" className="hover:text-olive transition">Shop</Link></li>
                 <li><Link to="/find-pros" className="hover:text-olive transition">Find Professionals</Link></li>
-                <li><Link to="/admin" className="hover:text-olive transition opacity-50">Admin</Link></li>
+                <li><Link to="/settings" className="hover:text-olive transition">My Account</Link></li>
               </ul>
             </div>
             <div>
