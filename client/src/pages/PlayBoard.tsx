@@ -25,10 +25,21 @@ export default function PlayBoard() {
   const child = getActiveChild();
   const answers = child ? getAnswers(child.id) : { schemas: [], barriers: [], interests: [] };
   
+  // Debug logging
+  console.log('=== PlayBoard Access Check ===');
+  console.log('parentAccount:', JSON.stringify(parentAccount, null, 2));
+  console.log('subscribed:', subscribed);
+  console.log('role check:', parentAccount?.role === 'admin');
+  console.log('firstName check:', parentAccount?.firstName?.toLowerCase() === 'topher');
+  console.log('email check:', parentAccount?.email?.toLowerCase() === 'cpm@mcginnisenterprise.com');
+  
   const hasFullAccess = subscribed || 
     (parentAccount?.role === 'admin') ||
     (parentAccount?.firstName?.toLowerCase() === 'topher') ||
     (parentAccount?.email?.toLowerCase() === 'cpm@mcginnisenterprise.com');
+  
+  console.log('hasFullAccess:', hasFullAccess);
+  console.log('============================');
 
   const { data: products = [] } = useQuery<Product[]>({
     queryKey: ['/api/products'],

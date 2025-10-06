@@ -9,7 +9,7 @@ const CURRENT_QUESTIONNAIRE_VERSION = 2;
 
 export default function Layout({ children: pageContent }: { children: React.ReactNode }) {
   const [location, setLocation] = useLocation();
-  const { children, getActiveChild, setActiveChild, getAnswers, dismissedQuestionnaireUpdates, dismissQuestionnaireUpdate, reset, parentAccount, updateParentAccount, loadChildren } = useStore();
+  const { children, getActiveChild, setActiveChild, getAnswers, dismissedQuestionnaireUpdates, dismissQuestionnaireUpdate, reset, parentAccount, updateParentAccount, setParentAccount, loadChildren } = useStore();
   const { user, isAuthenticated } = useAuth();
   const [showChildDropdown, setShowChildDropdown] = useState(false);
   const activeChild = getActiveChild();
@@ -78,7 +78,7 @@ export default function Layout({ children: pageContent }: { children: React.Reac
     if (isAuthenticated && user) {
       if (!parentAccount) {
         // If no parent account exists, create one from auth user data
-        updateParentAccount({
+        setParentAccount({
           firstName: user.firstName || '',
           lastName: user.lastName || '',
           email: user.email || '',
@@ -100,7 +100,7 @@ export default function Layout({ children: pageContent }: { children: React.Reac
         }
       }
     }
-  }, [isAuthenticated, user, parentAccount, updateParentAccount]);
+  }, [isAuthenticated, user, parentAccount, setParentAccount, updateParentAccount]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
