@@ -9,8 +9,8 @@ const CURRENT_QUESTIONNAIRE_VERSION = 2;
 
 export default function Layout({ children: pageContent }: { children: React.ReactNode }) {
   const [location, setLocation] = useLocation();
-  const { children, getActiveChild, setActiveChild, getAnswers, dismissedQuestionnaireUpdates, dismissQuestionnaireUpdate, reset } = useStore();
-  const { isAuthenticated } = useAuth();
+  const { children, getActiveChild, setActiveChild, getAnswers, dismissedQuestionnaireUpdates, dismissQuestionnaireUpdate, reset, parentAccount, updateParentAccount, loadChildren } = useStore();
+  const { user, isAuthenticated } = useAuth();
   const [showChildDropdown, setShowChildDropdown] = useState(false);
   const activeChild = getActiveChild();
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -30,6 +30,66 @@ export default function Layout({ children: pageContent }: { children: React.Reac
       setLocation('/login');
     }
   };
+
+  // Load children from database when authenticated
+  useEffect(() => {
+    const loadChildrenFromDb = async () => {
+      if (isAuthenticated && user && children.length === 0) {
+        try {
+          const response = await fetch('/api/auth/me');
+          if (response.ok) {
+            const data = await response.json();
+            if (data.children && data.children.length > 0) {
+              const childrenData = data.children.map((c: any) => ({
+                id: c.id,
+                name: c.name,
+                birthday: c.birthday || '',
+                ageYears: c.ageYears || 0,
+                ageMonths: c.ageMonths || 0,
+                ageBand: c.ageBand || '',
+              }));
+
+              const answersMap: Record<string, any> = {};
+              data.children.forEach((child: any) => {
+                answersMap[child.id] = {
+                  schemas: child.schemas || [],
+                  barriers: child.barriers || [],
+                  interests: child.interests || [],
+                  milestones: child.milestones || {},
+                  fullQuestionnaire: child.fullQuestionnaire || {},
+                  questionnaire_version: child.questionnaireVersion || 1,
+                };
+              });
+
+              loadChildren(childrenData, answersMap);
+            }
+          }
+        } catch (error) {
+          console.error('Failed to load children:', error);
+        }
+      }
+    };
+
+    loadChildrenFromDb();
+  }, [isAuthenticated, user, children.length, loadChildren]);
+
+  // Sync parent account data from auth user
+  useEffect(() => {
+    if (isAuthenticated && user && parentAccount) {
+      // Update parent account with auth user data, especially the role
+      if (user.firstName !== parentAccount.firstName || 
+          user.lastName !== parentAccount.lastName || 
+          user.email !== parentAccount.email ||
+          user.role !== parentAccount.role) {
+        updateParentAccount({
+          firstName: user.firstName || parentAccount.firstName,
+          lastName: user.lastName || parentAccount.lastName,
+          email: user.email || parentAccount.email,
+          role: user.role || parentAccount.role
+        });
+      }
+    }
+  }, [isAuthenticated, user, parentAccount, updateParentAccount]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {

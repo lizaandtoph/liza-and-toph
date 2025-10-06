@@ -166,7 +166,8 @@ export default function Onboarding() {
           firstName: (isAuthenticated && user?.firstName) || childData.firstName,
           lastName: (isAuthenticated && user?.lastName) || childData.lastName,
           email: (isAuthenticated && user?.email) || childData.email,
-          password: '' // Not needed with Replit Auth
+          password: '', // Not needed with Replit Auth
+          role: (isAuthenticated && user?.role) || 'parent'
         };
         setParentAccount(parentData);
       }
