@@ -220,12 +220,25 @@ export default function Home() {
       {/* Category Selection Section */}
       <section className="py-20">
         <div className="container mx-auto px-4 max-w-7xl">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-16">
-            Your playroom is full of toys. So why are they bored?
-          </h2>
-          <p>Parents spend billions on toys each year, yet most of them end up in the bottom of a bin, untouched. The problem isn't the toys—it's the mismatch. A toy that doesn't align with a child's specific developmental needs, interests, or temperament is just beautiful clutter.
-         <br>
-          Even more importantly, 1 in 6 children has a developmental delay that often goes unnoticed until school. These are critical years where the right support could make all the difference.</p>
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold mb-8">
+              Your playroom is full of toys. So why are they bored?
+            </h2>
+            <div className="max-w-3xl mx-auto mb-12">
+              <p className="text-lg opacity-90 mb-8">
+                Parents spend billions on toys each year, yet most of them end up in
+                the bottom of a bin, untouched. The problem isn't the toys—it's the
+                mismatch. A toy that doesn't align with a child's specific
+                developmental needs, interests, or temperament is just beautiful
+                clutter. Even more importantly, 1 in 6 children has a developmental
+                delay that often goes unnoticed until school. These are critical
+                years where the right support could make all the difference.
+              </p>
+            </div>
+            <h3 className="text-2xl md:text-3xl font-semibold text-olive mb-8">
+              Discover Toys by Category.
+            </h3>
+          </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 max-w-6xl mx-auto">
             <Link
               to="/shop"
@@ -332,7 +345,10 @@ export default function Home() {
 
           <div className="max-w-3xl mx-auto space-y-6 text-lg opacity-90">
             <p>
-              At the heart of Liza & Toph is a powerful, proprietary engine designed to think like a developmental psychologist. We use a sophisticated, data-driven approach to translate your unique observations into a clear and actionable play plan.
+              At the heart of Liza & Toph is a powerful, proprietary engine
+              designed to think like a developmental psychologist. We use a
+              sophisticated, data-driven approach to translate your unique
+              observations into a clear and actionable play plan.
             </p>
 
             <h3 className="text-xl font-bold mt-8 mb-4">
@@ -340,15 +356,23 @@ export default function Home() {
             </h3>
 
             <p>
-              When you complete your child's profile, our system doesn't just look for keywords. It analyzes 93 distinct data points across five critical developmental domains, from fine motor skills to social-emotional growth.
+              When you complete your child's profile, our system doesn't just
+              look for keywords. It analyzes 93 distinct data points across five
+              critical developmental domains, from fine motor skills to
+              social-emotional growth.
             </p>
 
             <p>
-              Our AI then cross-references this unique developmental snapshot against our extensive product database, which is cataloged with over 105 developmental filters and 210 product attributes. This allows us to go beyond simple age recommendations to find the toy that matches your child's specific needs and passions.
+              Our AI then cross-references this unique developmental snapshot
+              against our extensive product database, which is cataloged with
+              over 105 developmental filters and 210 product attributes. This
+              allows us to go beyond simple age recommendations to find the toy
+              that matches your child's specific needs and passions.
             </p>
 
             <p className="font-semibold">
-              The result is a level of personalization that is simply unmatched—a set of recommendations as unique as your child.
+              The result is a level of personalization that is simply
+              unmatched—a set of recommendations as unique as your child.
             </p>
           </div>
         </div>
