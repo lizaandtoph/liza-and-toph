@@ -80,13 +80,10 @@ export default function Settings() {
 
     try {
       const { apiRequest } = await import('@/lib/queryClient');
-      const response = await apiRequest('/api/auth/account', {
-        method: 'PATCH',
-        body: JSON.stringify({
-          firstName: accountForm.firstName,
-          lastName: accountForm.lastName,
-          email: accountForm.email
-        })
+      const response = await apiRequest('PATCH', '/api/auth/account', {
+        firstName: accountForm.firstName,
+        lastName: accountForm.lastName,
+        email: accountForm.email
       });
 
       updateParentAccount({
