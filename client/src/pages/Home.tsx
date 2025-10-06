@@ -1,54 +1,58 @@
-import { useState, useCallback, useEffect } from 'react';
-import { Link } from 'wouter';
-import { useStore } from '../store';
-import { Sparkles, Heart, TrendingUp, ShoppingBag } from 'lucide-react';
-import useEmblaCarousel from 'embla-carousel-react';
+import { useState, useCallback, useEffect } from "react";
+import { Link } from "wouter";
+import { useStore } from "../store";
+import { Sparkles, Heart, TrendingUp, ShoppingBag } from "lucide-react";
+import useEmblaCarousel from "embla-carousel-react";
 
 function PlatformCarousel() {
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [emblaRef, emblaApi] = useEmblaCarousel({ 
+  const [emblaRef, emblaApi] = useEmblaCarousel({
     loop: false,
-    align: 'center',
-    skipSnaps: false
+    align: "center",
+    skipSnaps: false,
   });
 
   const carouselSlides = [
     {
-      id: 'shop',
-      tabLabel: 'Online shop',
-      buttonText: 'Shop Now',
-      heading: 'Taking the guess work out of the toy aisle',
-      description: 'In pellentesque leo at nulla laoreet, vel auctor augue porttitor. Nulla ac massa nunc. Nulla scelerisque mattis lorem, sit amet tempus tellus euismod nec. Vivamus.',
-      link: '/shop',
-      testId: 'tab-online-shop'
+      id: "shop",
+      tabLabel: "Curated for Development",
+      buttonText: "Shop Now",
+      heading: "Taking the Guesswork Out of the Toy Aisle",
+      description:
+        "Our expert-curated online shop, featuring developmentally-rich toys and activities personalized for your child's unique journey.",
+      link: "/shop",
+      testId: "tab-online-shop",
     },
     {
-      id: 'ai',
-      tabLabel: 'Personalized for Your Child',
-      buttonText: 'Get Started',
-      heading: "Explore your child's Playboard",
-      description: 'Integer vulputate sem nisl, at efficitur mi vehicula eget. Fusce porttitor mauris vitae libero feugiat, ac blandit turpis suscipit. Suspendisse vitae auctor ipsum, at volutpat.',
-      link: '/onboarding',
-      testId: 'tab-ai-guidance'
+      id: "ai",
+      tabLabel: "Personalized for Your Child",
+      buttonText: "Create Your Free Profile",
+      heading: "Discover Your Child's Personal Play Board",
+      description:
+        "Our AI analyzes 93 data points across 5 developmental domains to generate a curated list of toys and activities perfectly matched to your child's current needs and emerging skills.",
+      link: "/onboarding",
+      testId: "tab-ai-guidance",
     },
     {
-      id: 'resources',
-      tabLabel: 'Play resources',
-      buttonText: 'Get Started',
-      heading: 'Playtime essentials',
-      description: 'Integer vulputate sem nisl, at efficitur mi vehicula eget. Fusce porttitor mauris vitae libero feugiat, ac blandit turpis suscipit. Suspendisse vitae auctor ipsum, at volutpat.',
-      link: '/playboard',
-      testId: 'tab-play-resources'
+      id: "resources",
+      tabLabel: "More Than Just Toys",
+      buttonText: "Empower Your Parenting",
+      heading: "Track Milestones, Get Insights",
+      description:
+        "Our platform helps you track your child’s progress over time. We celebrate their victories and provide gentle alerts if we notice an area where extra professional support might be beneficial, helping you support them when it matters most.",
+      link: "/playboard",
+      testId: "tab-play-resources",
     },
     {
-      id: 'expert',
-      tabLabel: 'Expert-led guidance',
-      buttonText: 'Get Started',
-      heading: "Support your child's development anywhere",
-      description: 'Integer vulputate sem nisl, at efficitur mi vehicula eget. Fusce porttitor mauris vitae libero feugiat, ac blandit turpis suscipit. Suspendisse vitae auctor ipsum, at volutpat.',
-      link: '/find-pros',
-      testId: 'tab-expert-guidance'
-    }
+      id: "expert",
+      tabLabel: "Expert-led Guidance",
+      buttonText: "Work With Professionals",
+      heading: "Guidance You Can Trust",
+      description:
+        "Our platform is built by a developmental psychologist using validated assessment frameworks, not marketing trends. Every recommendation is grounded in the science of how children learn and grow.",
+      link: "/find-pros",
+      testId: "tab-expert-guidance",
+    },
   ];
 
   const onSelect = useCallback(() => {
@@ -59,32 +63,35 @@ function PlatformCarousel() {
   useEffect(() => {
     if (!emblaApi) return;
     onSelect();
-    emblaApi.on('select', onSelect);
-    emblaApi.on('reInit', onSelect);
+    emblaApi.on("select", onSelect);
+    emblaApi.on("reInit", onSelect);
   }, [emblaApi, onSelect]);
 
-  const scrollTo = useCallback((index: number) => {
-    if (!emblaApi) return;
-    emblaApi.scrollTo(index);
-  }, [emblaApi]);
+  const scrollTo = useCallback(
+    (index: number) => {
+      if (!emblaApi) return;
+      emblaApi.scrollTo(index);
+    },
+    [emblaApi],
+  );
 
   return (
     <section className="bg-sand/30 py-20">
       <div className="container mx-auto px-4 max-w-7xl">
         <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-          The ultimate play platform for every stage
+          The Right Toys, for Right Now.
         </h2>
-        
+
         {/* Tab Buttons */}
         <div className="flex flex-wrap justify-center gap-4 mb-12">
           {carouselSlides.map((slide, index) => (
             <button
               key={slide.id}
               onClick={() => scrollTo(index)}
-              className={`px-6 py-3 rounded-xl font-semibold transition ${
+              className={`px-4 py-2 rounded-xl text-sm font-medium transition ${
                 selectedIndex === index
-                  ? 'bg-olive text-ivory'
-                  : 'bg-white text-espresso hover:bg-olive/10'
+                  ? "bg-olive text-ivory"
+                  : "bg-white text-espresso hover:bg-olive/10"
               }`}
               data-testid={slide.testId}
             >
@@ -97,10 +104,7 @@ function PlatformCarousel() {
         <div className="overflow-hidden" ref={emblaRef}>
           <div className="flex">
             {carouselSlides.map((slide) => (
-              <div 
-                key={slide.id} 
-                className="flex-[0_0_100%] min-w-0"
-              >
+              <div key={slide.id} className="flex-[0_0_100%] min-w-0">
                 <div className="bg-white rounded-2xl shadow-lg p-8 md:p-12 max-w-4xl mx-auto text-center">
                   <h3 className="text-2xl md:text-3xl font-bold mb-6">
                     {slide.heading}
@@ -128,9 +132,9 @@ function PlatformCarousel() {
               key={index}
               onClick={() => scrollTo(index)}
               className={`w-2.5 h-2.5 rounded-full transition-all ${
-                selectedIndex === index 
-                  ? 'bg-olive w-8' 
-                  : 'bg-olive/30 hover:bg-olive/50'
+                selectedIndex === index
+                  ? "bg-olive w-8"
+                  : "bg-olive/30 hover:bg-olive/50"
               }`}
               aria-label={`Go to slide ${index + 1}`}
               data-testid={`dot-indicator-${index}`}
@@ -187,7 +191,8 @@ export default function Home() {
               The new way to design your child's play
             </h1>
             <p className="text-xl md:text-2xl mb-8 opacity-80">
-              The first evidence-based platform that matches the perfect toys to your child's unique stage of development.
+              The first evidence-based platform that matches the perfect toys to
+              your child's unique stage of development.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Link
@@ -205,7 +210,9 @@ export default function Home() {
                 Sign In
               </Link>
             </div>
-            <p className="text-sm mt-4 opacity-70">Start for free. No credit card required.</p>
+            <p className="text-sm mt-4 opacity-70">
+              Start for free. No credit card required.
+            </p>
           </div>
         </div>
       </section>
@@ -315,7 +322,8 @@ export default function Home() {
             Stay in the loop
           </h2>
           <p className="text-lg mb-8 opacity-80 max-w-2xl mx-auto">
-            Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci.
+            Neque porro quisquam est qui dolorem ipsum quia dolor sit amet,
+            consectetur, adipisci.
           </p>
           <form className="flex flex-col sm:flex-row gap-4 max-w-xl mx-auto">
             <input
