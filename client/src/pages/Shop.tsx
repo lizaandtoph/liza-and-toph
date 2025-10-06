@@ -83,14 +83,18 @@ export default function Shop() {
   };
 
   const filteredProducts = products.filter((product) => {
-    // Search and category
+    // Search and category (always applied)
     const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = selectedCategory === 'all' || 
       (product.categories?.some(d => d.toLowerCase().includes(selectedCategory)) ?? false);
     
-    // Age range filter (check for overlap)
-    const matchesAge = (product.maxAgeMonths == null || product.maxAgeMonths >= ageRange[0]) &&
-                       (product.minAgeMonths == null || product.minAgeMonths <= ageRange[1]);
+    // Advanced filters (only applied when explicitly set)
+    // Age range filter - only apply if user has changed from default [0, 60]
+    const hasAgeFilter = ageRange[0] !== 0 || ageRange[1] !== 60;
+    const matchesAge = !hasAgeFilter || (
+      (product.maxAgeMonths == null || product.maxAgeMonths >= ageRange[0]) &&
+      (product.minAgeMonths == null || product.minAgeMonths <= ageRange[1])
+    );
     
     // Play types filter
     const matchesPlayType = selectedPlayTypes.length === 0 || 
