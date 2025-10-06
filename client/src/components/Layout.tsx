@@ -75,18 +75,29 @@ export default function Layout({ children: pageContent }: { children: React.Reac
 
   // Sync parent account data from auth user
   useEffect(() => {
-    if (isAuthenticated && user && parentAccount) {
-      // Update parent account with auth user data, especially the role
-      if (user.firstName !== parentAccount.firstName || 
-          user.lastName !== parentAccount.lastName || 
-          user.email !== parentAccount.email ||
-          user.role !== parentAccount.role) {
+    if (isAuthenticated && user) {
+      if (!parentAccount) {
+        // If no parent account exists, create one from auth user data
         updateParentAccount({
-          firstName: user.firstName || parentAccount.firstName,
-          lastName: user.lastName || parentAccount.lastName,
-          email: user.email || parentAccount.email,
-          role: user.role || parentAccount.role
+          firstName: user.firstName || '',
+          lastName: user.lastName || '',
+          email: user.email || '',
+          role: user.role || 'parent',
+          password: ''
         });
+      } else {
+        // Update parent account with auth user data, especially the role
+        if (user.firstName !== parentAccount.firstName || 
+            user.lastName !== parentAccount.lastName || 
+            user.email !== parentAccount.email ||
+            user.role !== parentAccount.role) {
+          updateParentAccount({
+            firstName: user.firstName || parentAccount.firstName,
+            lastName: user.lastName || parentAccount.lastName,
+            email: user.email || parentAccount.email,
+            role: user.role || parentAccount.role
+          });
+        }
       }
     }
   }, [isAuthenticated, user, parentAccount, updateParentAccount]);
