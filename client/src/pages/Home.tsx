@@ -221,9 +221,9 @@ export default function Home() {
       <section className="py-20">
         <div className="container mx-auto px-4 max-w-7xl">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-8">
+            <h1 className="text-4xl md:text-5xl font-bold mb-8">
               Your playroom is full of toys. So why are they bored?
-            </h2>
+            </h1>
             <div className="max-w-3xl mx-auto mb-12">
               <p className="text-lg opacity-90 mb-8">
                 Parents spend billions on toys each year, yet most of them end up in
