@@ -58,9 +58,6 @@ export default function Shop() {
       ageMin,
       ageMax,
       domains: p.categories || [],
-      price: p.price,
-      rating: parseFloat(p.rating) || 5.0,
-      reviewCount: p.reviewCount,
       imageUrl: p.imageUrl,
     };
   });
