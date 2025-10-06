@@ -1,6 +1,7 @@
 import { Link, useLocation } from 'wouter';
 import { Baby, Heart, ShoppingCart, HardHat, Settings as SettingsIcon, User, ChevronDown, Plus, AlertCircle, X, LogOut } from 'lucide-react';
 import { useStore } from '../store';
+import { useAuth } from '../hooks/useAuth';
 import logoImage from '@assets/symbol_orange_mono_1759602921856.png';
 import { useState, useEffect, useRef } from 'react';
 
@@ -8,7 +9,8 @@ const CURRENT_QUESTIONNAIRE_VERSION = 2;
 
 export default function Layout({ children: pageContent }: { children: React.ReactNode }) {
   const [location, setLocation] = useLocation();
-  const { isLoggedIn, children, getActiveChild, setActiveChild, getAnswers, dismissedQuestionnaireUpdates, dismissQuestionnaireUpdate, reset } = useStore();
+  const { children, getActiveChild, setActiveChild, getAnswers, dismissedQuestionnaireUpdates, dismissQuestionnaireUpdate, reset } = useStore();
+  const { isAuthenticated } = useAuth();
   const [showChildDropdown, setShowChildDropdown] = useState(false);
   const activeChild = getActiveChild();
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -20,7 +22,7 @@ export default function Layout({ children: pageContent }: { children: React.Reac
 
   const handleLogout = async () => {
     try {
-      await fetch('/api/auth/logout', { method: 'POST' });
+      await fetch('/api/logout', { method: 'GET' });
     } catch (error) {
       console.error('Logout error:', error);
     } finally {
@@ -70,7 +72,7 @@ export default function Layout({ children: pageContent }: { children: React.Reac
           </Link>
 
           <div className="flex items-center gap-4">
-            {!isLoggedIn ? (
+            {!isAuthenticated ? (
               <Link
                 to="/login"
                 className="w-10 h-10 bg-ochre rounded-full flex items-center justify-center hover:bg-burnt transition"
@@ -192,7 +194,7 @@ export default function Layout({ children: pageContent }: { children: React.Reac
       </nav>
       
       {/* Questionnaire Update Banner */}
-      {isLoggedIn && showUpdateBanner && (
+      {isAuthenticated && showUpdateBanner && (
         <div className="fixed top-[60px] md:top-[108px] left-0 right-0 bg-ochre text-ivory py-3 px-4 shadow-md z-30">
           <div className="container mx-auto max-w-7xl flex items-center justify-between gap-4">
             <div className="flex items-center gap-3">
@@ -223,7 +225,7 @@ export default function Layout({ children: pageContent }: { children: React.Reac
       )}
 
       {/* Main Content */}
-      <main className={`flex-1 pt-[60px] md:pt-[108px] ${isLoggedIn && showUpdateBanner ? 'mt-[52px]' : ''}`}>
+      <main className={`flex-1 pt-[60px] md:pt-[108px] ${isAuthenticated && showUpdateBanner ? 'mt-[52px]' : ''}`}>
         {pageContent}
       </main>
 
