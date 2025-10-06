@@ -59,7 +59,7 @@ export default function Settings() {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [childToDelete, setChildToDelete] = useState<string | null>(null);
 
-  const handleAccountUpdate = () => {
+  const handleAccountUpdate = async () => {
     if (!accountForm.firstName || !accountForm.lastName || !accountForm.email) {
       toast({
         title: 'Error',
@@ -78,17 +78,35 @@ export default function Settings() {
       return;
     }
 
-    updateParentAccount({
-      firstName: accountForm.firstName,
-      lastName: accountForm.lastName,
-      email: accountForm.email
-    });
+    try {
+      const { apiRequest } = await import('@/lib/queryClient');
+      const response = await apiRequest('/api/auth/account', {
+        method: 'PATCH',
+        body: JSON.stringify({
+          firstName: accountForm.firstName,
+          lastName: accountForm.lastName,
+          email: accountForm.email
+        })
+      });
 
-    setEditingAccount(false);
-    toast({
-      title: 'Success',
-      description: 'Account information updated'
-    });
+      updateParentAccount({
+        firstName: accountForm.firstName,
+        lastName: accountForm.lastName,
+        email: accountForm.email
+      });
+
+      setEditingAccount(false);
+      toast({
+        title: 'Success',
+        description: 'Account information updated'
+      });
+    } catch (error: any) {
+      toast({
+        title: 'Error',
+        description: error.message || 'Failed to update account',
+        variant: 'destructive'
+      });
+    }
   };
 
   const handlePasswordUpdate = () => {
