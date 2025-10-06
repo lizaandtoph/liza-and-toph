@@ -188,7 +188,7 @@ export default function Home() {
         <div className="container mx-auto px-4 max-w-7xl">
           <div className="text-center max-w-3xl mx-auto">
             <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight font-heading">
-              The Right Toy, For Right Now.
+              Not Another Toy Store. A Tool for Growth.
             </h1>
             <p className="text-xl md:text-2xl mb-8 opacity-80">
               The first evidence-based platform that matches the perfect toys to
