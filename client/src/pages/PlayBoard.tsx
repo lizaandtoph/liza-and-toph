@@ -4,7 +4,7 @@ import { useStore } from '../store';
 import { logEvent } from '../analytics';
 import milestonesData from '../data/milestones.json';
 import rulesData from '../data/rules.json';
-import { Sparkles, Lock, TrendingUp, ShoppingCart, Star, FileText } from 'lucide-react';
+import { Sparkles, Lock, TrendingUp, ShoppingCart, FileText } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { type Product } from '@shared/schema';
 
@@ -650,19 +650,9 @@ export default function PlayBoard() {
                     />
                   </div>
                   <div className="p-4">
-                    <h3 className="text-lg font-semibold mb-2 line-clamp-2 min-h-[3.5rem]" data-testid={`text-title-${product.id}`}>
+                    <h3 className="text-lg font-semibold mb-3 line-clamp-2 min-h-[3.5rem]" data-testid={`text-title-${product.id}`}>
                       {product.name}
                     </h3>
-                    
-                    <div className="flex items-center gap-1 mb-3">
-                      <Star className="w-4 h-4 fill-ochre text-ochre" />
-                      <span className="font-semibold text-sm" data-testid={`text-rating-${product.id}`}>
-                        {parseFloat(product.rating) || 5.0}
-                      </span>
-                      <span className="text-xs opacity-60" data-testid={`text-reviews-${product.id}`}>
-                        ({product.reviewCount})
-                      </span>
-                    </div>
 
                     {product.categories && product.categories.length > 0 && (
                       <div className="flex flex-wrap gap-2 mb-3">
@@ -682,18 +672,13 @@ export default function PlayBoard() {
                       Ages {product.ageMin}-{product.ageMax}
                     </p>
 
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="text-2xl font-bold text-olive" data-testid={`text-price-${product.id}`}>
-                        {product.price}
-                      </span>
-                      <button
-                        onClick={() => handleProductClick(product.id, product.affiliateUrl || '#')}
-                        className="px-4 py-2 bg-olive text-ivory rounded-lg hover:bg-ochre transition font-medium text-sm"
-                        data-testid={`button-view-${product.id}`}
-                      >
-                        View
-                      </button>
-                    </div>
+                    <button
+                      onClick={() => handleProductClick(product.id, product.affiliateUrl || '#')}
+                      className="w-full px-4 py-2 bg-olive text-ivory rounded-lg hover:bg-ochre transition font-medium text-sm"
+                      data-testid={`button-view-${product.id}`}
+                    >
+                      View Product
+                    </button>
                   </div>
                 </div>
               ))}
