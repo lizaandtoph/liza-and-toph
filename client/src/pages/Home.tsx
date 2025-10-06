@@ -226,18 +226,19 @@ export default function Home() {
             </h1>
             <div className="max-w-3xl mx-auto mb-12">
               <p className="text-lg opacity-90 mb-8">
-                Parents spend billions on toys each year, yet most of them end up in
-                the bottom of a bin, untouched. The problem isn't the toys—it's the
-                mismatch. A toy that doesn't align with a child's specific
-                developmental needs, interests, or temperament is just beautiful
-                clutter. Even more importantly, 1 in 6 children has a developmental
-                delay that often goes unnoticed until school. These are critical
-                years where the right support could make all the difference.
+                Parents spend billions on toys each year, yet most of them end
+                up in the bottom of a bin, untouched. The problem isn't the
+                toys—it's the mismatch. A toy that doesn't align with a child's
+                specific developmental needs, interests, or temperament is just
+                beautiful clutter. Even more importantly, 1 in 6 children has a
+                developmental delay that often goes unnoticed until school.
+                These are critical years where the right support could make all
+                the difference.
               </p>
             </div>
-            <h3 className="text-2xl md:text-3xl font-semibold text-olive mb-8">
+            <h2 className="text-2xl md:text-3xl font-semibold text-olive mb-8">
               Discover Toys by Category.
-            </h3>
+            </h2>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 max-w-6xl mx-auto">
             <Link
