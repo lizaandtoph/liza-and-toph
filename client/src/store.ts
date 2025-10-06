@@ -134,6 +134,7 @@ export interface ParentAccount {
   lastName: string;
   email: string;
   password: string;
+  role?: string;
 }
 
 export interface SavedItems {

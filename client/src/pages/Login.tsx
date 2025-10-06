@@ -51,6 +51,7 @@ export default function Login() {
           lastName: meData.user.lastName || '',
           email: meData.user.email,
           password: '',
+          role: meData.user.role,
         });
 
         if (meData.children && meData.children.length > 0) {
