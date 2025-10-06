@@ -152,6 +152,7 @@ interface Store {
   savedItems: SavedItems;
   dismissedQuestionnaireUpdates: Record<string, number>;
   addChild: (child: Omit<ChildProfile, 'id'>, answers?: Answers) => string;
+  loadChildren: (children: ChildProfile[], answersMap: Record<string, Answers>) => void;
   updateChild: (id: string, child: Partial<ChildProfile>) => void;
   deleteChild: (id: string) => void;
   setActiveChild: (id: string) => void;
@@ -192,6 +193,14 @@ export const useStore = create<Store>()(
           }
         }));
         return id;
+      },
+
+      loadChildren: (children, answersMap) => {
+        set({
+          children,
+          activeChildId: children.length > 0 ? children[0].id : null,
+          childAnswers: answersMap,
+        });
       },
       
       updateChild: (id, updates) => {

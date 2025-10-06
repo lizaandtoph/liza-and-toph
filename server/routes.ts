@@ -362,7 +362,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get("/api/auth/me", requireAuth, async (req: AuthRequest, res) => {
     try {
-      const user = req.user;
+      const user = req.user!;
       const children = await storage.getChildrenByUserId(user.id);
       res.json({ 
         user: { 
@@ -382,7 +382,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get("/api/auth/children", requireAuth, async (req: AuthRequest, res) => {
     try {
-      const children = await storage.getChildrenByUserId(req.user.id);
+      const children = await storage.getChildrenByUserId(req.user!.id);
       res.json(children);
     } catch (error) {
       res.status(500).json({ error: "Server error" });
@@ -393,7 +393,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const childData = insertChildProfileSchema.parse({
         ...req.body,
-        userId: req.user.id,
+        userId: req.user!.id,
       });
       const child = await storage.createChildProfile(childData);
       res.json(child);

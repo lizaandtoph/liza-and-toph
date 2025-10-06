@@ -11,34 +11,75 @@ const loginSchema = z.object({
 
 export default function Login() {
   const [, setLocation] = useLocation();
-  const { parentAccount, setLoggedIn } = useStore();
+  const { setLoggedIn, setParentAccount, loadChildren } = useStore();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [loginError, setLoginError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoginError('');
+    setIsLoading(true);
     
     try {
       const loginData = loginSchema.parse(formData);
       
-      if (!parentAccount) {
-        setLoginError('No account found. Please sign up first.');
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(loginData),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setLoginError(data.error || 'Login failed');
+        setIsLoading(false);
         return;
       }
-      
-      if (
-        parentAccount.email === loginData.email &&
-        parentAccount.password === loginData.password
-      ) {
+
+      const meResponse = await fetch('/api/auth/me');
+      const meData = await meResponse.json();
+
+      if (meResponse.ok) {
+        setParentAccount({
+          firstName: meData.user.firstName || '',
+          lastName: meData.user.lastName || '',
+          email: meData.user.email,
+          password: '',
+        });
+
+        if (meData.children && meData.children.length > 0) {
+          const children = meData.children.map((c: any) => ({
+            id: c.id,
+            name: c.name,
+            birthday: c.birthday || '',
+            ageYears: c.ageYears || 0,
+            ageMonths: c.ageMonths || 0,
+            ageBand: c.ageBand || '',
+          }));
+
+          const answersMap: Record<string, any> = {};
+          meData.children.forEach((child: any) => {
+            answersMap[child.id] = {
+              schemas: child.schemas || [],
+              barriers: child.barriers || [],
+              interests: child.interests || [],
+              household_size: child.householdSize || 1,
+              milestones: child.milestones || {},
+              questionnaire_version: child.questionnaireVersion || 2,
+            };
+          });
+
+          loadChildren(children, answersMap);
+        }
+
         setLoggedIn(true);
         setLocation('/playboard');
-      } else {
-        setLoginError('Incorrect email or password');
       }
     } catch (e) {
       if (e instanceof z.ZodError) {
@@ -47,7 +88,11 @@ export default function Login() {
           newErrors[err.path[0] as string] = err.message;
         });
         setErrors(newErrors);
+      } else {
+        setLoginError('An error occurred. Please try again.');
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
