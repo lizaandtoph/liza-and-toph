@@ -717,15 +717,26 @@ export class DbStorage implements IStorage {
 
   async upsertUser(userData: { id: string; email?: string | null; firstName?: string | null; lastName?: string | null; profileImageUrl?: string | null }): Promise<User> {
     await this.ensureInitialized();
+    
+    // Build update set - only include defined values to avoid overwriting existing data with null
+    const updateSet: Record<string, any> = {
+      updatedAt: new Date(),
+    };
+    if (userData.email !== undefined) updateSet.email = userData.email;
+    if (userData.firstName !== undefined) updateSet.firstName = userData.firstName;
+    if (userData.lastName !== undefined) updateSet.lastName = userData.lastName;
+    if (userData.profileImageUrl !== undefined) updateSet.profileImageUrl = userData.profileImageUrl;
+    
     const [user] = await this.db
       .insert(users)
-      .values(userData)
+      .values({
+        ...userData,
+        role: 'parent',  // Default role for new users
+        proId: null,     // Default proId for new users
+      })
       .onConflictDoUpdate({
         target: users.id,
-        set: {
-          ...userData,
-          updatedAt: new Date(),
-        },
+        set: updateSet,  // Only update provided fields, preserve role and proId
       })
       .returning();
     return user;
