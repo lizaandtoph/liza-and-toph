@@ -9,6 +9,7 @@ export interface IStorage {
   getUserByUsername(username: string): Promise<User | undefined>;
   getUserByEmail(email: string): Promise<User | undefined>;
   createUser(user: RegisterUser): Promise<User>;
+  getChildrenByUserId(userId: string): Promise<ChildProfile[]>;
   
   createChildProfile(profile: InsertChildProfile): Promise<ChildProfile>;
   getChildProfile(id: string): Promise<ChildProfile | undefined>;
@@ -306,12 +307,21 @@ export class MemStorage implements IStorage {
       id,
       email: userData.email,
       passwordHash: userData.password,
+      firstName: userData.firstName || null,
+      lastName: userData.lastName || null,
       role: userData.role,
       proId: userData.proId || null,
-      createdAt: new Date(),
+      username: null,
+      password: null,
     };
     this.users.set(id, user);
     return user;
+  }
+
+  async getChildrenByUserId(userId: string): Promise<ChildProfile[]> {
+    return Array.from(this.childProfiles.values()).filter(
+      child => child.userId === userId
+    );
   }
 
   async createChildProfile(profile: InsertChildProfile): Promise<ChildProfile> {
@@ -883,10 +893,17 @@ export class DbStorage implements IStorage {
     const result = await this.db.insert(users).values({
       email: userData.email,
       passwordHash: userData.password,
+      firstName: userData.firstName || null,
+      lastName: userData.lastName || null,
       role: userData.role || "parent",
       proId: userData.proId || null,
     }).returning();
     return result[0];
+  }
+
+  async getChildrenByUserId(userId: string): Promise<ChildProfile[]> {
+    await this.ensureInitialized();
+    return await this.db.select().from(childProfiles).where(eq(childProfiles.userId, userId));
   }
 
   async createChildProfile(profile: InsertChildProfile): Promise<ChildProfile> {

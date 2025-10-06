@@ -7,6 +7,8 @@ export const users = pgTable("users", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   email: text("email").notNull().unique(),
   passwordHash: text("password_hash").notNull(),
+  firstName: text("first_name"),
+  lastName: text("last_name"),
   role: text("role").notNull().default("parent"), // parent, pro, admin
   proId: varchar("pro_id"),
   username: text("username"),
@@ -15,10 +17,20 @@ export const users = pgTable("users", {
 
 export const childProfiles = pgTable("child_profiles", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  name: text("name"),
-  ageRange: text("age_range").notNull(),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  name: text("name").notNull(),
+  birthday: text("birthday"),
+  ageYears: integer("age_years"),
+  ageMonths: integer("age_months"),
+  ageBand: text("age_band"),
+  ageRange: text("age_range"),
   gender: text("gender"),
   interests: jsonb("interests").$type<string[]>(),
+  schemas: jsonb("schemas").$type<string[]>(),
+  barriers: jsonb("barriers").$type<string[]>(),
+  householdSize: integer("household_size"),
+  milestones: jsonb("milestones").$type<Record<string, any>>(),
+  questionnaireVersion: integer("questionnaire_version"),
   parentPreferences: jsonb("parent_preferences").$type<Record<string, any>>(),
   createdAt: timestamp("created_at").default(sql`now()`),
   updatedAt: timestamp("updated_at").default(sql`now()`),
@@ -425,6 +437,8 @@ export const insertUserSchema = createInsertSchema(users).omit({
 export const registerUserSchema = z.object({
   email: z.string().email(),
   password: z.string().min(6),
+  firstName: z.string().optional(),
+  lastName: z.string().optional(),
   role: z.enum(["parent", "pro", "admin"]).default("parent"),
   proId: z.string().nullable().optional(),
 });
