@@ -188,7 +188,7 @@ export default function Home() {
         <div className="container mx-auto px-4 max-w-7xl">
           <div className="text-center max-w-3xl mx-auto">
             <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight font-heading">
-              The new way to design your child's play
+              The Right Toy, For Right Now.
             </h1>
             <p className="text-xl md:text-2xl mb-8 opacity-80">
               The first evidence-based platform that matches the perfect toys to
@@ -222,7 +222,7 @@ export default function Home() {
         <div className="container mx-auto px-4 max-w-7xl">
           <div className="text-center mb-12">
             <h1 className="text-4xl md:text-5xl font-bold mb-8">
-              Your playroom is full of toys. So why are they bored?
+              Your Playroom is Full of Toys. So Why Are They Bored?
             </h1>
             <div className="max-w-3xl mx-auto mb-12">
               <p className="text-lg opacity-90 mb-8">
