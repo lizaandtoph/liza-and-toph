@@ -24,7 +24,7 @@ function PlatformCarousel() {
     },
     {
       id: 'ai',
-      tabLabel: 'AI guidance',
+      tabLabel: 'Personalized for Your Child',
       buttonText: 'Get Started',
       heading: "Explore your child's Playboard",
       description: 'Integer vulputate sem nisl, at efficitur mi vehicula eget. Fusce porttitor mauris vitae libero feugiat, ac blandit turpis suscipit. Suspendisse vitae auctor ipsum, at volutpat.',
