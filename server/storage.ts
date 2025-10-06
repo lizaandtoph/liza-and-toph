@@ -69,6 +69,7 @@ export interface IStorage {
   getPasswordResetToken(token: string): Promise<PasswordResetToken | undefined>;
   deletePasswordResetToken(token: string): Promise<boolean>;
   updateUserPassword(userId: string, newPasswordHash: string): Promise<void>;
+  updateUserAccount(userId: string, updates: { email?: string; firstName?: string; lastName?: string }): Promise<User | undefined>;
 }
 
 export class MemStorage implements IStorage {
@@ -619,6 +620,14 @@ export class MemStorage implements IStorage {
 
   async updateUserPassword(userId: string, newPasswordHash: string): Promise<void> {
     throw new Error("Password reset not implemented for MemStorage");
+  }
+
+  async updateUserAccount(userId: string, updates: { email?: string; firstName?: string; lastName?: string }): Promise<User | undefined> {
+    const user = this.users.get(userId);
+    if (!user) return undefined;
+    const updated = { ...user, ...updates };
+    this.users.set(userId, updated);
+    return updated;
   }
 }
 
@@ -1235,6 +1244,12 @@ export class DbStorage implements IStorage {
   async updateUserPassword(userId: string, newPasswordHash: string): Promise<void> {
     await this.ensureInitialized();
     await this.db.update(users).set({ passwordHash: newPasswordHash }).where(eq(users.id, userId));
+  }
+
+  async updateUserAccount(userId: string, updates: { email?: string; firstName?: string; lastName?: string }): Promise<User | undefined> {
+    await this.ensureInitialized();
+    const result = await this.db.update(users).set(updates).where(eq(users.id, userId)).returning();
+    return result[0];
   }
 }
 

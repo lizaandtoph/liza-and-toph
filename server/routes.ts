@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertChildProfileSchema, insertPlayBoardSchema, insertProductSchema, updateProductSchema, insertProfessionalSchema, updateProfessionalSchema, registerUserSchema, loginUserSchema, insertProSchema, updateProSchema, insertServiceOfferingSchema, insertServiceAreaSchema, insertGalleryImageSchema, insertReviewSchema, insertMessageSchema } from "@shared/schema";
+import { insertChildProfileSchema, insertPlayBoardSchema, insertProductSchema, updateProductSchema, insertProfessionalSchema, updateProfessionalSchema, registerUserSchema, loginUserSchema, updateUserAccountSchema, insertProSchema, updateProSchema, insertServiceOfferingSchema, insertServiceAreaSchema, insertGalleryImageSchema, insertReviewSchema, insertMessageSchema } from "@shared/schema";
 import { z } from "zod";
 import { requireAuth, requireRole, requireOwnershipOrAdmin, generateToken, hashPassword, comparePassword, type AuthRequest } from "./auth";
 import multer from "multer";
@@ -377,6 +377,37 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
     } catch (error) {
       res.status(500).json({ error: "Server error" });
+    }
+  });
+
+  app.patch("/api/auth/account", requireAuth, async (req: AuthRequest, res) => {
+    try {
+      const validatedData = updateUserAccountSchema.parse(req.body);
+      
+      if (validatedData.email) {
+        const existing = await storage.getUserByEmail(validatedData.email);
+        if (existing && existing.id !== req.user!.id) {
+          return res.status(400).json({ error: "Email already in use" });
+        }
+      }
+
+      const updatedUser = await storage.updateUserAccount(req.user!.id, validatedData);
+      if (!updatedUser) {
+        return res.status(404).json({ error: "User not found" });
+      }
+
+      res.json({ 
+        user: { 
+          id: updatedUser.id, 
+          email: updatedUser.email, 
+          firstName: updatedUser.firstName || null,
+          lastName: updatedUser.lastName || null,
+          role: updatedUser.role, 
+          proId: updatedUser.proId 
+        } 
+      });
+    } catch (error) {
+      res.status(400).json({ error: "Invalid update data" });
     }
   });
 
