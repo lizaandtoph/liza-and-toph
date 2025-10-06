@@ -405,9 +405,9 @@ export default function Shop() {
                   )) ?? null}
                 </div>
                 
-                {(product.minAgeMonths || product.maxAgeMonths) && (
+                {product.ageRange && (
                   <p className="text-xs opacity-70 mb-3">
-                    Ages {product.minAgeMonths || 0}-{product.maxAgeMonths || 60} months
+                    Ages {product.ageRange}
                   </p>
                 )}
 
