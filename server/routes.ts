@@ -360,8 +360,46 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.json({ message: "Logged out successfully" });
   });
 
-  app.get("/api/auth/me", requireAuth, (req: AuthRequest, res) => {
-    res.json({ user: req.user });
+  app.get("/api/auth/me", requireAuth, async (req: AuthRequest, res) => {
+    try {
+      const user = req.user;
+      const children = await storage.getChildrenByUserId(user.id);
+      res.json({ 
+        user: { 
+          id: user.id, 
+          email: user.email, 
+          firstName: user.firstName || null,
+          lastName: user.lastName || null,
+          role: user.role, 
+          proId: user.proId 
+        }, 
+        children 
+      });
+    } catch (error) {
+      res.status(500).json({ error: "Server error" });
+    }
+  });
+
+  app.get("/api/auth/children", requireAuth, async (req: AuthRequest, res) => {
+    try {
+      const children = await storage.getChildrenByUserId(req.user.id);
+      res.json(children);
+    } catch (error) {
+      res.status(500).json({ error: "Server error" });
+    }
+  });
+
+  app.post("/api/auth/children", requireAuth, async (req: AuthRequest, res) => {
+    try {
+      const childData = insertChildProfileSchema.parse({
+        ...req.body,
+        userId: req.user.id,
+      });
+      const child = await storage.createChildProfile(childData);
+      res.json(child);
+    } catch (error) {
+      res.status(400).json({ error: "Invalid child data" });
+    }
   });
 
   // Pro directory routes (public)
