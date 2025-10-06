@@ -84,8 +84,10 @@ export async function setupAuth(app: Express) {
     verified(null, user);
   };
 
-  for (const domain of process.env
-    .REPLIT_DOMAINS!.split(",")) {
+  const domains = process.env.REPLIT_DOMAINS!.split(",");
+  
+  // Register strategies for all configured domains
+  for (const domain of domains) {
     const strategy = new Strategy(
       {
         name: `replitauth:${domain}`,
@@ -97,6 +99,30 @@ export async function setupAuth(app: Express) {
     );
     passport.use(strategy);
   }
+  
+  // Register strategy for local development
+  const localStrategy = new Strategy(
+    {
+      name: `replitauth:127.0.0.1`,
+      config,
+      scope: "openid email profile offline_access",
+      callbackURL: `http://127.0.0.1:5000/api/callback`,
+    },
+    verify,
+  );
+  passport.use(localStrategy);
+  
+  // Also register for localhost
+  const localhostStrategy = new Strategy(
+    {
+      name: `replitauth:localhost`,
+      config,
+      scope: "openid email profile offline_access",
+      callbackURL: `http://localhost:5000/api/callback`,
+    },
+    verify,
+  );
+  passport.use(localhostStrategy);
 
   passport.serializeUser((user: any, cb) => {
     cb(null, {
