@@ -1,8 +1,8 @@
-import { type User, type InsertUser, type RegisterUser, type ChildProfile, type InsertChildProfile, type Milestone, type Product, type InsertProduct, type PlayBoard, type InsertPlayBoard, type Professional, type InsertProfessional, type Pro, type InsertPro, type UpdatePro, type ServiceOffering, type InsertServiceOffering, type ServiceArea, type InsertServiceArea, type GalleryImage, type InsertGalleryImage, type Review, type InsertReview, type Message, type InsertMessage, type Subscription, type InsertSubscription, users, childProfiles, milestones, products, playBoards, professionals, pros, serviceOfferings, serviceAreas, galleryImages, reviews, messages, subscriptions } from "@shared/schema";
+import { type User, type InsertUser, type RegisterUser, type ChildProfile, type InsertChildProfile, type Milestone, type Product, type InsertProduct, type PlayBoard, type InsertPlayBoard, type Professional, type InsertProfessional, type Pro, type InsertPro, type UpdatePro, type ServiceOffering, type InsertServiceOffering, type ServiceArea, type InsertServiceArea, type GalleryImage, type InsertGalleryImage, type Review, type InsertReview, type Message, type InsertMessage, type Subscription, type InsertSubscription, type PasswordResetToken, type InsertPasswordResetToken, users, childProfiles, milestones, products, playBoards, professionals, pros, serviceOfferings, serviceAreas, galleryImages, reviews, messages, subscriptions, passwordResetTokens } from "@shared/schema";
 import { randomUUID } from "crypto";
 import { neon } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-http";
-import { eq, and, like, gte } from "drizzle-orm";
+import { eq, and, like, gte, gt } from "drizzle-orm";
 
 export interface IStorage {
   getUser(id: string): Promise<User | undefined>;
@@ -64,6 +64,11 @@ export interface IStorage {
   getSubscriptionByProId(proId: string): Promise<Subscription | undefined>;
   createSubscription(subscription: InsertSubscription): Promise<Subscription>;
   updateSubscriptionStatus(proId: string, status: string): Promise<Subscription | undefined>;
+
+  createPasswordResetToken(userId: string, token: string, expiresAt: Date): Promise<PasswordResetToken>;
+  getPasswordResetToken(token: string): Promise<PasswordResetToken | undefined>;
+  deletePasswordResetToken(token: string): Promise<boolean>;
+  updateUserPassword(userId: string, newPasswordHash: string): Promise<void>;
 }
 
 export class MemStorage implements IStorage {
@@ -598,6 +603,22 @@ export class MemStorage implements IStorage {
     const updated = { ...existing, status, updatedAt: new Date() };
     this._subscriptions.set(existing.id, updated);
     return updated;
+  }
+
+  async createPasswordResetToken(userId: string, token: string, expiresAt: Date): Promise<PasswordResetToken> {
+    throw new Error("Password reset not implemented for MemStorage");
+  }
+
+  async getPasswordResetToken(token: string): Promise<PasswordResetToken | undefined> {
+    throw new Error("Password reset not implemented for MemStorage");
+  }
+
+  async deletePasswordResetToken(token: string): Promise<boolean> {
+    throw new Error("Password reset not implemented for MemStorage");
+  }
+
+  async updateUserPassword(userId: string, newPasswordHash: string): Promise<void> {
+    throw new Error("Password reset not implemented for MemStorage");
   }
 }
 
@@ -1180,6 +1201,40 @@ export class DbStorage implements IStorage {
     await this.ensureInitialized();
     const result = await this.db.update(subscriptions).set({ status }).where(eq(subscriptions.proId, proId)).returning();
     return result[0];
+  }
+
+  async createPasswordResetToken(userId: string, token: string, expiresAt: Date): Promise<PasswordResetToken> {
+    await this.ensureInitialized();
+    const result = await this.db.insert(passwordResetTokens).values({
+      userId,
+      token,
+      expiresAt
+    }).returning();
+    return result[0];
+  }
+
+  async getPasswordResetToken(token: string): Promise<PasswordResetToken | undefined> {
+    await this.ensureInitialized();
+    const result = await this.db
+      .select()
+      .from(passwordResetTokens)
+      .where(and(
+        eq(passwordResetTokens.token, token),
+        gt(passwordResetTokens.expiresAt, new Date())
+      ))
+      .limit(1);
+    return result[0];
+  }
+
+  async deletePasswordResetToken(token: string): Promise<boolean> {
+    await this.ensureInitialized();
+    const result = await this.db.delete(passwordResetTokens).where(eq(passwordResetTokens.token, token)).returning();
+    return result.length > 0;
+  }
+
+  async updateUserPassword(userId: string, newPasswordHash: string): Promise<void> {
+    await this.ensureInitialized();
+    await this.db.update(users).set({ passwordHash: newPasswordHash }).where(eq(users.id, userId));
   }
 }
 
