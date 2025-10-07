@@ -9,7 +9,7 @@ import connectPg from "connect-pg-simple";
 import { storage } from "./storage";
 
 if (!process.env.REPLIT_DOMAINS) {
-  throw new Error("Environment variable REPLIT_DOMAINS not provided");
+  console.warn("Warning: REPLIT_DOMAINS not set, authentication will only work for dynamically detected domains");
 }
 
 const getOidcConfig = memoize(
@@ -31,6 +31,10 @@ export function getSession() {
     ttl: sessionTtl,
     tableName: "sessions",
   });
+  
+  const isProduction = process.env.NODE_ENV === 'production';
+  console.log('[Session] Configuring session - production:', isProduction, 'secure:', isProduction);
+  
   return session({
     secret: process.env.SESSION_SECRET!,
     store: sessionStore,
@@ -38,7 +42,7 @@ export function getSession() {
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: isProduction,
       sameSite: 'lax',
       maxAge: sessionTtl,
     },
@@ -96,12 +100,15 @@ export async function setupAuth(app: Express) {
       return strategyMap.get(hostname)!;
     }
 
+    const callbackURL = `${protocol}://${hostname}/api/callback`;
+    console.log('[Auth] Creating new strategy for hostname:', hostname, 'callback:', callbackURL);
+    
     const strategy = new Strategy(
       {
         name: `replitauth:${hostname}`,
         config,
         scope: "openid email profile offline_access",
-        callbackURL: `${protocol}://${hostname}/api/callback`,
+        callbackURL,
       },
       verify,
     );
@@ -112,9 +119,15 @@ export async function setupAuth(app: Express) {
   };
 
   // Pre-register strategies for known domains
-  const domains = process.env.REPLIT_DOMAINS!.split(",");
-  for (const domain of domains) {
-    getOrCreateStrategy(domain.trim(), 'https');
+  if (process.env.REPLIT_DOMAINS) {
+    const domains = process.env.REPLIT_DOMAINS.split(",");
+    for (const domain of domains) {
+      const trimmedDomain = domain.trim();
+      if (trimmedDomain) {
+        getOrCreateStrategy(trimmedDomain, 'https');
+        console.log('[Auth] Pre-registered strategy for domain:', trimmedDomain);
+      }
+    }
   }
   
   // Pre-register local development strategies
@@ -140,6 +153,7 @@ export async function setupAuth(app: Express) {
   app.get("/api/login", (req, res, next) => {
     // Dynamically create strategy if it doesn't exist
     const protocol = req.protocol || (req.secure ? 'https' : 'http');
+    console.log('[Auth] Login request - hostname:', req.hostname, 'protocol:', protocol, 'secure:', req.secure);
     getOrCreateStrategy(req.hostname, protocol);
     
     passport.authenticate(`replitauth:${req.hostname}`, {
@@ -151,6 +165,7 @@ export async function setupAuth(app: Express) {
   app.get("/api/callback", (req, res, next) => {
     // Dynamically create strategy if it doesn't exist
     const protocol = req.protocol || (req.secure ? 'https' : 'http');
+    console.log('[Auth] Callback request - hostname:', req.hostname, 'protocol:', protocol, 'secure:', req.secure);
     getOrCreateStrategy(req.hostname, protocol);
     
     passport.authenticate(`replitauth:${req.hostname}`, {
