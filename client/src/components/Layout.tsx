@@ -85,8 +85,7 @@ export default function Layout({ children: pageContent }: { children: React.Reac
             lastName: user.lastName || '',
             email: user.email || '',
             role: user.role || 'parent',
-            password: '',
-            createdAt: user.createdAt
+            password: ''
           });
         }, 0);
       } else {
@@ -94,16 +93,14 @@ export default function Layout({ children: pageContent }: { children: React.Reac
         if (user.firstName !== parentAccount.firstName || 
             user.lastName !== parentAccount.lastName || 
             user.email !== parentAccount.email ||
-            user.role !== parentAccount.role ||
-            user.createdAt !== parentAccount.createdAt) {
+            user.role !== parentAccount.role) {
           // Use setTimeout to defer state update until after render
           setTimeout(() => {
             updateParentAccount({
               firstName: user.firstName || parentAccount.firstName,
               lastName: user.lastName || parentAccount.lastName,
               email: user.email || parentAccount.email,
-              role: user.role || parentAccount.role,
-              createdAt: user.createdAt || parentAccount.createdAt
+              role: user.role || parentAccount.role
             });
           }, 0);
         }

@@ -7,7 +7,6 @@ interface User {
   lastName?: string;
   profileImageUrl?: string;
   role: string;
-  createdAt?: Date;
 }
 
 export function useAuth() {
