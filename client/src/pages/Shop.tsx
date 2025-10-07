@@ -31,13 +31,23 @@ export default function Shop() {
   }, [location]);
   
   // Filter states
-  const [ageRange, setAgeRange] = useState<[number, number]>([0, 60]);
+  const [selectedAgeBracket, setSelectedAgeBracket] = useState<string | null>(null);
   const [selectedPlayTypes, setSelectedPlayTypes] = useState<string[]>([]);
   const [selectedComplexity, setSelectedComplexity] = useState<string | null>(null);
   const [selectedEnergy, setSelectedEnergy] = useState<string | null>(null);
   const [selectedSpecialNeeds, setSelectedSpecialNeeds] = useState<string[]>([]);
   const [selectedSocialContext, setSelectedSocialContext] = useState<string[]>([]);
   const [lizaTophCertifiedOnly, setLizaTophCertifiedOnly] = useState(false);
+  
+  const ageBrackets = [
+    { label: '0-6m', min: 0, max: 6 },
+    { label: '6-12m', min: 6, max: 12 },
+    { label: '1-2y', min: 12, max: 24 },
+    { label: '2-3y', min: 24, max: 36 },
+    { label: '3-4y', min: 36, max: 48 },
+    { label: '4-5y', min: 48, max: 60 },
+    { label: '5-6y', min: 60, max: 72 },
+  ];
   
   const playTypes = ['sensory', 'exploratory', 'functional', 'constructive', 'pretend', 'symbolic', 'gross_motor', 'fine_motor', 'cognitive', 'social', 'language', 'creative'];
   const complexityLevels = ['simple', 'moderate', 'complex', 'advanced', 'expert'];
@@ -100,12 +110,15 @@ export default function Shop() {
       (product.categories?.some(d => d.toLowerCase().includes(selectedCategory)) ?? false);
     
     // Advanced filters (only applied when explicitly set)
-    // Age range filter - only apply if user has changed from default [0, 60]
-    const hasAgeFilter = ageRange[0] !== 0 || ageRange[1] !== 60;
-    const matchesAge = !hasAgeFilter || (
-      (product.maxAgeMonths == null || product.maxAgeMonths >= ageRange[0]) &&
-      (product.minAgeMonths == null || product.minAgeMonths <= ageRange[1])
-    );
+    // Age bracket filter
+    const matchesAge = !selectedAgeBracket || (() => {
+      const bracket = ageBrackets.find(b => b.label === selectedAgeBracket);
+      if (!bracket) return true;
+      return (
+        (product.maxAgeMonths == null || product.maxAgeMonths >= bracket.min) &&
+        (product.minAgeMonths == null || product.minAgeMonths <= bracket.max)
+      );
+    })();
     
     // Play types filter
     const matchesPlayType = selectedPlayTypes.length === 0 || 
@@ -134,7 +147,7 @@ export default function Shop() {
   });
   
   const clearFilters = () => {
-    setAgeRange([0, 60]);
+    setSelectedAgeBracket(null);
     setSelectedPlayTypes([]);
     setSelectedComplexity(null);
     setSelectedEnergy(null);
@@ -145,7 +158,7 @@ export default function Shop() {
   };
   
   const activeFilterCount = 
-    (ageRange[0] !== 0 || ageRange[1] !== 60 ? 1 : 0) +
+    (selectedAgeBracket ? 1 : 0) +
     selectedPlayTypes.length +
     (selectedComplexity ? 1 : 0) +
     (selectedEnergy ? 1 : 0) +
@@ -225,23 +238,22 @@ export default function Shop() {
         {/* Advanced Filters Panel */}
         {showFilters && (
           <div className="border-t border-sand pt-4 mt-4 space-y-6">
-            {/* Age Range Slider */}
+            {/* Age Brackets */}
             <div>
-              <div className="flex justify-between items-center mb-3">
-                <label className="font-semibold text-sm text-espresso">Age Range</label>
-                <span className="text-sm font-medium text-olive bg-olive/10 px-3 py-1 rounded-full">
-                  {ageRange[0] >= 12 ? `${Math.floor(ageRange[0] / 12)}y` : `${ageRange[0]}m`} - {ageRange[1] >= 12 ? `${Math.floor(ageRange[1] / 12)}y` : `${ageRange[1]}m`}
-                </span>
+              <label className="font-semibold text-sm mb-3 block text-espresso">Age Range</label>
+              <div className="flex flex-wrap gap-2">
+                {ageBrackets.map(bracket => (
+                  <Badge
+                    key={bracket.label}
+                    variant={selectedAgeBracket === bracket.label ? "default" : "outline"}
+                    className="cursor-pointer px-4 py-2 text-sm hover:bg-olive/10 transition-colors"
+                    onClick={() => setSelectedAgeBracket(selectedAgeBracket === bracket.label ? null : bracket.label)}
+                    data-testid={`badge-age-${bracket.label}`}
+                  >
+                    {bracket.label}
+                  </Badge>
+                ))}
               </div>
-              <Slider
-                value={ageRange}
-                onValueChange={(value) => setAgeRange(value as [number, number])}
-                min={0}
-                max={72}
-                step={6}
-                className="w-full"
-                data-testid="slider-age-range"
-              />
             </div>
             
             {/* Play Types */}
