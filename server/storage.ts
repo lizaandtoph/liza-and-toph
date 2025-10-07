@@ -1,8 +1,8 @@
-import { type User, type InsertUser, type RegisterUser, type ChildProfile, type InsertChildProfile, type Milestone, type Product, type InsertProduct, type PlayBoard, type InsertPlayBoard, type Professional, type InsertProfessional, type Pro, type InsertPro, type UpdatePro, type ServiceOffering, type InsertServiceOffering, type ServiceArea, type InsertServiceArea, type GalleryImage, type InsertGalleryImage, type Review, type InsertReview, type Message, type InsertMessage, type Subscription, type InsertSubscription, type PasswordResetToken, type InsertPasswordResetToken, users, childProfiles, milestones, products, playBoards, professionals, pros, serviceOfferings, serviceAreas, galleryImages, reviews, messages, subscriptions, passwordResetTokens } from "@shared/schema";
+import { type User, type InsertUser, type RegisterUser, type ChildProfile, type InsertChildProfile, type Milestone, type Product, type InsertProduct, type PlayBoard, type InsertPlayBoard, type Professional, type InsertProfessional, type Pro, type InsertPro, type UpdatePro, type ServiceOffering, type InsertServiceOffering, type ServiceArea, type InsertServiceArea, type GalleryImage, type InsertGalleryImage, type Review, type InsertReview, type Message, type InsertMessage, type Subscription, type InsertSubscription, type PasswordResetToken, type InsertPasswordResetToken, type LoginToken, type InsertLoginToken, users, childProfiles, milestones, products, playBoards, professionals, pros, serviceOfferings, serviceAreas, galleryImages, reviews, messages, subscriptions, passwordResetTokens, loginTokens } from "@shared/schema";
 import { randomUUID } from "crypto";
 import { neon } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-http";
-import { eq, and, like, gte, gt } from "drizzle-orm";
+import { eq, and, like, gte, gt, lt } from "drizzle-orm";
 
 export interface IStorage {
   getUser(id: string): Promise<User | undefined>;
@@ -71,6 +71,11 @@ export interface IStorage {
   deletePasswordResetToken(token: string): Promise<boolean>;
   updateUserPassword(userId: string, newPasswordHash: string): Promise<void>;
   updateUserAccount(userId: string, updates: { email?: string; firstName?: string; lastName?: string }): Promise<User | undefined>;
+  
+  createLoginToken(userId: string, token: string, expiresAt: Date): Promise<LoginToken>;
+  getLoginToken(token: string): Promise<LoginToken | undefined>;
+  markLoginTokenUsed(token: string): Promise<boolean>;
+  deleteExpiredLoginTokens(): Promise<number>;
 }
 
 export class MemStorage implements IStorage {
@@ -561,6 +566,22 @@ export class MemStorage implements IStorage {
     const updated = { ...user, ...updates };
     this.users.set(userId, updated);
     return updated;
+  }
+
+  async createLoginToken(userId: string, token: string, expiresAt: Date): Promise<LoginToken> {
+    throw new Error("Login tokens not implemented for MemStorage");
+  }
+
+  async getLoginToken(token: string): Promise<LoginToken | undefined> {
+    throw new Error("Login tokens not implemented for MemStorage");
+  }
+
+  async markLoginTokenUsed(token: string): Promise<boolean> {
+    throw new Error("Login tokens not implemented for MemStorage");
+  }
+
+  async deleteExpiredLoginTokens(): Promise<number> {
+    throw new Error("Login tokens not implemented for MemStorage");
   }
 }
 
@@ -1061,6 +1082,45 @@ export class DbStorage implements IStorage {
     await this.ensureInitialized();
     const result = await this.db.update(users).set(updates).where(eq(users.id, userId)).returning();
     return result[0];
+  }
+
+  async createLoginToken(userId: string, token: string, expiresAt: Date): Promise<LoginToken> {
+    await this.ensureInitialized();
+    const result = await this.db.insert(loginTokens).values({
+      userId,
+      token,
+      expiresAt,
+      used: false
+    }).returning();
+    return result[0];
+  }
+
+  async getLoginToken(token: string): Promise<LoginToken | undefined> {
+    await this.ensureInitialized();
+    const result = await this.db
+      .select()
+      .from(loginTokens)
+      .where(and(
+        eq(loginTokens.token, token),
+        gt(loginTokens.expiresAt, new Date()),
+        eq(loginTokens.used, false)
+      ))
+      .limit(1);
+    return result[0];
+  }
+
+  async markLoginTokenUsed(token: string): Promise<boolean> {
+    await this.ensureInitialized();
+    const result = await this.db.update(loginTokens).set({ used: true }).where(eq(loginTokens.token, token)).returning();
+    return result.length > 0;
+  }
+
+  async deleteExpiredLoginTokens(): Promise<number> {
+    await this.ensureInitialized();
+    const result = await this.db.delete(loginTokens).where(
+      lt(loginTokens.expiresAt, new Date())
+    ).returning();
+    return result.length;
   }
 }
 
