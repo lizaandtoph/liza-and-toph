@@ -352,7 +352,7 @@ export default function Admin() {
       )}
 
       <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-[#fff9ec]">
           <DialogHeader>
             <DialogTitle data-testid="heading-create-product">Create New Product</DialogTitle>
           </DialogHeader>
