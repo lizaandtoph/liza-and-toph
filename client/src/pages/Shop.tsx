@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Search, Filter, ChevronDown, ChevronUp, X } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { type Product } from '@shared/schema';
@@ -8,13 +8,27 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { Checkbox } from '@/components/ui/checkbox';
+import { useLocation } from 'wouter';
 
 export default function Shop() {
   const { getActiveChild } = useStore();
   const child = getActiveChild();
+  const [location] = useLocation();
+  
+  // Get category from URL params
+  const urlParams = new URLSearchParams(window.location.search);
+  const categoryFromUrl = urlParams.get('category') || 'all';
+  
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [selectedCategory, setSelectedCategory] = useState<string>(categoryFromUrl);
   const [showFilters, setShowFilters] = useState(false);
+  
+  // Update category when URL changes
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const category = params.get('category') || 'all';
+    setSelectedCategory(category);
+  }, [location]);
   
   // Filter states
   const [ageRange, setAgeRange] = useState<[number, number]>([0, 60]);

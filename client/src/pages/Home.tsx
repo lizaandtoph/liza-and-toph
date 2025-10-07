@@ -242,84 +242,84 @@ export default function Home() {
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 max-w-6xl mx-auto">
             <Link
-              to="/shop"
+              to="/shop?category=sensory"
               className="px-6 py-4 bg-white border-2 border-sand rounded-xl hover:bg-olive hover:text-ivory hover:border-olive transition text-center font-medium"
               data-testid="button-category-sensory"
             >
               Sensory & Exploratory
             </Link>
             <Link
-              to="/shop"
+              to="/shop?category=fine motor"
               className="px-6 py-4 bg-white border-2 border-sand rounded-xl hover:bg-olive hover:text-ivory hover:border-olive transition text-center font-medium"
               data-testid="button-category-fine-motor"
             >
               Fine Motor Development
             </Link>
             <Link
-              to="/shop"
+              to="/shop?category=gross motor"
               className="px-6 py-4 bg-white border-2 border-sand rounded-xl hover:bg-olive hover:text-ivory hover:border-olive transition text-center font-medium"
               data-testid="button-category-gross-motor"
             >
               Gross Motor Development
             </Link>
             <Link
-              to="/shop"
+              to="/shop?category=cognitive"
               className="px-6 py-4 bg-white border-2 border-sand rounded-xl hover:bg-olive hover:text-ivory hover:border-olive transition text-center font-medium"
               data-testid="button-category-cognitive"
             >
               Cognitive & Problem-Solving
             </Link>
             <Link
-              to="/shop"
+              to="/shop?category=language"
               className="px-6 py-4 bg-white border-2 border-sand rounded-xl hover:bg-olive hover:text-ivory hover:border-olive transition text-center font-medium"
               data-testid="button-category-language"
             >
               Language & Communication
             </Link>
             <Link
-              to="/shop"
+              to="/shop?category=social"
               className="px-6 py-4 bg-white border-2 border-sand rounded-xl hover:bg-olive hover:text-ivory hover:border-olive transition text-center font-medium"
               data-testid="button-category-social-emotional"
             >
               Social-Emotional Development
             </Link>
             <Link
-              to="/shop"
+              to="/shop?category=pretend"
               className="px-6 py-4 bg-white border-2 border-sand rounded-xl hover:bg-olive hover:text-ivory hover:border-olive transition text-center font-medium"
               data-testid="button-category-imaginative"
             >
               Imaginative & Pretend Play
             </Link>
             <Link
-              to="/shop"
+              to="/shop?category=building"
               className="px-6 py-4 bg-white border-2 border-sand rounded-xl hover:bg-olive hover:text-ivory hover:border-olive transition text-center font-medium"
               data-testid="button-category-construction"
             >
               Construction & Building
             </Link>
             <Link
-              to="/shop"
+              to="/shop?category=stem"
               className="px-6 py-4 bg-white border-2 border-sand rounded-xl hover:bg-olive hover:text-ivory hover:border-olive transition text-center font-medium"
               data-testid="button-category-stem"
             >
               Science & Discovery (STEM)
             </Link>
             <Link
-              to="/shop"
+              to="/shop?category=art"
               className="px-6 py-4 bg-white border-2 border-sand rounded-xl hover:bg-olive hover:text-ivory hover:border-olive transition text-center font-medium"
               data-testid="button-category-creative-arts"
             >
               Creative Arts & Expression
             </Link>
             <Link
-              to="/shop"
+              to="/shop?category=music"
               className="px-6 py-4 bg-white border-2 border-sand rounded-xl hover:bg-olive hover:text-ivory hover:border-olive transition text-center font-medium"
               data-testid="button-category-music"
             >
               Music & Movement
             </Link>
             <Link
-              to="/shop"
+              to="/shop?category=games"
               className="px-6 py-4 bg-white border-2 border-sand rounded-xl hover:bg-olive hover:text-ivory hover:border-olive transition text-center font-medium"
               data-testid="button-category-games"
             >
