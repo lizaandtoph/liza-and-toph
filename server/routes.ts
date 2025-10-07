@@ -3,7 +3,7 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertChildProfileSchema, insertPlayBoardSchema, insertProductSchema, updateProductSchema, insertProfessionalSchema, updateProfessionalSchema, registerUserSchema, loginUserSchema, updateUserAccountSchema, insertProSchema, updateProSchema, insertServiceOfferingSchema, insertServiceAreaSchema, insertGalleryImageSchema, insertReviewSchema, insertMessageSchema } from "@shared/schema";
 import { z } from "zod";
-import { setupAuth, isAuthenticated } from "./replitAuth";
+import { setupAuth, isAuthenticated } from "./sessionAuth";
 import { sendMagicLinkEmail } from "./email";
 import { nanoid } from "nanoid";
 import multer from "multer";
