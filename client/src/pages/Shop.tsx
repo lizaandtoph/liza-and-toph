@@ -246,7 +246,7 @@ export default function Shop() {
                   <Badge
                     key={bracket.label}
                     variant={selectedAgeBracket === bracket.label ? "default" : "outline"}
-                    className={`cursor-pointer px-4 py-2 text-sm hover:bg-olive/10 transition-colors ${selectedAgeBracket !== bracket.label ? 'bg-[#dedacc]' : ''}`}
+                    className={`cursor-pointer px-4 py-2 text-sm transition-colors ${selectedAgeBracket === bracket.label ? 'bg-olive text-white border-olive shadow-md font-semibold' : 'bg-[#dedacc] hover:bg-olive/20 border-espresso/20'}`}
                     onClick={() => setSelectedAgeBracket(selectedAgeBracket === bracket.label ? null : bracket.label)}
                     data-testid={`badge-age-${bracket.label}`}
                   >
@@ -289,7 +289,7 @@ export default function Shop() {
                   <Badge
                     key={level}
                     variant={selectedComplexity === level ? "default" : "outline"}
-                    className={`cursor-pointer capitalize px-4 py-2 text-sm hover:bg-olive/10 transition-colors ${selectedComplexity !== level ? 'bg-[#dedacc]' : ''}`}
+                    className={`cursor-pointer capitalize px-4 py-2 text-sm transition-colors ${selectedComplexity === level ? 'bg-olive text-white border-olive shadow-md font-semibold' : 'bg-[#dedacc] hover:bg-olive/20 border-espresso/20'}`}
                     onClick={() => setSelectedComplexity(selectedComplexity === level ? null : level)}
                     data-testid={`badge-complexity-${level}`}
                   >
@@ -307,7 +307,7 @@ export default function Shop() {
                   <Badge
                     key={energy}
                     variant={selectedEnergy === energy ? "default" : "outline"}
-                    className={`cursor-pointer capitalize px-4 py-2 text-sm hover:bg-olive/10 transition-colors ${selectedEnergy !== energy ? 'bg-[#dedacc]' : ''}`}
+                    className={`cursor-pointer capitalize px-4 py-2 text-sm transition-colors ${selectedEnergy === energy ? 'bg-olive text-white border-olive shadow-md font-semibold' : 'bg-[#dedacc] hover:bg-olive/20 border-espresso/20'}`}
                     onClick={() => setSelectedEnergy(selectedEnergy === energy ? null : energy)}
                     data-testid={`badge-energy-${energy}`}
                   >
