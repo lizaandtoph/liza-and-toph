@@ -5,6 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useLocation } from 'wouter';
 import { Package, Plus, Edit2, Trash2, X } from 'lucide-react';
 import { insertProductSchema, updateProductSchema, type Product, type InsertProduct } from '@shared/schema';
+import { getAgeBandLabel } from '@shared/ageUtils';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -218,15 +219,23 @@ export default function Admin() {
     });
   };
 
-  const ageRanges = [
-    '0-6 months',
-    '6-12 months',
-    '12-18 months',
-    '18-24 months',
-    '2-3 years',
-    '3-4 years',
-    '4-5 years',
-  ];
+  // Age ranges matching onboarding age bands
+  const ageBands = [
+    'newborn-18m',
+    '18m-3y',
+    '2-5y',
+    '3-6y',
+    '4-7y',
+    '5-8y',
+    '6-9y',
+    '7-10y',
+    '8-11y',
+    '9-12y',
+    '10-early-teens',
+    'preteens-older-teens',
+  ] as const;
+  
+  const ageRanges = ageBands.map(band => getAgeBandLabel(band));
 
   const categories = ['cognitive', 'motor', 'social-emotional', 'language', 'creative'];
   
