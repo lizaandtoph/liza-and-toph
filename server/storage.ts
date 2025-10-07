@@ -77,6 +77,8 @@ export interface IStorage {
   getLoginToken(token: string): Promise<LoginToken | undefined>;
   markLoginTokenUsed(token: string): Promise<boolean>;
   deleteExpiredLoginTokens(): Promise<number>;
+  
+  updateUserStripeInfo(userId: string, stripeCustomerId: string, stripeSubscriptionId: string): Promise<User | undefined>;
 }
 
 export class MemStorage implements IStorage {
@@ -596,6 +598,14 @@ export class MemStorage implements IStorage {
 
   async deleteExpiredLoginTokens(): Promise<number> {
     throw new Error("Login tokens not implemented for MemStorage");
+  }
+
+  async updateUserStripeInfo(userId: string, stripeCustomerId: string, stripeSubscriptionId: string): Promise<User | undefined> {
+    const user = this.users.get(userId);
+    if (!user) return undefined;
+    const updated = { ...user, stripeCustomerId, stripeSubscriptionId };
+    this.users.set(userId, updated);
+    return updated;
   }
 }
 
@@ -1145,6 +1155,15 @@ export class DbStorage implements IStorage {
       lt(loginTokens.expiresAt, new Date())
     ).returning();
     return result.length;
+  }
+
+  async updateUserStripeInfo(userId: string, stripeCustomerId: string, stripeSubscriptionId: string): Promise<User | undefined> {
+    await this.ensureInitialized();
+    const result = await this.db.update(users).set({
+      stripeCustomerId,
+      stripeSubscriptionId
+    }).where(eq(users.id, userId)).returning();
+    return result[0];
   }
 }
 
