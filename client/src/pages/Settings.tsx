@@ -11,6 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
 import { calculateAgeFromBirthday, categorizeAgeBand } from '@shared/ageUtils';
 import { apiRequest } from '@/lib/queryClient';
+import { useQuery } from '@tanstack/react-query';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -31,14 +32,20 @@ export default function Settings() {
     deleteChild,
     savedItems,
     removeSavedItem,
-    getAnswers,
-    subscribed,
-    setSubscribed
+    getAnswers
   } = useStore();
   
   const { user, isAuthenticated, isLoading } = useAuth();
   const { toast } = useToast();
   const [, setLocation] = useLocation();
+
+  // Check subscription status from backend (which verifies with Stripe)
+  const { data: subscriptionStatus } = useQuery<{ hasActiveSubscription: boolean }>({
+    queryKey: ['/api/subscription-status'],
+    enabled: !!user, // Check whenever user is authenticated
+  });
+
+  const hasActiveSubscription = subscriptionStatus?.hasActiveSubscription || false;
 
   // Redirect to login if not authenticated
   useEffect(() => {
@@ -185,11 +192,11 @@ export default function Settings() {
     }
   };
 
-  const handleCancelSubscription = () => {
-    // TODO: Implement subscription cancellation with backend
+  const handleManageSubscription = () => {
+    // Navigate to Stripe customer portal for subscription management
     toast({
-      title: 'Subscription Cancelled',
-      description: 'Your subscription has been cancelled'
+      title: 'Coming Soon',
+      description: 'Subscription management portal will be available soon'
     });
   };
 
@@ -320,7 +327,7 @@ export default function Settings() {
               <CardDescription>Manage your subscription</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              {subscribed ? (
+              {hasActiveSubscription ? (
                 <div className="space-y-4">
                   <div className="p-4 bg-olive/10 rounded-lg border border-olive/20">
                     <p className="text-lg font-semibold text-olive mb-2" data-testid="text-subscription-status">
@@ -331,11 +338,11 @@ export default function Settings() {
                     </p>
                   </div>
                   <Button 
-                    variant="destructive" 
-                    onClick={handleCancelSubscription}
-                    data-testid="button-cancel-subscription"
+                    variant="outline" 
+                    onClick={handleManageSubscription}
+                    data-testid="button-manage-subscription"
                   >
-                    Cancel Subscription
+                    Manage Subscription
                   </Button>
                 </div>
               ) : (
