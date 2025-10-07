@@ -1167,13 +1167,13 @@ export default function Admin() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Age Range</FormLabel>
-                    <Select onValueChange={field.onChange} value={field.value}>
+                    <Select onValueChange={field.onChange} value={field.value || undefined}>
                       <FormControl>
                         <SelectTrigger data-testid="select-edit-ageRange">
-                          <SelectValue />
+                          <SelectValue placeholder="Select age range" />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent className="bg-[#fff9ed] max-h-[300px] overflow-y-auto">
+                      <SelectContent className="bg-[#fff9ed] max-h-[300px] overflow-y-auto z-[100]">
                         {ageRanges.map((range) => (
                           <SelectItem key={range} value={range}>
                             {range}
