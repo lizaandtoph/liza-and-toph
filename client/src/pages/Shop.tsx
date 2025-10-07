@@ -206,16 +206,18 @@ export default function Shop() {
           <div className="border-t border-sand pt-4 mt-4 space-y-6">
             {/* Age Range Slider */}
             <div>
-              <div className="flex justify-between items-center mb-2">
-                <label className="font-medium text-sm">Age Range (months)</label>
-                <span className="text-sm text-muted-foreground">{ageRange[0]} - {ageRange[1]}</span>
+              <div className="flex justify-between items-center mb-3">
+                <label className="font-semibold text-sm text-espresso">Age Range</label>
+                <span className="text-sm font-medium text-olive bg-olive/10 px-3 py-1 rounded-full">
+                  {ageRange[0] >= 12 ? `${Math.floor(ageRange[0] / 12)}y` : `${ageRange[0]}m`} - {ageRange[1] >= 12 ? `${Math.floor(ageRange[1] / 12)}y` : `${ageRange[1]}m`}
+                </span>
               </div>
               <Slider
                 value={ageRange}
                 onValueChange={(value) => setAgeRange(value as [number, number])}
                 min={0}
-                max={60}
-                step={1}
+                max={72}
+                step={6}
                 className="w-full"
                 data-testid="slider-age-range"
               />
@@ -223,11 +225,12 @@ export default function Shop() {
             
             {/* Play Types */}
             <div>
-              <label className="font-medium text-sm mb-2 block">Play Types</label>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+              <label className="font-semibold text-sm mb-3 block text-espresso">Play Types</label>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 {playTypes.map(type => (
-                  <div key={type} className="flex items-center space-x-2">
+                  <div key={type} className="flex items-center space-x-3 cursor-pointer">
                     <Checkbox
+                      id={`playtype-${type}`}
                       checked={selectedPlayTypes.includes(type)}
                       onCheckedChange={(checked) => {
                         if (checked) {
@@ -236,9 +239,10 @@ export default function Shop() {
                           setSelectedPlayTypes(selectedPlayTypes.filter(t => t !== type));
                         }
                       }}
+                      className="h-5 w-5"
                       data-testid={`checkbox-playtype-${type}`}
                     />
-                    <label className="text-sm capitalize">{type.replace('_', ' ')}</label>
+                    <label htmlFor={`playtype-${type}`} className="text-sm capitalize cursor-pointer">{type.replace('_', ' ')}</label>
                   </div>
                 ))}
               </div>
@@ -246,13 +250,13 @@ export default function Shop() {
             
             {/* Complexity Level */}
             <div>
-              <label className="font-medium text-sm mb-2 block">Complexity Level</label>
+              <label className="font-semibold text-sm mb-3 block text-espresso">Complexity Level</label>
               <div className="flex flex-wrap gap-2">
                 {complexityLevels.map(level => (
                   <Badge
                     key={level}
                     variant={selectedComplexity === level ? "default" : "outline"}
-                    className="cursor-pointer"
+                    className="cursor-pointer capitalize px-4 py-2 text-sm hover:bg-olive/10 transition-colors"
                     onClick={() => setSelectedComplexity(selectedComplexity === level ? null : level)}
                     data-testid={`badge-complexity-${level}`}
                   >
@@ -264,13 +268,13 @@ export default function Shop() {
             
             {/* Energy Requirement */}
             <div>
-              <label className="font-medium text-sm mb-2 block">Energy Requirement</label>
+              <label className="font-semibold text-sm mb-3 block text-espresso">Energy Requirement</label>
               <div className="flex flex-wrap gap-2">
                 {energyRequirements.map(energy => (
                   <Badge
                     key={energy}
                     variant={selectedEnergy === energy ? "default" : "outline"}
-                    className="cursor-pointer"
+                    className="cursor-pointer capitalize px-4 py-2 text-sm hover:bg-olive/10 transition-colors"
                     onClick={() => setSelectedEnergy(selectedEnergy === energy ? null : energy)}
                     data-testid={`badge-energy-${energy}`}
                   >
@@ -282,11 +286,12 @@ export default function Shop() {
             
             {/* Special Needs Support */}
             <div>
-              <label className="font-medium text-sm mb-2 block">Special Needs Support</label>
-              <div className="grid grid-cols-2 gap-2">
+              <label className="font-semibold text-sm mb-3 block text-espresso">Special Needs Support</label>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 {specialNeedsTypes.map(need => (
-                  <div key={need} className="flex items-center space-x-2">
+                  <div key={need} className="flex items-center space-x-3 cursor-pointer">
                     <Checkbox
+                      id={`specialneeds-${need}`}
                       checked={selectedSpecialNeeds.includes(need)}
                       onCheckedChange={(checked) => {
                         if (checked) {
@@ -295,9 +300,10 @@ export default function Shop() {
                           setSelectedSpecialNeeds(selectedSpecialNeeds.filter(n => n !== need));
                         }
                       }}
+                      className="h-5 w-5"
                       data-testid={`checkbox-specialneeds-${need}`}
                     />
-                    <label className="text-sm capitalize">{need.replace('_', ' ')}</label>
+                    <label htmlFor={`specialneeds-${need}`} className="text-sm capitalize cursor-pointer">{need.replace('_', ' ')}</label>
                   </div>
                 ))}
               </div>
@@ -305,11 +311,12 @@ export default function Shop() {
             
             {/* Social Context */}
             <div>
-              <label className="font-medium text-sm mb-2 block">Social Context</label>
-              <div className="grid grid-cols-2 gap-2">
+              <label className="font-semibold text-sm mb-3 block text-espresso">Social Context</label>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 {socialContexts.map(context => (
-                  <div key={context} className="flex items-center space-x-2">
+                  <div key={context} className="flex items-center space-x-3 cursor-pointer">
                     <Checkbox
+                      id={`socialcontext-${context}`}
                       checked={selectedSocialContext.includes(context)}
                       onCheckedChange={(checked) => {
                         if (checked) {
@@ -318,9 +325,10 @@ export default function Shop() {
                           setSelectedSocialContext(selectedSocialContext.filter(c => c !== context));
                         }
                       }}
+                      className="h-5 w-5"
                       data-testid={`checkbox-socialcontext-${context}`}
                     />
-                    <label className="text-sm capitalize">{context.replace('_', ' ')}</label>
+                    <label htmlFor={`socialcontext-${context}`} className="text-sm capitalize cursor-pointer">{context.replace('_', ' ')}</label>
                   </div>
                 ))}
               </div>
@@ -328,14 +336,16 @@ export default function Shop() {
             
             {/* Liza and Toph Certified */}
             <div>
-              <label className="font-medium text-sm mb-2 block">Liza and Toph Certified</label>
-              <div className="flex items-center space-x-2">
+              <label className="font-semibold text-sm mb-3 block text-espresso">Liza and Toph Certified</label>
+              <div className="flex items-center space-x-3 cursor-pointer">
                 <Checkbox
+                  id="liza-toph-certified"
                   checked={lizaTophCertifiedOnly}
                   onCheckedChange={(checked) => setLizaTophCertifiedOnly(checked as boolean)}
+                  className="h-5 w-5"
                   data-testid="checkbox-liza-toph-certified"
                 />
-                <label className="text-sm">Show only Liza and Toph Certified products</label>
+                <label htmlFor="liza-toph-certified" className="text-sm cursor-pointer">Show only Liza and Toph Certified products</label>
               </div>
             </div>
             
