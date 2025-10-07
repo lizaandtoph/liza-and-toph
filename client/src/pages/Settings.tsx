@@ -10,6 +10,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
 import { calculateAgeFromBirthday, categorizeAgeBand } from '@shared/ageUtils';
+import { apiRequest } from '@/lib/queryClient';
 import {
   AlertDialog,
   AlertDialogAction,
