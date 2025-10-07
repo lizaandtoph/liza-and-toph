@@ -457,8 +457,8 @@ export type InsertSubscription = z.infer<typeof insertSubscriptionSchema>;
 // User types from existing schema
 export const insertUserSchema = createInsertSchema(users).omit({
   id: true,
-  username: true,
-  password: true,
+  createdAt: true,
+  updatedAt: true,
 });
 
 export const registerUserSchema = z.object({
