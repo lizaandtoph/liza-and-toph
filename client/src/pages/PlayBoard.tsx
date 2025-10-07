@@ -26,10 +26,6 @@ export default function PlayBoard() {
   const child = getActiveChild();
   const answers = child ? getAnswers(child.id) : { schemas: [], barriers: [], interests: [] };
   
-  // Debug: Check if answers have data
-  console.log('PlayBoard - child:', child);
-  console.log('PlayBoard - answers:', answers);
-  
   // Calculate ageBand from birthday if missing (for backwards compatibility)
   const effectiveAgeBand = useMemo(() => {
     if (!child) return '';
