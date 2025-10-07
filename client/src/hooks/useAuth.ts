@@ -7,6 +7,8 @@ interface User {
   lastName?: string;
   profileImageUrl?: string;
   role: string;
+  stripeCustomerId?: string | null;
+  stripeSubscriptionId?: string | null;
 }
 
 export function useAuth() {

@@ -9,6 +9,7 @@ import { nanoid } from "nanoid";
 import multer from "multer";
 import path from "path";
 import fs from "fs";
+import Stripe from "stripe";
 
 // Helper middleware to check user roles
 const requireRole = (role: string): RequestHandler => {
@@ -934,6 +935,118 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(subscription);
     } catch (error) {
       res.status(500).json({ error: "Server error" });
+    }
+  });
+
+  // Stripe subscription endpoint (referencing blueprint:javascript_stripe)
+  if (!process.env.STRIPE_SECRET_KEY) {
+    throw new Error('Missing required Stripe secret: STRIPE_SECRET_KEY');
+  }
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+    apiVersion: "2023-10-16",
+  });
+
+  // Endpoint to check subscription status
+  app.get('/api/subscription-status', isAuthenticated as any, async (req: AuthRequest, res) => {
+    try {
+      if (!req.isAuthenticated() || !req.user?.claims?.sub) {
+        return res.status(401).json({ message: "Not authenticated" });
+      }
+
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+
+      if (!user || !user.stripeSubscriptionId) {
+        return res.json({ hasActiveSubscription: false });
+      }
+
+      // Check subscription status from Stripe
+      const subscription = await stripe.subscriptions.retrieve(user.stripeSubscriptionId);
+      
+      const isActive = subscription.status === 'active' || subscription.status === 'trialing';
+      
+      return res.json({ 
+        hasActiveSubscription: isActive,
+        status: subscription.status 
+      });
+    } catch (error: any) {
+      console.error('Error checking subscription status:', error);
+      return res.status(500).json({ error: { message: error.message } });
+    }
+  });
+
+  app.post('/api/get-or-create-subscription', isAuthenticated as any, async (req: AuthRequest, res) => {
+    try {
+      if (!req.isAuthenticated() || !req.user?.claims?.sub) {
+        return res.status(401).json({ message: "Not authenticated" });
+      }
+
+      const userId = req.user.claims.sub;
+      let user = await storage.getUser(userId);
+
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      // If user already has a subscription, check its status
+      if (user.stripeSubscriptionId) {
+        const subscription = await stripe.subscriptions.retrieve(user.stripeSubscriptionId);
+
+        // If subscription is active or trialing, they don't need to pay again
+        if (subscription.status === 'active' || subscription.status === 'trialing') {
+          return res.json({
+            alreadySubscribed: true,
+            subscriptionId: subscription.id,
+          });
+        }
+
+        // If subscription needs payment (incomplete, past_due), return client secret
+        const clientSecret = (subscription.latest_invoice as any)?.payment_intent?.client_secret;
+        return res.json({
+          subscriptionId: subscription.id,
+          clientSecret,
+        });
+      }
+
+      // Create Stripe customer if not exists
+      let customerId = user.stripeCustomerId;
+      
+      if (!customerId) {
+        if (!user.email) {
+          return res.status(400).json({ message: 'No user email on file' });
+        }
+
+        const customer = await stripe.customers.create({
+          email: user.email,
+          name: user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : user.email,
+        });
+
+        customerId = customer.id;
+      }
+
+      // Create subscription
+      const subscription = await stripe.subscriptions.create({
+        customer: customerId,
+        items: [{
+          price: process.env.STRIPE_PRICE_ID!,
+        }],
+        payment_behavior: 'default_incomplete',
+        payment_settings: { save_default_payment_method: 'on_subscription' },
+        expand: ['latest_invoice.payment_intent'],
+      });
+
+      // Save subscription ID (access will be gated on subscription STATUS, not just ID)
+      await storage.updateUserStripeInfo(userId, customerId, subscription.id);
+
+      const clientSecret = (subscription.latest_invoice as any)?.payment_intent?.client_secret;
+
+      return res.json({
+        subscriptionId: subscription.id,
+        clientSecret,
+      });
+    } catch (error: any) {
+      console.error('Error creating subscription:', error);
+      return res.status(400).json({ error: { message: error.message } });
     }
   });
 

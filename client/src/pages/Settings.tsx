@@ -353,7 +353,7 @@ export default function Settings() {
                           <p className="font-semibold">Monthly Plan</p>
                           <p className="text-sm text-muted-foreground">$4.99/month</p>
                         </div>
-                        <Button onClick={() => setSubscribed(true)} data-testid="button-subscribe-monthly">
+                        <Button onClick={() => setLocation('/subscribe')} data-testid="button-subscribe-monthly">
                           Subscribe
                         </Button>
                       </div>
@@ -362,7 +362,7 @@ export default function Settings() {
                           <p className="font-semibold">Annual Plan</p>
                           <p className="text-sm text-muted-foreground">$99/year (Save $60!)</p>
                         </div>
-                        <Button onClick={() => setSubscribed(true)} data-testid="button-subscribe-annual">
+                        <Button onClick={() => setLocation('/subscribe')} data-testid="button-subscribe-annual">
                           Subscribe
                         </Button>
                       </div>

@@ -18,6 +18,7 @@ import FullQuestionnaire from './pages/FullQuestionnaire';
 import QuestionnaireResults from './pages/QuestionnaireResults';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
+import Subscribe from './pages/Subscribe';
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
         <Route path="/forgot-password" component={ForgotPassword} />
         <Route path="/reset-password/:token" component={ResetPassword} />
         <Route path="/onboarding" component={Onboarding} />
+        <Route path="/subscribe" component={Subscribe} />
         <Route path="/your-child" component={YourChild} />
         <Route path="/playboard/:childId" component={PlayBoard} />
         <Route path="/playboard" component={PlayBoard} />

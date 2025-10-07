@@ -1,18 +1,22 @@
 import { useEffect, useState, useMemo } from 'react';
-import { Link, useRoute } from 'wouter';
+import { Link, useRoute, useLocation } from 'wouter';
 import { useStore } from '../store';
 import { logEvent } from '../analytics';
 import milestonesData from '../data/milestones.json';
 import rulesData from '../data/rules.json';
 import { Sparkles, Lock, TrendingUp, ShoppingCart, FileText, CheckCircle } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
+import { queryClient } from '@/lib/queryClient';
 import { type Product } from '@shared/schema';
 import { calculateAgeFromBirthday, categorizeAgeBand } from '@shared/ageUtils';
+import { useAuth } from '../hooks/useAuth';
 
 export default function PlayBoard() {
   const [, params] = useRoute('/playboard/:childId');
-  const { getActiveChild, getAnswers, activeChildId, subscribed, setSubscribed, parentAccount, children, setActiveChild } = useStore();
+  const [, setLocation] = useLocation();
+  const { getActiveChild, getAnswers, activeChildId, children, setActiveChild } = useStore();
   const [showPaywall, setShowPaywall] = useState(false);
+  const { user } = useAuth();
   
   useEffect(() => {
     if (params?.childId && params.childId !== activeChildId) {
@@ -22,6 +26,18 @@ export default function PlayBoard() {
       }
     }
   }, [params?.childId, activeChildId, children, setActiveChild]);
+
+  // Check for payment success from Stripe redirect
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('payment') === 'success') {
+      // Payment succeeded - refetch user data and subscription status
+      queryClient.invalidateQueries({ queryKey: ['/api/auth/user'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/subscription-status'] });
+      // Clean up URL
+      window.history.replaceState({}, '', '/playboard');
+    }
+  }, []);
   
   const child = getActiveChild();
   const answers = child ? getAnswers(child.id) : { schemas: [], barriers: [], interests: [] };
@@ -37,7 +53,14 @@ export default function PlayBoard() {
     return '';
   }, [child]);
   
-  const hasFullAccess = subscribed || (parentAccount?.role === 'admin');
+  // Check subscription status from backend (which verifies with Stripe)
+  const { data: subscriptionStatus } = useQuery<{ hasActiveSubscription: boolean }>({
+    queryKey: ['/api/subscription-status'],
+    enabled: !!user, // Check whenever user is authenticated
+  });
+
+  // Check if user has full access via Stripe subscription or admin role (NOT client-side flag)
+  const hasFullAccess = subscriptionStatus?.hasActiveSubscription || user?.role === 'admin';
 
   const { data: products = [] } = useQuery<Product[]>({
     queryKey: ['/api/products'],
@@ -268,8 +291,7 @@ export default function PlayBoard() {
 
   const handleSubscribe = () => {
     logEvent('subscribe_clicked');
-    setSubscribed(true);
-    setShowPaywall(false);
+    setLocation('/subscribe');
   };
 
   // Map age band to shop age bracket
