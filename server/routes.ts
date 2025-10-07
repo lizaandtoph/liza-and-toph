@@ -182,6 +182,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Client error logging endpoint
+  app.post('/api/client-error', (req, res) => {
+    const { message, stack, url } = req.body;
+    console.error('[CLIENT ERROR]', { message, stack, url });
+    res.json({ logged: true });
+  });
+
   // Affiliate link tracker
   app.get("/api/links", (req, res) => {
     const { sku, to } = req.query;
