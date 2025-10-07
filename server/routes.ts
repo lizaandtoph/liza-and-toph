@@ -573,7 +573,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
           firstName: user.firstName || null,
           lastName: user.lastName || null,
           role: user.role, 
-          proId: user.proId 
+          proId: user.proId,
+          createdAt: user.createdAt
         }, 
         children 
       });
