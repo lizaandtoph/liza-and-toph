@@ -56,7 +56,7 @@ export default function Layout({ children: pageContent }: { children: React.Reac
                   barriers: child.barriers || [],
                   interests: child.interests || [],
                   milestones: child.milestones || {},
-                  fullQuestionnaire: child.fullQuestionnaire || {},
+                  ...(child.fullQuestionnaire ? { fullQuestionnaire: child.fullQuestionnaire } : {}),
                   questionnaire_version: child.questionnaireVersion || 1,
                 };
               });

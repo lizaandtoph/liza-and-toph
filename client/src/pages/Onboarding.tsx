@@ -125,6 +125,28 @@ export default function Onboarding() {
           setErrors(newErrors);
         }
       }
+    } else if (step === 2) {
+      // Validate milestones are answered
+      const newErrors: Record<string, string> = {};
+      if (!formData.milestones.social_emotional.answer) {
+        newErrors.milestones = 'Please answer all milestone questions';
+      }
+      if (!formData.milestones.cognitive.answer) {
+        newErrors.milestones = 'Please answer all milestone questions';
+      }
+      if (!formData.milestones.language.answer) {
+        newErrors.milestones = 'Please answer all milestone questions';
+      }
+      if (!formData.milestones.motor.answer) {
+        newErrors.milestones = 'Please answer all milestone questions';
+      }
+      
+      if (Object.keys(newErrors).length > 0) {
+        setErrors(newErrors);
+      } else {
+        setErrors({});
+        setStep(step + 1);
+      }
     } else {
       setStep(step + 1);
     }
@@ -525,6 +547,12 @@ export default function Onboarding() {
           ) : (
             <div className="text-center py-8">
               <p className="text-lg opacity-70">Please complete Step 1 first to see age-appropriate milestone questions.</p>
+            </div>
+          )}
+          
+          {errors.milestones && (
+            <div className="mt-6 p-4 bg-red-50 border-2 border-red-200 rounded-xl">
+              <p className="text-red-600 text-center font-medium">{errors.milestones}</p>
             </div>
           )}
           
