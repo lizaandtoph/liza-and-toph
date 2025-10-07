@@ -78,25 +78,31 @@ export default function Layout({ children: pageContent }: { children: React.Reac
     if (isAuthenticated && user) {
       if (!parentAccount) {
         // If no parent account exists, create one from auth user data
-        setParentAccount({
-          firstName: user.firstName || '',
-          lastName: user.lastName || '',
-          email: user.email || '',
-          role: user.role || 'parent',
-          password: ''
-        });
+        // Use setTimeout to defer state update until after render
+        setTimeout(() => {
+          setParentAccount({
+            firstName: user.firstName || '',
+            lastName: user.lastName || '',
+            email: user.email || '',
+            role: user.role || 'parent',
+            password: ''
+          });
+        }, 0);
       } else {
         // Update parent account with auth user data, especially the role
         if (user.firstName !== parentAccount.firstName || 
             user.lastName !== parentAccount.lastName || 
             user.email !== parentAccount.email ||
             user.role !== parentAccount.role) {
-          updateParentAccount({
-            firstName: user.firstName || parentAccount.firstName,
-            lastName: user.lastName || parentAccount.lastName,
-            email: user.email || parentAccount.email,
-            role: user.role || parentAccount.role
-          });
+          // Use setTimeout to defer state update until after render
+          setTimeout(() => {
+            updateParentAccount({
+              firstName: user.firstName || parentAccount.firstName,
+              lastName: user.lastName || parentAccount.lastName,
+              email: user.email || parentAccount.email,
+              role: user.role || parentAccount.role
+            });
+          }, 0);
         }
       }
     }
