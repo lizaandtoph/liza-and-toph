@@ -30,9 +30,9 @@ const childWithParentSchema = z.object({
 
 export default function Onboarding() {
   const [, setLocation] = useLocation();
-  const { setLoggedIn, setParentAccount, parentAccount, loadChildren } = useStore();
+  const { setLoggedIn, setParentAccount, parentAccount, loadChildren, children } = useStore();
   const { user, isAuthenticated, isLoading } = useAuth();
-  const hasParentAccount = !!parentAccount;
+  const isFirstChild = children.length === 0;
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     firstName: '',
@@ -98,7 +98,7 @@ export default function Onboarding() {
   const nextStep = () => {
     if (step === 1) {
       try {
-        if (hasParentAccount) {
+        if (!isFirstChild) {
           childOnlySchema.parse({ 
             name: formData.name, 
             birthday: formData.birthday,
@@ -166,7 +166,7 @@ export default function Onboarding() {
       let childBirthday: string;
       let householdSize: number;
       
-      if (hasParentAccount) {
+      if (!isFirstChild) {
         const childData = childOnlySchema.parse({ 
           name: formData.name, 
           birthday: formData.birthday,
@@ -305,13 +305,13 @@ export default function Onboarding() {
       {step === 1 && (
         <div className="bg-gradient-to-br from-[#EDE9DC] to-ivory p-10 rounded-2xl shadow-lg">
           <h2 className="text-3xl font-bold mb-3 text-center" data-testid="heading-step-1">
-            {hasParentAccount ? 'Add Another Child' : "Let's Get Started"}
+            {!isFirstChild ? 'Add Another Child' : "Let's Get Started"}
           </h2>
           <p className="text-center mb-8 opacity-70">
-            {hasParentAccount ? 'Tell us about your child' : 'Create your parent account and tell us about your child'}
+            {!isFirstChild ? 'Tell us about your child' : 'Create your parent account and tell us about your child'}
           </p>
           
-          {!hasParentAccount && (
+          {isFirstChild && (
             <>
               <div className="mb-6">
                 <label className="block mb-3 font-semibold text-lg">Your First Name</label>
