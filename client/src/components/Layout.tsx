@@ -2,6 +2,7 @@ import { Link, useLocation } from 'wouter';
 import { Baby, Heart, ShoppingCart, HardHat, Settings as SettingsIcon, User, ChevronDown, Plus, AlertCircle, X, LogOut } from 'lucide-react';
 import { useStore } from '../store';
 import { useAuth } from '../hooks/useAuth';
+import { queryClient } from '@/lib/queryClient';
 import logoImage from '@assets/symbol_orange_mono_1759602921856.png';
 import { useState, useEffect, useRef } from 'react';
 
@@ -26,7 +27,9 @@ export default function Layout({ children: pageContent }: { children: React.Reac
     } catch (error) {
       console.error('Logout error:', error);
     } finally {
-      reset();
+      // Clear all cached data
+      reset(); // Clear Zustand store
+      queryClient.clear(); // Clear all React Query cache
       setLocation('/login');
     }
   };
