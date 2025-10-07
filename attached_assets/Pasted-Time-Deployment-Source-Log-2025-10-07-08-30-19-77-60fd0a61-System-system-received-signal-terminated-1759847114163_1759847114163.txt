@@ -1,0 +1,152 @@
+Time
+Deployment
+Source
+Log
+2025-10-07 08:30:19.77
+60fd0a61
+System
+system: received signal terminated
+2025-10-07 09:45:02.15
+9ba46250
+User
+> rest-express@1.0.0 start
+2025-10-07 09:45:02.15
+9ba46250
+User
+> NODE_ENV=production node dist/index.js
+2025-10-07 09:45:03.21
+9ba46250
+User
+[Session] Configuring session - production: true secure: true
+2025-10-07 09:45:03.34
+9ba46250
+User
+1:45:03 PM [express] serving on port 5000
+2025-10-07 09:45:41.76
+9ba46250
+System
+starting up user application
+2025-10-07 09:45:41.77
+9ba46250
+System
+forwarding local port 5000 to external port 80 (mapped as 1104)
+2025-10-07 09:45:48.31
+9ba46250
+User
+> rest-express@1.0.0 start
+2025-10-07 09:45:48.31
+9ba46250
+User
+> NODE_ENV=production node dist/index.js
+2025-10-07 09:45:53.22
+9ba46250
+User
+[Session] Configuring session - production: true secure: true
+2025-10-07 09:45:53.76
+9ba46250
+User
+1:45:53 PM [express] serving on port 5000
+2025-10-07 09:45:56.19
+9ba46250
+User
+1:45:56 PM [express] GET /api/products 200 in 1876ms :: [{"id":"LT002","name":"Vulli Sophie la Giraf…
+2025-10-07 09:45:56.71
+9ba46250
+User
+1:45:56 PM [express] POST /api/auth/request-login 200 in 2147ms :: {"message":"Login link sent to yo…
+2025-10-07 09:46:40.59
+9ba46250
+User
+1:46:40 PM [express] GET /api/auth/verify/r9WC9Id6wbGDDAdrtm60h4JG6iJx0roC 302 in 407ms
+2025-10-07 09:46:42.18
+9ba46250
+User
+1:46:42 PM [express] GET /api/auth/user 304 in 205ms :: {"id":"48371733","email":"cpm@lizaandtoph.co…
+2025-10-07 09:46:42.32
+9ba46250
+User
+1:46:42 PM [express] GET /api/auth/me 304 in 91ms :: {"user":{"id":"48371733","email":"cpm@lizaandto…
+2025-10-07 09:47:20.81
+9ba46250
+User
+1:47:20 PM [express] GET /api/auth/user 304 in 117ms :: {"id":"48371733","email":"cpm@lizaandtoph.co…
+2025-10-07 09:47:21.00
+9ba46250
+User
+1:47:21 PM [express] GET /api/auth/me 304 in 137ms :: {"user":{"id":"48371733","email":"cpm@lizaandt…
+2025-10-07 09:48:51.76
+958bbbf9
+System
+system: received signal terminated
+2025-10-07 09:51:13.00
+9ba46250
+System
+system: received signal terminated
+2025-10-07 09:51:34.55
+bf1ba187
+System
+starting up user application
+2025-10-07 09:51:34.55
+bf1ba187
+System
+forwarding local port 5000 to external port 80 (mapped as 1104)
+2025-10-07 09:51:37.73
+bf1ba187
+User
+> rest-express@1.0.0 start
+2025-10-07 09:51:37.73
+bf1ba187
+User
+> NODE_ENV=production node dist/index.js
+2025-10-07 09:51:39.55
+bf1ba187
+User
+[Session] Configuring session - production: true secure: true
+2025-10-07 09:51:39.81
+bf1ba187
+User
+1:51:39 PM [express] serving on port 5000
+2025-10-07 10:15:50.69
+9bbc6dcd
+System
+starting up user application
+2025-10-07 10:15:50.69
+9bbc6dcd
+System
+forwarding local port 5000 to external port 80 (mapped as 1104)
+2025-10-07 10:15:52.16
+9bbc6dcd
+User
+> rest-express@1.0.0 start
+2025-10-07 10:15:52.16
+9bbc6dcd
+User
+> NODE_ENV=production node dist/index.js
+2025-10-07 10:15:53.18
+9bbc6dcd
+User
+[Session] Configuring session - production: true secure: true
+2025-10-07 10:15:53.29
+9bbc6dcd
+User
+2:15:53 PM [express] serving on port 5000
+2025-10-07 10:19:21.33
+bf1ba187
+System
+system: received signal terminated
+2025-10-07 10:23:39.86
+9bbc6dcd
+User
+2:23:39 PM [express] GET /api/auth/user 304 in 186ms :: {"id":"48371733","email":"cpm@lizaandtoph.co…
+2025-10-07 10:23:40.09
+9bbc6dcd
+User
+2:23:40 PM [express] GET /api/auth/me 304 in 178ms :: {"user":{"id":"48371733","email":"cpm@lizaandt…
+2025-10-07 10:23:44.10
+9bbc6dcd
+User
+2:23:44 PM [express] GET /api/auth/user 304 in 117ms :: {"id":"48371733","email":"cpm@lizaandtoph.co…
+2025-10-07 10:23:44.29
+9bbc6dcd
+User
+2:23:44 PM [express] GET /api/auth/me 304 in 148ms :: {"user":{"id":"48371733","email":"cpm@lizaandt…
