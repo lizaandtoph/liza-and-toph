@@ -37,10 +37,7 @@ export default function PlayBoard() {
     return '';
   }, [child]);
   
-  const hasFullAccess = subscribed || 
-    (parentAccount?.role === 'admin') ||
-    (parentAccount?.firstName?.toLowerCase() === 'topher') ||
-    (parentAccount?.email?.toLowerCase() === 'cpm@mcginnisenterprise.com');
+  const hasFullAccess = subscribed || (parentAccount?.role === 'admin');
 
   const { data: products = [] } = useQuery<Product[]>({
     queryKey: ['/api/products'],

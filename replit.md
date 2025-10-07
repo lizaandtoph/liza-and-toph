@@ -109,7 +109,6 @@ Preferred communication style: Simple, everyday language.
   - Onboarding Step 1 pre-fills parent info (firstName, lastName, email) from authenticated Replit Auth user
   - Parent info fields disabled during onboarding to prevent editing auth-provided data
   - Settings page displays user info from Replit Auth (name and email) - password managed by Replit
-  - Special access: firstName "Topher" OR email "cpm@mcginnisenterprise.com" grants full access without subscription
   - Child's first name (not full name) collected in onboarding
 - **Child Profiles**: Stores child information with unique ID (nanoid), name, birthday, calculated age, age band, and developmental preferences
   - Multiple children per parent account supported
