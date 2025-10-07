@@ -14,7 +14,7 @@ export const sessions = pgTable(
   (table) => [index("IDX_session_expire").on(table.expire)],
 );
 
-// User storage table for Replit Auth
+// User storage table
 export const users = pgTable("users", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   email: varchar("email").unique(),
@@ -25,6 +25,16 @@ export const users = pgTable("users", {
   proId: varchar("pro_id"),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Magic link login tokens
+export const loginTokens = pgTable("login_tokens", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  token: varchar("token").notNull().unique(),
+  expiresAt: timestamp("expires_at").notNull(),
+  used: boolean("used").default(false).notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
 });
 
 export const childProfiles = pgTable("child_profiles", {
@@ -476,6 +486,11 @@ export const insertPasswordResetTokenSchema = createInsertSchema(passwordResetTo
   createdAt: true,
 });
 
+export const insertLoginTokenSchema = createInsertSchema(loginTokens).omit({
+  id: true,
+  createdAt: true,
+});
+
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
 export type UpsertUser = typeof users.$inferInsert;
@@ -484,3 +499,5 @@ export type LoginUser = z.infer<typeof loginUserSchema>;
 export type UpdateUserAccount = z.infer<typeof updateUserAccountSchema>;
 export type PasswordResetToken = typeof passwordResetTokens.$inferSelect;
 export type InsertPasswordResetToken = z.infer<typeof insertPasswordResetTokenSchema>;
+export type LoginToken = typeof loginTokens.$inferSelect;
+export type InsertLoginToken = z.infer<typeof insertLoginTokenSchema>;
