@@ -121,7 +121,7 @@ export default function Settings() {
     }
   };
 
-  const handleChildUpdate = () => {
+  const handleChildUpdate = async () => {
     if (!childForm.name || !childForm.birthday) {
       toast({
         title: 'Error',
@@ -134,19 +134,37 @@ export default function Settings() {
     const { years, months, totalMonths } = calculateAgeFromBirthday(childForm.birthday);
     const ageBand = categorizeAgeBand(totalMonths);
 
-    updateChild(editingChild!, {
-      name: childForm.name,
-      birthday: childForm.birthday,
-      ageYears: years,
-      ageMonths: months,
-      ageBand
-    });
+    try {
+      // Update in database first
+      await apiRequest('PATCH', `/api/child-profiles/${editingChild}`, {
+        name: childForm.name,
+        birthday: childForm.birthday,
+        ageYears: years,
+        ageMonths: months,
+        ageBand
+      });
 
-    setEditingChild(null);
-    toast({
-      title: 'Success',
-      description: 'Child profile updated'
-    });
+      // Then update local state
+      updateChild(editingChild!, {
+        name: childForm.name,
+        birthday: childForm.birthday,
+        ageYears: years,
+        ageMonths: months,
+        ageBand
+      });
+
+      setEditingChild(null);
+      toast({
+        title: 'Success',
+        description: 'Child profile updated'
+      });
+    } catch (error: any) {
+      toast({
+        title: 'Error',
+        description: error.message || 'Failed to update child profile',
+        variant: 'destructive'
+      });
+    }
   };
 
   const confirmDeleteChild = (childId: string) => {
