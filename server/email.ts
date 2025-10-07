@@ -60,3 +60,29 @@ export async function sendPasswordResetEmail(to: string, resetToken: string) {
     `,
   });
 }
+
+export async function sendMagicLinkEmail(to: string, loginToken: string, protocol: string = 'https') {
+  const { client, fromEmail } = await getUncachableResendClient();
+  
+  // Determine the base URL
+  const hostname = process.env.REPLIT_DOMAINS?.split(',')[0] || 'localhost:5000';
+  const baseUrl = hostname.includes('localhost') ? `http://${hostname}` : `${protocol}://${hostname}`;
+  const loginUrl = `${baseUrl}/api/auth/verify/${loginToken}`;
+  
+  await client.emails.send({
+    from: fromEmail,
+    to,
+    subject: 'Your Login Link - Liza & Toph',
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <h2 style="color: #4A5D23;">Login to Your Account</h2>
+        <p>Click the button below to securely log in to your Liza & Toph account:</p>
+        <a href="${loginUrl}" style="display: inline-block; padding: 12px 24px; background-color: #4A5D23; color: white; text-decoration: none; border-radius: 5px; margin: 16px 0;">Log In to Liza & Toph</a>
+        <p>Or copy and paste this link into your browser:</p>
+        <p style="color: #666; word-break: break-all;">${loginUrl}</p>
+        <p style="color: #999; font-size: 14px; margin-top: 24px;">This link will expire in 15 minutes and can only be used once.</p>
+        <p style="color: #999; font-size: 14px;">If you didn't request this login link, you can safely ignore this email.</p>
+      </div>
+    `,
+  });
+}

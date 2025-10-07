@@ -4,6 +4,8 @@ import { storage } from "./storage";
 import { insertChildProfileSchema, insertPlayBoardSchema, insertProductSchema, updateProductSchema, insertProfessionalSchema, updateProfessionalSchema, registerUserSchema, loginUserSchema, updateUserAccountSchema, insertProSchema, updateProSchema, insertServiceOfferingSchema, insertServiceAreaSchema, insertGalleryImageSchema, insertReviewSchema, insertMessageSchema } from "@shared/schema";
 import { z } from "zod";
 import { setupAuth, isAuthenticated } from "./replitAuth";
+import { sendMagicLinkEmail } from "./email";
+import { nanoid } from "nanoid";
 import multer from "multer";
 import path from "path";
 import fs from "fs";
@@ -73,6 +75,110 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error fetching user:", error);
       res.status(500).json({ message: "Failed to fetch user" });
+    }
+  });
+
+  // Magic link authentication - request login link
+  app.post('/api/auth/request-login', async (req, res) => {
+    try {
+      const { email } = req.body;
+      
+      if (!email || typeof email !== 'string') {
+        return res.status(400).json({ message: "Email is required" });
+      }
+
+      // Find or create user by email
+      let user = await storage.getUserByEmail(email.toLowerCase().trim());
+      
+      if (!user) {
+        // Create new user if they don't exist
+        user = await storage.upsertUser({
+          id: nanoid(),
+          email: email.toLowerCase().trim(),
+          firstName: null,
+          lastName: null,
+          profileImageUrl: null
+        });
+      }
+
+      // Generate login token
+      const token = nanoid(32);
+      const expiresAt = new Date(Date.now() + 15 * 60 * 1000); // 15 minutes
+
+      // Save token to database
+      await storage.createLoginToken(user.id, token, expiresAt);
+
+      // Send magic link email
+      await sendMagicLinkEmail(email, token);
+
+      res.json({ message: "Login link sent to your email" });
+    } catch (error) {
+      console.error("Error sending magic link:", error);
+      res.status(500).json({ message: "Failed to send login link" });
+    }
+  });
+
+  // Magic link authentication - verify token and log in
+  app.get('/api/auth/verify/:token', async (req, res) => {
+    try {
+      const { token } = req.params;
+
+      // Verify token
+      const loginToken = await storage.getLoginToken(token);
+
+      if (!loginToken) {
+        return res.status(400).send(`
+          <html>
+            <head><title>Invalid Login Link</title></head>
+            <body style="font-family: Arial, sans-serif; text-align: center; padding: 50px;">
+              <h1>Invalid or Expired Login Link</h1>
+              <p>This login link is invalid, has expired, or has already been used.</p>
+              <p><a href="/login">Request a new login link</a></p>
+            </body>
+          </html>
+        `);
+      }
+
+      // Mark token as used
+      await storage.markLoginTokenUsed(token);
+
+      // Get user
+      const user = await storage.getUser(loginToken.userId);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      // Create session (compatible with existing session system)
+      req.login({ claims: { sub: user.id, email: user.email } }, (err: any) => {
+        if (err) {
+          console.error("Error creating session:", err);
+          return res.status(500).send(`
+            <html>
+              <head><title>Login Error</title></head>
+              <body style="font-family: Arial, sans-serif; text-align: center; padding: 50px;">
+                <h1>Login Error</h1>
+                <p>An error occurred while logging you in. Please try again.</p>
+                <p><a href="/login">Go to login</a></p>
+              </body>
+            </html>
+          `);
+        }
+
+        // Successful login - redirect to home
+        res.redirect('/');
+      });
+    } catch (error) {
+      console.error("Error verifying magic link:", error);
+      res.status(500).send(`
+        <html>
+          <head><title>Login Error</title></head>
+          <body style="font-family: Arial, sans-serif; text-align: center; padding: 50px;">
+            <h1>Login Error</h1>
+            <p>An unexpected error occurred. Please try again.</p>
+            <p><a href="/login">Go to login</a></p>
+          </body>
+        </html>
+      `);
     }
   });
 
