@@ -338,7 +338,7 @@ export default function Layout({ children: pageContent }: { children: React.Reac
                 Liza & Toph
               </h3>
               <p className="text-sm opacity-80">
-                Personalized play guidance for every child's unique journey.
+                The first evidence-based platform for childhood development and play.
               </p>
             </div>
             <div>
