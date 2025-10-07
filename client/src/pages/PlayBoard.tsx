@@ -4,7 +4,7 @@ import { useStore } from '../store';
 import { logEvent } from '../analytics';
 import milestonesData from '../data/milestones.json';
 import rulesData from '../data/rules.json';
-import { Sparkles, Lock, TrendingUp, ShoppingCart, FileText } from 'lucide-react';
+import { Sparkles, Lock, TrendingUp, ShoppingCart, FileText, CheckCircle } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { type Product } from '@shared/schema';
 import { calculateAgeFromBirthday, categorizeAgeBand } from '@shared/ageUtils';
@@ -327,10 +327,11 @@ export default function PlayBoard() {
                 <TrendingUp className="w-6 h-6 text-ochre" />
                 <h3 className="text-2xl font-semibold">Milestone Tracker</h3>
               </div>
-              {answers.milestones?.social_emotional?.answer || 
-               answers.milestones?.cognitive?.answer || 
-               answers.milestones?.language?.answer || 
-               answers.milestones?.motor?.answer ? (
+              {(answers.milestones?.social_emotional?.answer || 
+                answers.milestones?.cognitive?.answer || 
+                answers.milestones?.language?.answer || 
+                answers.milestones?.motor?.answer ||
+                answers.fullQuestionnaire) ? (
                 <div className="grid md:grid-cols-2 gap-4">
                   {answers.milestones.social_emotional?.answer && (
                     <div className="p-4 bg-gradient-to-br from-blush/20 to-ivory border-2 border-sand rounded-xl">
@@ -372,6 +373,18 @@ export default function PlayBoard() {
                       <p className="font-medium capitalize">{answers.milestones.motor.answer.replace('_', ' ')}</p>
                     </div>
                   )}
+                </div>
+              ) : answers.fullQuestionnaire ? (
+                <div className="text-center py-8 px-4">
+                  <div className="inline-block p-4 bg-olive/10 rounded-full mb-4">
+                    <CheckCircle className="w-8 h-8 text-olive" />
+                  </div>
+                  <p className="text-lg mb-2 font-semibold text-olive">
+                    Full Development Assessment Complete!
+                  </p>
+                  <p className="text-sm opacity-60 mb-6">
+                    You've completed the comprehensive assessment. View detailed results below in the Developmental Journey section.
+                  </p>
                 </div>
               ) : (
                 <div className="text-center py-8 px-4">
