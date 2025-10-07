@@ -2,15 +2,33 @@ import { Link } from 'wouter';
 import { useStore } from '../store';
 import { logEvent } from '../analytics';
 import rulesData from '../data/rules.json';
-import needsToProductsData from '../data/needsToProducts.json';
 import { Sparkles, ExternalLink, ShoppingBag } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
+import { type Product } from '@shared/schema';
+import { calculateAgeFromBirthday, categorizeAgeBand } from '@shared/ageUtils';
+import { useMemo } from 'react';
 
 export default function Recommendations() {
   const { getActiveChild, getAnswers, activeChildId } = useStore();
   const child = getActiveChild();
   const answers = child ? getAnswers(child.id) : { schemas: [], barriers: [], interests: [] };
 
-  if (!child || !child.ageBand) {
+  // Calculate ageBand from birthday if missing (for backwards compatibility)
+  const effectiveAgeBand = useMemo(() => {
+    if (!child) return '';
+    if (child.ageBand) return child.ageBand;
+    if (child.birthday) {
+      const { totalMonths } = calculateAgeFromBirthday(child.birthday);
+      return categorizeAgeBand(totalMonths);
+    }
+    return '';
+  }, [child]);
+
+  const { data: products = [] } = useQuery<Product[]>({
+    queryKey: ['/api/products'],
+  });
+
+  if (!child || !effectiveAgeBand) {
     return (
       <div className="container mx-auto px-4 max-w-4xl py-12 text-center">
         <div className="bg-gradient-to-br from-[#EDE9DC] to-ivory p-12 rounded-2xl shadow-lg">
@@ -46,6 +64,34 @@ export default function Recommendations() {
 
   const needIds = computeNeeds();
   
+  // Parse age range from product
+  const parseAgeRange = (ageRange: string) => {
+    const parts = ageRange.split('-');
+    
+    const parseAgeValue = (value: string) => {
+      const match = value.match(/(\d+\.?\d*)\s*(m|months?|y|years?)?/i);
+      if (!match) return 0;
+      
+      const value2 = parseFloat(match[1]);
+      const unit = match[2];
+      
+      if (unit && (unit.startsWith('m') || unit === 'months' || unit === 'month')) {
+        return value2 / 12;
+      }
+      return value2;
+    };
+    
+    if (parts.length === 2) {
+      return {
+        ageMin: parseAgeValue(parts[0].trim()),
+        ageMax: parseAgeValue(parts[1].trim())
+      };
+    }
+    
+    const singleAge = parseAgeValue(ageRange);
+    return { ageMin: singleAge, ageMax: singleAge };
+  };
+
   const ageMap: Record<string, [number, number]> = {
     'newborn-18m': [0, 1.5],
     '18m-3y': [1.5, 3],
@@ -60,21 +106,57 @@ export default function Recommendations() {
     '10-early-teens': [10, 13],
     'preteens-older-teens': [11, 17],
   };
-  const [minAge, maxAge] = ageMap[child.ageBand] || [0, 18];
+  const [minAge, maxAge] = ageMap[effectiveAgeBand] || [0, 18];
 
-  const products = needIds.flatMap((needId) => {
-    const items = needsToProductsData[needId as keyof typeof needsToProductsData] || [];
-    return items.filter(
-      (item) => item.ageMin <= maxAge && item.ageMax >= minAge
-    );
-  });
+  const childAge = child.ageYears || 0;
 
-  const uniqueProducts = Array.from(
-    new Map(products.map((p) => [p.skuId, p])).values()
-  ).slice(0, 12);
+  // Filter and score products based on age and needs
+  const productsWithScores = products
+    .map((p) => {
+      const { ageMin, ageMax } = parseAgeRange(p.ageRange);
+      
+      let relevanceScore = 0;
+      if (p.categories && Array.isArray(p.categories)) {
+        p.categories.forEach(category => {
+          needIds.forEach(needId => {
+            if (category.toLowerCase().includes(needId.toLowerCase()) ||
+                needId.toLowerCase().includes(category.toLowerCase())) {
+              relevanceScore += 10;
+            }
+          });
+        });
+      }
+      
+      return {
+        ...p,
+        ageMin,
+        ageMax,
+        relevanceScore,
+      };
+    })
+    .filter((p) => {
+      const ageMatch = childAge >= p.ageMin && childAge <= p.ageMax;
+      return ageMatch;
+    })
+    .sort((a, b) => b.relevanceScore - a.relevanceScore)
+    .slice(0, 12);
+
+  const uniqueProducts = productsWithScores.map((p) => ({
+    skuId: p.id,
+    title: p.name,
+    url: p.affiliateUrl || '#',
+    ageMin: p.ageMin,
+    ageMax: p.ageMax,
+    domains: p.categories || [],
+    imageUrl: p.imageUrl,
+  }));
 
   const handleClick = (skuId: string, url: string) => {
     logEvent('recommendation_clicked', { sku: skuId });
+    if (!url || url === '#') {
+      alert('Product link not available yet. This feature is coming soon!');
+      return;
+    }
     const encodedUrl = encodeURIComponent(url);
     window.open(`/api/links?sku=${skuId}&to=${encodedUrl}`, '_blank');
   };
