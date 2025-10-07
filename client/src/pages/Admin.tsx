@@ -54,12 +54,14 @@ export default function Admin() {
   const createProductMutation = useMutation({
     mutationFn: (data: InsertProduct) => apiRequest('POST', '/api/admin/products', data),
     onSuccess: () => {
+      console.log('Product created successfully');
       queryClient.invalidateQueries({ queryKey: ['/api/admin/products'] });
       setIsCreateOpen(false);
       createForm.reset();
       toast({ title: 'Product created successfully' });
     },
-    onError: () => {
+    onError: (error: any) => {
+      console.error('Failed to create product:', error);
       toast({ title: 'Failed to create product', variant: 'destructive' });
     },
   });
@@ -148,6 +150,8 @@ export default function Admin() {
   });
 
   const handleCreateSubmit = (data: InsertProduct) => {
+    console.log('Form submitted with data:', data);
+    console.log('Form errors:', createForm.formState.errors);
     createProductMutation.mutate(data);
   };
 
@@ -1098,7 +1102,16 @@ export default function Admin() {
                 <Button type="button" variant="outline" onClick={() => setIsCreateOpen(false)} data-testid="button-cancel-create">
                   Cancel
                 </Button>
-                <Button type="submit" disabled={createProductMutation.isPending} data-testid="button-submit-create">
+                <Button 
+                  type="submit" 
+                  disabled={createProductMutation.isPending} 
+                  data-testid="button-submit-create"
+                  onClick={() => {
+                    console.log('Create button clicked');
+                    console.log('Form valid:', createForm.formState.isValid);
+                    console.log('Form errors:', createForm.formState.errors);
+                  }}
+                >
                   {createProductMutation.isPending ? 'Creating...' : 'Create Product'}
                 </Button>
               </div>
