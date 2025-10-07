@@ -15,23 +15,26 @@ export default function Shop() {
   const child = getActiveChild();
   const [location] = useLocation();
   
-  // Get category from URL params
+  // Get category and age from URL params
   const urlParams = new URLSearchParams(window.location.search);
   const categoryFromUrl = urlParams.get('category') || 'all';
+  const ageFromUrl = urlParams.get('age') || null;
   
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>(categoryFromUrl);
   const [showFilters, setShowFilters] = useState(false);
   
-  // Update category when URL changes
+  // Update category and age when URL changes
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const category = params.get('category') || 'all';
+    const age = params.get('age') || null;
     setSelectedCategory(category);
+    setSelectedAgeBracket(age);
   }, [location]);
   
   // Filter states
-  const [selectedAgeBracket, setSelectedAgeBracket] = useState<string | null>(null);
+  const [selectedAgeBracket, setSelectedAgeBracket] = useState<string | null>(ageFromUrl);
   const [selectedPlayTypes, setSelectedPlayTypes] = useState<string[]>([]);
   const [selectedComplexity, setSelectedComplexity] = useState<string | null>(null);
   const [selectedEnergy, setSelectedEnergy] = useState<string | null>(null);

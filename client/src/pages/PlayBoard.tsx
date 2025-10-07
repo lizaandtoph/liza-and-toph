@@ -275,6 +275,27 @@ export default function PlayBoard() {
     setShowPaywall(false);
   };
 
+  // Map age band to shop age bracket
+  const getShopAgeBracket = (ageBand: string): string => {
+    const mapping: Record<string, string> = {
+      'newborn-18m': '6-12m',
+      '18m-3y': '2-3y',
+      '2-5y': '3-4y',
+      '3-6y': '4-5y',
+      '4-7y': '5-6y',
+      '5-8y': '5-6y',
+      '6-9y': '5-6y',
+      '7-10y': '5-6y',
+      '8-11y': '5-6y',
+      '9-12y': '5-6y',
+      '10-early-teens': '5-6y',
+      'preteens-older-teens': '5-6y',
+    };
+    return mapping[ageBand] || '2-3y';
+  };
+
+  const childAgeBracket = getShopAgeBracket(effectiveAgeBand);
+
   return (
     <div className="relative">
       {/* Hero Section with Gradient */}
@@ -656,13 +677,16 @@ export default function PlayBoard() {
           })}
         </div>
 
-        {/* Recommended Products Section */}
+        {/* Shopping Section - Age-Filtered Products */}
         {recommendedProducts.length > 0 && (
           <div className="mt-12" data-testid="section-recommended-products">
             <div className="text-center mb-8">
-              <h2 className="text-3xl font-bold mb-3">Ready to bring these ideas to life?</h2>
+              <div className="inline-flex items-center gap-2 mb-3">
+                <ShoppingCart className="w-7 h-7 text-olive" />
+                <h2 className="text-3xl font-bold">Shop for {child.name}</h2>
+              </div>
               <p className="text-lg opacity-80 mb-2">
-                Explore curated toys and products perfectly matched to {child.name}'s development
+                Products curated for {effectiveAgeBand.replace('-', ' - ')} year olds, matched to {child.name}'s developmental needs
               </p>
               <p className="text-sm opacity-60">
                 As we develop the market place, product links below may be affiliate links from platforms such as Amazon. As affiliates, we earn from qualifying purchases.
@@ -721,12 +745,12 @@ export default function PlayBoard() {
 
             <div className="text-center">
               <Link
-                to="/shop"
+                to={`/shop?age=${childAgeBracket}`}
                 className="inline-flex items-center gap-2 px-8 py-4 bg-olive text-ivory rounded-xl hover:bg-ochre transition text-lg font-semibold shadow-lg hover:shadow-xl"
                 data-testid="button-shop-all"
               >
                 <ShoppingCart className="w-5 h-5" />
-                Shop All Products
+                Shop for {child.name}
               </Link>
             </div>
           </div>
