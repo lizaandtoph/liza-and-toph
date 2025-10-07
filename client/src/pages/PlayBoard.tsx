@@ -321,89 +321,57 @@ export default function PlayBoard() {
             )}
           </div>
 
-          {hasFullAccess && (
+          {hasFullAccess && (answers.milestones?.social_emotional?.answer || 
+            answers.milestones?.cognitive?.answer || 
+            answers.milestones?.language?.answer || 
+            answers.milestones?.motor?.answer) && (
             <div className="bg-white/80 backdrop-blur-sm border-2 border-olive/20 rounded-2xl p-8 shadow-lg max-w-3xl mx-auto mb-8">
               <div className="flex items-center gap-2 mb-6">
                 <TrendingUp className="w-6 h-6 text-ochre" />
                 <h3 className="text-2xl font-semibold">Milestone Tracker</h3>
               </div>
-              {(answers.milestones?.social_emotional?.answer || 
-                answers.milestones?.cognitive?.answer || 
-                answers.milestones?.language?.answer || 
-                answers.milestones?.motor?.answer ||
-                answers.fullQuestionnaire) ? (
-                <div className="grid md:grid-cols-2 gap-4">
-                  {answers.milestones.social_emotional?.answer && (
-                    <div className="p-4 bg-gradient-to-br from-blush/20 to-ivory border-2 border-sand rounded-xl">
-                      <div className="flex items-center gap-2 mb-2">
-                        <span className="text-2xl">😊</span>
-                        <h4 className="font-semibold">Social-Emotional</h4>
-                      </div>
-                      <p className="text-sm text-muted-foreground mb-2">{answers.milestones.social_emotional.question}</p>
-                      <p className="font-medium capitalize">{answers.milestones.social_emotional.answer.replace('_', ' ')}</p>
+              <div className="grid md:grid-cols-2 gap-4">
+                {answers.milestones?.social_emotional?.answer && (
+                  <div className="p-4 bg-gradient-to-br from-blush/20 to-ivory border-2 border-sand rounded-xl">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-2xl">😊</span>
+                      <h4 className="font-semibold">Social-Emotional</h4>
                     </div>
-                  )}
-                  {answers.milestones.cognitive?.answer && (
-                    <div className="p-4 bg-gradient-to-br from-blush/20 to-ivory border-2 border-sand rounded-xl">
-                      <div className="flex items-center gap-2 mb-2">
-                        <span className="text-2xl">🧠</span>
-                        <h4 className="font-semibold">Cognitive</h4>
-                      </div>
-                      <p className="text-sm text-muted-foreground mb-2">{answers.milestones.cognitive.question}</p>
-                      <p className="font-medium capitalize">{answers.milestones.cognitive.answer.replace('_', ' ')}</p>
-                    </div>
-                  )}
-                  {answers.milestones.language?.answer && (
-                    <div className="p-4 bg-gradient-to-br from-blush/20 to-ivory border-2 border-sand rounded-xl">
-                      <div className="flex items-center gap-2 mb-2">
-                        <span className="text-2xl">💬</span>
-                        <h4 className="font-semibold">Language & Communication</h4>
-                      </div>
-                      <p className="text-sm text-muted-foreground mb-2">{answers.milestones.language.question}</p>
-                      <p className="font-medium capitalize">{answers.milestones.language.answer.replace('_', ' ').replace('+', '+')}</p>
-                    </div>
-                  )}
-                  {answers.milestones.motor?.answer && (
-                    <div className="p-4 bg-gradient-to-br from-blush/20 to-ivory border-2 border-sand rounded-xl">
-                      <div className="flex items-center gap-2 mb-2">
-                        <span className="text-2xl">🤸</span>
-                        <h4 className="font-semibold">Motor Development</h4>
-                      </div>
-                      <p className="text-sm text-muted-foreground mb-2">{answers.milestones.motor.question}</p>
-                      <p className="font-medium capitalize">{answers.milestones.motor.answer.replace('_', ' ')}</p>
-                    </div>
-                  )}
-                </div>
-              ) : answers.fullQuestionnaire ? (
-                <div className="text-center py-8 px-4">
-                  <div className="inline-block p-4 bg-olive/10 rounded-full mb-4">
-                    <CheckCircle className="w-8 h-8 text-olive" />
+                    <p className="text-sm text-muted-foreground mb-2">{answers.milestones.social_emotional.question}</p>
+                    <p className="font-medium capitalize">{answers.milestones.social_emotional.answer.replace('_', ' ')}</p>
                   </div>
-                  <p className="text-lg mb-2 font-semibold text-olive">
-                    Full Development Assessment Complete!
-                  </p>
-                  <p className="text-sm opacity-60 mb-6">
-                    You've completed the comprehensive assessment. View detailed results below in the Developmental Journey section.
-                  </p>
-                </div>
-              ) : (
-                <div className="text-center py-8 px-4">
-                  <div className="inline-block p-4 bg-blush/10 rounded-full mb-4">
-                    <TrendingUp className="w-8 h-8 text-ochre" />
+                )}
+                {answers.milestones?.cognitive?.answer && (
+                  <div className="p-4 bg-gradient-to-br from-blush/20 to-ivory border-2 border-sand rounded-xl">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-2xl">🧠</span>
+                      <h4 className="font-semibold">Cognitive</h4>
+                    </div>
+                    <p className="text-sm text-muted-foreground mb-2">{answers.milestones.cognitive.question}</p>
+                    <p className="font-medium capitalize">{answers.milestones.cognitive.answer.replace('_', ' ')}</p>
                   </div>
-                  <p className="text-lg mb-4 opacity-80">
-                    No milestone data available yet
-                  </p>
-                  <p className="text-sm opacity-60 mb-6">
-                    Milestone tracking is collected during the onboarding process. If you'd like to update this information, you can create a new child profile with the onboarding questionnaire.
-                  </p>
-                  <Link to="/onboarding">
-                    <button className="px-6 py-3 bg-olive text-white rounded-lg hover:bg-ochre transition font-medium">
-                      Add New Child Profile
-                    </button>
-                  </Link>
-                </div>
-              )}
+                )}
+                {answers.milestones?.language?.answer && (
+                  <div className="p-4 bg-gradient-to-br from-blush/20 to-ivory border-2 border-sand rounded-xl">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-2xl">💬</span>
+                      <h4 className="font-semibold">Language & Communication</h4>
+                    </div>
+                    <p className="text-sm text-muted-foreground mb-2">{answers.milestones.language.question}</p>
+                    <p className="font-medium capitalize">{answers.milestones.language.answer.replace('_', ' ').replace('+', '+')}</p>
+                  </div>
+                )}
+                {answers.milestones?.motor?.answer && (
+                  <div className="p-4 bg-gradient-to-br from-blush/20 to-ivory border-2 border-sand rounded-xl">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-2xl">🤸</span>
+                      <h4 className="font-semibold">Motor Development</h4>
+                    </div>
+                    <p className="text-sm text-muted-foreground mb-2">{answers.milestones.motor.question}</p>
+                    <p className="font-medium capitalize">{answers.milestones.motor.answer.replace('_', ' ')}</p>
+                  </div>
+                )}
+              </div>
             </div>
           )}
 
