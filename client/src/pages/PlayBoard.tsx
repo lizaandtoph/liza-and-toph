@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { Link, useRoute } from 'wouter';
 import { useStore } from '../store';
 import { logEvent } from '../analytics';
@@ -7,6 +7,7 @@ import rulesData from '../data/rules.json';
 import { Sparkles, Lock, TrendingUp, ShoppingCart, FileText } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { type Product } from '@shared/schema';
+import { calculateAgeFromBirthday, categorizeAgeBand } from '@shared/ageUtils';
 
 export default function PlayBoard() {
   const [, params] = useRoute('/playboard/:childId');
@@ -25,21 +26,25 @@ export default function PlayBoard() {
   const child = getActiveChild();
   const answers = child ? getAnswers(child.id) : { schemas: [], barriers: [], interests: [] };
   
-  // Debug logging
-  console.log('=== PlayBoard Access Check ===');
-  console.log('parentAccount:', JSON.stringify(parentAccount, null, 2));
-  console.log('subscribed:', subscribed);
-  console.log('role check:', parentAccount?.role === 'admin');
-  console.log('firstName check:', parentAccount?.firstName?.toLowerCase() === 'topher');
-  console.log('email check:', parentAccount?.email?.toLowerCase() === 'cpm@mcginnisenterprise.com');
+  // Debug: Check if answers have data
+  console.log('PlayBoard - child:', child);
+  console.log('PlayBoard - answers:', answers);
+  
+  // Calculate ageBand from birthday if missing (for backwards compatibility)
+  const effectiveAgeBand = useMemo(() => {
+    if (!child) return '';
+    if (child.ageBand) return child.ageBand;
+    if (child.birthday) {
+      const { totalMonths } = calculateAgeFromBirthday(child.birthday);
+      return categorizeAgeBand(totalMonths);
+    }
+    return '';
+  }, [child]);
   
   const hasFullAccess = subscribed || 
     (parentAccount?.role === 'admin') ||
     (parentAccount?.firstName?.toLowerCase() === 'topher') ||
     (parentAccount?.email?.toLowerCase() === 'cpm@mcginnisenterprise.com');
-  
-  console.log('hasFullAccess:', hasFullAccess);
-  console.log('============================');
 
   const { data: products = [] } = useQuery<Product[]>({
     queryKey: ['/api/products'],
@@ -47,13 +52,13 @@ export default function PlayBoard() {
 
   useEffect(() => {
     if (child) {
-      logEvent('playboard_viewed', { ageBand: child.ageBand });
+      logEvent('playboard_viewed', { ageBand: effectiveAgeBand });
       if (!hasFullAccess) {
         logEvent('paywall_viewed');
         setShowPaywall(true);
       }
     }
-  }, [child?.ageBand, hasFullAccess]);
+  }, [child, effectiveAgeBand, hasFullAccess]);
 
   if (!child) {
     return (
@@ -71,13 +76,13 @@ export default function PlayBoard() {
     );
   }
 
-  const milestones = milestonesData[child.ageBand as keyof typeof milestonesData];
+  const milestones = milestonesData[effectiveAgeBand as keyof typeof milestonesData];
   
   if (!milestones) {
     return (
       <div className="container mx-auto px-4 max-w-4xl py-12 text-center">
         <h2 className="text-2xl font-semibold mb-4">Milestone Data Not Available</h2>
-        <p className="mb-4">We couldn't find milestone data for age band: {child.ageBand}</p>
+        <p className="mb-4">We couldn't find milestone data for age band: {effectiveAgeBand}</p>
         <p className="mb-4 text-sm text-espresso/60">This may happen if you completed the questionnaire before the latest update.</p>
         <button
           onClick={() => {
@@ -266,7 +271,7 @@ export default function PlayBoard() {
     }
   };
 
-  const currentJourney = journeyDescriptions[child.ageBand as keyof typeof journeyDescriptions];
+  const currentJourney = journeyDescriptions[effectiveAgeBand as keyof typeof journeyDescriptions];
 
   const handleSubscribe = () => {
     logEvent('subscribe_clicked');
@@ -284,7 +289,7 @@ export default function PlayBoard() {
               {child.name}'s Play Board
             </h1>
             <p className="text-lg opacity-80 mb-4" data-testid="text-age-range">
-              Age: {child.ageBand.replace('-', ' - ')} years
+              Age: {effectiveAgeBand.replace('-', ' - ')} years
             </p>
             {!answers.fullQuestionnaire && (
               <Link to={`/full-questionnaire/${child.id}`}>

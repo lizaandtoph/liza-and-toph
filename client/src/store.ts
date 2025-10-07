@@ -197,9 +197,17 @@ export const useStore = create<Store>()(
       },
 
       loadChildren: (children, answersMap) => {
+        const existingState = get();
+        
+        // Replace children with server data (server is source of truth)
+        // But preserve activeChildId if it still exists in the new children
+        const activeChildStillExists = children.some(c => c.id === existingState.activeChildId);
+        
         set({
           children,
-          activeChildId: children.length > 0 ? children[0].id : null,
+          activeChildId: activeChildStillExists 
+            ? existingState.activeChildId 
+            : (children.length > 0 ? children[0].id : null),
           childAnswers: answersMap,
         });
       },

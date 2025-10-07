@@ -52,6 +52,7 @@ export default function Onboarding() {
     },
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Pre-fill parent info from Replit Auth (only runs once when data loads)
   useEffect(() => {
@@ -134,6 +135,10 @@ export default function Onboarding() {
   };
 
   const handleSubmit = async () => {
+    // Prevent duplicate submissions
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+    
     try {
       let childName: string;
       let childBirthday: string;
@@ -195,6 +200,7 @@ export default function Onboarding() {
 
       if (!childResponse.ok) {
         console.error('Failed to create child');
+        setIsSubmitting(false);
         return;
       }
 
@@ -231,6 +237,7 @@ export default function Onboarding() {
       setLocation('/playboard');
     } catch (e) {
       console.error('Validation error:', e);
+      setIsSubmitting(false);
     }
   };
 

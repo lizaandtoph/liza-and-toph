@@ -39,6 +39,7 @@ export default function Layout({ children: pageContent }: { children: React.Reac
           const response = await fetch('/api/auth/me');
           if (response.ok) {
             const data = await response.json();
+            console.log('[Layout] API response:', data.children);
             if (data.children && data.children.length > 0) {
               const childrenData = data.children.map((c: any) => ({
                 id: c.id,
@@ -60,6 +61,7 @@ export default function Layout({ children: pageContent }: { children: React.Reac
                   questionnaire_version: child.questionnaireVersion || 1,
                 };
               });
+              console.log('[Layout] Answers map:', answersMap);
 
               loadChildren(childrenData, answersMap);
             }
