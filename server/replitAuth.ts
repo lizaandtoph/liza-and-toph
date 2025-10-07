@@ -87,45 +87,44 @@ export async function setupAuth(app: Express) {
     verified(null, user);
   };
 
-  const domains = process.env.REPLIT_DOMAINS!.split(",");
-  
-  // Register strategies for all configured domains
-  for (const domain of domains) {
+  // Create a map to store strategies by hostname
+  const strategyMap = new Map<string, Strategy>();
+
+  // Helper to get or create strategy for a hostname
+  const getOrCreateStrategy = (hostname: string, protocol: string = 'https') => {
+    if (strategyMap.has(hostname)) {
+      return strategyMap.get(hostname)!;
+    }
+
     const strategy = new Strategy(
       {
-        name: `replitauth:${domain}`,
+        name: `replitauth:${hostname}`,
         config,
         scope: "openid email profile offline_access",
-        callbackURL: `https://${domain}/api/callback`,
+        callbackURL: `${protocol}://${hostname}/api/callback`,
       },
       verify,
     );
+    
     passport.use(strategy);
+    strategyMap.set(hostname, strategy);
+    return strategy;
+  };
+
+  // Pre-register strategies for known domains
+  const domains = process.env.REPLIT_DOMAINS!.split(",");
+  for (const domain of domains) {
+    getOrCreateStrategy(domain.trim(), 'https');
   }
   
-  // Register strategy for local development
-  const localStrategy = new Strategy(
-    {
-      name: `replitauth:127.0.0.1`,
-      config,
-      scope: "openid email profile offline_access",
-      callbackURL: `http://127.0.0.1:5000/api/callback`,
-    },
-    verify,
-  );
-  passport.use(localStrategy);
+  // Pre-register local development strategies
+  getOrCreateStrategy('127.0.0.1', 'http');
+  getOrCreateStrategy('localhost', 'http');
   
-  // Also register for localhost
-  const localhostStrategy = new Strategy(
-    {
-      name: `replitauth:localhost`,
-      config,
-      scope: "openid email profile offline_access",
-      callbackURL: `http://localhost:5000/api/callback`,
-    },
-    verify,
-  );
-  passport.use(localhostStrategy);
+  // Pre-register custom domain if it exists
+  if (process.env.CUSTOM_DOMAIN) {
+    getOrCreateStrategy(process.env.CUSTOM_DOMAIN, 'https');
+  }
 
   passport.serializeUser((user: any, cb) => {
     cb(null, {
@@ -139,6 +138,10 @@ export async function setupAuth(app: Express) {
   passport.deserializeUser((user: any, cb) => cb(null, user));
 
   app.get("/api/login", (req, res, next) => {
+    // Dynamically create strategy if it doesn't exist
+    const protocol = req.protocol || (req.secure ? 'https' : 'http');
+    getOrCreateStrategy(req.hostname, protocol);
+    
     passport.authenticate(`replitauth:${req.hostname}`, {
       prompt: "login consent",
       scope: ["openid", "email", "profile", "offline_access"],
@@ -146,6 +149,10 @@ export async function setupAuth(app: Express) {
   });
 
   app.get("/api/callback", (req, res, next) => {
+    // Dynamically create strategy if it doesn't exist
+    const protocol = req.protocol || (req.secure ? 'https' : 'http');
+    getOrCreateStrategy(req.hostname, protocol);
+    
     passport.authenticate(`replitauth:${req.hostname}`, {
       successReturnToOrRedirect: "/",
       failureRedirect: "/api/login",

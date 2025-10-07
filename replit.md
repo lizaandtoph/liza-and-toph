@@ -10,10 +10,11 @@ Preferred communication style: Simple, everyday language.
 
 ## October 7, 2025 - Production Authentication & Data Sync Fixes
 - **Critical Production Fix**: Moved `app.set("trust proxy", 1)` to before session middleware setup (required for cookies to work properly with HTTPS in production)
+- **Dynamic Auth Strategy**: Implemented dynamic authentication strategy creation that auto-detects and supports ANY domain (lizaandtoph.com, replit.dev, etc.) without requiring REPLIT_DOMAINS configuration
 - **Data Sync Fix**: Removed `children.length === 0` guard in Layout so children/answers always refresh from server when authenticated (prevents stale data issues)
 - **Duplication Prevention**: Added submission guard in onboarding to prevent double-submit during async child creation
 - **Milestone Display**: Added `effectiveAgeBand` fallback calculation for children without ageBand field
-- **Note**: REPLIT_DOMAINS environment variable automatically includes custom domains when published (lizaandtoph.com should be included automatically)
+- **Product Integration**: Recommendations page now uses same database products as Shop page with age/need-based filtering
 
 # System Architecture
 
