@@ -359,7 +359,7 @@ export default function Layout({ children: pageContent }: { children: React.Reac
             </div>
           </div>
           <div className="border-t border-espresso/20 pt-6 text-center text-sm opacity-70">
-            <p>&copy; 2024 Liza & Toph. Privacy-first play guidance for growing families.</p>
+            <p>&copy; 2025 Liza & Toph.</p>
           </div>
         </div>
       </footer>
