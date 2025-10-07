@@ -148,7 +148,6 @@ interface Store {
   children: ChildProfile[];
   activeChildId: string | null;
   childAnswers: Record<string, Answers>;
-  subscribed: boolean;
   isLoggedIn: boolean;
   parentAccount: ParentAccount | null;
   savedItems: SavedItems;
@@ -161,7 +160,6 @@ interface Store {
   getActiveChild: () => ChildProfile | null;
   setAnswers: (childId: string, answers: Answers) => void;
   getAnswers: (childId: string) => Answers;
-  setSubscribed: (subscribed: boolean) => void;
   setLoggedIn: (isLoggedIn: boolean) => void;
   setParentAccount: (account: ParentAccount) => void;
   updateParentAccount: (updates: Partial<ParentAccount>) => void;
@@ -177,7 +175,6 @@ export const useStore = create<Store>()(
       children: [],
       activeChildId: null,
       childAnswers: {},
-      subscribed: false,
       isLoggedIn: false,
       parentAccount: null,
       savedItems: { brands: [], professionals: [], products: [] },
@@ -264,7 +261,6 @@ export const useStore = create<Store>()(
         return state.childAnswers[childId] || { schemas: [], barriers: [], interests: [], questionnaire_version: 2 };
       },
       
-      setSubscribed: (subscribed) => set({ subscribed }),
       setLoggedIn: (isLoggedIn) => set({ isLoggedIn }),
       setParentAccount: (account) => set({ parentAccount: account }),
       
@@ -307,7 +303,6 @@ export const useStore = create<Store>()(
         children: [],
         activeChildId: null,
         childAnswers: {},
-        subscribed: false,
         isLoggedIn: false,
         parentAccount: null,
         savedItems: { brands: [], professionals: [], products: [] },
