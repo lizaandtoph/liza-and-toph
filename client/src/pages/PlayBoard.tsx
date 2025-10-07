@@ -755,6 +755,21 @@ export default function PlayBoard() {
             </div>
           </div>
         )}
+
+        {/* Personalized Recommendations CTA */}
+        <div className="mt-12 bg-gradient-to-r from-olive/10 to-blush/10 p-8 rounded-lg text-center">
+          <h2 className="text-2xl font-bold mb-4">Looking for personalized recommendations?</h2>
+          <p className="mb-6 opacity-80">
+            View products specifically curated for {child.name}'s Play Board
+          </p>
+          <Link
+            to="/recommendations"
+            className="inline-block px-6 py-3 bg-olive text-ivory rounded-lg hover:bg-ochre transition font-medium"
+            data-testid="button-view-recommendations"
+          >
+            View My Recommendations
+          </Link>
+        </div>
       </div>
     </div>
   );
