@@ -6,6 +6,15 @@ This is a React-based web application called "Liza & Toph" that helps parents tr
 
 Preferred communication style: Simple, everyday language.
 
+# Recent Changes
+
+## October 7, 2025 - Production Authentication & Data Sync Fixes
+- **Critical Production Fix**: Moved `app.set("trust proxy", 1)` to before session middleware setup (required for cookies to work properly with HTTPS in production)
+- **Data Sync Fix**: Removed `children.length === 0` guard in Layout so children/answers always refresh from server when authenticated (prevents stale data issues)
+- **Duplication Prevention**: Added submission guard in onboarding to prevent double-submit during async child creation
+- **Milestone Display**: Added `effectiveAgeBand` fallback calculation for children without ageBand field
+- **Note**: REPLIT_DOMAINS environment variable automatically includes custom domains when published (lizaandtoph.com should be included automatically)
+
 # System Architecture
 
 ## Frontend Architecture
