@@ -135,6 +135,7 @@ export interface ParentAccount {
   email: string;
   password: string;
   role?: string;
+  createdAt?: Date;
 }
 
 export interface SavedItems {
