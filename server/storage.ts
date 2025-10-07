@@ -14,6 +14,7 @@ export interface IStorage {
   
   createChildProfile(profile: InsertChildProfile): Promise<ChildProfile>;
   getChildProfile(id: string): Promise<ChildProfile | undefined>;
+  updateChildProfile(id: string, profile: Partial<InsertChildProfile>): Promise<ChildProfile | undefined>;
   
   getMilestonesByAgeRange(ageRange: string): Promise<Milestone[]>;
   getAllMilestones(): Promise<Milestone[]>;
@@ -283,6 +284,19 @@ export class MemStorage implements IStorage {
     };
     this.childProfiles.set(id, childProfile);
     return childProfile;
+  }
+
+  async updateChildProfile(id: string, profile: Partial<InsertChildProfile>): Promise<ChildProfile | undefined> {
+    const existing = this.childProfiles.get(id);
+    if (!existing) return undefined;
+    
+    const updated: ChildProfile = {
+      ...existing,
+      ...profile,
+      updatedAt: new Date()
+    };
+    this.childProfiles.set(id, updated);
+    return updated;
   }
 
   async getChildProfile(id: string): Promise<ChildProfile | undefined> {
@@ -777,6 +791,16 @@ export class DbStorage implements IStorage {
   async getChildProfile(id: string): Promise<ChildProfile | undefined> {
     await this.ensureInitialized();
     const result = await this.db.select().from(childProfiles).where(eq(childProfiles.id, id)).limit(1);
+    return result[0];
+  }
+
+  async updateChildProfile(id: string, profile: Partial<InsertChildProfile>): Promise<ChildProfile | undefined> {
+    await this.ensureInitialized();
+    const result = await this.db
+      .update(childProfiles)
+      .set({ ...profile, updatedAt: new Date() })
+      .where(eq(childProfiles.id, id))
+      .returning();
     return result[0];
   }
 

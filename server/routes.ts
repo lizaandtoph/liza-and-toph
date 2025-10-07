@@ -232,6 +232,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.patch("/api/child-profiles/:id", async (req, res) => {
+    try {
+      const { id } = req.params;
+      const childProfile = await storage.updateChildProfile(id, req.body);
+      if (!childProfile) {
+        return res.status(404).json({ message: "Child profile not found" });
+      }
+      res.json(childProfile);
+    } catch (error) {
+      res.status(500).json({ message: "Server error", error });
+    }
+  });
+
   // Milestone routes
   app.get("/api/milestones", async (req, res) => {
     try {
