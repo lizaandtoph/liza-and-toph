@@ -8,6 +8,7 @@ import { Sparkles, Lock, TrendingUp, ShoppingCart, FileText, CheckCircle } from 
 import { useQuery } from '@tanstack/react-query';
 import { type Product } from '@shared/schema';
 import { calculateAgeFromBirthday, categorizeAgeBand } from '@shared/ageUtils';
+import { isInTrialPeriod } from '@/lib/utils';
 
 export default function PlayBoard() {
   const [, params] = useRoute('/playboard/:childId');
@@ -40,7 +41,8 @@ export default function PlayBoard() {
   const hasFullAccess = subscribed || 
     (parentAccount?.role === 'admin') ||
     (parentAccount?.firstName?.toLowerCase() === 'topher') ||
-    (parentAccount?.email?.toLowerCase() === 'cpm@mcginnisenterprise.com');
+    (parentAccount?.email?.toLowerCase() === 'cpm@mcginnisenterprise.com') ||
+    isInTrialPeriod(parentAccount?.createdAt);
 
   const { data: products = [] } = useQuery<Product[]>({
     queryKey: ['/api/products'],
