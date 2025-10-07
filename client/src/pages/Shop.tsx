@@ -156,6 +156,13 @@ export default function Shop() {
 
   const handleProductClick = (skuId: string, url: string) => {
     logEvent('shop_product_clicked', { sku: skuId });
+    
+    // Prevent redirect loop for invalid URLs
+    if (!url || url === '#' || url.trim() === '') {
+      alert('Product link not available. Please check back later.');
+      return;
+    }
+    
     const encodedUrl = encodeURIComponent(url);
     window.open(`/api/links?sku=${skuId}&to=${encodedUrl}`, '_blank');
   };
