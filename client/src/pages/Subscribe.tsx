@@ -106,7 +106,7 @@ export default function Subscribe() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-pink-50 to-white dark:from-gray-900 dark:to-gray-800">
+      <div className="min-h-screen flex items-center justify-center bg-ivory">
         <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full" aria-label="Loading"/>
       </div>
     );
@@ -114,7 +114,7 @@ export default function Subscribe() {
 
   if (!clientSecret) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-pink-50 to-white dark:from-gray-900 dark:to-gray-800 p-4">
+      <div className="min-h-screen flex items-center justify-center bg-ivory p-4">
         <Card className="w-full max-w-md">
           <CardHeader>
             <CardTitle>Unable to Process Payment</CardTitle>
@@ -129,7 +129,7 @@ export default function Subscribe() {
 
   // Make SURE to wrap the form in <Elements> which provides the stripe context.
   return (
-    <div className="min-h-screen bg-gradient-to-b from-pink-50 to-white dark:from-gray-900 dark:to-gray-800 py-12 px-4">
+    <div className="min-h-screen bg-ivory py-12 px-4">
       <div className="max-w-2xl mx-auto">
         <Card>
           <CardHeader>
