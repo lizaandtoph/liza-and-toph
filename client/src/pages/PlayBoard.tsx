@@ -4,9 +4,8 @@ import { useStore } from '../store';
 import { logEvent } from '../analytics';
 import milestonesData from '../data/milestones.json';
 import rulesData from '../data/rules.json';
-import { Sparkles, Lock, TrendingUp, ShoppingCart, FileText, CheckCircle } from 'lucide-react';
+import { Sparkles, TrendingUp, ShoppingCart, FileText, CheckCircle } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
-import { queryClient } from '@/lib/queryClient';
 import { type Product } from '@shared/schema';
 import { calculateAgeFromBirthday, categorizeAgeBand } from '@shared/ageUtils';
 import { useAuth } from '../hooks/useAuth';
@@ -15,7 +14,6 @@ export default function PlayBoard() {
   const [, params] = useRoute('/playboard/:childId');
   const [, setLocation] = useLocation();
   const { getActiveChild, getAnswers, activeChildId, children, setActiveChild } = useStore();
-  const [showPaywall, setShowPaywall] = useState(false);
   const { user } = useAuth();
   
   useEffect(() => {
@@ -27,17 +25,6 @@ export default function PlayBoard() {
     }
   }, [params?.childId, activeChildId, children, setActiveChild]);
 
-  // Check for payment success from Stripe redirect
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('payment') === 'success') {
-      // Payment succeeded - refetch user data and subscription status
-      queryClient.invalidateQueries({ queryKey: ['/api/auth/user'] });
-      queryClient.invalidateQueries({ queryKey: ['/api/subscription-status'] });
-      // Clean up URL
-      window.history.replaceState({}, '', '/playboard');
-    }
-  }, []);
   
   const child = getActiveChild();
   const answers = child ? getAnswers(child.id) : { schemas: [], barriers: [], interests: [] };
@@ -53,14 +40,7 @@ export default function PlayBoard() {
     return '';
   }, [child]);
   
-  // Check subscription status from backend (which verifies with Stripe)
-  const { data: subscriptionStatus } = useQuery<{ hasActiveSubscription: boolean }>({
-    queryKey: ['/api/subscription-status'],
-    enabled: !!user, // Check whenever user is authenticated
-  });
-
-  // Check if user has full access via Stripe subscription or admin role (NOT client-side flag)
-  const hasFullAccess = subscriptionStatus?.hasActiveSubscription || user?.role === 'admin';
+  // Early access period: all authenticated users have full access through January 2026
 
   const { data: products = [] } = useQuery<Product[]>({
     queryKey: ['/api/products'],
@@ -69,12 +49,8 @@ export default function PlayBoard() {
   useEffect(() => {
     if (child) {
       logEvent('playboard_viewed', { ageBand: effectiveAgeBand });
-      if (!hasFullAccess) {
-        logEvent('paywall_viewed');
-        setShowPaywall(true);
-      }
     }
-  }, [child, effectiveAgeBand, hasFullAccess]);
+  }, [child, effectiveAgeBand]);
 
   if (!child) {
     return (
@@ -289,10 +265,6 @@ export default function PlayBoard() {
 
   const currentJourney = journeyDescriptions[effectiveAgeBand as keyof typeof journeyDescriptions];
 
-  const handleSubscribe = () => {
-    logEvent('subscribe_clicked');
-    setLocation('/subscribe');
-  };
 
   // Map age band to shop age bracket
   const getShopAgeBracket = (ageBand: string): string => {
@@ -340,7 +312,7 @@ export default function PlayBoard() {
             )}
           </div>
 
-          {hasFullAccess && (answers.milestones?.social_emotional?.answer || 
+          {(answers.milestones?.social_emotional?.answer || 
             answers.milestones?.cognitive?.answer || 
             answers.milestones?.language?.answer || 
             answers.milestones?.motor?.answer) && (
@@ -394,7 +366,7 @@ export default function PlayBoard() {
             </div>
           )}
 
-          {hasFullAccess && insights.length > 0 && (
+          {insights.length > 0 && (
             <div className="bg-white/80 backdrop-blur-sm border-2 border-olive/20 rounded-2xl p-8 shadow-lg max-w-3xl mx-auto">
               <div className="flex items-center gap-2 mb-4">
                 <Sparkles className="w-6 h-6 text-ochre" />
@@ -418,74 +390,6 @@ export default function PlayBoard() {
       </div>
 
       <div className="container mx-auto px-4 max-w-6xl py-8">
-        {/* Paywall Overlay Modal */}
-        {!hasFullAccess && showPaywall && (
-          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-            <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-8 relative">
-              <button
-                onClick={() => setShowPaywall(false)}
-                className="absolute top-4 right-4 text-espresso/50 hover:text-espresso text-2xl"
-                data-testid="button-close-paywall"
-              >
-                ×
-              </button>
-              <div className="text-center">
-                <div className="w-16 h-16 bg-gradient-to-br from-olive to-ochre rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Lock className="w-8 h-8 text-ivory" />
-                </div>
-                <h2 className="text-3xl font-bold mb-3">Unlock Full Insights</h2>
-                <p className="text-lg mb-6 opacity-80">
-                  Subscribe to see the complete developmental journey, personalized recommendations, and expert guidance for {child.name}
-                </p>
-                <div className="bg-sand/30 rounded-xl p-6 mb-6">
-                  <h3 className="font-semibold mb-3">What you'll get:</h3>
-                  <ul className="space-y-2 text-left">
-                    <li className="flex items-center gap-2">
-                      <TrendingUp className="w-5 h-5 text-olive" />
-                      <span>Complete developmental milestones</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <Sparkles className="w-5 h-5 text-ochre" />
-                      <span>Personalized play insights</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <ShoppingCart className="w-5 h-5 text-burnt" />
-                      <span>Curated product recommendations</span>
-                    </li>
-                  </ul>
-                </div>
-                <button
-                  onClick={handleSubscribe}
-                  className="w-full bg-olive text-ivory px-8 py-4 rounded-xl hover:bg-ochre transition text-lg font-semibold shadow-lg hover:shadow-xl"
-                  data-testid="button-subscribe"
-                >
-                  Subscribe Now
-                </button>
-                <p className="text-sm mt-4 opacity-60">Cancel anytime</p>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Sticky Banner for Non-subscribers */}
-        {!hasFullAccess && !showPaywall && (
-          <div className="sticky top-20 z-40 bg-gradient-to-r from-blush to-ochre/30 border-2 border-burnt/30 rounded-xl p-4 mb-6 shadow-lg">
-            <div className="flex items-center justify-between gap-4">
-              <div className="flex items-center gap-3">
-                <Lock className="w-5 h-5 text-espresso" />
-                <p className="font-medium">Unlock full insights and personalized recommendations</p>
-              </div>
-              <button
-                onClick={() => setShowPaywall(true)}
-                className="px-6 py-2 bg-olive text-ivory rounded-lg hover:bg-espresso transition font-medium whitespace-nowrap"
-                data-testid="button-open-paywall"
-              >
-                Subscribe
-              </button>
-            </div>
-          </div>
-        )}
-
         {/* Developmental Journey Table */}
         <div className="mb-12">
           <div className="text-center mb-8">
@@ -542,55 +446,18 @@ export default function PlayBoard() {
                         <td className="px-6 py-4 border-b border-sand/50">
                           <p className="text-sm leading-relaxed">{data.currentMilestone}</p>
                         </td>
-                        {hasFullAccess ? (
-                          <>
-                            <td className="px-6 py-4 border-b border-sand/50">
-                              <p className="text-sm leading-relaxed">{data.shiftSummary}</p>
-                            </td>
-                            <td className="px-6 py-4 border-b border-sand/50">
-                              <p className="text-sm leading-relaxed">{data.endMilestone}</p>
-                            </td>
-                          </>
-                        ) : (
-                          <td colSpan={2} className="px-6 py-4 border-b border-sand/50">
-                            <div className="relative h-24 flex items-center justify-center">
-                              <div className="absolute inset-0 bg-gradient-to-r from-blush/5 to-ochre/5 rounded-lg flex items-center justify-center">
-                                <div className="text-center">
-                                  <Lock className="w-6 h-6 text-espresso/40 mx-auto mb-2" />
-                                  <p className="text-sm font-medium text-espresso/70">
-                                    Subscribe to unlock full journey
-                                  </p>
-                                </div>
-                              </div>
-                            </div>
-                          </td>
-                        )}
+                        <td className="px-6 py-4 border-b border-sand/50">
+                          <p className="text-sm leading-relaxed">{data.shiftSummary}</p>
+                        </td>
+                        <td className="px-6 py-4 border-b border-sand/50">
+                          <p className="text-sm leading-relaxed">{data.endMilestone}</p>
+                        </td>
                       </tr>
                     );
                   })}
                 </tbody>
               </table>
             </div>
-            
-            {!hasFullAccess && (
-              <div className="border-t-2 border-sand bg-gradient-to-r from-blush/10 to-ochre/10 p-6">
-                <div className="flex items-center justify-between gap-4">
-                  <div>
-                    <p className="font-semibold mb-1">Unlock the complete developmental journey</p>
-                    <p className="text-sm opacity-70">
-                      See the full progression across all stages and get personalized insights
-                    </p>
-                  </div>
-                  <button
-                    onClick={handleSubscribe}
-                    className="px-6 py-3 bg-olive text-ivory rounded-lg hover:bg-ochre transition font-semibold whitespace-nowrap"
-                    data-testid="button-subscribe-table"
-                  >
-                    Get full access • $4.99/mo
-                  </button>
-                </div>
-              </div>
-            )}
           </div>
         </div>
 
@@ -615,54 +482,14 @@ export default function PlayBoard() {
                     <p className="text-sm font-semibold text-olive uppercase tracking-wide mb-1">Current Stage</p>
                     <p className="text-lg">{data.currentMilestone}</p>
                   </div>
-                  {hasFullAccess ? (
-                    <>
-                      <div>
-                        <p className="text-sm font-semibold text-ochre uppercase tracking-wide mb-1">Developmental Journey</p>
-                        <p>{data.shiftSummary}</p>
-                      </div>
-                      <div>
-                        <p className="text-sm font-semibold text-burnt uppercase tracking-wide mb-1">Looking Ahead</p>
-                        <p>{data.endMilestone}</p>
-                      </div>
-                    </>
-                  ) : (
-                    <div className="relative">
-                      <div>
-                        <p className="text-sm font-semibold text-ochre uppercase tracking-wide mb-1">Developmental Journey</p>
-                        <p className="text-sm leading-relaxed">{data.shiftSummary}</p>
-                      </div>
-                      
-                      {/* Gradient overlay with pricing */}
-                      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/60 to-white pt-8">
-                        <div className="absolute bottom-0 left-0 right-0 bg-white border-2 border-ochre/30 rounded-xl p-4 shadow-lg">
-                          <div className="space-y-3">
-                            <div className="flex items-center justify-between gap-3">
-                              <div>
-                                <p className="text-xs text-espresso/60 mb-1">Monthly</p>
-                                <p className="text-lg font-bold text-espresso">$4.99/mo</p>
-                              </div>
-                              <button
-                                onClick={handleSubscribe}
-                                className="px-4 py-2 bg-olive text-ivory rounded-lg hover:bg-ochre transition font-semibold text-sm whitespace-nowrap"
-                                data-testid="button-subscribe-card"
-                              >
-                                Get full access
-                              </button>
-                            </div>
-                            <p className="text-xs text-espresso/60 leading-relaxed">
-                              Unlock complete developmental insights and personalized recommendations
-                            </p>
-                            <div className="pt-2 border-t border-sand/50">
-                              <p className="text-xs text-espresso/70">
-                                <span className="font-semibold">Annual $99/yr</span> <span className="text-espresso/50">($8/mo)</span>
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
+                  <div>
+                    <p className="text-sm font-semibold text-ochre uppercase tracking-wide mb-1">Developmental Journey</p>
+                    <p>{data.shiftSummary}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-burnt uppercase tracking-wide mb-1">Looking Ahead</p>
+                    <p>{data.endMilestone}</p>
+                  </div>
                   <div className="pt-4 border-t border-sand">
                     <p className="text-sm font-semibold text-espresso/70 mb-1">💡 Play Support</p>
                     <p className="text-sm">{data.playSupport}</p>

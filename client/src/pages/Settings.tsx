@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useStore } from '../store';
 import { useAuth } from '../hooks/useAuth';
 import { useLocation } from 'wouter';
-import { User, Mail, Lock, CreditCard, Baby, Trash2, Save, X, Heart, Briefcase, ShoppingBag, Edit2, RefreshCw, CheckCircle } from 'lucide-react';
+import { User, Mail, Lock, Baby, Trash2, Save, X, Heart, Briefcase, ShoppingBag, Edit2, RefreshCw, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -11,7 +11,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
 import { calculateAgeFromBirthday, categorizeAgeBand } from '@shared/ageUtils';
 import { apiRequest } from '@/lib/queryClient';
-import { useQuery } from '@tanstack/react-query';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -39,13 +38,7 @@ export default function Settings() {
   const { toast } = useToast();
   const [, setLocation] = useLocation();
 
-  // Check subscription status from backend (which verifies with Stripe)
-  const { data: subscriptionStatus } = useQuery<{ hasActiveSubscription: boolean }>({
-    queryKey: ['/api/subscription-status'],
-    enabled: !!user, // Check whenever user is authenticated
-  });
-
-  const hasActiveSubscription = subscriptionStatus?.hasActiveSubscription || false;
+  // Early access period - all users have full access through January 2026
 
   // Redirect to login if not authenticated
   useEffect(() => {
@@ -192,13 +185,6 @@ export default function Settings() {
     }
   };
 
-  const handleManageSubscription = () => {
-    // Navigate to Stripe customer portal for subscription management
-    toast({
-      title: 'Coming Soon',
-      description: 'Subscription management portal will be available soon'
-    });
-  };
 
   // Show loading state while checking auth
   if (isLoading) {
@@ -223,9 +209,8 @@ export default function Settings() {
       <h1 className="text-3xl font-bold mb-8" data-testid="heading-settings">Settings</h1>
 
       <Tabs defaultValue="account" className="w-full">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="account" data-testid="tab-account">Account</TabsTrigger>
-          <TabsTrigger value="subscription" data-testid="tab-subscription">Subscription</TabsTrigger>
           <TabsTrigger value="children" data-testid="tab-children">Children</TabsTrigger>
           <TabsTrigger value="saved" data-testid="tab-saved">Saved Items</TabsTrigger>
         </TabsList>
@@ -315,70 +300,6 @@ export default function Settings() {
             </CardContent>
           </Card>
 
-        </TabsContent>
-
-        <TabsContent value="subscription" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <CreditCard className="w-5 h-5" />
-                Subscription Status
-              </CardTitle>
-              <CardDescription>Manage your subscription</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {hasActiveSubscription ? (
-                <div className="space-y-4">
-                  <div className="p-4 bg-olive/10 rounded-lg border border-olive/20">
-                    <p className="text-lg font-semibold text-olive mb-2" data-testid="text-subscription-status">
-                      Active Subscription
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      You have full access to all features and content
-                    </p>
-                  </div>
-                  <Button 
-                    variant="outline" 
-                    onClick={handleManageSubscription}
-                    data-testid="button-manage-subscription"
-                  >
-                    Manage Subscription
-                  </Button>
-                </div>
-              ) : (
-                <div className="space-y-4">
-                  <div className="p-4 bg-sand/30 rounded-lg border border-sand">
-                    <p className="text-lg font-semibold mb-2" data-testid="text-subscription-status">
-                      Free Plan
-                    </p>
-                    <p className="text-sm text-muted-foreground mb-4">
-                      Upgrade to unlock all features and content
-                    </p>
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-between p-3 bg-white rounded border">
-                        <div>
-                          <p className="font-semibold">Monthly Plan</p>
-                          <p className="text-sm text-muted-foreground">$4.99/month</p>
-                        </div>
-                        <Button onClick={() => setLocation('/subscribe')} data-testid="button-subscribe-monthly">
-                          Subscribe
-                        </Button>
-                      </div>
-                      <div className="flex items-center justify-between p-3 bg-white rounded border">
-                        <div>
-                          <p className="font-semibold">Annual Plan</p>
-                          <p className="text-sm text-muted-foreground">$99/year (Save $60!)</p>
-                        </div>
-                        <Button onClick={() => setLocation('/subscribe')} data-testid="button-subscribe-annual">
-                          Subscribe
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </CardContent>
-          </Card>
         </TabsContent>
 
         <TabsContent value="children" className="space-y-6">

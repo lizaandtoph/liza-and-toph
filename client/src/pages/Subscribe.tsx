@@ -1,108 +1,19 @@
-import { useStripe, Elements, PaymentElement, useElements } from '@stripe/react-stripe-js';
-import { loadStripe } from '@stripe/stripe-js';
-import { useEffect, useState } from 'react';
-import { apiRequest, queryClient } from "@/lib/queryClient";
-import { useToast } from "@/hooks/use-toast";
-import { Button } from "@/components/ui/button";
+import { useEffect } from 'react';
+import { useLocation } from 'wouter';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { useLocation } from "wouter";
-
-// Make sure to call `loadStripe` outside of a component's render to avoid
-// recreating the `Stripe` object on every render.
-if (!import.meta.env.VITE_STRIPE_PUBLIC_KEY) {
-  throw new Error('Missing required Stripe key: VITE_STRIPE_PUBLIC_KEY');
-}
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
-
-const SubscribeForm = () => {
-  const stripe = useStripe();
-  const elements = useElements();
-  const { toast } = useToast();
-  const [, setLocation] = useLocation();
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!stripe || !elements) {
-      return;
-    }
-
-    setIsLoading(true);
-
-    const { error } = await stripe.confirmPayment({
-      elements,
-      confirmParams: {
-        // Stripe will redirect here after payment - we'll refetch user data there
-        return_url: window.location.origin + '/playboard?payment=success',
-      },
-    });
-
-    setIsLoading(false);
-
-    if (error) {
-      toast({
-        title: "Payment Failed",
-        description: error.message,
-        variant: "destructive",
-      });
-    }
-  }
-
-  return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <PaymentElement />
-      <Button 
-        type="submit" 
-        className="w-full" 
-        disabled={!stripe || isLoading}
-        data-testid="button-submit-payment"
-      >
-        {isLoading ? "Processing..." : "Subscribe"}
-      </Button>
-    </form>
-  );
-};
+import { Button } from "@/components/ui/button";
+import { Sparkles } from 'lucide-react';
+import { useAuth } from "@/hooks/useAuth";
 
 export default function Subscribe() {
-  const [clientSecret, setClientSecret] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
-  const { toast } = useToast();
+  const { user, isLoading } = useAuth();
   const [, setLocation] = useLocation();
 
   useEffect(() => {
-    // Create subscription as soon as the page loads
-    apiRequest("POST", "/api/get-or-create-subscription")
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.alreadySubscribed) {
-          // User already has an active subscription, redirect to playboard
-          toast({
-            title: "Already Subscribed",
-            description: "You already have an active subscription!",
-          });
-          setLocation('/playboard');
-        } else if (data.clientSecret) {
-          setClientSecret(data.clientSecret);
-        } else if (data.error) {
-          toast({
-            title: "Error",
-            description: data.error.message || "Failed to create subscription",
-            variant: "destructive",
-          });
-        }
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        console.error('Error creating subscription:', error);
-        toast({
-          title: "Error",
-          description: "Failed to initialize payment. Please try again.",
-          variant: "destructive",
-        });
-        setIsLoading(false);
-      });
-  }, []);
+    if (!isLoading && !user) {
+      setLocation('/login');
+    }
+  }, [user, isLoading, setLocation]);
 
   if (isLoading) {
     return (
@@ -112,36 +23,53 @@ export default function Subscribe() {
     );
   }
 
-  if (!clientSecret) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-sand/30 p-4">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>Unable to Process Payment</CardTitle>
-            <CardDescription>
-              We couldn't set up your subscription. Please try again or contact support.
-            </CardDescription>
-          </CardHeader>
-        </Card>
-      </div>
-    );
-  }
-
-  // Make SURE to wrap the form in <Elements> which provides the stripe context.
   return (
     <div className="min-h-screen bg-sand/30 py-12 px-4">
-      <div className="max-w-2xl mx-auto">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-2xl">Subscribe to Liza & Toph</CardTitle>
-            <CardDescription>
-              Get unlimited access to personalized play recommendations, developmental tracking, and expert resources
+      <div className="max-w-3xl mx-auto">
+        <Card className="bg-[#fff9ec] border-olive/20">
+          <CardHeader className="text-center space-y-4 pb-8">
+            <div className="flex justify-center">
+              <div className="w-16 h-16 rounded-full bg-olive/10 flex items-center justify-center">
+                <Sparkles className="w-8 h-8 text-olive" />
+              </div>
+            </div>
+            <CardTitle className="text-3xl sm:text-4xl font-serif text-espresso">
+              You're In. Enjoy Full Access, On Us.
+            </CardTitle>
+            <CardDescription className="text-lg text-espresso/80 max-w-2xl mx-auto">
+              As one of our foundational users, you have complete, unrestricted access to all Liza & Toph platform features, entirely free through January 2026.
             </CardDescription>
           </CardHeader>
-          <CardContent>
-            <Elements stripe={stripePromise} options={{ clientSecret }}>
-              <SubscribeForm />
-            </Elements>
+          <CardContent className="space-y-6 text-center">
+            <div className="bg-white/50 rounded-lg p-6 space-y-4">
+              <p className="text-espresso/90 leading-relaxed">
+                We are in a critical stage of building this platform, and your experience is our most valuable guide. During this early-access period, we ask for your expertise. Your insights on what's working, what's missing, and what you'd love to see will directly shape the future of this tool for families everywhere.
+              </p>
+              <p className="text-espresso/90 leading-relaxed font-medium">
+                Have an idea or feedback to share? We would be honored if you'd take a few minutes to help us design the future of play.
+              </p>
+            </div>
+            
+            <div className="pt-4">
+              <Button 
+                size="lg"
+                className="bg-olive hover:bg-olive/90 text-white px-8 py-6 text-lg h-auto"
+                onClick={() => window.open('https://app-feedback.lizaandtoph.com', '_blank')}
+                data-testid="button-share-feedback"
+              >
+                Share Your Insights at app-feedback.lizaandtoph.com
+              </Button>
+            </div>
+
+            <div className="pt-6">
+              <Button 
+                variant="outline"
+                onClick={() => setLocation('/playboard')}
+                data-testid="button-continue-to-playboard"
+              >
+                Continue to Your Play Board
+              </Button>
+            </div>
           </CardContent>
         </Card>
       </div>

@@ -946,28 +946,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
     apiVersion: "2023-10-16",
   });
 
-  // Endpoint to check subscription status
+  // Endpoint to check subscription status - Early Access Period (Free through Jan 2026)
   app.get('/api/subscription-status', isAuthenticated as any, async (req: AuthRequest, res) => {
     try {
       if (!req.isAuthenticated() || !req.user?.claims?.sub) {
         return res.status(401).json({ message: "Not authenticated" });
       }
 
-      const userId = req.user.claims.sub;
-      const user = await storage.getUser(userId);
-
-      if (!user || !user.stripeSubscriptionId) {
-        return res.json({ hasActiveSubscription: false });
-      }
-
-      // Check subscription status from Stripe
-      const subscription = await stripe.subscriptions.retrieve(user.stripeSubscriptionId);
-      
-      const isActive = subscription.status === 'active' || subscription.status === 'trialing';
-      
+      // During early access period, all authenticated users have full access
       return res.json({ 
-        hasActiveSubscription: isActive,
-        status: subscription.status 
+        hasActiveSubscription: true,
+        status: 'early_access' 
       });
     } catch (error: any) {
       console.error('Error checking subscription status:', error);
