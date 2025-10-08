@@ -23,14 +23,14 @@ export default function Layout({ children: pageContent }: { children: React.Reac
 
   const handleLogout = async () => {
     try {
-      await fetch('/api/logout', { method: 'GET' });
+      await fetch('/api/auth/logout', { method: 'POST' });
     } catch (error) {
       console.error('Logout error:', error);
     } finally {
       // Clear all cached data
       reset(); // Clear Zustand store
       queryClient.clear(); // Clear all React Query cache
-      setLocation('/login');
+      setLocation('/');
     }
   };
 
