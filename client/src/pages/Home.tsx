@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect } from "react";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { useStore } from "../store";
+import { useAuth } from "../hooks/useAuth";
 import { Sparkles, Heart, TrendingUp, ShoppingBag } from "lucide-react";
 import useEmblaCarousel from "embla-carousel-react";
 
@@ -30,7 +31,7 @@ function PlatformCarousel() {
       heading: "Discover Your Child's Personal Play Board",
       description:
         "Our AI analyzes 93 data points across 5 developmental domains to generate a curated list of toys and activities perfectly matched to your child's current needs and emerging skills.",
-      link: "/onboarding",
+      link: "/login",
       testId: "tab-ai-guidance",
     },
     {
@@ -147,10 +148,20 @@ function PlatformCarousel() {
 }
 
 export default function Home() {
-  const { isLoggedIn, getActiveChild } = useStore();
+  const { getActiveChild, children, childrenLoaded } = useStore();
+  const { isAuthenticated, isLoading } = useAuth();
   const child = getActiveChild();
+  const [, setLocation] = useLocation();
 
-  if (isLoggedIn && child?.name) {
+  // Redirect authenticated users with no children to onboarding
+  // Only redirect after both auth and children data have loaded
+  useEffect(() => {
+    if (!isLoading && isAuthenticated && childrenLoaded && children.length === 0) {
+      setLocation('/onboarding');
+    }
+  }, [isAuthenticated, isLoading, childrenLoaded, children.length, setLocation]);
+
+  if (isAuthenticated && child?.name) {
     return (
       <div className="container mx-auto px-4 max-w-7xl py-12">
         <div className="text-center mb-12">
@@ -196,7 +207,7 @@ export default function Home() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Link
-                to="/onboarding"
+                to="/login"
                 className="inline-block px-10 py-5 bg-olive text-ivory rounded-lg hover:bg-ochre transition text-xl font-semibold shadow-lg hover:shadow-xl"
                 data-testid="button-try-free-hero"
               >

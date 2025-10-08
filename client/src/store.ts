@@ -148,6 +148,7 @@ interface Store {
   children: ChildProfile[];
   activeChildId: string | null;
   childAnswers: Record<string, Answers>;
+  childrenLoaded: boolean;
   isLoggedIn: boolean;
   parentAccount: ParentAccount | null;
   savedItems: SavedItems;
@@ -175,6 +176,7 @@ export const useStore = create<Store>()(
       children: [],
       activeChildId: null,
       childAnswers: {},
+      childrenLoaded: false,
       isLoggedIn: false,
       parentAccount: null,
       savedItems: { brands: [], professionals: [], products: [] },
@@ -207,6 +209,7 @@ export const useStore = create<Store>()(
             ? existingState.activeChildId 
             : (children.length > 0 ? children[0].id : null),
           childAnswers: answersMap,
+          childrenLoaded: true,
         });
       },
       
@@ -303,6 +306,7 @@ export const useStore = create<Store>()(
         children: [],
         activeChildId: null,
         childAnswers: {},
+        childrenLoaded: false,
         isLoggedIn: false,
         parentAccount: null,
         savedItems: { brands: [], professionals: [], products: [] },

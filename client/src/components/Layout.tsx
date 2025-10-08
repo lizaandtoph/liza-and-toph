@@ -42,30 +42,29 @@ export default function Layout({ children: pageContent }: { children: React.Reac
           const response = await fetch('/api/auth/me');
           if (response.ok) {
             const data = await response.json();
-            if (data.children && data.children.length > 0) {
-              const childrenData = data.children.map((c: any) => ({
-                id: c.id,
-                name: c.name,
-                birthday: c.birthday || '',
-                ageYears: c.ageYears || 0,
-                ageMonths: c.ageMonths || 0,
-                ageBand: c.ageBand || '',
-              }));
+            const childrenData = (data.children || []).map((c: any) => ({
+              id: c.id,
+              name: c.name,
+              birthday: c.birthday || '',
+              ageYears: c.ageYears || 0,
+              ageMonths: c.ageMonths || 0,
+              ageBand: c.ageBand || '',
+            }));
 
-              const answersMap: Record<string, any> = {};
-              data.children.forEach((child: any) => {
-                answersMap[child.id] = {
-                  schemas: child.schemas || [],
-                  barriers: child.barriers || [],
-                  interests: child.interests || [],
-                  milestones: child.milestones || {},
-                  ...(child.fullQuestionnaire ? { fullQuestionnaire: child.fullQuestionnaire } : {}),
-                  questionnaire_version: child.questionnaireVersion || 1,
-                };
-              });
+            const answersMap: Record<string, any> = {};
+            (data.children || []).forEach((child: any) => {
+              answersMap[child.id] = {
+                schemas: child.schemas || [],
+                barriers: child.barriers || [],
+                interests: child.interests || [],
+                milestones: child.milestones || {},
+                ...(child.fullQuestionnaire ? { fullQuestionnaire: child.fullQuestionnaire } : {}),
+                questionnaire_version: child.questionnaireVersion || 1,
+              };
+            });
 
-              loadChildren(childrenData, answersMap);
-            }
+            // Always call loadChildren to set childrenLoaded flag, even if array is empty
+            loadChildren(childrenData, answersMap);
           }
         } catch (error) {
           console.error('Failed to load children:', error);
