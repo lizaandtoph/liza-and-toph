@@ -328,7 +328,10 @@ export default function Settings() {
                   rel="noopener noreferrer"
                   className="inline-block"
                 >
-                  <Button variant="outline" className="w-full sm:w-auto" data-testid="button-provide-feedback">
+                  <Button 
+                    className="w-full sm:w-auto bg-[#4a5942] text-[#fff9ed] hover:bg-[#3d4a37] transition-colors" 
+                    data-testid="button-provide-feedback"
+                  >
                     Share Your Feedback
                   </Button>
                 </a>
