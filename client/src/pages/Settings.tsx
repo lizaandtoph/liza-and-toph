@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useStore } from '../store';
 import { useAuth } from '../hooks/useAuth';
 import { useLocation } from 'wouter';
-import { User, Mail, Lock, Baby, Trash2, Save, X, Heart, Briefcase, ShoppingBag, Edit2, RefreshCw, CheckCircle } from 'lucide-react';
+import { User, Mail, Lock, Baby, Trash2, Save, X, Heart, Briefcase, ShoppingBag, Edit2, RefreshCw, CheckCircle, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -297,6 +297,42 @@ export default function Settings() {
                   </div>
                 </div>
               )}
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Sparkles className="w-5 h-5" />
+                Early Access Status
+              </CardTitle>
+              <CardDescription>Your subscription information</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="bg-gradient-to-br from-olive/10 to-blush/10 border-2 border-olive/20 rounded-xl p-6">
+                <div className="flex items-start gap-3 mb-4">
+                  <CheckCircle className="w-6 h-6 text-olive mt-1 flex-shrink-0" />
+                  <div>
+                    <h3 className="text-lg font-semibold mb-2">Free Early Access Active</h3>
+                    <p className="text-muted-foreground mb-3">
+                      You have full, unrestricted access to all Liza & Toph features through <strong>January 2026</strong> as part of our early access program.
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      After the early access period ends, a subscription will be required to continue using the platform. We'll notify you well in advance.
+                    </p>
+                  </div>
+                </div>
+                <a 
+                  href="https://app-feedback.lizaandtoph.com" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="inline-block"
+                >
+                  <Button variant="outline" className="w-full sm:w-auto" data-testid="button-provide-feedback">
+                    Share Your Feedback
+                  </Button>
+                </a>
+              </div>
             </CardContent>
           </Card>
 
