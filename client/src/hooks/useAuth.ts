@@ -15,7 +15,9 @@ export function useAuth() {
   const { data: user, isLoading } = useQuery<User | null>({
     queryKey: ["/api/auth/user"],
     queryFn: async () => {
-      const response = await fetch("/api/auth/user");
+      const response = await fetch("/api/auth/user", {
+        credentials: 'include'
+      });
       
       // Handle unauthenticated state gracefully
       if (response.status === 401 || response.status === 403) {

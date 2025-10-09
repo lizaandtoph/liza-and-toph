@@ -200,6 +200,7 @@ export default function Onboarding() {
       const childResponse = await fetch('/api/auth/children', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({
           name: childName,
           birthday: childBirthday,
@@ -239,7 +240,9 @@ export default function Onboarding() {
         return;
       }
 
-      const meResponse = await fetch('/api/auth/me');
+      const meResponse = await fetch('/api/auth/me', {
+        credentials: 'include'
+      });
       const meData = await meResponse.json();
 
       if (meResponse.ok && meData.children) {
