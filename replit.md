@@ -42,10 +42,10 @@ Preferred communication style: Simple, everyday language.
 
 **State Management & Data Fetching**
 - Zustand with localStorage persistence for global state (multi-child support, active child selection, per-child questionnaire answers, parent account, saved items)
-- **Authentication**: Replit Auth (OAuth/OpenID Connect) with session-based authentication stored in PostgreSQL
+- **Authentication**: Passwordless magic link authentication with session-based storage in PostgreSQL
   - `useAuth` hook provides user data (firstName, lastName, email) from authenticated session
-  - Parent info pre-filled in onboarding from Replit Auth data (fields disabled to prevent editing)
-  - No password management in app - handled by Replit Auth
+  - Parent info can be entered manually in onboarding (editable fields unless pre-populated from user profile)
+  - No password management - users receive a secure login link via email (Resend integration)
 - Multi-child architecture: parents can add and manage multiple children, each with unique ID (nanoid), profile, and answers
 - Saved items: brands, professionals, and products favorited by parents (persisted in localStorage)
 - TanStack Query (React Query) for server state management, caching, and data synchronization
@@ -113,10 +113,9 @@ Preferred communication style: Simple, everyday language.
 - Schema-first approach with shared type definitions
 
 **Data Models**
-- **Parent Accounts**: Authenticated via Replit Auth (OAuth), user data stored in PostgreSQL users table
-  - Onboarding Step 1 pre-fills parent info (firstName, lastName, email) from authenticated Replit Auth user
-  - Parent info fields disabled during onboarding to prevent editing auth-provided data
-  - Settings page displays user info from Replit Auth (name and email) - password managed by Replit
+- **Parent Accounts**: Authenticated via passwordless magic link, user data stored in PostgreSQL users table
+  - Onboarding Step 1 allows parent info entry (firstName, lastName, email) - fields only disabled if pre-populated from profile
+  - Settings page displays user info (name and email) - no password required with magic link authentication
   - Child's first name (not full name) collected in onboarding
 - **Child Profiles**: Stores child information with unique ID (nanoid), name, birthday, calculated age, age band, and developmental preferences
   - Multiple children per parent account supported
@@ -143,10 +142,10 @@ Preferred communication style: Simple, everyday language.
 - Development uses in-memory storage with seed data for products and professionals
 - PostgreSQL database for users, sessions, and child profiles
 - Storage interface allows seamless transition from mock to real database
-- **Authentication**: Replit Auth (OAuth) with PostgreSQL session store (connect-pg-simple)
-  - Session cookies configured with `sameSite: 'lax'` and conditional `secure` flag for production
-  - Passport.js for OAuth strategy and session serialization
-  - Localhost/127.0.0.1 strategy support for local development
+- **Authentication**: Passwordless magic link authentication with PostgreSQL session store (connect-pg-simple)
+  - Session cookies configured with `sameSite: 'lax'` and conditional `secure` flag for production  
+  - Passport.js for session serialization
+  - Magic link tokens sent via Resend email integration
 
 ## External Dependencies
 
