@@ -3,7 +3,7 @@ import psycopg2
 from psycopg2.extras import execute_values
 
 # Settings
-MULTI_SELECT_AS_ARRAYS = TRUE  # set True only if DB columns are text[] for the 7 multi-select fields
+MULTI_SELECT_AS_ARRAYS = True  # set True only if DB columns are text[] for the 7 multi-select fields
 PROMOTE_ON_IMPORT = True  # set imported rows to "live"
 
 CSV_URL = os.environ["SHEET_CSV_URL"]
