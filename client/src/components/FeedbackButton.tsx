@@ -68,7 +68,7 @@ export default function FeedbackButton() {
 
       {/* Feedback Dialog */}
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent className="sm:max-w-md" data-testid="dialog-feedback">
+        <DialogContent className="sm:max-w-md bg-white" data-testid="dialog-feedback">
           <DialogHeader>
             <DialogTitle>Report an Issue</DialogTitle>
             <DialogDescription>
