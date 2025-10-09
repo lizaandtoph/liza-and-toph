@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Search, Filter, ChevronDown, ChevronUp, X } from 'lucide-react';
+import { Search, Filter, ChevronDown, ChevronUp, X, Heart } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { type Product } from '@shared/schema';
 import { useStore } from '../store';
@@ -12,7 +12,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { useLocation } from 'wouter';
 
 export default function Shop() {
-  const { getActiveChild } = useStore();
+  const { getActiveChild, savedItems, addSavedItem, removeSavedItem } = useStore();
   const child = getActiveChild();
   const [location] = useLocation();
   
@@ -207,6 +207,22 @@ export default function Shop() {
     
     const encodedUrl = encodeURIComponent(url);
     window.open(`/api/links?sku=${skuId}&to=${encodedUrl}`, '_blank');
+  };
+
+  const handleSaveProduct = (product: Product, e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent triggering product click
+    
+    const isSaved = savedItems.products.includes(product.name);
+    
+    if (isSaved) {
+      removeSavedItem('products', product.name);
+    } else {
+      addSavedItem('products', product.name);
+      // Auto-save brand if not already saved
+      if (product.brand && !savedItems.brands.includes(product.brand)) {
+        addSavedItem('brands', product.brand);
+      }
+    }
   };
 
   return (
@@ -531,6 +547,8 @@ export default function Shop() {
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {filteredProducts.map((product) => {
           const badge = getProductBadge(product);
+          const isSaved = savedItems.products.includes(product.name);
+          
           return (
             <div
               key={product.id}
@@ -547,6 +565,17 @@ export default function Shop() {
                     e.currentTarget.src = 'https://placehold.co/400x400/EDE9DC/8B7355?text=No+Image';
                   }}
                 />
+                {/* Save Button */}
+                <button
+                  onClick={(e) => handleSaveProduct(product, e)}
+                  className="absolute top-3 left-3 p-2 bg-white/90 hover:bg-white rounded-full shadow-md transition-all hover:scale-110"
+                  aria-label={isSaved ? "Unsave product" : "Save product"}
+                  data-testid={`button-save-${product.id}`}
+                >
+                  <Heart 
+                    className={`w-5 h-5 ${isSaved ? 'fill-olive text-olive' : 'text-espresso'}`}
+                  />
+                </button>
                 {badge && (
                   <div className={`absolute top-3 right-3 ${badge.className} text-xs font-bold px-2 py-1 rounded`} data-testid={`badge-${product.id}`}>
                     {badge.text}

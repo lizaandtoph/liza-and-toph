@@ -1,10 +1,12 @@
-import { Search, MapPin, Star } from 'lucide-react';
+import { Search, MapPin, Star, Heart } from 'lucide-react';
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { type Professional } from '@shared/schema';
+import { useStore } from '../store';
 
 export default function FindPros() {
   const [searchQuery, setSearchQuery] = useState('');
+  const { savedItems, addSavedItem, removeSavedItem } = useStore();
 
   const { data: professionals = [], isLoading } = useQuery<Professional[]>({
     queryKey: ['/api/professionals'],
@@ -15,6 +17,18 @@ export default function FindPros() {
     pro.specialty.toLowerCase().includes(searchQuery.toLowerCase()) ||
     pro.location.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const handleSaveProfessional = (pro: Professional, e: React.MouseEvent) => {
+    e.stopPropagation();
+    
+    const isSaved = savedItems.professionals.includes(pro.name);
+    
+    if (isSaved) {
+      removeSavedItem('professionals', pro.name);
+    } else {
+      addSavedItem('professionals', pro.name);
+    }
+  };
 
   return (
     <div className="container mx-auto px-4 max-w-7xl py-8">
@@ -52,39 +66,55 @@ export default function FindPros() {
       ) : null}
 
       <div className="space-y-6">
-        {filteredPros.map((pro) => (
-          <div
-            key={pro.id}
-            className="bg-[#EDE9DC] p-6 rounded-lg shadow-md hover:shadow-lg transition"
-            data-testid={`card-pro-${pro.id}`}
-          >
-            <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
-              <div className="flex-1">
-                <h3 className="text-xl font-semibold mb-2" data-testid={`text-pro-name-${pro.id}`}>
-                  {pro.name}
-                </h3>
-                <p className="text-ochre font-medium mb-2">{pro.specialty}</p>
-                <div className="flex items-center gap-2 mb-3 text-sm opacity-70">
-                  <MapPin className="w-4 h-4" />
-                  <span>{pro.location}</span>
+        {filteredPros.map((pro) => {
+          const isSaved = savedItems.professionals.includes(pro.name);
+          
+          return (
+            <div
+              key={pro.id}
+              className="bg-[#EDE9DC] p-6 rounded-lg shadow-md hover:shadow-lg transition relative"
+              data-testid={`card-pro-${pro.id}`}
+            >
+              {/* Save Button */}
+              <button
+                onClick={(e) => handleSaveProfessional(pro, e)}
+                className="absolute top-4 right-4 p-2 bg-white/90 hover:bg-white rounded-full shadow-md transition-all hover:scale-110"
+                aria-label={isSaved ? "Unsave professional" : "Save professional"}
+                data-testid={`button-save-pro-${pro.id}`}
+              >
+                <Heart 
+                  className={`w-5 h-5 ${isSaved ? 'fill-olive text-olive' : 'text-espresso'}`}
+                />
+              </button>
+              
+              <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+                <div className="flex-1">
+                  <h3 className="text-xl font-semibold mb-2" data-testid={`text-pro-name-${pro.id}`}>
+                    {pro.name}
+                  </h3>
+                  <p className="text-ochre font-medium mb-2">{pro.specialty}</p>
+                  <div className="flex items-center gap-2 mb-3 text-sm opacity-70">
+                    <MapPin className="w-4 h-4" />
+                    <span>{pro.location}</span>
+                  </div>
+                  <p className="opacity-80">{pro.description}</p>
                 </div>
-                <p className="opacity-80">{pro.description}</p>
-              </div>
-              <div className="flex flex-col items-end gap-3">
-                <div className="flex items-center gap-1 bg-ochre/10 px-3 py-1 rounded-full">
-                  <Star className="w-4 h-4 text-ochre fill-ochre" />
-                  <span className="font-semibold">{pro.rating}</span>
+                <div className="flex flex-col items-end gap-3">
+                  <div className="flex items-center gap-1 bg-ochre/10 px-3 py-1 rounded-full">
+                    <Star className="w-4 h-4 text-ochre fill-ochre" />
+                    <span className="font-semibold">{pro.rating}</span>
+                  </div>
+                  <button
+                    className="px-6 py-2 bg-olive text-ivory rounded-lg hover:bg-ochre transition font-medium"
+                    data-testid={`button-contact-${pro.id}`}
+                  >
+                    Contact
+                  </button>
                 </div>
-                <button
-                  className="px-6 py-2 bg-olive text-ivory rounded-lg hover:bg-ochre transition font-medium"
-                  data-testid={`button-contact-${pro.id}`}
-                >
-                  Contact
-                </button>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* Coming Soon Notice */}

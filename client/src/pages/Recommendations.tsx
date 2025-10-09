@@ -2,14 +2,14 @@ import { Link } from 'wouter';
 import { useStore } from '../store';
 import { logEvent } from '../analytics';
 import rulesData from '../data/rules.json';
-import { Sparkles, ExternalLink, ShoppingBag } from 'lucide-react';
+import { Sparkles, ExternalLink, ShoppingBag, Heart } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { type Product } from '@shared/schema';
 import { calculateAgeFromBirthday, categorizeAgeBand, formatAgeRange } from '@shared/ageUtils';
 import { useMemo } from 'react';
 
 export default function Recommendations() {
-  const { getActiveChild, getAnswers, activeChildId } = useStore();
+  const { getActiveChild, getAnswers, activeChildId, savedItems, addSavedItem, removeSavedItem } = useStore();
   const child = getActiveChild();
   const answers = child ? getAnswers(child.id) : { schemas: [], barriers: [], interests: [] };
 
@@ -171,6 +171,7 @@ export default function Recommendations() {
   const uniqueProducts = productsWithScores.map((p) => ({
     skuId: p.id,
     title: p.name,
+    brand: p.brand,
     url: p.affiliateUrl || '#',
     ageMin: p.ageMin,
     ageMax: p.ageMax,
@@ -187,6 +188,22 @@ export default function Recommendations() {
     }
     const encodedUrl = encodeURIComponent(url);
     window.open(`/api/links?sku=${skuId}&to=${encodedUrl}`, '_blank');
+  };
+
+  const handleSaveProduct = (product: typeof uniqueProducts[0], e: React.MouseEvent) => {
+    e.stopPropagation();
+    
+    const isSaved = savedItems.products.includes(product.title);
+    
+    if (isSaved) {
+      removeSavedItem('products', product.title);
+    } else {
+      addSavedItem('products', product.title);
+      // Auto-save brand if not already saved
+      if (product.brand && !savedItems.brands.includes(product.brand)) {
+        addSavedItem('brands', product.brand);
+      }
+    }
   };
 
   return (
@@ -225,20 +242,34 @@ export default function Recommendations() {
         {uniqueProducts.length > 0 && (
           <>
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {uniqueProducts.map((product) => (
-                <div
-                  key={product.skuId}
-                  className="bg-white border-2 border-sand rounded-2xl shadow-md hover:shadow-xl transition-all overflow-hidden group"
-                  data-testid={`card-recommendation-${product.skuId}`}
-                >
-                  <div className="aspect-square bg-ivory overflow-hidden border-b-2 border-sand">
-                    <img
-                      src={product.imageUrl}
-                      alt={product.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                      data-testid={`img-product-${product.skuId}`}
-                    />
-                  </div>
+              {uniqueProducts.map((product) => {
+                const isSaved = savedItems.products.includes(product.title);
+                
+                return (
+                  <div
+                    key={product.skuId}
+                    className="bg-white border-2 border-sand rounded-2xl shadow-md hover:shadow-xl transition-all overflow-hidden group"
+                    data-testid={`card-recommendation-${product.skuId}`}
+                  >
+                    <div className="aspect-square bg-ivory overflow-hidden border-b-2 border-sand relative">
+                      <img
+                        src={product.imageUrl}
+                        alt={product.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        data-testid={`img-product-${product.skuId}`}
+                      />
+                      {/* Save Button */}
+                      <button
+                        onClick={(e) => handleSaveProduct(product, e)}
+                        className="absolute top-3 left-3 p-2 bg-white/90 hover:bg-white rounded-full shadow-md transition-all hover:scale-110"
+                        aria-label={isSaved ? "Unsave product" : "Save product"}
+                        data-testid={`button-save-${product.skuId}`}
+                      >
+                        <Heart 
+                          className={`w-5 h-5 ${isSaved ? 'fill-olive text-olive' : 'text-espresso'}`}
+                        />
+                      </button>
+                    </div>
                   <div className="p-5">
                     <h3 className="text-lg font-bold mb-3 line-clamp-2 min-h-[3.5rem]" data-testid={`text-product-title-${product.skuId}`}>
                       {product.title}
@@ -272,7 +303,8 @@ export default function Recommendations() {
                     </button>
                   </div>
                 </div>
-              ))}
+                );
+              })}
             </div>
 
             {/* CTA to Shop */}
