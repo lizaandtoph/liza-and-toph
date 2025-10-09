@@ -26,7 +26,21 @@
         {
           "id": "primaryLanguages",
           "text": "Primary language(s) spoken at home",
-          "type": "text"
+          "type": "checkbox",
+          "options": [
+            "English",
+            "Spanish",
+            "Chinese (Mandarin or Cantonese)",
+            "Hindi",
+            "Arabic",
+            "French",
+            "Vietnamese",
+            "Tagalog",
+            "Korean",
+            "Russian",
+            "Portuguese",
+            "Other"
+          ]
         },
         {
           "id": "completedBy",

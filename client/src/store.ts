@@ -54,7 +54,7 @@ export interface Answers {
       gender?: string;
       premature?: boolean;
       weeksEarly?: number;
-      primaryLanguages?: string;
+      primaryLanguages?: string[];
       completedBy?: string;
       relationshipDuration?: string;
       completionDate?: string;
