@@ -315,7 +315,7 @@ export default function Onboarding() {
                   className="w-full px-6 py-4 bg-ivory border-2 border-sand rounded-xl focus:border-olive focus:outline-none text-lg transition disabled:opacity-60 disabled:cursor-not-allowed"
                   placeholder={isLoading ? "Loading..." : "Enter your first name"}
                   data-testid="input-parent-first-name"
-                  disabled={isLoading || isAuthenticated}
+                  disabled={isLoading || !!(isAuthenticated && user?.firstName)}
                 />
                 {errors.firstName && <p className="text-burnt text-sm mt-2" data-testid="error-first-name">{errors.firstName}</p>}
               </div>
@@ -329,7 +329,7 @@ export default function Onboarding() {
                   className="w-full px-6 py-4 bg-ivory border-2 border-sand rounded-xl focus:border-olive focus:outline-none text-lg transition disabled:opacity-60 disabled:cursor-not-allowed"
                   placeholder={isLoading ? "Loading..." : "Enter your last name"}
                   data-testid="input-parent-last-name"
-                  disabled={isLoading || isAuthenticated}
+                  disabled={isLoading || !!(isAuthenticated && user?.lastName)}
                 />
                 {errors.lastName && <p className="text-burnt text-sm mt-2" data-testid="error-last-name">{errors.lastName}</p>}
               </div>
@@ -343,7 +343,7 @@ export default function Onboarding() {
                   className="w-full px-6 py-4 bg-ivory border-2 border-sand rounded-xl focus:border-olive focus:outline-none text-lg transition disabled:opacity-60 disabled:cursor-not-allowed"
                   placeholder={isLoading ? "Loading..." : "your@email.com"}
                   data-testid="input-parent-email"
-                  disabled={isLoading || isAuthenticated}
+                  disabled={isLoading || !!(isAuthenticated && user?.email)}
                 />
                 {errors.email && <p className="text-burnt text-sm mt-2" data-testid="error-email">{errors.email}</p>}
               </div>
