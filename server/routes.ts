@@ -424,6 +424,57 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Import from Google Sheets endpoints
+  app.post("/api/admin/import-dev", isAuthenticated, requireRole("admin"), async (req, res) => {
+    try {
+      const { exec } = await import("child_process");
+      const { promisify } = await import("util");
+      const execAsync = promisify(exec);
+      
+      const { stdout, stderr } = await execAsync("python3 import_from_sheet.py");
+      
+      res.json({ 
+        success: true, 
+        message: "Development database import completed",
+        output: stdout,
+        errors: stderr || null
+      });
+    } catch (error: any) {
+      res.status(500).json({ 
+        success: false,
+        message: "Import failed", 
+        error: error.message,
+        output: error.stdout || null,
+        errors: error.stderr || null
+      });
+    }
+  });
+
+  app.post("/api/admin/import-production", isAuthenticated, requireRole("admin"), async (req, res) => {
+    try {
+      const { exec } = await import("child_process");
+      const { promisify } = await import("util");
+      const execAsync = promisify(exec);
+      
+      const { stdout, stderr } = await execAsync("python3 import_from_sheet.py --production");
+      
+      res.json({ 
+        success: true, 
+        message: "Production database import completed",
+        output: stdout,
+        errors: stderr || null
+      });
+    } catch (error: any) {
+      res.status(500).json({ 
+        success: false,
+        message: "Import failed", 
+        error: error.message,
+        output: error.stdout || null,
+        errors: error.stderr || null
+      });
+    }
+  });
+
   // Play Board routes
   app.post("/api/play-boards", async (req, res) => {
     try {

@@ -3,7 +3,7 @@ import { useQuery, useMutation } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useLocation } from 'wouter';
-import { Package, Plus, Edit2, Trash2, X } from 'lucide-react';
+import { Package, Plus, Edit2, Trash2, X, Database, Download } from 'lucide-react';
 import { insertProductSchema, updateProductSchema, type Product, type InsertProduct } from '@shared/schema';
 import { getAgeBandLabel } from '@shared/ageUtils';
 import { Button } from '@/components/ui/button';
@@ -298,6 +298,75 @@ export default function Admin() {
           </Button>
         </div>
       </div>
+
+      {/* Import Section */}
+      <Card className="mb-8">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Database className="w-6 h-6" />
+            Import from Google Sheets
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-col sm:flex-row gap-4">
+            <Button
+              onClick={async () => {
+                try {
+                  const res = await apiRequest('POST', '/api/admin/import-dev');
+                  toast({ 
+                    title: 'Import Successful', 
+                    description: 'Development database has been updated with the latest data from Google Sheets' 
+                  });
+                  queryClient.invalidateQueries({ queryKey: ['/api/admin/products'] });
+                } catch (error: any) {
+                  toast({ 
+                    title: 'Import Failed', 
+                    description: error.message || 'Failed to import data to development database',
+                    variant: 'destructive' 
+                  });
+                }
+              }}
+              variant="outline"
+              className="flex-1"
+              data-testid="button-import-dev"
+            >
+              <Download className="w-4 h-4 mr-2" />
+              Import to Development Database
+            </Button>
+            
+            <Button
+              onClick={async () => {
+                if (!confirm('Are you sure you want to import to the PRODUCTION database? This will update live data.')) {
+                  return;
+                }
+                try {
+                  const res = await apiRequest('POST', '/api/admin/import-production');
+                  toast({ 
+                    title: 'Import Successful', 
+                    description: 'Production database has been updated with the latest data from Google Sheets' 
+                  });
+                  queryClient.invalidateQueries({ queryKey: ['/api/admin/products'] });
+                } catch (error: any) {
+                  toast({ 
+                    title: 'Import Failed', 
+                    description: error.message || 'Failed to import data to production database',
+                    variant: 'destructive' 
+                  });
+                }
+              }}
+              variant="default"
+              className="flex-1 bg-orange-600 hover:bg-orange-700"
+              data-testid="button-import-production"
+            >
+              <Download className="w-4 h-4 mr-2" />
+              Import to Production Database
+            </Button>
+          </div>
+          <p className="text-sm text-muted-foreground mt-4">
+            Import product and professional data from the Google Sheets source. Development updates the local database, Production updates the live database.
+          </p>
+        </CardContent>
+      </Card>
 
       {isLoading ? (
         <div className="text-center py-12" data-testid="loading-products">Loading products...</div>
