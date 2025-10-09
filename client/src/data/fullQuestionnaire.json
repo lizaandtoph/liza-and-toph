@@ -310,11 +310,11 @@
     {
       "id": "playBehavior",
       "title": "Play Behavior and Preferences",
-      "description": "Response Scale: Never (1) | Rarely (2) | Sometimes (3) | Often (4) | Always (5)",
+      "description": "Tell us about how your child plays and interacts during play",
       "questions": [
         {
           "id": "playTypes",
-          "text": "What types of play does your child enjoy most? (Check all that apply)",
+          "text": "What play activities does your child enjoy most? (Check all that apply)",
           "type": "checkbox",
           "options": [
             "Pretend/imaginative play",
@@ -481,7 +481,7 @@
     {
       "id": "temperament",
       "title": "Temperament and Behavioral Characteristics",
-      "description": "Response Scale: 1 (Much less than typical) | 2 (Less than typical) | 3 (About typical) | 4 (More than typical) | 5 (Much more than typical)",
+      "description": "Rate your child's behaviors compared to other children their age",
       "questions": [
         {
           "id": "excitementIntensity",

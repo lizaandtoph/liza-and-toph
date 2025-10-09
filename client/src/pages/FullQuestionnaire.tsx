@@ -189,6 +189,17 @@ export default function FullQuestionnaire() {
 
       case 'rating':
         const ratingValue = (value as number) || 3;
+        const getScaleLabel = (val: number, sectionId: string) => {
+          if (sectionId === 'playBehavior') {
+            const labels = ['Never', 'Rarely', 'Sometimes', 'Often', 'Always'];
+            return labels[val - 1];
+          } else if (sectionId === 'temperament') {
+            const labels = ['Much less than typical', 'Less than typical', 'About typical', 'More than typical', 'Much more than typical'];
+            return labels[val - 1];
+          }
+          return val.toString();
+        };
+        
         return (
           <div key={index} className="space-y-3">
             <div className="flex justify-between items-start">
@@ -208,8 +219,8 @@ export default function FullQuestionnaire() {
                 data-testid={`slider-${questionId}`}
               />
               <div className="flex justify-between text-xs text-muted-foreground">
-                <span>1</span>
-                <span>{question.scale || 5}</span>
+                <span>{getScaleLabel(1, currentSection.id)}</span>
+                <span>{getScaleLabel(question.scale || 5, currentSection.id)}</span>
               </div>
             </div>
           </div>
