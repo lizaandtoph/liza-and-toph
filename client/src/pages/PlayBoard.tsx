@@ -539,10 +539,13 @@ export default function PlayBoard() {
                 >
                   <div className="aspect-square bg-ivory overflow-hidden">
                     <img
-                      src={product.imageUrl}
+                      src={product.imageUrl || 'https://placehold.co/400x400/EDE9DC/8B7355?text=No+Image'}
                       alt={product.name}
                       className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                       data-testid={`img-product-${product.id}`}
+                      onError={(e) => {
+                        e.currentTarget.src = 'https://placehold.co/400x400/EDE9DC/8B7355?text=No+Image';
+                      }}
                     />
                   </div>
                   <div className="p-4">

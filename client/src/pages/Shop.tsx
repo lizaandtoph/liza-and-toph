@@ -433,10 +433,13 @@ export default function Shop() {
             >
               <div className="aspect-square bg-ivory overflow-hidden relative">
                 <img
-                  src={product.imageUrl}
+                  src={product.imageUrl || 'https://placehold.co/400x400/EDE9DC/8B7355?text=No+Image'}
                   alt={product.name}
                   className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                   data-testid={`img-product-${product.id}`}
+                  onError={(e) => {
+                    e.currentTarget.src = 'https://placehold.co/400x400/EDE9DC/8B7355?text=No+Image';
+                  }}
                 />
                 {badge && (
                   <div className={`absolute top-3 right-3 ${badge.className} text-xs font-bold px-2 py-1 rounded`} data-testid={`badge-${product.id}`}>
