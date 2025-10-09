@@ -62,7 +62,10 @@ export default function Shop() {
     queryKey: ['/api/products'],
   });
 
-  const parseAgeRange = (ageRange: string) => {
+  const parseAgeRange = (ageRange: string | null | undefined) => {
+    if (!ageRange) {
+      return { ageMin: 0, ageMax: 24 };
+    }
     const cleanRange = ageRange.replace(/\s*(months?|years?)\s*/gi, '').trim();
     const match = cleanRange.match(/(\d+)-(\d+)/);
     if (match) {
