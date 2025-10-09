@@ -65,3 +65,42 @@ export function getAgeBandLabel(ageBand: string): string {
   };
   return labels[ageBand] || ageBand;
 }
+
+export function formatAgeRange(ageRange: string | null | undefined): string {
+  if (!ageRange) return '';
+  
+  // Parse age range to extract numbers and units
+  const match = ageRange.match(/(\d+)\s*(to|-)?\s*(\d+)?\s*(months?|years?)?/i);
+  if (!match) return ageRange;
+  
+  const minAge = parseInt(match[1]);
+  const maxAge = match[3] ? parseInt(match[3]) : minAge;
+  const unit = match[4]?.toLowerCase();
+  
+  // Determine if values are in months
+  const isMonths = unit?.includes('month') || (!unit && maxAge <= 18);
+  
+  if (isMonths) {
+    // If max age is over 18 months, convert to years
+    if (maxAge > 18) {
+      const minYears = Math.floor(minAge / 12);
+      const maxYears = Math.floor(maxAge / 12);
+      
+      if (minYears === maxYears) {
+        return `${minYears} year${minYears !== 1 ? 's' : ''}`;
+      }
+      return `${minYears} to ${maxYears} years`;
+    }
+    // Keep in months if under 18 months
+    if (minAge === maxAge) {
+      return `${minAge} month${minAge !== 1 ? 's' : ''}`;
+    }
+    return `${minAge} to ${maxAge} months`;
+  }
+  
+  // Already in years
+  if (minAge === maxAge) {
+    return `${minAge} year${minAge !== 1 ? 's' : ''}`;
+  }
+  return `${minAge} to ${maxAge} years`;
+}

@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { type Product } from '@shared/schema';
 import { useStore } from '../store';
 import { logEvent } from '../analytics';
+import { formatAgeRange } from '@shared/ageUtils';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
@@ -481,7 +482,7 @@ export default function Shop() {
                 
                 {product.ageRange && (
                   <p className="text-xs opacity-70 mb-3">
-                    Ages {product.ageRange}
+                    Ages {formatAgeRange(product.ageRange)}
                   </p>
                 )}
 

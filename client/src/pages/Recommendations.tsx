@@ -5,7 +5,7 @@ import rulesData from '../data/rules.json';
 import { Sparkles, ExternalLink, ShoppingBag } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { type Product } from '@shared/schema';
-import { calculateAgeFromBirthday, categorizeAgeBand } from '@shared/ageUtils';
+import { calculateAgeFromBirthday, categorizeAgeBand, formatAgeRange } from '@shared/ageUtils';
 import { useMemo } from 'react';
 
 export default function Recommendations() {
@@ -175,7 +175,7 @@ export default function Recommendations() {
     ageMin: p.ageMin,
     ageMax: p.ageMax,
     ageRange: p.ageRange,
-    domains: p.categories || [],
+    domains: normalizeCategories(p.categories),
     imageUrl: p.imageUrl,
   }));
 
@@ -258,7 +258,7 @@ export default function Recommendations() {
                     
                     {product.ageRange && (
                       <p className="text-xs opacity-70 mb-4">
-                        Ages {product.ageRange}
+                        Ages {formatAgeRange(product.ageRange)}
                       </p>
                     )}
 

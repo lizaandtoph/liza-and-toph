@@ -7,7 +7,7 @@ import rulesData from '../data/rules.json';
 import { Sparkles, TrendingUp, ShoppingCart, FileText, CheckCircle } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { type Product } from '@shared/schema';
-import { calculateAgeFromBirthday, categorizeAgeBand } from '@shared/ageUtils';
+import { calculateAgeFromBirthday, categorizeAgeBand, formatAgeRange } from '@shared/ageUtils';
 import { useAuth } from '../hooks/useAuth';
 
 export default function PlayBoard() {
@@ -586,7 +586,7 @@ export default function PlayBoard() {
                     
                     {product.ageRange && (
                       <p className="text-xs opacity-70 mb-3">
-                        Ages {product.ageRange}
+                        Ages {formatAgeRange(product.ageRange)}
                       </p>
                     )}
 
