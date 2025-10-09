@@ -10,6 +10,7 @@ import interestsData from '../data/interests.json';
 import { ChevronRight, ChevronLeft } from 'lucide-react';
 import { calculateAgeFromBirthday, categorizeAgeBand, getAgeBandLabel } from '@shared/ageUtils';
 import { useAuth } from '../hooks/useAuth';
+import { useToast } from '@/hooks/use-toast';
 
 const QUESTIONNAIRE_VERSION = 2;
 
@@ -32,6 +33,7 @@ export default function Onboarding() {
   const [, setLocation] = useLocation();
   const { setLoggedIn, setParentAccount, parentAccount, loadChildren, children } = useStore();
   const { user, isAuthenticated, isLoading } = useAuth();
+  const { toast } = useToast();
   const isFirstChild = children.length === 0;
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
@@ -215,6 +217,11 @@ export default function Onboarding() {
 
       if (!childResponse.ok) {
         console.error('Failed to create child');
+        toast({
+          title: "Submission Failed",
+          description: "We couldn't save your child's profile. Please try again.",
+          variant: "destructive",
+        });
         setIsSubmitting(false);
         return;
       }
@@ -252,6 +259,11 @@ export default function Onboarding() {
       setLocation('/playboard');
     } catch (e) {
       console.error('Validation error:', e);
+      toast({
+        title: "Error",
+        description: "Something went wrong. Please check your information and try again.",
+        variant: "destructive",
+      });
       setIsSubmitting(false);
     }
   };
@@ -717,10 +729,11 @@ export default function Onboarding() {
         ) : (
           <button
             onClick={handleSubmit}
-            className="flex items-center gap-2 px-8 py-3 bg-olive text-ivory rounded-xl hover:bg-ochre transition font-semibold text-lg shadow-md hover:shadow-lg ml-auto"
+            disabled={isSubmitting}
+            className="flex items-center gap-2 px-8 py-3 bg-olive text-ivory rounded-xl hover:bg-ochre transition font-semibold text-lg shadow-md hover:shadow-lg ml-auto disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-olive"
             data-testid="button-submit"
           >
-            See My Play Board
+            {isSubmitting ? 'Creating Your Play Board...' : 'See My Play Board'}
             <ChevronRight className="w-5 h-5" />
           </button>
         )}
