@@ -355,6 +355,14 @@ export default function Home() {
             <p className="text-sm font-semibold text-olive uppercase tracking-wider mb-4">
               Intelligent by Design
             </p>
+            <div className="flex justify-center mb-8">
+              <img 
+                src={new URL('@assets/Group_1760042426375.png', import.meta.url).href} 
+                alt="Data analysis illustration" 
+                className="w-64 h-auto"
+                data-testid="img-data-analysis"
+              />
+            </div>
             <h1 className="text-4xl md:text-5xl font-bold mb-8">
               The Science Behind Your Recommendations
             </h1>
