@@ -171,6 +171,7 @@ export default function Recommendations() {
     url: p.affiliateUrl || '#',
     ageMin: p.ageMin,
     ageMax: p.ageMax,
+    ageRange: p.ageRange,
     domains: p.categories || [],
     imageUrl: p.imageUrl,
   }));
@@ -252,9 +253,11 @@ export default function Recommendations() {
                       ))}
                     </div>
                     
-                    <p className="text-xs opacity-70 mb-4">
-                      Ages {product.ageMin}-{product.ageMax}
-                    </p>
+                    {product.ageRange && (
+                      <p className="text-xs opacity-70 mb-4">
+                        Ages {product.ageRange}
+                      </p>
+                    )}
 
                     <button
                       onClick={() => handleClick(product.skuId, product.url)}

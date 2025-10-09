@@ -581,9 +581,11 @@ export default function PlayBoard() {
                       ))}
                     </div>
                     
-                    <p className="text-xs opacity-70 mb-3">
-                      Ages {product.ageMin}-{product.ageMax}
-                    </p>
+                    {product.ageRange && (
+                      <p className="text-xs opacity-70 mb-3">
+                        Ages {product.ageRange}
+                      </p>
+                    )}
 
                     <button
                       onClick={() => handleProductClick(product.id, product.affiliateUrl || '#')}
