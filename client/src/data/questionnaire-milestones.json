@@ -1,5 +1,23 @@
 {
-  "18m-3yr": {
+  "newborn-18m": {
+    "social_emotional": {
+      "question": "Does your baby smile at familiar people?",
+      "options": ["yes", "sometimes", "not_yet"]
+    },
+    "cognitive": {
+      "question": "Does your baby explore objects by mouthing or shaking them?",
+      "options": ["yes", "sometimes", "not_yet"]
+    },
+    "language": {
+      "question": "Does your baby babble or make sounds?",
+      "options": ["yes", "sometimes", "not_yet"]
+    },
+    "motor": {
+      "question": "Can your baby sit without support?",
+      "options": ["yes", "sometimes", "not_yet"]
+    }
+  },
+  "18m-3y": {
     "social_emotional": {
       "question": "Does your child play next to other children?",
       "options": ["yes", "sometimes", "not_yet"]
@@ -17,7 +35,7 @@
       "options": ["yes", "sometimes", "not_yet"]
     }
   },
-  "2-5yr": {
+  "2-5y": {
     "social_emotional": {
       "question": "Does your child take turns during play?",
       "options": ["yes", "sometimes", "not_yet"]
@@ -35,7 +53,7 @@
       "options": ["yes", "sometimes", "not_yet"]
     }
   },
-  "3-6yr": {
+  "3-6y": {
     "social_emotional": {
       "question": "Does your child assign roles during pretend play?",
       "options": ["yes", "sometimes", "not_yet"]
@@ -50,6 +68,150 @@
     },
     "motor": {
       "question": "Can your child use scissors to cut paper?",
+      "options": ["yes", "sometimes", "not_yet"]
+    }
+  },
+  "4-7y": {
+    "social_emotional": {
+      "question": "Does your child cooperate with peers during group activities?",
+      "options": ["yes", "sometimes", "not_yet"]
+    },
+    "cognitive": {
+      "question": "Does your child understand and follow multi-step instructions?",
+      "options": ["yes", "sometimes", "not_yet"]
+    },
+    "language": {
+      "question": "Can your child tell detailed stories with a clear sequence?",
+      "options": ["yes", "sometimes", "not_yet"]
+    },
+    "motor": {
+      "question": "Can your child catch and throw a ball with accuracy?",
+      "options": ["yes", "sometimes", "not_yet"]
+    }
+  },
+  "5-8y": {
+    "social_emotional": {
+      "question": "Does your child show empathy for others' feelings?",
+      "options": ["yes", "sometimes", "not_yet"]
+    },
+    "cognitive": {
+      "question": "Can your child solve simple math problems?",
+      "options": ["yes", "sometimes", "not_yet"]
+    },
+    "language": {
+      "question": "Can your child read simple words or sentences?",
+      "options": ["yes", "sometimes", "not_yet"]
+    },
+    "motor": {
+      "question": "Can your child ride a bike with or without training wheels?",
+      "options": ["yes", "sometimes", "not_yet"]
+    }
+  },
+  "6-9y": {
+    "social_emotional": {
+      "question": "Does your child develop and maintain friendships?",
+      "options": ["yes", "sometimes", "not_yet"]
+    },
+    "cognitive": {
+      "question": "Can your child think through problems before acting?",
+      "options": ["yes", "sometimes", "not_yet"]
+    },
+    "language": {
+      "question": "Can your child read chapter books independently?",
+      "options": ["yes", "sometimes", "not_yet"]
+    },
+    "motor": {
+      "question": "Can your child participate in organized sports or activities?",
+      "options": ["yes", "sometimes", "not_yet"]
+    }
+  },
+  "7-10y": {
+    "social_emotional": {
+      "question": "Does your child understand complex social rules?",
+      "options": ["yes", "sometimes", "not_yet"]
+    },
+    "cognitive": {
+      "question": "Can your child plan and complete multi-step projects?",
+      "options": ["yes", "sometimes", "not_yet"]
+    },
+    "language": {
+      "question": "Can your child write organized paragraphs?",
+      "options": ["yes", "sometimes", "not_yet"]
+    },
+    "motor": {
+      "question": "Does your child show good coordination in physical activities?",
+      "options": ["yes", "sometimes", "not_yet"]
+    }
+  },
+  "8-11y": {
+    "social_emotional": {
+      "question": "Does your child manage conflicts with peers appropriately?",
+      "options": ["yes", "sometimes", "not_yet"]
+    },
+    "cognitive": {
+      "question": "Can your child think abstractly about concepts?",
+      "options": ["yes", "sometimes", "not_yet"]
+    },
+    "language": {
+      "question": "Can your child express complex ideas in writing?",
+      "options": ["yes", "sometimes", "not_yet"]
+    },
+    "motor": {
+      "question": "Does your child participate in complex physical activities or sports?",
+      "options": ["yes", "sometimes", "not_yet"]
+    }
+  },
+  "9-12y": {
+    "social_emotional": {
+      "question": "Does your child show increased independence in decision-making?",
+      "options": ["yes", "sometimes", "not_yet"]
+    },
+    "cognitive": {
+      "question": "Can your child understand and discuss abstract concepts?",
+      "options": ["yes", "sometimes", "not_yet"]
+    },
+    "language": {
+      "question": "Can your child engage in debates or discussions using logic?",
+      "options": ["yes", "sometimes", "not_yet"]
+    },
+    "motor": {
+      "question": "Does your child demonstrate skill refinement in chosen activities?",
+      "options": ["yes", "sometimes", "not_yet"]
+    }
+  },
+  "10-early-teens": {
+    "social_emotional": {
+      "question": "Does your child navigate peer pressure effectively?",
+      "options": ["yes", "sometimes", "not_yet"]
+    },
+    "cognitive": {
+      "question": "Can your child think critically about complex issues?",
+      "options": ["yes", "sometimes", "not_yet"]
+    },
+    "language": {
+      "question": "Can your child express nuanced thoughts in writing?",
+      "options": ["yes", "sometimes", "not_yet"]
+    },
+    "motor": {
+      "question": "Does your child maintain physical fitness through regular activity?",
+      "options": ["yes", "sometimes", "not_yet"]
+    }
+  },
+  "preteens-older-teens": {
+    "social_emotional": {
+      "question": "Does your teen demonstrate emotional maturity in relationships?",
+      "options": ["yes", "sometimes", "not_yet"]
+    },
+    "cognitive": {
+      "question": "Can your teen analyze and evaluate complex information?",
+      "options": ["yes", "sometimes", "not_yet"]
+    },
+    "language": {
+      "question": "Can your teen communicate effectively in various contexts?",
+      "options": ["yes", "sometimes", "not_yet"]
+    },
+    "motor": {
+      "question": "Does your teen engage in regular physical activity or sports?",
       "options": ["yes", "sometimes", "not_yet"]
     }
   }

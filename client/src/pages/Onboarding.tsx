@@ -80,14 +80,7 @@ export default function Onboarding() {
       return milestonesData[bandKey];
     }
     
-    if (childAgeBand === '18m-3y') {
-      return milestonesData['18m-3yr'];
-    } else if (childAgeBand === '2-5y') {
-      return milestonesData['2-5yr'];
-    } else if (childAgeBand === '3-6y') {
-      return milestonesData['3-6yr'];
-    }
-    
+    console.warn(`No milestone questions found for age band: ${childAgeBand}`);
     return null;
   }, [childAgeBand]);
 
