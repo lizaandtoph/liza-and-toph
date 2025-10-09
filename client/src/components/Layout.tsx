@@ -5,6 +5,7 @@ import { useAuth } from '../hooks/useAuth';
 import { queryClient } from '@/lib/queryClient';
 import logoImage from '@assets/symbol_orange_mono_1759602921856.png';
 import { useState, useEffect, useRef } from 'react';
+import FeedbackButton from './FeedbackButton';
 
 const CURRENT_QUESTIONNAIRE_VERSION = 2;
 
@@ -362,6 +363,9 @@ export default function Layout({ children: pageContent }: { children: React.Reac
           </div>
         </div>
       </footer>
+      
+      {/* Feedback Button */}
+      <FeedbackButton />
     </div>
   );
 }
