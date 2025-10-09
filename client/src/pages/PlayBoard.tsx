@@ -319,7 +319,7 @@ export default function PlayBoard() {
   return (
     <div className="relative">
       {/* Hero Section with Gradient */}
-      <div className="bg-gradient-to-br from-olive/20 via-ivory to-blush/20 py-12 -mt-8">
+      <div className="bg-gradient-to-br from-olive/20 via-ivory to-blush/20 py-12 mt-6">
         <div className="container mx-auto px-4 max-w-6xl">
           <div className="text-center mb-8">
             <h1 className="text-4xl md:text-5xl font-bold mb-3" data-testid="text-playboard-title">

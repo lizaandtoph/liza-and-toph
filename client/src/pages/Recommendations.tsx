@@ -192,7 +192,7 @@ export default function Recommendations() {
   return (
     <div>
       {/* Hero Section */}
-      <div className="bg-gradient-to-br from-olive/20 via-ivory to-blush/20 py-12 -mt-8 mb-8">
+      <div className="bg-gradient-to-br from-olive/20 via-ivory to-blush/20 py-12 mt-6 mb-8">
         <div className="container mx-auto px-4 max-w-6xl text-center">
           <div className="flex items-center justify-center gap-2 mb-3">
             <Sparkles className="w-8 h-8 text-ochre" />
