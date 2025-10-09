@@ -130,6 +130,12 @@ export default function PlayBoard() {
 
   const insights = computeInsights();
 
+  const normalizeCategories = (categories: any): string[] => {
+    if (Array.isArray(categories)) return categories;
+    if (typeof categories === 'string') return categories.split(',').map(c => c.trim()).filter(Boolean);
+    return [];
+  };
+
   const parseAgeRange = (ageRange: string | null | undefined) => {
     if (!ageRange) {
       return { ageMin: 0, ageMax: 99 };
@@ -544,19 +550,17 @@ export default function PlayBoard() {
                       {product.name}
                     </h3>
 
-                    {product.categories && product.categories.length > 0 && (
-                      <div className="flex flex-wrap gap-2 mb-3">
-                        {product.categories.slice(0, 2).map((category, idx) => (
-                          <span
-                            key={idx}
-                            className="px-2 py-1 bg-sand text-espresso text-xs rounded"
-                            data-testid={`tag-category-${idx}`}
-                          >
-                            {category}
-                          </span>
-                        ))}
-                      </div>
-                    )}
+                    <div className="flex flex-wrap gap-2 mb-3">
+                      {normalizeCategories(product.categories).slice(0, 2).map((category, idx) => (
+                        <span
+                          key={idx}
+                          className="px-2 py-1 bg-sand text-espresso text-xs rounded"
+                          data-testid={`tag-category-${idx}`}
+                        >
+                          {category}
+                        </span>
+                      ))}
+                    </div>
                     
                     <p className="text-xs opacity-70 mb-3">
                       Ages {product.ageMin}-{product.ageMax}

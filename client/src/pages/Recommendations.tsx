@@ -64,8 +64,17 @@ export default function Recommendations() {
 
   const needIds = computeNeeds();
   
+  const normalizeCategories = (categories: any): string[] => {
+    if (Array.isArray(categories)) return categories;
+    if (typeof categories === 'string') return categories.split(',').map(c => c.trim()).filter(Boolean);
+    return [];
+  };
+  
   // Parse age range from product
-  const parseAgeRange = (ageRange: string) => {
+  const parseAgeRange = (ageRange: string | null | undefined) => {
+    if (!ageRange) {
+      return { ageMin: 0, ageMax: 99 };
+    }
     const parts = ageRange.split('-');
     
     const parseAgeValue = (value: string) => {
@@ -116,16 +125,15 @@ export default function Recommendations() {
       const { ageMin, ageMax } = parseAgeRange(p.ageRange);
       
       let relevanceScore = 0;
-      if (p.categories && Array.isArray(p.categories)) {
-        p.categories.forEach(category => {
-          needIds.forEach(needId => {
-            if (category.toLowerCase().includes(needId.toLowerCase()) ||
-                needId.toLowerCase().includes(category.toLowerCase())) {
-              relevanceScore += 10;
-            }
-          });
+      const categories = normalizeCategories(p.categories);
+      categories.forEach(category => {
+        needIds.forEach(needId => {
+          if (category.toLowerCase().includes(needId.toLowerCase()) ||
+              needId.toLowerCase().includes(category.toLowerCase())) {
+            relevanceScore += 10;
+          }
         });
-      }
+      });
       
       return {
         ...p,
