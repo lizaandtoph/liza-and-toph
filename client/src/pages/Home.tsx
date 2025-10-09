@@ -232,6 +232,14 @@ export default function Home() {
       <section className="py-20">
         <div className="container mx-auto px-4 max-w-7xl">
           <div className="text-center mb-12">
+            <div className="flex justify-center mb-8">
+              <img 
+                src={new URL('@assets/Group 82_1760042351145.png', import.meta.url).href} 
+                alt="Confused child with toys illustration" 
+                className="w-64 h-auto"
+                data-testid="img-confused-child"
+              />
+            </div>
             <h1 className="text-4xl md:text-5xl font-bold mb-8">
               Your Playroom is Full of Toys. So Why Are They Bored?
             </h1>
