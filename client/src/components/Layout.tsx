@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'wouter';
-import { Baby, Heart, ShoppingCart, HardHat, Settings as SettingsIcon, User, ChevronDown, Plus, AlertCircle, X, LogOut } from 'lucide-react';
+import { Baby, Heart, ShoppingCart, Users, Settings as SettingsIcon, User, ChevronDown, Plus, AlertCircle, X, LogOut } from 'lucide-react';
 import { useStore } from '../store';
 import { useAuth } from '../hooks/useAuth';
 import { queryClient } from '@/lib/queryClient';
@@ -127,7 +127,7 @@ export default function Layout({ children: pageContent }: { children: React.Reac
     { to: '/your-child', label: 'Your Child', icon: Baby },
     { to: '/playboard', label: 'Play Board', icon: Heart },
     { to: '/shop', label: 'Shop', icon: ShoppingCart },
-    { to: '/pros', label: 'Professionals', icon: HardHat },
+    { to: '/pros', label: 'Professionals', icon: Users },
     { to: '/settings', label: 'Settings', icon: SettingsIcon },
   ];
 
