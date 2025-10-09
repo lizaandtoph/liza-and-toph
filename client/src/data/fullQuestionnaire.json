@@ -63,249 +63,247 @@
       ]
     },
     {
-      "id": "developmental",
-      "title": "Developmental Milestones Assessment",
+      "id": "communication",
+      "title": "Communication & Language Development",
       "description": "Response Scale: Yes | Sometimes | Not Yet | Don't Know",
-      "subsections": [
+      "questions": [
         {
-          "id": "communication",
-          "title": "Communication & Language Development",
-          "questions": [
-            {
-              "id": "pointsToBodyParts",
-              "text": "When you ask your child to point to parts of the body, such as nose, hair, or tummy, does your child point correctly?",
-              "type": "scale",
-              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
-            },
-            {
-              "id": "says50Words",
-              "text": "Does your child say about 50 or more words?",
-              "type": "scale",
-              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
-            },
-            {
-              "id": "twoWordSentences",
-              "text": "Does your child put two words together to make simple sentences like \"Daddy go\" or \"More cookie\"?",
-              "type": "scale",
-              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
-            },
-            {
-              "id": "communicatesWants",
-              "text": "When your child wants something, do they usually let you know by pointing and making sounds or using words?",
-              "type": "scale",
-              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
-            },
-            {
-              "id": "followsInstructions",
-              "text": "Does your child follow simple instructions like \"Come here\" or \"Give me the ball\"?",
-              "type": "scale",
-              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
-            },
-            {
-              "id": "namesBodyParts",
-              "text": "Can your child name at least three body parts when you ask?",
-              "type": "scale",
-              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
-            },
-            {
-              "id": "asksQuestions",
-              "text": "Does your child ask questions using words like \"what,\" \"where,\" or \"who\"?",
-              "type": "scale",
-              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
-            }
-          ]
+          "id": "pointsToBodyParts",
+          "text": "When you ask your child to point to parts of the body, such as nose, hair, or tummy, does your child point correctly?",
+          "type": "scale",
+          "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
         },
         {
-          "id": "grossMotor",
-          "title": "Gross Motor Skills",
-          "questions": [
-            {
-              "id": "walksWithoutFalling",
-              "text": "Does your child walk without falling down or running into things?",
-              "type": "scale",
-              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
-            },
-            {
-              "id": "climbsFurniture",
-              "text": "Does your child climb on furniture or playground equipment?",
-              "type": "scale",
-              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
-            },
-            {
-              "id": "kicksBall",
-              "text": "Can your child kick a ball forward?",
-              "type": "scale",
-              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
-            },
-            {
-              "id": "walksUpstairs",
-              "text": "Does your child walk up stairs using the railing or wall for support?",
-              "type": "scale",
-              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
-            },
-            {
-              "id": "runs",
-              "text": "Can your child run without falling frequently?",
-              "type": "scale",
-              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
-            },
-            {
-              "id": "jumps",
-              "text": "Does your child jump with both feet leaving the ground?",
-              "type": "scale",
-              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
-            },
-            {
-              "id": "pedalsTricycle",
-              "text": "Can your child pedal a tricycle or similar riding toy?",
-              "type": "scale",
-              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
-            }
-          ]
+          "id": "says50Words",
+          "text": "Does your child say about 50 or more words?",
+          "type": "scale",
+          "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
         },
         {
-          "id": "fineMotor",
-          "title": "Fine Motor Skills",
-          "questions": [
-            {
-              "id": "stacksBlocks",
-              "text": "Can your child stack at least four small blocks on top of each other?",
-              "type": "scale",
-              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
-            },
-            {
-              "id": "turnsPages",
-              "text": "Does your child turn pages in a book by themselves?",
-              "type": "scale",
-              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
-            },
-            {
-              "id": "scribbles",
-              "text": "Can your child draw or scribble with a crayon or pencil?",
-              "type": "scale",
-              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
-            },
-            {
-              "id": "usesUtensils",
-              "text": "Does your child use a spoon or fork to feed themselves?",
-              "type": "scale",
-              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
-            },
-            {
-              "id": "turnsDoorknobs",
-              "text": "Can your child turn doorknobs or lids on containers?",
-              "type": "scale",
-              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
-            },
-            {
-              "id": "stringsBeads",
-              "text": "Does your child string beads or put shapes in a shape-sorter?",
-              "type": "scale",
-              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
-            },
-            {
-              "id": "usesScissors",
-              "text": "Can your child use scissors to cut paper (with supervision)?",
-              "type": "scale",
-              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
-            }
-          ]
+          "id": "twoWordSentences",
+          "text": "Does your child put two words together to make simple sentences like \"Daddy go\" or \"More cookie\"?",
+          "type": "scale",
+          "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
         },
         {
-          "id": "problemSolving",
-          "title": "Problem-Solving & Cognitive Development",
-          "questions": [
-            {
-              "id": "matchesObjects",
-              "text": "Does your child match similar objects or put objects in categories?",
-              "type": "scale",
-              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
-            },
-            {
-              "id": "pointsToObjects",
-              "text": "When looking at picture books, does your child point to and name familiar objects?",
-              "type": "scale",
-              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
-            },
-            {
-              "id": "pretendPlay",
-              "text": "Does your child pretend to feed a doll, stuffed animal, or you?",
-              "type": "scale",
-              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
-            },
-            {
-              "id": "showsObjects",
-              "text": "Does your child show you objects by bringing them to you or holding them up?",
-              "type": "scale",
-              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
-            },
-            {
-              "id": "completesPuzzles",
-              "text": "Can your child complete simple puzzles (3-6 pieces)?",
-              "type": "scale",
-              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
-            },
-            {
-              "id": "imitatesActivities",
-              "text": "Does your child imitate activities they see you do (like talking on phone, cooking)?",
-              "type": "scale",
-              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
-            },
-            {
-              "id": "followsSequence",
-              "text": "Can your child follow a simple sequence like \"First put on socks, then shoes\"?",
-              "type": "scale",
-              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
-            }
-          ]
+          "id": "communicatesWants",
+          "text": "When your child wants something, do they usually let you know by pointing and making sounds or using words?",
+          "type": "scale",
+          "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
         },
         {
-          "id": "personalSocial",
-          "title": "Personal-Social Development",
-          "questions": [
-            {
-              "id": "playsAlongside",
-              "text": "Does your child play alongside other children?",
-              "type": "scale",
-              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
-            },
-            {
-              "id": "showsAffection",
-              "text": "Does your child show affection toward familiar people?",
-              "type": "scale",
-              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
-            },
-            {
-              "id": "canBeComforted",
-              "text": "When upset, can your child be comforted by familiar adults?",
-              "type": "scale",
-              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
-            },
-            {
-              "id": "showsIndependence",
-              "text": "Does your child show independence in familiar situations?",
-              "type": "scale",
-              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
-            },
-            {
-              "id": "removesClothing",
-              "text": "Can your child take off some clothing items by themselves?",
-              "type": "scale",
-              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
-            },
-            {
-              "id": "helpsWithTasks",
-              "text": "Does your child help with simple household tasks when asked?",
-              "type": "scale",
-              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
-            },
-            {
-              "id": "showsConcern",
-              "text": "Does your child show concern when others are hurt or upset?",
-              "type": "scale",
-              "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
-            }
-          ]
+          "id": "followsInstructions",
+          "text": "Does your child follow simple instructions like \"Come here\" or \"Give me the ball\"?",
+          "type": "scale",
+          "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
+        },
+        {
+          "id": "namesBodyParts",
+          "text": "Can your child name at least three body parts when you ask?",
+          "type": "scale",
+          "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
+        },
+        {
+          "id": "asksQuestions",
+          "text": "Does your child ask questions using words like \"what,\" \"where,\" or \"who\"?",
+          "type": "scale",
+          "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
+        }
+      ]
+    },
+    {
+      "id": "grossMotor",
+      "title": "Gross Motor Skills",
+      "description": "Response Scale: Yes | Sometimes | Not Yet | Don't Know",
+      "questions": [
+        {
+          "id": "walksWithoutFalling",
+          "text": "Does your child walk without falling down or running into things?",
+          "type": "scale",
+          "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
+        },
+        {
+          "id": "climbsFurniture",
+          "text": "Does your child climb on furniture or playground equipment?",
+          "type": "scale",
+          "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
+        },
+        {
+          "id": "kicksBall",
+          "text": "Can your child kick a ball forward?",
+          "type": "scale",
+          "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
+        },
+        {
+          "id": "walksUpstairs",
+          "text": "Does your child walk up stairs using the railing or wall for support?",
+          "type": "scale",
+          "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
+        },
+        {
+          "id": "runs",
+          "text": "Can your child run without falling frequently?",
+          "type": "scale",
+          "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
+        },
+        {
+          "id": "jumps",
+          "text": "Does your child jump with both feet leaving the ground?",
+          "type": "scale",
+          "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
+        },
+        {
+          "id": "pedalsTricycle",
+          "text": "Can your child pedal a tricycle or similar riding toy?",
+          "type": "scale",
+          "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
+        }
+      ]
+    },
+    {
+      "id": "fineMotor",
+      "title": "Fine Motor Skills",
+      "description": "Response Scale: Yes | Sometimes | Not Yet | Don't Know",
+      "questions": [
+        {
+          "id": "stacksBlocks",
+          "text": "Can your child stack at least four small blocks on top of each other?",
+          "type": "scale",
+          "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
+        },
+        {
+          "id": "turnsPages",
+          "text": "Does your child turn pages in a book by themselves?",
+          "type": "scale",
+          "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
+        },
+        {
+          "id": "scribbles",
+          "text": "Can your child draw or scribble with a crayon or pencil?",
+          "type": "scale",
+          "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
+        },
+        {
+          "id": "usesUtensils",
+          "text": "Does your child use a spoon or fork to feed themselves?",
+          "type": "scale",
+          "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
+        },
+        {
+          "id": "turnsDoorknobs",
+          "text": "Can your child turn doorknobs or lids on containers?",
+          "type": "scale",
+          "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
+        },
+        {
+          "id": "stringsBeads",
+          "text": "Does your child string beads or put shapes in a shape-sorter?",
+          "type": "scale",
+          "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
+        },
+        {
+          "id": "usesScissors",
+          "text": "Can your child use scissors to cut paper (with supervision)?",
+          "type": "scale",
+          "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
+        }
+      ]
+    },
+    {
+      "id": "problemSolving",
+      "title": "Problem-Solving & Cognitive Development",
+      "description": "Response Scale: Yes | Sometimes | Not Yet | Don't Know",
+      "questions": [
+        {
+          "id": "matchesObjects",
+          "text": "Does your child match similar objects or put objects in categories?",
+          "type": "scale",
+          "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
+        },
+        {
+          "id": "pointsToObjects",
+          "text": "When looking at picture books, does your child point to and name familiar objects?",
+          "type": "scale",
+          "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
+        },
+        {
+          "id": "pretendPlay",
+          "text": "Does your child pretend to feed a doll, stuffed animal, or you?",
+          "type": "scale",
+          "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
+        },
+        {
+          "id": "showsObjects",
+          "text": "Does your child show you objects by bringing them to you or holding them up?",
+          "type": "scale",
+          "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
+        },
+        {
+          "id": "completesPuzzles",
+          "text": "Can your child complete simple puzzles (3-6 pieces)?",
+          "type": "scale",
+          "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
+        },
+        {
+          "id": "imitatesActivities",
+          "text": "Does your child imitate activities they see you do (like talking on phone, cooking)?",
+          "type": "scale",
+          "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
+        },
+        {
+          "id": "followsSequence",
+          "text": "Can your child follow a simple sequence like \"First put on socks, then shoes\"?",
+          "type": "scale",
+          "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
+        }
+      ]
+    },
+    {
+      "id": "personalSocial",
+      "title": "Personal-Social Development",
+      "description": "Response Scale: Yes | Sometimes | Not Yet | Don't Know",
+      "questions": [
+        {
+          "id": "playsAlongside",
+          "text": "Does your child play alongside other children?",
+          "type": "scale",
+          "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
+        },
+        {
+          "id": "showsAffection",
+          "text": "Does your child show affection toward familiar people?",
+          "type": "scale",
+          "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
+        },
+        {
+          "id": "canBeComforted",
+          "text": "When upset, can your child be comforted by familiar adults?",
+          "type": "scale",
+          "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
+        },
+        {
+          "id": "showsIndependence",
+          "text": "Does your child show independence in familiar situations?",
+          "type": "scale",
+          "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
+        },
+        {
+          "id": "removesClothing",
+          "text": "Can your child take off some clothing items by themselves?",
+          "type": "scale",
+          "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
+        },
+        {
+          "id": "helpsWithTasks",
+          "text": "Does your child help with simple household tasks when asked?",
+          "type": "scale",
+          "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
+        },
+        {
+          "id": "showsConcern",
+          "text": "Does your child show concern when others are hurt or upset?",
+          "type": "scale",
+          "options": ["Yes", "Sometimes", "Not Yet", "Don't Know"]
         }
       ]
     },

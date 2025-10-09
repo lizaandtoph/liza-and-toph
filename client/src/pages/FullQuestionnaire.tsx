@@ -299,6 +299,8 @@ export default function FullQuestionnaire() {
       concerns: {}
     };
 
+    const developmentalSectionIds = ['communication', 'grossMotor', 'fineMotor', 'problemSolving', 'personalSocial'];
+    
     sections.forEach(section => {
       if (section.subsections) {
         section.subsections.forEach((subsection: any) => {
@@ -307,6 +309,13 @@ export default function FullQuestionnaire() {
               (formattedAnswers.developmental as any)[subsection.id][q.id] = responses[q.id];
             }
           });
+        });
+      } else if (developmentalSectionIds.includes(section.id)) {
+        // Map developmental sections to the developmental object
+        section.questions.forEach((q: any) => {
+          if (responses[q.id] !== undefined) {
+            (formattedAnswers.developmental as any)[section.id][q.id] = responses[q.id];
+          }
         });
       } else {
         section.questions.forEach((q: any) => {
