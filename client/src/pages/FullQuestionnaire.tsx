@@ -50,6 +50,11 @@ export default function FullQuestionnaire() {
     }
   }, [existingAnswers]);
 
+  // Scroll to top whenever section changes
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  }, [currentSectionIndex]);
+
   if (!child || !childId) {
     return (
       <div className="container mx-auto px-4 py-12 max-w-4xl">
@@ -283,14 +288,12 @@ export default function FullQuestionnaire() {
   const handleNext = () => {
     if (currentSectionIndex < totalSections - 1) {
       setCurrentSectionIndex(prev => prev + 1);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
   const handlePrevious = () => {
     if (currentSectionIndex > 0) {
       setCurrentSectionIndex(prev => prev - 1);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
