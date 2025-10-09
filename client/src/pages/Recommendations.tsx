@@ -128,7 +128,10 @@ export default function Recommendations() {
   };
   const [minAge, maxAge] = ageMap[effectiveAgeBand] || [0, 18];
 
-  const childAgeMonths = child.ageMonths || 0;
+  // Calculate age from birthday if available, otherwise use stored value
+  const childAgeMonths = child.birthday 
+    ? calculateAgeFromBirthday(child.birthday).totalMonths 
+    : (child.ageMonths || 0);
 
   // Filter and score products based on age and needs
   const productsWithScores = products

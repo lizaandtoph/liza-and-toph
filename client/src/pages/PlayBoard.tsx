@@ -190,7 +190,10 @@ export default function PlayBoard() {
       }
     });
 
-    const childAgeMonths = child.ageMonths || 0;
+    // Calculate age from birthday if available, otherwise use stored value
+    const childAgeMonths = child.birthday 
+      ? calculateAgeFromBirthday(child.birthday).totalMonths 
+      : (child.ageMonths || 0);
     
     const productsWithScores = products
       .map((p) => {
