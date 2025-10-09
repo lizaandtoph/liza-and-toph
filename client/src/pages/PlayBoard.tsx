@@ -130,7 +130,11 @@ export default function PlayBoard() {
 
   const insights = computeInsights();
 
-  const parseAgeRange = (ageRange: string) => {
+  const parseAgeRange = (ageRange: string | null | undefined) => {
+    if (!ageRange) {
+      return { ageMin: 0, ageMax: 99 };
+    }
+    
     const parts = ageRange.toLowerCase().split(/[-–—]/);
     
     const parseAgeValue = (str: string): number => {

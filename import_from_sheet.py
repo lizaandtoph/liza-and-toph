@@ -3,22 +3,24 @@ import psycopg2
 from psycopg2.extras import execute_values
 
 # Settings
-MULTI_SELECT_AS_ARRAYS = False  # set True only if DB columns are text[] for the 7 multi-select fields
+MULTI_SELECT_AS_ARRAYS = TRUE  # set True only if DB columns are text[] for the 7 multi-select fields
 PROMOTE_ON_IMPORT = True  # set imported rows to "live"
 
 CSV_URL = os.environ["SHEET_CSV_URL"]
 
 # Determine which database to use
-USE_PRODUCTION = "--production" in sys.argv or "--prod" in sys.argv or os.environ.get("IMPORT_TO_PRODUCTION", "").lower() == "true"
+USE_PRODUCTION = "--production" in sys.argv or "--prod" in sys.argv or os.environ.get(
+    "IMPORT_TO_PRODUCTION", "").lower() == "true"
 
 if USE_PRODUCTION:
-    # For production database, use PRODUCTION_DATABASE_URL if set, otherwise DATABASE_URL
-    DB_URL = os.environ.get("PRODUCTION_DATABASE_URL") or os.environ.get("DATABASE_URL")
-    print("🚀 IMPORTING TO PRODUCTION DATABASE")
+        # For production database, use PRODUCTION_DATABASE_URL if set, otherwise DATABASE_URL
+        DB_URL = os.environ.get("PRODUCTION_DATABASE_URL") or os.environ.get(
+            "DATABASE_URL")
+        print("🚀 IMPORTING TO PRODUCTION DATABASE")
 else:
-    # For development database
-    DB_URL = os.environ["DATABASE_URL"]
-    print("🔧 IMPORTING TO DEVELOPMENT DATABASE")
+        # For development database
+        DB_URL = os.environ["DATABASE_URL"]
+        print("🔧 IMPORTING TO DEVELOPMENT DATABASE")
 
 # Column order (39 fields)
 COLS = [
@@ -171,7 +173,8 @@ def load_csv(url):
         ]
         for c in text_cols:
                 if c in df.columns:
-                        df[c] = df[c].apply(lambda x: "" if pd.isna(x) else norm_text(x))
+                        df[c] = df[c].apply(lambda x: ""
+                                            if pd.isna(x) else norm_text(x))
 
         # clean multi selects then enforce allowlists
         for c in [
@@ -202,8 +205,10 @@ def load_csv(url):
             lambda v: check_enum(v, AL_ENERGY))
         df["noise_level"] = df["noise_level"].apply(
             lambda v: check_enum(v, AL_NOISE))
-        df["mess_factor"] = df["mess_factor"].apply(lambda v: check_enum(v, AL_MESS))
-        df["setup_time"] = df["setup_time"].apply(lambda v: check_enum(v, AL_SETUP))
+        df["mess_factor"] = df["mess_factor"].apply(
+            lambda v: check_enum(v, AL_MESS))
+        df["setup_time"] = df["setup_time"].apply(
+            lambda v: check_enum(v, AL_SETUP))
         df["space_requirements"] = df["space_requirements"].apply(
             lambda v: check_enum(v, AL_SPACE))
 
@@ -234,9 +239,10 @@ def load_csv(url):
                         maxm = minm
                 row["min_age_months"] = minm
                 row["max_age_months"] = maxm
-                if not row.get(
-                    "age_range_category") or row["age_range_category"] not in AL_AGE_CAT:
-                        row["age_range_category"] = calc_age_category(minm, maxm)
+                if not row.get("age_range_category") or row[
+                    "age_range_category"] not in AL_AGE_CAT:
+                        row["age_range_category"] = calc_age_category(
+                            minm, maxm)
                 return row
 
         df = df.apply(fix_row, axis=1)
@@ -271,11 +277,16 @@ def row_to_tuple(row):
                                 if pd.isna(v) or str(v).strip() == "":
                                         out.append([])
                                 else:
-                                        out.append([p.strip() for p in str(v).split(",") if p.strip()])
+                                        out.append([
+                                            p.strip()
+                                            for p in str(v).split(",")
+                                            if p.strip()
+                                        ])
                         else:
                                 out.append("" if pd.isna(v) else str(v))
                 else:
-                        s = None if (pd.isna(v) or str(v) == "") else norm_text(v)
+                        s = None if (pd.isna(v)
+                                     or str(v) == "") else norm_text(v)
                         out.append(s)
         return tuple(out)
 
@@ -286,23 +297,32 @@ def upsert(df):
                 return
         rows = [row_to_tuple(r) for _, r in df.iterrows()]
         col_list = ", ".join(f'"{c}"' for c in COLS)
-        set_clause = ", ".join(f'"{c}" = EXCLUDED."{c}"' for c in COLS if c != "id")
+        set_clause = ", ".join(f'"{c}" = EXCLUDED."{c}"' for c in COLS
+                               if c != "id")
         sql = f'INSERT INTO products ({col_list}) VALUES %s ON CONFLICT ("id") DO UPDATE SET {set_clause};'
-        
+
         print(f"Connecting to database...")
         try:
                 with psycopg2.connect(DB_URL) as conn:
                         with conn.cursor() as cur:
                                 execute_values(cur, sql, rows)
                         conn.commit()
-                print(f"✅ Successfully upserted {len(rows)} rows to {'PRODUCTION' if USE_PRODUCTION else 'DEVELOPMENT'} database.")
+                print(
+                    f"✅ Successfully upserted {len(rows)} rows to {'PRODUCTION' if USE_PRODUCTION else 'DEVELOPMENT'} database."
+                )
         except Exception as e:
                 print(f"❌ Error connecting to database: {e}")
                 if USE_PRODUCTION:
                         print("\nℹ️  To import to production, you need to:")
-                        print("   1. Get production database credentials from your Replit App")
-                        print("   2. Set PRODUCTION_DATABASE_URL secret with the production connection string")
-                        print("   3. Run: python import_from_sheet.py --production")
+                        print(
+                            "   1. Get production database credentials from your Replit App"
+                        )
+                        print(
+                            "   2. Set PRODUCTION_DATABASE_URL secret with the production connection string"
+                        )
+                        print(
+                            "   3. Run: python import_from_sheet.py --production"
+                        )
                 raise
 
 
@@ -315,25 +335,31 @@ def ensure_unique_id():
 
 
 if __name__ == "__main__":
-        print("\n" + "="*60)
+        print("\n" + "=" * 60)
         print(f"📦 PRODUCT IMPORT SCRIPT")
-        print("="*60)
-        print(f"Target: {'PRODUCTION' if USE_PRODUCTION else 'DEVELOPMENT'} database")
-        
+        print("=" * 60)
+        print(
+            f"Target: {'PRODUCTION' if USE_PRODUCTION else 'DEVELOPMENT'} database"
+        )
+
         if USE_PRODUCTION and not os.environ.get("PRODUCTION_DATABASE_URL"):
                 print("\n⚠️  WARNING: PRODUCTION_DATABASE_URL not set!")
-                print("This will attempt to use DATABASE_URL (development database).")
-                print("To import to production, set PRODUCTION_DATABASE_URL secret.")
+                print(
+                    "This will attempt to use DATABASE_URL (development database)."
+                )
+                print(
+                    "To import to production, set PRODUCTION_DATABASE_URL secret."
+                )
                 response = input("\nContinue anyway? (yes/no): ")
                 if response.lower() not in ['yes', 'y']:
                         print("❌ Aborted.")
                         sys.exit(0)
-        
+
         print(f"\nFetching data from CSV...")
         ensure_unique_id()
         df = load_csv(CSV_URL)
         print(f"Found {len(df)} approved/live products to import")
         upsert(df)
-        print("\n" + "="*60)
+        print("\n" + "=" * 60)
         print("✅ IMPORT COMPLETE")
-        print("="*60 + "\n")
+        print("=" * 60 + "\n")
