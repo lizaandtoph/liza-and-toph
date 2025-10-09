@@ -701,6 +701,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const userId = req.user?.claims?.sub;
       if (!userId) {
+        console.error("Child creation failed: No userId in session");
         return res.status(401).json({ error: "Not authenticated" });
       }
       
@@ -711,6 +712,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const child = await storage.createChildProfile(childData);
       res.json(child);
     } catch (error) {
+      console.error("Child creation error:", error);
       res.status(400).json({ error: "Invalid child data" });
     }
   });

@@ -216,12 +216,25 @@ export default function Onboarding() {
       });
 
       if (!childResponse.ok) {
-        console.error('Failed to create child');
-        toast({
-          title: "Submission Failed",
-          description: "We couldn't save your child's profile. Please try again.",
-          variant: "destructive",
-        });
+        const errorData = await childResponse.json().catch(() => ({}));
+        console.error('Failed to create child:', errorData);
+        
+        // Check if it's an authentication error
+        if (childResponse.status === 401) {
+          toast({
+            title: "Session Expired",
+            description: "Your session has expired. Please log in again and try creating your child's profile.",
+            variant: "destructive",
+          });
+          // Redirect to login after a brief delay
+          setTimeout(() => setLocation('/login'), 2000);
+        } else {
+          toast({
+            title: "Submission Failed",
+            description: "We couldn't save your child's profile. Please try again.",
+            variant: "destructive",
+          });
+        }
         setIsSubmitting(false);
         return;
       }
