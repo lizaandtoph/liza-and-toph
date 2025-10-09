@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { MessageSquare, X } from 'lucide-react';
+import { Bug, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
@@ -63,7 +63,7 @@ export default function FeedbackButton() {
         aria-label="Send Feedback"
         data-testid="button-feedback-floating"
       >
-        <MessageSquare className="w-6 h-6" />
+        <Bug className="w-6 h-6" />
       </button>
 
       {/* Feedback Dialog */}
