@@ -128,7 +128,7 @@ export default function Recommendations() {
   };
   const [minAge, maxAge] = ageMap[effectiveAgeBand] || [0, 18];
 
-  const childAge = child.ageYears || 0;
+  const childAgeMonths = child.ageMonths || 0;
 
   // Filter and score products based on age and needs
   const productsWithScores = products
@@ -154,8 +154,13 @@ export default function Recommendations() {
       };
     })
     .filter((p) => {
-      const ageMatch = childAge >= p.ageMin && childAge <= p.ageMax;
-      return ageMatch;
+      // Use the precise min_age_months and max_age_months if available
+      if (p.minAgeMonths != null && p.maxAgeMonths != null) {
+        return childAgeMonths >= p.minAgeMonths && childAgeMonths <= p.maxAgeMonths;
+      }
+      // Fallback to parsed age range (in years)
+      const childAgeYears = childAgeMonths / 12;
+      return childAgeYears >= p.ageMin && childAgeYears <= p.ageMax;
     })
     .sort((a, b) => b.relevanceScore - a.relevanceScore)
     .slice(0, 12);

@@ -190,7 +190,7 @@ export default function PlayBoard() {
       }
     });
 
-    const childAge = child.ageYears || 0;
+    const childAgeMonths = child.ageMonths || 0;
     
     const productsWithScores = products
       .map((p) => {
@@ -216,8 +216,13 @@ export default function PlayBoard() {
         };
       })
       .filter((p) => {
-        const ageMatch = childAge >= p.ageMin && childAge <= p.ageMax;
-        return ageMatch;
+        // Use the precise min_age_months and max_age_months if available
+        if (p.minAgeMonths != null && p.maxAgeMonths != null) {
+          return childAgeMonths >= p.minAgeMonths && childAgeMonths <= p.maxAgeMonths;
+        }
+        // Fallback to parsed age range (in years)
+        const childAgeYears = childAgeMonths / 12;
+        return childAgeYears >= p.ageMin && childAgeYears <= p.ageMax;
       })
       .sort((a, b) => b.relevanceScore - a.relevanceScore)
       .slice(0, 6);
