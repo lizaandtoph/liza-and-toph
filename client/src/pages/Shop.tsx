@@ -79,6 +79,12 @@ export default function Shop() {
     return { ageMin: 0, ageMax: 24 };
   };
 
+  const normalizeCategories = (categories: any): string[] => {
+    if (Array.isArray(categories)) return categories;
+    if (typeof categories === 'string') return categories.split(',').map(c => c.trim()).filter(Boolean);
+    return [];
+  };
+
   const transformedProducts = products.map((p) => {
     const { ageMin, ageMax } = parseAgeRange(p.ageRange);
     return {
@@ -112,8 +118,9 @@ export default function Shop() {
   const filteredProducts = products.filter((product) => {
     // Search and category (always applied)
     const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
+    const categories = normalizeCategories(product.categories);
     const matchesCategory = selectedCategory === 'all' || 
-      (product.categories?.some(d => d.toLowerCase().includes(selectedCategory)) ?? false);
+      categories.some(d => d.toLowerCase().includes(selectedCategory));
     
     // Advanced filters (only applied when explicitly set)
     // Age bracket filter
@@ -443,7 +450,7 @@ export default function Shop() {
                 </h3>
 
                 <div className="flex flex-wrap gap-2 mb-3">
-                  {product.categories?.slice(0, 2).map((category, idx) => (
+                  {normalizeCategories(product.categories).slice(0, 2).map((category, idx) => (
                     <span
                       key={idx}
                       className="px-2 py-1 bg-sand text-espresso text-xs rounded"
@@ -451,7 +458,7 @@ export default function Shop() {
                     >
                       {category}
                     </span>
-                  )) ?? null}
+                  ))}
                 </div>
                 
                 {product.ageRange && (
