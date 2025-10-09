@@ -66,7 +66,18 @@ export default function Recommendations() {
   
   const normalizeCategories = (categories: any): string[] => {
     if (Array.isArray(categories)) return categories;
-    if (typeof categories === 'string') return categories.split(',').map(c => c.trim()).filter(Boolean);
+    if (typeof categories === 'string') {
+      // Handle PostgreSQL array format: {"item1","item2","item3"}
+      if (categories.startsWith('{') && categories.endsWith('}')) {
+        return categories
+          .slice(1, -1) // Remove curly braces
+          .split(',')
+          .map(c => c.replace(/^"(.*)"$/, '$1').trim()) // Remove quotes and trim
+          .filter(Boolean);
+      }
+      // Handle comma-separated string
+      return categories.split(',').map(c => c.trim()).filter(Boolean);
+    }
     return [];
   };
   
