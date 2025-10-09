@@ -223,7 +223,7 @@ export default function Shop() {
 
       {/* Category Quick Links */}
       <div className="mb-8">
-        <h2 className="text-2xl font-semibold text-olive mb-4">Shop by Category</h2>
+        <h2 className="text-2xl font-semibold text-olive mb-4 text-center">Shop by Category</h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3">
           <button
             onClick={() => setSelectedCategory('sensory')}
