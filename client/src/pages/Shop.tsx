@@ -50,6 +50,10 @@ export default function Shop() {
     { label: '3-4y', min: 36, max: 48 },
     { label: '4-5y', min: 48, max: 60 },
     { label: '5-6y', min: 60, max: 72 },
+    { label: '6-7y', min: 72, max: 84 },
+    { label: '7-8y', min: 84, max: 96 },
+    { label: '8-9y', min: 96, max: 108 },
+    { label: '9-10y', min: 108, max: 120 },
   ];
   
   const playTypes = ['sensory', 'exploratory', 'functional', 'constructive', 'pretend', 'symbolic', 'gross_motor', 'fine_motor', 'cognitive', 'social', 'language', 'creative'];
