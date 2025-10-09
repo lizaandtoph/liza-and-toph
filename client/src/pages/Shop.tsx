@@ -221,6 +221,97 @@ export default function Shop() {
         </p>
       </div>
 
+      {/* Category Quick Links */}
+      <div className="mb-8">
+        <h2 className="text-2xl font-semibold text-olive mb-4">Shop by Category</h2>
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3">
+          <button
+            onClick={() => setSelectedCategory('sensory')}
+            className={`px-4 py-3 border-2 rounded-xl transition text-center font-medium text-sm ${selectedCategory === 'sensory' ? 'bg-olive text-ivory border-olive' : 'bg-white border-sand hover:bg-olive hover:text-ivory hover:border-olive'}`}
+            data-testid="button-category-sensory"
+          >
+            Sensory & Exploratory
+          </button>
+          <button
+            onClick={() => setSelectedCategory('fine motor')}
+            className={`px-4 py-3 border-2 rounded-xl transition text-center font-medium text-sm ${selectedCategory === 'fine motor' ? 'bg-olive text-ivory border-olive' : 'bg-white border-sand hover:bg-olive hover:text-ivory hover:border-olive'}`}
+            data-testid="button-category-fine-motor"
+          >
+            Fine Motor
+          </button>
+          <button
+            onClick={() => setSelectedCategory('gross motor')}
+            className={`px-4 py-3 border-2 rounded-xl transition text-center font-medium text-sm ${selectedCategory === 'gross motor' ? 'bg-olive text-ivory border-olive' : 'bg-white border-sand hover:bg-olive hover:text-ivory hover:border-olive'}`}
+            data-testid="button-category-gross-motor"
+          >
+            Gross Motor
+          </button>
+          <button
+            onClick={() => setSelectedCategory('cognitive')}
+            className={`px-4 py-3 border-2 rounded-xl transition text-center font-medium text-sm ${selectedCategory === 'cognitive' ? 'bg-olive text-ivory border-olive' : 'bg-white border-sand hover:bg-olive hover:text-ivory hover:border-olive'}`}
+            data-testid="button-category-cognitive"
+          >
+            Cognitive & Problem-Solving
+          </button>
+          <button
+            onClick={() => setSelectedCategory('language')}
+            className={`px-4 py-3 border-2 rounded-xl transition text-center font-medium text-sm ${selectedCategory === 'language' ? 'bg-olive text-ivory border-olive' : 'bg-white border-sand hover:bg-olive hover:text-ivory hover:border-olive'}`}
+            data-testid="button-category-language"
+          >
+            Language & Communication
+          </button>
+          <button
+            onClick={() => setSelectedCategory('social')}
+            className={`px-4 py-3 border-2 rounded-xl transition text-center font-medium text-sm ${selectedCategory === 'social' ? 'bg-olive text-ivory border-olive' : 'bg-white border-sand hover:bg-olive hover:text-ivory hover:border-olive'}`}
+            data-testid="button-category-social-emotional"
+          >
+            Social-Emotional
+          </button>
+          <button
+            onClick={() => setSelectedCategory('pretend')}
+            className={`px-4 py-3 border-2 rounded-xl transition text-center font-medium text-sm ${selectedCategory === 'pretend' ? 'bg-olive text-ivory border-olive' : 'bg-white border-sand hover:bg-olive hover:text-ivory hover:border-olive'}`}
+            data-testid="button-category-imaginative"
+          >
+            Imaginative & Pretend
+          </button>
+          <button
+            onClick={() => setSelectedCategory('building')}
+            className={`px-4 py-3 border-2 rounded-xl transition text-center font-medium text-sm ${selectedCategory === 'building' ? 'bg-olive text-ivory border-olive' : 'bg-white border-sand hover:bg-olive hover:text-ivory hover:border-olive'}`}
+            data-testid="button-category-construction"
+          >
+            Construction & Building
+          </button>
+          <button
+            onClick={() => setSelectedCategory('stem')}
+            className={`px-4 py-3 border-2 rounded-xl transition text-center font-medium text-sm ${selectedCategory === 'stem' ? 'bg-olive text-ivory border-olive' : 'bg-white border-sand hover:bg-olive hover:text-ivory hover:border-olive'}`}
+            data-testid="button-category-stem"
+          >
+            Science & Discovery (STEM)
+          </button>
+          <button
+            onClick={() => setSelectedCategory('art')}
+            className={`px-4 py-3 border-2 rounded-xl transition text-center font-medium text-sm ${selectedCategory === 'art' ? 'bg-olive text-ivory border-olive' : 'bg-white border-sand hover:bg-olive hover:text-ivory hover:border-olive'}`}
+            data-testid="button-category-creative-arts"
+          >
+            Creative Arts
+          </button>
+          <button
+            onClick={() => setSelectedCategory('music')}
+            className={`px-4 py-3 border-2 rounded-xl transition text-center font-medium text-sm ${selectedCategory === 'music' ? 'bg-olive text-ivory border-olive' : 'bg-white border-sand hover:bg-olive hover:text-ivory hover:border-olive'}`}
+            data-testid="button-category-music"
+          >
+            Music & Movement
+          </button>
+          <button
+            onClick={() => setSelectedCategory('games')}
+            className={`px-4 py-3 border-2 rounded-xl transition text-center font-medium text-sm ${selectedCategory === 'games' ? 'bg-olive text-ivory border-olive' : 'bg-white border-sand hover:bg-olive hover:text-ivory hover:border-olive'}`}
+            data-testid="button-category-games"
+          >
+            Games & Structured Play
+          </button>
+        </div>
+      </div>
+
       {/* Search and Filter Bar */}
       <div className="bg-[#EDE9DC] p-6 rounded-lg mb-8">
         <div className="flex flex-col md:flex-row gap-4 mb-4">
