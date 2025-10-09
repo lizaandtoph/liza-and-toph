@@ -1100,6 +1100,46 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Feedback endpoint - send user feedback via email
+  app.post('/api/feedback', async (req: any, res) => {
+    try {
+      const { feedback, url, timestamp } = req.body;
+
+      if (!feedback || !feedback.trim()) {
+        return res.status(400).json({ error: 'Feedback is required' });
+      }
+
+      // Get user info if authenticated
+      let userInfo = 'Anonymous';
+      if (req.isAuthenticated() && req.user?.claims?.sub) {
+        const user = await storage.getUser(req.user.claims.sub);
+        if (user) {
+          userInfo = `${user.firstName} ${user.lastName} (${user.email})`;
+        }
+      }
+
+      // Send email with feedback
+      await sendMagicLinkEmail(
+        'support@lizaandtoph.com', // Replace with your actual support email
+        'User Feedback Report',
+        `
+          <h2>New Feedback Received</h2>
+          <p><strong>From:</strong> ${userInfo}</p>
+          <p><strong>Page:</strong> ${url || 'Unknown'}</p>
+          <p><strong>Time:</strong> ${timestamp || new Date().toISOString()}</p>
+          <hr>
+          <p><strong>Feedback:</strong></p>
+          <p>${feedback.replace(/\n/g, '<br>')}</p>
+        `
+      );
+
+      res.json({ success: true });
+    } catch (error: any) {
+      console.error('Error sending feedback:', error);
+      return res.status(500).json({ error: 'Failed to send feedback' });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
