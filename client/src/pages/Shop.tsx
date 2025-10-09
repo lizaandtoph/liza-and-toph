@@ -341,16 +341,15 @@ export default function Shop() {
             </select>
             <Button 
               onClick={() => setShowFilters(!showFilters)}
-              variant="outline"
-              className="flex items-center gap-2"
+              className="flex items-center gap-2 bg-olive text-ivory hover:bg-ochre px-6 py-3 font-semibold shadow-md"
               data-testid="button-toggle-filters"
             >
-              <Filter className="w-4 h-4" />
+              <Filter className="w-5 h-5" />
               Filters
               {activeFilterCount > 0 && (
-                <Badge className="ml-1">{activeFilterCount}</Badge>
+                <Badge className="ml-1 bg-ivory text-olive">{activeFilterCount}</Badge>
               )}
-              {showFilters ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+              {showFilters ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
             </Button>
           </div>
         </div>
