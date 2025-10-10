@@ -32,6 +32,7 @@ export default function Login() {
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include',
         body: JSON.stringify({ email: email.trim().toLowerCase() }),
       });
 
@@ -104,10 +105,10 @@ export default function Login() {
         </div>
         
         <h1 className="text-4xl font-bold mb-3 text-center" data-testid="heading-login">
-          Welcome Back
+          Get Started
         </h1>
         <p className="text-center mb-8 opacity-70">
-          Enter your email to receive a login link
+          Enter your email to receive a secure login link
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -145,20 +146,13 @@ export default function Login() {
           </Button>
         </form>
 
-        <div className="mt-8 text-center">
+        <div className="mt-6 text-center">
           <p className="text-sm opacity-70">
-            Don't have an account?{' '}
-            <Link
-              to="/onboarding"
-              className="text-olive font-semibold hover:text-ochre transition"
-              data-testid="link-signup"
-            >
-              Sign up
-            </Link>
+            New user? No problem! We'll create your account automatically when you use your login link.
           </p>
         </div>
 
-        <div className="mt-6 text-center">
+        <div className="mt-4 text-center">
           <p className="text-xs opacity-60">
             We'll send you a secure link that logs you in instantly—no password needed.
           </p>
