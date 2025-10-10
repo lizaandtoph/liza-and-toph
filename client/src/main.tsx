@@ -43,9 +43,23 @@ try {
   );
 } catch (error) {
   console.error('[Root Render Error]', error);
-  document.body.innerHTML = `<div style="padding: 20px; font-family: sans-serif;">
-    <h1>Application Error</h1>
-    <p>Failed to start application. Check console for details.</p>
-    <pre>${error}</pre>
-  </div>`;
+  const errorContainer = document.createElement('div');
+  errorContainer.style.padding = '20px';
+  errorContainer.style.fontFamily = 'sans-serif';
+  
+  const heading = document.createElement('h1');
+  heading.textContent = 'Application Error';
+  
+  const message = document.createElement('p');
+  message.textContent = 'Failed to start application. Check console for details.';
+  
+  const errorPre = document.createElement('pre');
+  errorPre.textContent = String(error);
+  
+  errorContainer.appendChild(heading);
+  errorContainer.appendChild(message);
+  errorContainer.appendChild(errorPre);
+  
+  document.body.innerHTML = '';
+  document.body.appendChild(errorContainer);
 }
