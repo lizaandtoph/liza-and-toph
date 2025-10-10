@@ -43,7 +43,9 @@ export default function Layout({ children: pageContent }: { children: React.Reac
     const loadChildrenFromDb = async () => {
       if (isAuthenticated && user) {
         try {
-          const response = await fetch('/api/auth/me');
+          const response = await fetch('/api/auth/me', {
+            credentials: 'include'
+          });
           if (response.ok) {
             const data = await response.json();
             const childrenData = (data.children || []).map((c: any) => ({

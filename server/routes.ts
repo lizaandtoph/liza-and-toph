@@ -150,7 +150,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       // Create session (compatible with existing session system)
-      req.login({ claims: { sub: user.id, email: user.email } }, (err: any) => {
+      req.login({ claims: { sub: user.id, email: user.email } }, async (err: any) => {
         if (err) {
           console.error("Error creating session:", err);
           return res.status(500).send(`
@@ -165,8 +165,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
           `);
         }
 
-        // Successful login - redirect to home
-        res.redirect('/');
+        // Check if user has children to determine redirect
+        const children = await storage.getChildrenByUserId(user.id);
+        const redirectPath = children.length > 0 ? '/your-child' : '/onboarding';
+        
+        console.log(`[Auth] User ${user.id} logged in, has ${children.length} children, redirecting to ${redirectPath}`);
+        
+        // Successful login - redirect based on whether they have children
+        res.redirect(redirectPath);
       });
     } catch (error) {
       console.error("Error verifying magic link:", error);
