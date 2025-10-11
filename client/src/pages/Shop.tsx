@@ -150,8 +150,10 @@ export default function Shop() {
     })();
     
     // Play types filter
-    const matchesPlayType = selectedPlayTypes.length === 0 || 
-      (product.playTypeTags?.some(tag => selectedPlayTypes.includes(tag)) ?? false);
+    const matchesPlayType = selectedPlayTypes.length === 0 || (() => {
+      const tags = Array.isArray(product.playTypeTags) ? product.playTypeTags : [];
+      return tags.some(tag => selectedPlayTypes.includes(tag));
+    })();
     
     // Complexity filter
     const matchesComplexity = !selectedComplexity || product.complexityLevel === selectedComplexity;
@@ -160,12 +162,16 @@ export default function Shop() {
     const matchesEnergy = !selectedEnergy || product.energyRequirement === selectedEnergy;
     
     // Special needs filter
-    const matchesSpecialNeeds = selectedSpecialNeeds.length === 0 ||
-      (product.specialNeedsSupport?.some(need => selectedSpecialNeeds.includes(need)) ?? false);
+    const matchesSpecialNeeds = selectedSpecialNeeds.length === 0 || (() => {
+      const support = Array.isArray(product.specialNeedsSupport) ? product.specialNeedsSupport : [];
+      return support.some(need => selectedSpecialNeeds.includes(need));
+    })();
     
     // Social context filter
-    const matchesSocialContext = selectedSocialContext.length === 0 ||
-      (product.socialContext?.some(ctx => selectedSocialContext.includes(ctx)) ?? false);
+    const matchesSocialContext = selectedSocialContext.length === 0 || (() => {
+      const contexts = Array.isArray(product.socialContext) ? product.socialContext : [];
+      return contexts.some(ctx => selectedSocialContext.includes(ctx));
+    })();
     
     // Liza & Toph Certified filter
     const matchesLizaTophCertified = !lizaTophCertifiedOnly || product.isLizaTophCertified === true;
