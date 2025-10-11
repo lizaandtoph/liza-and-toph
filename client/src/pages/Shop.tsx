@@ -43,6 +43,10 @@ export default function Shop() {
   const [selectedSocialContext, setSelectedSocialContext] = useState<string[]>([]);
   const [lizaTophCertifiedOnly, setLizaTophCertifiedOnly] = useState(false);
   
+  // Pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 25;
+  
   const ageRangeCategories = [
     'Newborn to 18 months',
     '18 months to 3 years',
@@ -175,6 +179,11 @@ export default function Shop() {
            matchesLizaTophCertified;
   });
   
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, selectedCategory, selectedAgeBracket, selectedPlayTypes, selectedComplexity, selectedEnergy, selectedSpecialNeeds, selectedSocialContext, lizaTophCertifiedOnly]);
+  
   const clearFilters = () => {
     setSelectedAgeBracket(null);
     setSelectedPlayTypes([]);
@@ -195,6 +204,13 @@ export default function Shop() {
     selectedSocialContext.length +
     (selectedCategory !== 'all' ? 1 : 0) +
     (lizaTophCertifiedOnly ? 1 : 0);
+  
+  // Pagination calculations
+  const totalProducts = filteredProducts.length;
+  const totalPages = Math.ceil(totalProducts / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedProducts = filteredProducts.slice(startIndex, endIndex);
 
   const handleProductClick = (skuId: string, url: string) => {
     logEvent('shop_product_clicked', { sku: skuId });
@@ -542,10 +558,14 @@ export default function Shop() {
         <div className="text-center py-12">
           <p className="text-lg opacity-70">No products found matching your criteria.</p>
         </div>
-      ) : null}
+      ) : (
+        <div className="mb-4 text-sm opacity-70">
+          Showing {startIndex + 1}-{Math.min(endIndex, totalProducts)} of {totalProducts} products
+        </div>
+      )}
 
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {filteredProducts.map((product) => {
+        {paginatedProducts.map((product) => {
           const badge = getProductBadge(product);
           const isSaved = savedItems.products.includes(product.name);
           
@@ -617,6 +637,59 @@ export default function Shop() {
           );
         })}
       </div>
+
+      {/* Pagination Controls */}
+      {totalPages > 1 && (
+        <div className="mt-8 flex justify-center items-center gap-2">
+          <Button
+            variant="outline"
+            onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+            disabled={currentPage === 1}
+            className="px-4 py-2"
+            data-testid="button-prev-page"
+          >
+            Previous
+          </Button>
+          
+          <div className="flex gap-1">
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => {
+              // Show first page, last page, current page, and pages around current
+              const showPage = page === 1 || page === totalPages || 
+                              (page >= currentPage - 1 && page <= currentPage + 1);
+              
+              if (!showPage && page === currentPage - 2) {
+                return <span key={page} className="px-3 py-2">...</span>;
+              }
+              if (!showPage && page === currentPage + 2) {
+                return <span key={page} className="px-3 py-2">...</span>;
+              }
+              if (!showPage) return null;
+              
+              return (
+                <Button
+                  key={page}
+                  variant={currentPage === page ? "default" : "outline"}
+                  onClick={() => setCurrentPage(page)}
+                  className={`px-4 py-2 ${currentPage === page ? 'bg-olive text-white' : ''}`}
+                  data-testid={`button-page-${page}`}
+                >
+                  {page}
+                </Button>
+              );
+            })}
+          </div>
+          
+          <Button
+            variant="outline"
+            onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+            disabled={currentPage === totalPages}
+            className="px-4 py-2"
+            data-testid="button-next-page"
+          >
+            Next
+          </Button>
+        </div>
+      )}
 
       {child?.name && (
         <div className="mt-12 bg-gradient-to-r from-olive/10 to-blush/10 p-8 rounded-lg text-center">
