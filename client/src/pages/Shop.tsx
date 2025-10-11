@@ -43,18 +43,19 @@ export default function Shop() {
   const [selectedSocialContext, setSelectedSocialContext] = useState<string[]>([]);
   const [lizaTophCertifiedOnly, setLizaTophCertifiedOnly] = useState(false);
   
-  const ageBrackets = [
-    { label: '0-6m', min: 0, max: 6 },
-    { label: '6-12m', min: 6, max: 12 },
-    { label: '1-2y', min: 12, max: 24 },
-    { label: '2-3y', min: 24, max: 36 },
-    { label: '3-4y', min: 36, max: 48 },
-    { label: '4-5y', min: 48, max: 60 },
-    { label: '5-6y', min: 60, max: 72 },
-    { label: '6-7y', min: 72, max: 84 },
-    { label: '7-8y', min: 84, max: 96 },
-    { label: '8-9y', min: 96, max: 108 },
-    { label: '9-10y', min: 108, max: 120 },
+  const ageRangeCategories = [
+    'Newborn to 18 months',
+    '18 months to 3 years',
+    '2 to 5 years',
+    '3 to 6 years',
+    '4 to 7 years',
+    '5 to 8 years',
+    '6 to 9 years',
+    '7 to 10 years',
+    '8 to 11 years',
+    '9 to 12 years',
+    '10 to Early Teens',
+    'Preteens to Older Teens',
   ];
   
   const playTypes = ['sensory_toys', 'textures', 'active_play', 'group_games', 'social_interaction', 'logic_games', 'construction', 'art_supplies', 'crafts', 'sports', 'puzzles', 'imagination', 'pretend_play', 'music', 'reading'];
@@ -139,15 +140,8 @@ export default function Shop() {
       categories.some(d => d.toLowerCase().includes(selectedCategory));
     
     // Advanced filters (only applied when explicitly set)
-    // Age bracket filter
-    const matchesAge = !selectedAgeBracket || (() => {
-      const bracket = ageBrackets.find(b => b.label === selectedAgeBracket);
-      if (!bracket) return true;
-      return (
-        (product.maxAgeMonths == null || product.maxAgeMonths >= bracket.min) &&
-        (product.minAgeMonths == null || product.minAgeMonths <= bracket.max)
-      );
-    })();
+    // Age range category filter
+    const matchesAge = !selectedAgeBracket || product.ageRangeCategory === selectedAgeBracket;
     
     // Play types filter
     const matchesPlayType = selectedPlayTypes.length === 0 || (() => {
@@ -379,19 +373,19 @@ export default function Shop() {
         {/* Advanced Filters Panel */}
         {showFilters && (
           <div className="border-t border-sand pt-4 mt-4 space-y-6">
-            {/* Age Brackets */}
+            {/* Age Range Categories */}
             <div>
               <label className="font-semibold text-sm mb-3 block text-espresso">Age Range</label>
               <div className="flex flex-wrap gap-2">
-                {ageBrackets.map(bracket => (
+                {ageRangeCategories.map(category => (
                   <Badge
-                    key={bracket.label}
-                    variant={selectedAgeBracket === bracket.label ? "default" : "outline"}
-                    className={`cursor-pointer px-4 py-2 text-sm transition-colors ${selectedAgeBracket === bracket.label ? 'bg-olive text-white border-olive shadow-md font-semibold' : 'bg-[#dedacc] hover:bg-olive/20 border-espresso/20'}`}
-                    onClick={() => setSelectedAgeBracket(selectedAgeBracket === bracket.label ? null : bracket.label)}
-                    data-testid={`badge-age-${bracket.label}`}
+                    key={category}
+                    variant={selectedAgeBracket === category ? "default" : "outline"}
+                    className={`cursor-pointer px-4 py-2 text-sm transition-colors ${selectedAgeBracket === category ? 'bg-olive text-white border-olive shadow-md font-semibold' : 'bg-[#dedacc] hover:bg-olive/20 border-espresso/20'}`}
+                    onClick={() => setSelectedAgeBracket(selectedAgeBracket === category ? null : category)}
+                    data-testid={`badge-age-${category.replace(/\s+/g, '-').toLowerCase()}`}
                   >
-                    {bracket.label}
+                    {category}
                   </Badge>
                 ))}
               </div>
