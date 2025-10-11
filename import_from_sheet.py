@@ -150,6 +150,50 @@ def calc_age_category(min_m, max_m):
         return "Preteens to Older Teens"
 
 
+def convert_google_drive_url(url):
+        """Convert Google Drive share links to direct image URLs."""
+        if pd.isna(url) or not url:
+                return url
+        
+        url_str = str(url).strip()
+        
+        # Skip if not a Google Drive URL
+        if 'drive.google.com' not in url_str:
+                return url_str
+        
+        # Already in correct format
+        if 'drive.google.com/uc?export=view&id=' in url_str:
+                return url_str
+        
+        # Extract file ID from various Google Drive URL formats
+        file_id = None
+        
+        # Format: https://drive.google.com/file/d/FILE_ID/view
+        if '/file/d/' in url_str:
+                parts = url_str.split('/file/d/')
+                if len(parts) > 1:
+                        file_id = parts[1].split('/')[0].split('?')[0]
+        
+        # Format: https://drive.google.com/open?id=FILE_ID
+        elif 'open?id=' in url_str:
+                parts = url_str.split('open?id=')
+                if len(parts) > 1:
+                        file_id = parts[1].split('&')[0].split('#')[0]
+        
+        # Format: https://drive.google.com/uc?id=FILE_ID
+        elif 'uc?id=' in url_str:
+                parts = url_str.split('uc?id=')
+                if len(parts) > 1:
+                        file_id = parts[1].split('&')[0].split('#')[0]
+        
+        # If we found a file ID, convert to direct image URL
+        if file_id:
+                return f"https://drive.google.com/uc?export=view&id={file_id}"
+        
+        # Return original if we couldn't parse it
+        return url_str
+
+
 def load_csv(url):
         r = requests.get(url, timeout=30, allow_redirects=True)
         r.raise_for_status()
@@ -175,6 +219,10 @@ def load_csv(url):
                 if c in df.columns:
                         df[c] = df[c].apply(lambda x: ""
                                             if pd.isna(x) else norm_text(x))
+
+        # Convert Google Drive URLs to direct image URLs
+        if "image_url" in df.columns:
+                df["image_url"] = df["image_url"].apply(convert_google_drive_url)
 
         # clean multi selects then enforce allowlists
         for c in [
