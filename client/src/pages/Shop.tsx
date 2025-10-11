@@ -57,7 +57,7 @@ export default function Shop() {
     { label: '9-10y', min: 108, max: 120 },
   ];
   
-  const playTypes = ['sensory', 'exploratory', 'functional', 'constructive', 'pretend', 'symbolic', 'gross_motor', 'fine_motor', 'cognitive', 'social', 'language', 'creative'];
+  const playTypes = ['sensory_toys', 'textures', 'active_play', 'group_games', 'social_interaction', 'logic_games', 'construction', 'art_supplies', 'crafts', 'sports', 'puzzles', 'imagination', 'pretend_play', 'music', 'reading'];
   const complexityLevels = ['simple', 'moderate', 'complex', 'advanced', 'expert'];
   const energyRequirements = ['sedentary', 'moderate', 'active', 'high_energy'];
   const specialNeedsTypes = ['autism_friendly', 'sensory_processing', 'speech_therapy', 'motor_therapy'];
@@ -151,7 +151,7 @@ export default function Shop() {
     
     // Play types filter
     const matchesPlayType = selectedPlayTypes.length === 0 || (() => {
-      const tags = Array.isArray(product.playTypeTags) ? product.playTypeTags : [];
+      const tags = normalizeCategories(product.playTypeTags);
       return tags.some(tag => selectedPlayTypes.includes(tag));
     })();
     
@@ -163,13 +163,13 @@ export default function Shop() {
     
     // Special needs filter
     const matchesSpecialNeeds = selectedSpecialNeeds.length === 0 || (() => {
-      const support = Array.isArray(product.specialNeedsSupport) ? product.specialNeedsSupport : [];
+      const support = normalizeCategories(product.specialNeedsSupport);
       return support.some(need => selectedSpecialNeeds.includes(need));
     })();
     
     // Social context filter
     const matchesSocialContext = selectedSocialContext.length === 0 || (() => {
-      const contexts = Array.isArray(product.socialContext) ? product.socialContext : [];
+      const contexts = normalizeCategories(product.socialContext);
       return contexts.some(ctx => selectedSocialContext.includes(ctx));
     })();
     
