@@ -158,11 +158,11 @@ def convert_google_drive_url(url):
         url_str = str(url).strip()
         
         # Skip if not a Google Drive URL
-        if 'drive.google.com' not in url_str:
+        if 'drive.google.com' not in url_str and 'drive.usercontent.google.com' not in url_str:
                 return url_str
         
-        # Already in correct format
-        if 'drive.google.com/uc?export=view&id=' in url_str:
+        # Already in thumbnail format (optimal for embedding)
+        if 'lh3.googleusercontent.com' in url_str or 'drive.usercontent.google.com/download' in url_str:
                 return url_str
         
         # Extract file ID from various Google Drive URL formats
@@ -180,15 +180,16 @@ def convert_google_drive_url(url):
                 if len(parts) > 1:
                         file_id = parts[1].split('&')[0].split('#')[0]
         
-        # Format: https://drive.google.com/uc?id=FILE_ID
-        elif 'uc?id=' in url_str:
-                parts = url_str.split('uc?id=')
+        # Format: https://drive.google.com/uc?id=FILE_ID or uc?export=view&id=FILE_ID
+        elif 'uc?' in url_str and 'id=' in url_str:
+                parts = url_str.split('id=')
                 if len(parts) > 1:
                         file_id = parts[1].split('&')[0].split('#')[0]
         
-        # If we found a file ID, convert to direct image URL
+        # If we found a file ID, convert to thumbnail URL (better for embedding)
         if file_id:
-                return f"https://drive.google.com/uc?export=view&id={file_id}"
+                # Use thumbnail format which works better for direct image embedding
+                return f"https://drive.google.com/thumbnail?id={file_id}&sz=w1000"
         
         # Return original if we couldn't parse it
         return url_str
