@@ -40,7 +40,19 @@ export async function getUncachableResendClient() {
 
 export async function sendPasswordResetEmail(to: string, resetToken: string) {
   const { client, fromEmail } = await getUncachableResendClient();
-  const resetUrl = `${process.env.REPLIT_DOMAINS?.split(',')[0] || 'http://localhost:5000'}/reset-password/${resetToken}`;
+  
+  // Determine the base URL - prioritize custom domain
+  let hostname = 'localhost:5000';
+  
+  if (process.env.REPLIT_DOMAINS) {
+    const domains = process.env.REPLIT_DOMAINS.split(',');
+    // Prioritize custom domain (non-replit.app) if available
+    const customDomain = domains.find(d => !d.includes('.replit.app'));
+    hostname = customDomain || domains[0];
+  }
+  
+  const baseUrl = hostname.includes('localhost') ? `http://${hostname}` : `https://${hostname}`;
+  const resetUrl = `${baseUrl}/reset-password/${resetToken}`;
   
   await client.emails.send({
     from: fromEmail,
@@ -64,8 +76,16 @@ export async function sendPasswordResetEmail(to: string, resetToken: string) {
 export async function sendMagicLinkEmail(to: string, loginToken: string, protocol: string = 'https') {
   const { client, fromEmail } = await getUncachableResendClient();
   
-  // Determine the base URL
-  const hostname = process.env.REPLIT_DOMAINS?.split(',')[0] || 'localhost:5000';
+  // Determine the base URL - prioritize custom domain
+  let hostname = 'localhost:5000';
+  
+  if (process.env.REPLIT_DOMAINS) {
+    const domains = process.env.REPLIT_DOMAINS.split(',');
+    // Prioritize custom domain (non-replit.app) if available
+    const customDomain = domains.find(d => !d.includes('.replit.app'));
+    hostname = customDomain || domains[0];
+  }
+  
   const baseUrl = hostname.includes('localhost') ? `http://${hostname}` : `${protocol}://${hostname}`;
   const loginUrl = `${baseUrl}/api/auth/verify/${loginToken}`;
   
