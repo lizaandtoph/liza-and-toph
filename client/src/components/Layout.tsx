@@ -133,7 +133,6 @@ export default function Layout({ children: pageContent }: { children: React.Reac
     { to: '/your-child', label: 'Your Child', icon: Baby },
     { to: '/playboard', label: 'Play Board', icon: Heart },
     { to: '/shop', label: 'Shop', icon: ShoppingCart },
-    { to: '/pros', label: 'Professionals', icon: Users },
     { to: '/settings', label: 'Settings', icon: SettingsIcon },
   ];
 
