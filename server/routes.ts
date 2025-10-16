@@ -633,7 +633,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ error: "User not found" });
       }
       
-      const children = await storage.getChildrenByUserId(user.id);
+      // Get all children linked to this user (owned + shared)
+      const links = await storage.getUserChildLinks(userId);
+      const childrenWithRoles = await Promise.all(
+        links.map(async (link) => {
+          const child = await storage.getChildProfile(link.childId);
+          return child ? { ...child, linkRole: link.role } : null;
+        })
+      );
+      
+      const children = childrenWithRoles.filter(c => c !== null);
+      
       res.json({ 
         user: { 
           id: user.id, 
@@ -716,10 +726,298 @@ export async function registerRoutes(app: Express): Promise<Server> {
         userId: userId,
       });
       const child = await storage.createChildProfile(childData);
+      
+      // Auto-create owner link for the child creator
+      await storage.createUserChildLink({
+        userId: userId,
+        childId: child.id,
+        role: "owner",
+        invitedBy: null
+      });
+      
       res.json(child);
     } catch (error) {
       console.error("Child creation error:", error);
       res.status(400).json({ error: "Invalid child data" });
+    }
+  });
+
+  // Family sharing - Generate referral code for a child
+  app.post("/api/children/:childId/invite", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub;
+      const { childId } = req.params;
+      
+      if (!userId) {
+        return res.status(401).json({ error: "Not authenticated" });
+      }
+      
+      // Check if user has access to this child
+      const links = await storage.getUserChildLinks(userId);
+      const hasAccess = links.some(link => link.childId === childId && (link.role === "owner" || link.role === "editor"));
+      
+      if (!hasAccess) {
+        return res.status(403).json({ error: "You don't have permission to invite others to this child's playboard" });
+      }
+      
+      // Generate unique referral code
+      const code = nanoid(10).toUpperCase();
+      const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days
+      
+      const token = await storage.createReferralToken({
+        childId,
+        code,
+        createdBy: userId,
+        expiresAt,
+        maxUses: 1
+      });
+      
+      res.json(token);
+    } catch (error) {
+      console.error("Error creating referral token:", error);
+      res.status(500).json({ error: "Failed to create invite" });
+    }
+  });
+
+  // Family sharing - Get active invites for a child
+  app.get("/api/children/:childId/invites", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub;
+      const { childId } = req.params;
+      
+      if (!userId) {
+        return res.status(401).json({ error: "Not authenticated" });
+      }
+      
+      // Check if user has access to this child
+      const links = await storage.getUserChildLinks(userId);
+      const hasAccess = links.some(link => link.childId === childId);
+      
+      if (!hasAccess) {
+        return res.status(403).json({ error: "Access denied" });
+      }
+      
+      const tokens = await storage.getActiveReferralTokensByChild(childId);
+      res.json(tokens);
+    } catch (error) {
+      console.error("Error fetching invites:", error);
+      res.status(500).json({ error: "Failed to fetch invites" });
+    }
+  });
+
+  // Family sharing - Join using referral code
+  app.post("/api/children/join", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub;
+      const { code } = req.body;
+      
+      if (!userId) {
+        return res.status(401).json({ error: "Not authenticated" });
+      }
+      
+      if (!code) {
+        return res.status(400).json({ error: "Invite code is required" });
+      }
+      
+      // Validate referral code
+      const token = await storage.getReferralTokenByCode(code.toUpperCase());
+      
+      if (!token) {
+        return res.status(404).json({ error: "Invalid or expired invite code" });
+      }
+      
+      // Check if already linked
+      const existingLinks = await storage.getUserChildLinks(userId);
+      if (existingLinks.some(link => link.childId === token.childId)) {
+        return res.status(400).json({ error: "You already have access to this child's playboard" });
+      }
+      
+      // Check if max uses reached
+      if (token.usedCount >= token.maxUses) {
+        return res.status(400).json({ error: "This invite code has already been used" });
+      }
+      
+      // Create the link
+      const link = await storage.createUserChildLink({
+        userId,
+        childId: token.childId,
+        role: "viewer",
+        invitedBy: token.createdBy
+      });
+      
+      // Update token usage
+      await storage.updateReferralTokenUsage(token.id, userId);
+      
+      // Get the child profile to return
+      const child = await storage.getChildProfile(token.childId);
+      
+      res.json({ link, child });
+    } catch (error) {
+      console.error("Error joining with referral code:", error);
+      res.status(500).json({ error: "Failed to join playboard" });
+    }
+  });
+
+  // Family sharing - Get family members for a child
+  app.get("/api/children/:childId/family", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub;
+      const { childId } = req.params;
+      
+      if (!userId) {
+        return res.status(401).json({ error: "Not authenticated" });
+      }
+      
+      // Check if user has access to this child
+      const userLinks = await storage.getUserChildLinks(userId);
+      const hasAccess = userLinks.some(link => link.childId === childId);
+      
+      if (!hasAccess) {
+        return res.status(403).json({ error: "Access denied" });
+      }
+      
+      // Get all links for this child
+      const links = await storage.getChildLinks(childId);
+      
+      // Get user info for each link
+      const familyMembers = await Promise.all(
+        links.map(async (link) => {
+          const user = await storage.getUser(link.userId);
+          return {
+            ...link,
+            user: user ? {
+              id: user.id,
+              email: user.email,
+              firstName: user.firstName,
+              lastName: user.lastName
+            } : null
+          };
+        })
+      );
+      
+      res.json(familyMembers);
+    } catch (error) {
+      console.error("Error fetching family members:", error);
+      res.status(500).json({ error: "Failed to fetch family members" });
+    }
+  });
+
+  // Family sharing - Remove family member access
+  app.delete("/api/children/:childId/family/:targetUserId", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub;
+      const { childId, targetUserId } = req.params;
+      
+      if (!userId) {
+        return res.status(401).json({ error: "Not authenticated" });
+      }
+      
+      // Check if current user is owner
+      const userLinks = await storage.getUserChildLinks(userId);
+      const isOwner = userLinks.some(link => link.childId === childId && link.role === "owner");
+      
+      if (!isOwner) {
+        return res.status(403).json({ error: "Only the owner can remove family members" });
+      }
+      
+      // Can't remove yourself if you're the owner
+      if (userId === targetUserId) {
+        return res.status(400).json({ error: "Cannot remove yourself as owner" });
+      }
+      
+      const success = await storage.deleteUserChildLink(targetUserId, childId);
+      
+      if (!success) {
+        return res.status(404).json({ error: "Family member not found" });
+      }
+      
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error removing family member:", error);
+      res.status(500).json({ error: "Failed to remove family member" });
+    }
+  });
+
+  // Family sharing - Revoke invite
+  app.delete("/api/children/:childId/invites/:tokenId", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub;
+      const { childId, tokenId } = req.params;
+      
+      if (!userId) {
+        return res.status(401).json({ error: "Not authenticated" });
+      }
+      
+      // Check if user has permission
+      const links = await storage.getUserChildLinks(userId);
+      const hasPermission = links.some(link => link.childId === childId && (link.role === "owner" || link.role === "editor"));
+      
+      if (!hasPermission) {
+        return res.status(403).json({ error: "Access denied" });
+      }
+      
+      const success = await storage.deleteReferralToken(tokenId);
+      
+      if (!success) {
+        return res.status(404).json({ error: "Invite not found" });
+      }
+      
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error revoking invite:", error);
+      res.status(500).json({ error: "Failed to revoke invite" });
+    }
+  });
+
+  // Backfill migration - Create owner links for existing children
+  app.post("/api/admin/backfill-child-links", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub;
+      if (!userId) {
+        return res.status(401).json({ error: "Not authenticated" });
+      }
+      
+      const user = await storage.getUser(userId);
+      if (!user || user.role !== "admin") {
+        return res.status(403).json({ error: "Admin access required" });
+      }
+      
+      // Get all children
+      const sql = neon(process.env.DATABASE_URL!);
+      const db = drizzle(sql);
+      const allChildren = await db.select().from(childProfiles);
+      
+      let created = 0;
+      let skipped = 0;
+      
+      for (const child of allChildren) {
+        // Check if link already exists
+        const existingLinks = await storage.getUserChildLinks(child.userId);
+        const hasLink = existingLinks.some(link => link.childId === child.id);
+        
+        if (!hasLink) {
+          // Create owner link
+          await storage.createUserChildLink({
+            userId: child.userId,
+            childId: child.id,
+            role: "owner",
+            invitedBy: null
+          });
+          created++;
+        } else {
+          skipped++;
+        }
+      }
+      
+      res.json({ 
+        message: "Backfill complete",
+        created,
+        skipped,
+        total: allChildren.length
+      });
+    } catch (error) {
+      console.error("Error in backfill:", error);
+      res.status(500).json({ error: "Backfill failed" });
     }
   });
 

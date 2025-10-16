@@ -60,6 +60,32 @@ export const childProfiles = pgTable("child_profiles", {
   updatedAt: timestamp("updated_at").default(sql`now()`),
 });
 
+// User-Child Links for family sharing
+export const userChildLinks = pgTable("user_child_links", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  childId: varchar("child_id").notNull().references(() => childProfiles.id, { onDelete: "cascade" }),
+  role: text("role").notNull().default("viewer"), // owner, editor, viewer
+  invitedBy: varchar("invited_by").references(() => users.id),
+  createdAt: timestamp("created_at").default(sql`now()`),
+}, (table) => [
+  index("user_child_links_user_idx").on(table.userId),
+  index("user_child_links_child_idx").on(table.childId),
+]);
+
+// Referral tokens for sharing children with family members
+export const referralTokens = pgTable("referral_tokens", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  childId: varchar("child_id").notNull().references(() => childProfiles.id, { onDelete: "cascade" }),
+  code: varchar("code", { length: 12 }).notNull().unique(),
+  createdBy: varchar("created_by").notNull().references(() => users.id, { onDelete: "cascade" }),
+  expiresAt: timestamp("expires_at").notNull(),
+  maxUses: integer("max_uses").default(1).notNull(),
+  usedCount: integer("used_count").default(0).notNull(),
+  usedBy: jsonb("used_by").$type<string[]>().default(sql`'[]'`),
+  createdAt: timestamp("created_at").default(sql`now()`),
+});
+
 export const milestones = pgTable("milestones", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   title: text("title").notNull(),
@@ -75,10 +101,14 @@ export const products = pgTable("products", {
   name: text("name").notNull(),
   brand: text("brand").notNull(),
   description: text("description").notNull(),
+  price: text("price"),
   imageUrl: text("image_url").notNull(),
   categories: text("categories"),
   ageRange: text("age_range").notNull(),
+  rating: text("rating"),
+  reviewCount: integer("review_count"),
   affiliateUrl: text("affiliate_url"),
+  status: text("status"),
   isTopPick: boolean("is_top_pick").default(false),
   isBestseller: boolean("is_bestseller").default(false),
   isNew: boolean("is_new").default(false),
@@ -90,13 +120,13 @@ export const products = pgTable("products", {
   ageRangeCategory: text("age_range_category"),
   
   // Developmental support (arrays of levels: emerging, developing, proficient, advanced)
-  communicationLevels: jsonb("communication_levels").$type<string[]>(),
-  motorLevels: jsonb("motor_levels").$type<string[]>(),
-  cognitiveLevels: jsonb("cognitive_levels").$type<string[]>(),
-  socialEmotionalLevels: jsonb("social_emotional_levels").$type<string[]>(),
+  communicationLevels: text("communication_levels"),
+  motorLevels: text("motor_levels"),
+  cognitiveLevels: text("cognitive_levels"),
+  socialEmotionalLevels: text("social_emotional_levels"),
   
   // Play type tags
-  playTypeTags: jsonb("play_type_tags").$type<string[]>(),
+  playTypeTags: text("play_type_tags"),
   
   // Complexity and challenge
   complexityLevel: text("complexity_level"), // simple, moderate, complex, advanced, expert
@@ -107,16 +137,16 @@ export const products = pgTable("products", {
   stimulationLevel: text("stimulation_level"), // low, moderate, high
   structurePreference: text("structure_preference"), // structured, flexible, open_ended
   energyRequirement: text("energy_requirement"), // sedentary, moderate, active, high_energy
-  sensoryCompatibility: jsonb("sensory_compatibility").$type<string[]>(), // gentle, moderate, intense
+  sensoryCompatibility: text("sensory_compatibility"), // gentle, moderate, intense
   
   // Social context
-  socialContext: jsonb("social_context").$type<string[]>(), // solo_play, paired_play, group_play, family_play
+  socialContext: text("social_context"), // solo_play, paired_play, group_play, family_play
   cooperationRequired: boolean("cooperation_required"),
   
   // Safety and special needs
-  safetyConsiderations: jsonb("safety_considerations").$type<string[]>(), // choking_hazard, supervision_required, small_parts
-  specialNeedsSupport: jsonb("special_needs_support").$type<string[]>(), // autism_friendly, sensory_processing, speech_therapy, motor_therapy
-  interventionFocus: jsonb("intervention_focus").$type<string[]>(), // communication, motor_skills, social_skills, behavior_support
+  safetyConsiderations: text("safety_considerations"), // choking_hazard, supervision_required, small_parts
+  specialNeedsSupport: text("special_needs_support"), // autism_friendly, sensory_processing, speech_therapy, motor_therapy
+  interventionFocus: text("intervention_focus"), // communication, motor_skills, social_skills, behavior_support
   
   // Environmental factors
   noiseLevel: text("noise_level"), // quiet, moderate, loud
@@ -493,6 +523,18 @@ export const insertLoginTokenSchema = createInsertSchema(loginTokens).omit({
   createdAt: true,
 });
 
+export const insertUserChildLinkSchema = createInsertSchema(userChildLinks).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const insertReferralTokenSchema = createInsertSchema(referralTokens).omit({
+  id: true,
+  createdAt: true,
+  usedCount: true,
+  usedBy: true,
+});
+
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
 export type UpsertUser = typeof users.$inferInsert;
@@ -503,3 +545,7 @@ export type PasswordResetToken = typeof passwordResetTokens.$inferSelect;
 export type InsertPasswordResetToken = z.infer<typeof insertPasswordResetTokenSchema>;
 export type LoginToken = typeof loginTokens.$inferSelect;
 export type InsertLoginToken = z.infer<typeof insertLoginTokenSchema>;
+export type UserChildLink = typeof userChildLinks.$inferSelect;
+export type InsertUserChildLink = z.infer<typeof insertUserChildLinkSchema>;
+export type ReferralToken = typeof referralTokens.$inferSelect;
+export type InsertReferralToken = z.infer<typeof insertReferralTokenSchema>;

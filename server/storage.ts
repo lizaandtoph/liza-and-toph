@@ -1,4 +1,4 @@
-import { type User, type InsertUser, type RegisterUser, type ChildProfile, type InsertChildProfile, type Milestone, type Product, type InsertProduct, type PlayBoard, type InsertPlayBoard, type Professional, type InsertProfessional, type Pro, type InsertPro, type UpdatePro, type ServiceOffering, type InsertServiceOffering, type ServiceArea, type InsertServiceArea, type GalleryImage, type InsertGalleryImage, type Review, type InsertReview, type Message, type InsertMessage, type Subscription, type InsertSubscription, type PasswordResetToken, type InsertPasswordResetToken, type LoginToken, type InsertLoginToken, users, childProfiles, milestones, products, playBoards, professionals, pros, serviceOfferings, serviceAreas, galleryImages, reviews, messages, subscriptions, passwordResetTokens, loginTokens } from "@shared/schema";
+import { type User, type InsertUser, type RegisterUser, type ChildProfile, type InsertChildProfile, type Milestone, type Product, type InsertProduct, type PlayBoard, type InsertPlayBoard, type Professional, type InsertProfessional, type Pro, type InsertPro, type UpdatePro, type ServiceOffering, type InsertServiceOffering, type ServiceArea, type InsertServiceArea, type GalleryImage, type InsertGalleryImage, type Review, type InsertReview, type Message, type InsertMessage, type Subscription, type InsertSubscription, type PasswordResetToken, type InsertPasswordResetToken, type LoginToken, type InsertLoginToken, type UserChildLink, type InsertUserChildLink, type ReferralToken, type InsertReferralToken, users, childProfiles, milestones, products, playBoards, professionals, pros, serviceOfferings, serviceAreas, galleryImages, reviews, messages, subscriptions, passwordResetTokens, loginTokens, userChildLinks, referralTokens } from "@shared/schema";
 import { randomUUID } from "crypto";
 import { neon } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-http";
@@ -79,6 +79,18 @@ export interface IStorage {
   deleteExpiredLoginTokens(): Promise<number>;
   
   updateUserStripeInfo(userId: string, stripeCustomerId: string, stripeSubscriptionId: string): Promise<User | undefined>;
+  
+  // Family sharing methods
+  createUserChildLink(link: InsertUserChildLink): Promise<UserChildLink>;
+  getUserChildLinks(userId: string): Promise<UserChildLink[]>;
+  getChildLinks(childId: string): Promise<UserChildLink[]>;
+  deleteUserChildLink(userId: string, childId: string): Promise<boolean>;
+  
+  createReferralToken(token: InsertReferralToken): Promise<ReferralToken>;
+  getReferralTokenByCode(code: string): Promise<ReferralToken | undefined>;
+  getActiveReferralTokensByChild(childId: string): Promise<ReferralToken[]>;
+  updateReferralTokenUsage(tokenId: string, userId: string): Promise<ReferralToken | undefined>;
+  deleteReferralToken(tokenId: string): Promise<boolean>;
 }
 
 export class MemStorage implements IStorage {
@@ -606,6 +618,42 @@ export class MemStorage implements IStorage {
     const updated = { ...user, stripeCustomerId, stripeSubscriptionId };
     this.users.set(userId, updated);
     return updated;
+  }
+
+  async createUserChildLink(link: InsertUserChildLink): Promise<UserChildLink> {
+    throw new Error("Family sharing not implemented for MemStorage");
+  }
+
+  async getUserChildLinks(userId: string): Promise<UserChildLink[]> {
+    throw new Error("Family sharing not implemented for MemStorage");
+  }
+
+  async getChildLinks(childId: string): Promise<UserChildLink[]> {
+    throw new Error("Family sharing not implemented for MemStorage");
+  }
+
+  async deleteUserChildLink(userId: string, childId: string): Promise<boolean> {
+    throw new Error("Family sharing not implemented for MemStorage");
+  }
+
+  async createReferralToken(token: InsertReferralToken): Promise<ReferralToken> {
+    throw new Error("Family sharing not implemented for MemStorage");
+  }
+
+  async getReferralTokenByCode(code: string): Promise<ReferralToken | undefined> {
+    throw new Error("Family sharing not implemented for MemStorage");
+  }
+
+  async getActiveReferralTokensByChild(childId: string): Promise<ReferralToken[]> {
+    throw new Error("Family sharing not implemented for MemStorage");
+  }
+
+  async updateReferralTokenUsage(tokenId: string, userId: string): Promise<ReferralToken | undefined> {
+    throw new Error("Family sharing not implemented for MemStorage");
+  }
+
+  async deleteReferralToken(tokenId: string): Promise<boolean> {
+    throw new Error("Family sharing not implemented for MemStorage");
   }
 }
 
@@ -1164,6 +1212,82 @@ export class DbStorage implements IStorage {
       stripeSubscriptionId
     }).where(eq(users.id, userId)).returning();
     return result[0];
+  }
+
+  async createUserChildLink(link: InsertUserChildLink): Promise<UserChildLink> {
+    await this.ensureInitialized();
+    const result = await this.db.insert(userChildLinks).values(link).returning();
+    return result[0];
+  }
+
+  async getUserChildLinks(userId: string): Promise<UserChildLink[]> {
+    await this.ensureInitialized();
+    return await this.db.select().from(userChildLinks).where(eq(userChildLinks.userId, userId));
+  }
+
+  async getChildLinks(childId: string): Promise<UserChildLink[]> {
+    await this.ensureInitialized();
+    return await this.db.select().from(userChildLinks).where(eq(userChildLinks.childId, childId));
+  }
+
+  async deleteUserChildLink(userId: string, childId: string): Promise<boolean> {
+    await this.ensureInitialized();
+    const result = await this.db.delete(userChildLinks).where(
+      and(
+        eq(userChildLinks.userId, userId),
+        eq(userChildLinks.childId, childId)
+      )
+    ).returning();
+    return result.length > 0;
+  }
+
+  async createReferralToken(token: InsertReferralToken): Promise<ReferralToken> {
+    await this.ensureInitialized();
+    const result = await this.db.insert(referralTokens).values(token).returning();
+    return result[0];
+  }
+
+  async getReferralTokenByCode(code: string): Promise<ReferralToken | undefined> {
+    await this.ensureInitialized();
+    const result = await this.db
+      .select()
+      .from(referralTokens)
+      .where(and(
+        eq(referralTokens.code, code),
+        gt(referralTokens.expiresAt, new Date())
+      ))
+      .limit(1);
+    return result[0];
+  }
+
+  async getActiveReferralTokensByChild(childId: string): Promise<ReferralToken[]> {
+    await this.ensureInitialized();
+    return await this.db
+      .select()
+      .from(referralTokens)
+      .where(and(
+        eq(referralTokens.childId, childId),
+        gt(referralTokens.expiresAt, new Date())
+      ));
+  }
+
+  async updateReferralTokenUsage(tokenId: string, userId: string): Promise<ReferralToken | undefined> {
+    await this.ensureInitialized();
+    const token = await this.db.select().from(referralTokens).where(eq(referralTokens.id, tokenId)).limit(1);
+    if (!token[0]) return undefined;
+    
+    const currentUsedBy = token[0].usedBy || [];
+    const result = await this.db.update(referralTokens).set({
+      usedCount: token[0].usedCount + 1,
+      usedBy: [...currentUsedBy, userId]
+    }).where(eq(referralTokens.id, tokenId)).returning();
+    return result[0];
+  }
+
+  async deleteReferralToken(tokenId: string): Promise<boolean> {
+    await this.ensureInitialized();
+    const result = await this.db.delete(referralTokens).where(eq(referralTokens.id, tokenId)).returning();
+    return result.length > 0;
   }
 }
 

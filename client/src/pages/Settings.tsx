@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useStore } from '../store';
 import { useAuth } from '../hooks/useAuth';
 import { useLocation } from 'wouter';
-import { User, Mail, Lock, Baby, Trash2, Save, X, Heart, Briefcase, ShoppingBag, Edit2, RefreshCw, CheckCircle, Sparkles } from 'lucide-react';
+import { User, Mail, Lock, Baby, Trash2, Save, X, Heart, Briefcase, ShoppingBag, Edit2, RefreshCw, CheckCircle, Sparkles, Users2, Copy, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -71,6 +71,12 @@ export default function Settings() {
   
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [childToDelete, setChildToDelete] = useState<string | null>(null);
+  
+  // Family sharing state
+  const [selectedChildForSharing, setSelectedChildForSharing] = useState<string | null>(null);
+  const [inviteCode, setInviteCode] = useState<string>('');
+  const [familyMembers, setFamilyMembers] = useState<any[]>([]);
+  const [joinCode, setJoinCode] = useState<string>('');
 
   const handleAccountUpdate = async () => {
     if (!accountForm.firstName || !accountForm.lastName || !accountForm.email) {
@@ -181,6 +187,93 @@ export default function Settings() {
       toast({
         title: 'Success',
         description: 'Child profile removed'
+      });
+    }
+  };
+
+  // Family sharing handlers
+  const generateInviteCode = async (childId: string) => {
+    try {
+      const response = await apiRequest('POST', `/api/children/${childId}/invite`, {});
+      setInviteCode(response.code);
+      setSelectedChildForSharing(childId);
+      toast({
+        title: 'Invite Created',
+        description: 'Share this code with family members to give them access'
+      });
+    } catch (error: any) {
+      toast({
+        title: 'Error',
+        description: error.message || 'Failed to create invite',
+        variant: 'destructive'
+      });
+    }
+  };
+
+  const copyInviteCode = () => {
+    navigator.clipboard.writeText(inviteCode);
+    toast({
+      title: 'Copied!',
+      description: 'Invite code copied to clipboard'
+    });
+  };
+
+  const joinWithCode = async () => {
+    if (!joinCode.trim()) {
+      toast({
+        title: 'Error',
+        description: 'Please enter an invite code',
+        variant: 'destructive'
+      });
+      return;
+    }
+
+    try {
+      const response = await apiRequest('POST', '/api/children/join', { code: joinCode.trim() });
+      toast({
+        title: 'Success',
+        description: `You now have access to ${response.child.name}'s playboard`
+      });
+      setJoinCode('');
+      // Reload page to refresh children list
+      window.location.reload();
+    } catch (error: any) {
+      toast({
+        title: 'Error',
+        description: error.message || 'Invalid or expired invite code',
+        variant: 'destructive'
+      });
+    }
+  };
+
+  const loadFamilyMembers = async (childId: string) => {
+    try {
+      const members = await apiRequest('GET', `/api/children/${childId}/family`, {});
+      setFamilyMembers(members);
+      setSelectedChildForSharing(childId);
+    } catch (error: any) {
+      toast({
+        title: 'Error',
+        description: 'Failed to load family members',
+        variant: 'destructive'
+      });
+    }
+  };
+
+  const removeFamilyMember = async (childId: string, userId: string) => {
+    try {
+      await apiRequest('DELETE', `/api/children/${childId}/family/${userId}`, {});
+      toast({
+        title: 'Success',
+        description: 'Family member removed'
+      });
+      // Reload family members
+      loadFamilyMembers(childId);
+    } catch (error: any) {
+      toast({
+        title: 'Error',
+        description: error.message || 'Failed to remove family member',
+        variant: 'destructive'
       });
     }
   };
@@ -477,11 +570,143 @@ export default function Settings() {
                             </div>
                           );
                         })()}
+                          
+                          {/* Family Sharing Section */}
+                          {!editingChild && (
+                            <div className="mt-3 pt-3 border-t">
+                              <Button 
+                                variant="outline" 
+                                size="sm"
+                                onClick={() => {
+                                  if (selectedChildForSharing === child.id) {
+                                    setSelectedChildForSharing(null);
+                                    setInviteCode('');
+                                    setFamilyMembers([]);
+                                  } else {
+                                    loadFamilyMembers(child.id);
+                                  }
+                                }}
+                                data-testid={`button-manage-family-${child.id}`}
+                                className="w-full"
+                              >
+                                <Users2 className="w-4 h-4 mr-2" />
+                                {selectedChildForSharing === child.id ? 'Hide Family Access' : 'Manage Family Access'}
+                              </Button>
+                              
+                              {selectedChildForSharing === child.id && (
+                                <div className="mt-4 space-y-4">
+                                  <div className="p-4 bg-muted/50 rounded-lg">
+                                    <h4 className="font-semibold mb-2 flex items-center gap-2">
+                                      <Plus className="w-4 h-4" />
+                                      Invite Family Member
+                                    </h4>
+                                    {!inviteCode ? (
+                                      <Button 
+                                        onClick={() => generateInviteCode(child.id)}
+                                        size="sm"
+                                        data-testid={`button-generate-invite-${child.id}`}
+                                      >
+                                        Generate Invite Code
+                                      </Button>
+                                    ) : (
+                                      <div className="space-y-2">
+                                        <div className="flex gap-2">
+                                          <Input 
+                                            value={inviteCode} 
+                                            readOnly 
+                                            className="font-mono text-lg"
+                                            data-testid={`input-invite-code-${child.id}`}
+                                          />
+                                          <Button 
+                                            onClick={copyInviteCode}
+                                            size="sm"
+                                            data-testid={`button-copy-invite-${child.id}`}
+                                          >
+                                            <Copy className="w-4 h-4" />
+                                          </Button>
+                                        </div>
+                                        <p className="text-xs text-muted-foreground">
+                                          This code expires in 7 days. Share it with family members so they can access {child.name}'s playboard.
+                                        </p>
+                                      </div>
+                                    )}
+                                  </div>
+
+                                  <div className="p-4 bg-muted/50 rounded-lg">
+                                    <h4 className="font-semibold mb-2 flex items-center gap-2">
+                                      <Users2 className="w-4 h-4" />
+                                      Family Members
+                                    </h4>
+                                    {familyMembers.length === 0 ? (
+                                      <p className="text-sm text-muted-foreground">No other family members have access yet</p>
+                                    ) : (
+                                      <div className="space-y-2">
+                                        {familyMembers.map((member) => (
+                                          <div 
+                                            key={member.id} 
+                                            className="flex items-center justify-between p-2 bg-background rounded"
+                                            data-testid={`family-member-${member.userId}`}
+                                          >
+                                            <div>
+                                              <p className="font-medium">
+                                                {member.user?.firstName} {member.user?.lastName}
+                                                {member.userId === user?.id && ' (You)'}
+                                              </p>
+                                              <p className="text-xs text-muted-foreground">
+                                                {member.user?.email} · {member.role}
+                                              </p>
+                                            </div>
+                                            {member.role !== 'owner' && member.userId !== user?.id && (
+                                              <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                onClick={() => removeFamilyMember(child.id, member.userId)}
+                                                data-testid={`button-remove-member-${member.userId}`}
+                                              >
+                                                <Trash2 className="w-4 h-4" />
+                                              </Button>
+                                            )}
+                                          </div>
+                                        ))}
+                                      </div>
+                                    )}
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                          )}
                       </div>
                     )}
                   </div>
                 ))
               )}
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Users2 className="w-5 h-5" />
+                Join Family Playboard
+              </CardTitle>
+              <CardDescription>Enter an invite code to access another child's playboard</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex gap-2">
+                <Input
+                  placeholder="Enter invite code"
+                  value={joinCode}
+                  onChange={(e) => setJoinCode(e.target.value.toUpperCase())}
+                  className="font-mono"
+                  data-testid="input-join-code"
+                />
+                <Button onClick={joinWithCode} data-testid="button-join-playboard">
+                  Join
+                </Button>
+              </div>
+              <p className="text-sm text-muted-foreground">
+                Ask a family member to generate an invite code from their child's settings, then enter it here to get access.
+              </p>
             </CardContent>
           </Card>
         </TabsContent>
