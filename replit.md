@@ -8,6 +8,14 @@ Preferred communication style: Simple, everyday language.
 
 # Recent Changes
 
+## October 17, 2025 - Family Sharing System Implementation
+- **Family Sharing Architecture**: Implemented referral code-based system allowing multiple family members to access the same child's playboard without creating duplicate children
+- **Database Schema**: Added `user_child_links` table (many-to-many user-child relationships with roles: owner/editor/viewer) and `referral_tokens` table (12-character codes, 7-day expiry, single-use)
+- **Backend API**: Created endpoints for generating invite codes, joining via code, managing family members, and revoking access
+- **Settings UI**: Added family sharing controls - invite generation, code display with copy button, family member list, and access revocation
+- **Critical Fix**: Updated child creation endpoint to automatically create owner link in user_child_links table (previously caused new children to not appear in user accounts)
+- **Data Migration**: Backfilled existing children with owner links to ensure legacy users retain access after family sharing deployment
+
 ## October 8, 2025 - Early Access Period Implementation
 - **Removed Subscription Requirements**: All authenticated users have full, unrestricted access through January 2026
 - **Early Access Welcome Page**: Replaced Subscribe page with early access message and feedback collection CTA

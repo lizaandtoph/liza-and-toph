@@ -220,6 +220,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const validatedData = insertChildProfileSchema.parse(req.body);
       const childProfile = await storage.createChildProfile(validatedData);
+      
+      // Automatically create owner link for the child
+      await storage.createUserChildLink({
+        userId: childProfile.userId,
+        childId: childProfile.id,
+        role: "owner",
+        invitedBy: null
+      });
+      
       res.json(childProfile);
     } catch (error) {
       res.status(400).json({ message: "Invalid child profile data", error });
