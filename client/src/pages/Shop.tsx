@@ -197,7 +197,11 @@ export default function Shop() {
     // Play types filter
     const matchesPlayType = selectedPlayTypes.length === 0 || (() => {
       const tags = normalizeCategories(product.playTypeTags);
-      return tags.some(tag => selectedPlayTypes.includes(tag));
+      const matches = tags.some(tag => selectedPlayTypes.includes(tag));
+      if (selectedPlayTypes.length > 0 && matches) {
+        console.log('[Filter Debug] Product matched:', product.name, 'Tags:', tags, 'Selected:', selectedPlayTypes);
+      }
+      return matches;
     })();
     
     // Complexity filter
@@ -317,6 +321,7 @@ export default function Shop() {
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' && nlQuery.trim()) {
                     const parsed = parseNaturalLanguageQuery(nlQuery);
+                    console.log('[NLP Search] Parsed query:', parsed);
                     if (parsed.hasResults) {
                       // Apply filters
                       if (parsed.ageRange) {
@@ -331,6 +336,7 @@ export default function Shop() {
                       if (parsed.playTypes.length > 0) {
                         setSelectedPlayTypes(parsed.playTypes);
                       }
+                      console.log('[NLP Search] Applied filters - Age:', parsed.ageRange, 'Category:', parsed.categories.length > 1 || parsed.playTypes.length > 0 ? 'all' : parsed.categories[0], 'Play Types:', parsed.playTypes);
                       setShowFilters(true);
                       setCurrentPage(1);
                     }
