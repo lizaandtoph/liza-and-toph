@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Search, Filter, ChevronDown, ChevronUp, X, Heart } from 'lucide-react';
+import { Search, Filter, ChevronDown, ChevronUp, X, Heart, Sparkles } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { type Product } from '@shared/schema';
 import { useStore } from '../store';
@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useLocation } from 'wouter';
+import { parseNaturalLanguageQuery } from '@/lib/nlpParser';
 
 export default function Shop() {
   const { getActiveChild, savedItems, addSavedItem, removeSavedItem } = useStore();
@@ -22,6 +23,7 @@ export default function Shop() {
   const ageFromUrl = urlParams.get('age') || null;
   
   const [searchQuery, setSearchQuery] = useState('');
+  const [nlQuery, setNlQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>(categoryFromUrl);
   const [showFilters, setShowFilters] = useState(false);
   
@@ -296,6 +298,75 @@ export default function Shop() {
         <p className="text-sm opacity-60">
           As we develop the market place, product links below may be affiliate links from platforms such as Amazon. As affiliates, we earn from qualifying purchases.
         </p>
+      </div>
+
+      {/* Natural Language Search */}
+      <div className="mb-8 bg-gradient-to-r from-olive/10 to-ochre/10 p-6 rounded-xl border-2 border-olive/20">
+        <div className="flex items-start gap-3 mb-3">
+          <Sparkles className="w-6 h-6 text-olive mt-1 flex-shrink-0" />
+          <div className="flex-1">
+            <h2 className="text-xl font-semibold text-olive mb-2">Try Smart Search</h2>
+            <p className="text-sm text-espresso/70 mb-4">
+              Describe what you're looking for in plain language. Try: "7-year-old who loves building" or "toddler into sensory play"
+            </p>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={nlQuery}
+                onChange={(e) => setNlQuery(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && nlQuery.trim()) {
+                    const parsed = parseNaturalLanguageQuery(nlQuery);
+                    if (parsed.hasResults) {
+                      // Apply filters
+                      if (parsed.ageRange) {
+                        setSelectedAgeBracket(parsed.ageRange);
+                      }
+                      if (parsed.categories.length > 0) {
+                        setSelectedCategory(parsed.categories[0]);
+                      }
+                      if (parsed.playTypes.length > 0) {
+                        setSelectedPlayTypes(parsed.playTypes);
+                      }
+                      setShowFilters(true);
+                      setCurrentPage(1);
+                    }
+                  }
+                }}
+                placeholder="e.g., 5-year-old who loves puzzles and building things"
+                className="flex-1 px-4 py-3 bg-white border-2 border-olive/30 rounded-lg focus:border-olive focus:outline-none text-espresso placeholder:text-espresso/40"
+                data-testid="input-nl-search"
+              />
+              <Button
+                onClick={() => {
+                  if (nlQuery.trim()) {
+                    const parsed = parseNaturalLanguageQuery(nlQuery);
+                    if (parsed.hasResults) {
+                      // Apply filters
+                      if (parsed.ageRange) {
+                        setSelectedAgeBracket(parsed.ageRange);
+                      }
+                      if (parsed.categories.length > 0) {
+                        setSelectedCategory(parsed.categories[0]);
+                      }
+                      if (parsed.playTypes.length > 0) {
+                        setSelectedPlayTypes(parsed.playTypes);
+                      }
+                      setShowFilters(true);
+                      setCurrentPage(1);
+                    }
+                  }
+                }}
+                disabled={!nlQuery.trim()}
+                className="bg-olive text-ivory hover:bg-ochre px-6 py-3 font-semibold shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+                data-testid="button-nl-search"
+              >
+                <Sparkles className="w-5 h-5 mr-2" />
+                Search
+              </Button>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Category Quick Links */}
