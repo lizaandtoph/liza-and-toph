@@ -391,23 +391,23 @@ export default function Shop() {
 
       {/* Search and Filter Bar */}
       <div className="bg-[#EDE9DC] p-6 rounded-lg mb-8">
-        <div className="flex flex-col md:flex-row gap-4 mb-4">
-          <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-espresso/50" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search products..."
-              className="w-full pl-10 pr-4 py-3 bg-ivory border-2 border-sand rounded-lg focus:border-olive focus:outline-none"
-              data-testid="input-search"
-            />
-          </div>
-          <div className="flex items-center gap-2">
+        <div className="flex flex-col gap-4 mb-4">
+          <div className="flex flex-col md:flex-row gap-4">
+            <div className="flex-1 relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-espresso/50" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search products..."
+                className="w-full pl-10 pr-4 py-3 bg-ivory border-2 border-sand rounded-lg focus:border-olive focus:outline-none"
+                data-testid="input-search"
+              />
+            </div>
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="px-4 py-3 bg-ivory border-2 border-sand rounded-lg focus:border-olive focus:outline-none"
+              className="px-4 py-3 bg-ivory border-2 border-sand rounded-lg focus:border-olive focus:outline-none md:w-auto"
               data-testid="select-category"
             >
               {categories.map((cat) => (
@@ -416,19 +416,19 @@ export default function Shop() {
                 </option>
               ))}
             </select>
-            <Button 
-              onClick={() => setShowFilters(!showFilters)}
-              className="flex items-center gap-2 bg-olive text-ivory hover:bg-ochre px-6 py-3 font-semibold shadow-md"
-              data-testid="button-toggle-filters"
-            >
-              <Filter className="w-5 h-5" />
-              Filters
-              {activeFilterCount > 0 && (
-                <Badge className="ml-1 bg-ivory text-olive">{activeFilterCount}</Badge>
-              )}
-              {showFilters ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
-            </Button>
           </div>
+          <Button 
+            onClick={() => setShowFilters(!showFilters)}
+            className="flex items-center justify-center gap-2 bg-olive text-ivory hover:bg-ochre px-6 py-3 font-semibold shadow-md w-full"
+            data-testid="button-toggle-filters"
+          >
+            <Filter className="w-5 h-5" />
+            Filters
+            {activeFilterCount > 0 && (
+              <Badge className="ml-1 bg-ivory text-olive">{activeFilterCount}</Badge>
+            )}
+            {showFilters ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+          </Button>
         </div>
         
         {/* Advanced Filters Panel */}
