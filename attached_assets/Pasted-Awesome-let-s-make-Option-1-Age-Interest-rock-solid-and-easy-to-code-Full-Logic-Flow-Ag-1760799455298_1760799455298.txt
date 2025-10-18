@@ -1,0 +1,289 @@
+Awesome—let’s make **Option 1 (Age + Interest)** rock-solid and easy to code.
+
+# Full Logic Flow (Age + Interest)
+
+1. **Normalize the input**
+
+* Lowercase, trim whitespace, collapse multiple spaces.
+* Replace Unicode dashes/quotes with ASCII.
+
+2. **Extract the age**
+
+* Regex (ordered):
+
+  * `(\d{1,2})\s*-\s*(\d{1,2})\s*year[- ]?old` → explicit range
+  * `(\d{1,2})\s*year[- ]?old` → single age
+  * Words → mapped age buckets (see “Age Lexicon” below), e.g., “toddler,” “preteen.”
+* If single age, map to your **Age Range** taxonomy (table below). If a range, map to the **closest matching site range**.
+
+3. **Extract interests (keywords/phrases)**
+
+* Grab phrases following cue words like: `likes|loves|into|interested in|obsessed with|enjoys|is all about|prefers|wants|fans of`.
+* Split by commas/“and/or”.
+* Lemmatize (e.g., “building,” “builds,” → “build”).
+
+4. **Map interests → filters**
+
+* Use a controlled synonym dictionary to map interest tokens/phrases to:
+
+  * **Shop by Category** (top-level)
+  * **Play Types** (sub-level)
+* (Optional) infer **Complexity** and **Energy** if the sentence includes cues (kept off by default for Option 1; see “Lightweight Inference Cues” below).
+
+5. **De-dupe & validate**
+
+* Remove duplicate filters.
+* Keep at least one **Category** OR one **Play Type**; if none resolved, fall back to “All Products” and return **suggested chips** (see Fallbacks).
+
+6. **Build a filter payload**
+
+* JSON object with normalized filters (see schema below).
+* Keep Option 1 minimal: **Age Range + Categories/Play Types** only.
+
+7. **Return candidate results**
+
+* Pass the payload to your product query.
+* If empty results, relax secondary filters (e.g., drop Play Types first, keep Category + Age).
+
+---
+
+## Age Mapping
+
+**User ages/words → Your “Age Range”**
+
+* `0–1` → **Newborn to 18 months**
+* `1.5–3` → **18 months to 3 years**
+* `2–5` → **2 to 5 years**  *(note: overlaps—choose the best fit based on exact age)*
+* `3–6` → **3 to 6 years**
+* `4–7` → **4 to 7 years**
+* `5–8` → **5 to 8 years**
+* `6–9` → **6 to 9 years**
+* `7–10` → **7 to 10 years**
+* `8–11` → **8 to 11 years**
+* `9–12` → **9 to 12 years**
+* `10–13` → **10 to Early Teens**
+* `12+` → **Preteens to Older Teens**
+
+**Lexical shortcuts → Age Range**
+
+* newborn, infant, baby → Newborn to 18 months
+* toddler → 18 months to 3 years *(or 2 to 5 years when context suggests older)*
+* preschooler → 2 to 5 years / 3 to 6 years
+* kindergartener → 4 to 7 years
+* grade-schooler / elementary → 5 to 8, 6 to 9, or 7 to 10 (pick nearest if an age is present)
+* tween / preteen → 10 to Early Teens / Preteens to Older Teens
+* teen → Preteens to Older Teens
+
+---
+
+## Interest → Filter Dictionary (canonical, expandable)
+
+Each row shows **Interest cue → Category + Play Type(s)**
+
+* building, construction, “building things,” bricks, LEGO → **Construction & Building** + *Building Toys*, *Construction*
+* pretend, role play, dress-up, dolls, puppets → **Imaginative & Pretend** + *Pretend Play*, *Imagination*
+* puzzles, jigsaws, brainteasers → **Cognitive & Problem-Solving** + *Puzzles*
+* logic, strategy, chess, “thinking games” → **Cognitive & Problem-Solving** + *Logic Games*, *Games & Structured Play*
+* board games, card games, family game night → **Games & Structured Play** + *Group Games*
+* sensory, textures, fidgets, calm bin → **Sensory & Exploratory** + *Sensory Toys*, *Textures*
+* fine motor, tweezers, beads, lacing → **Fine Motor** + *(no required play type)* or *Crafts* if specified
+* gross motor, climbing, balance, sports, outdoor → **Gross Motor** or **Sports** + *Active Play*
+* art, drawing, painting, craft kits → **Creative Arts** + *Art Supplies*, *Crafts*
+* music, dance, rhythm, instruments → **Music & Movement** + *Active Play* (optional)
+* science, STEM, robots, coding, experiments → **Science & Discovery (STEM)**
+* reading, language, speech, storytelling → **Language & Communication**
+* social skills, feelings, SEL → **Social-Emotional** + *Social Interaction*
+
+> Tip: store this dictionary as an easily editable JSON so your team can add synonyms without code changes.
+
+---
+
+## Lightweight Inference Cues (Optional for v1)
+
+* **Complexity:**
+
+  * “simple,” “starter,” “intro” → *Simple*
+  * “challenge,” “brainy,” “advanced,” “expert” → *Advanced*
+  * “just right,” “moderate,” “step-up” → *Moderate/Complex*
+* **Energy:**
+
+  * “calm,” “quiet time,” “car activity” → *Sedentary*
+  * “burn energy,” “active,” “outdoor,” “sports” → *Active/High Energy*
+* **Social Context:**
+
+  * “for siblings,” “friends,” “party” → *Group Play*
+  * “independent,” “solo” → *Solo Play*
+  * “with a parent,” “family game night” → *Family Play*
+
+*(Keep these OFF unless explicitly stated—you can add later.)*
+
+---
+
+## Input Pattern Examples (all parse to Age + Interest)
+
+* “I’m shopping for a **4-year-old** who loves **building things and pretend play**.”
+* “Gift for my **7-year-old** into **science and robots**.”
+* “Looking for a **10-year-old** who’s **really into logic games**.”
+* “For a **toddler**, super into **sensory bins and textures**.”
+* “Something for a **preschooler** who **loves art and crafts**.”
+
+---
+
+## Output Schema (payload to your product query)
+
+```json
+{
+  "age_range": "7 to 10 years",
+  "categories": ["Construction & Building", "Imaginative & Pretend"],
+  "play_types": ["Building Toys", "Pretend Play"],
+  "complexity_level": null,
+  "energy_requirement": null,
+  "social_context": null,
+  "lt_certified_only": false
+}
+```
+
+* Keep non-Option-1 fields `null` unless inferred/explicit.
+* If nothing maps for `play_types`, it’s fine to return only `categories`.
+
+---
+
+## Deterministic Mapping Rules (pseudocode)
+
+```pseudo
+function parseQuery(q):
+  qn = normalize(q)
+
+  age = extractAge(qn)                 // returns single age number or lexical bucket
+  age_range = mapAgeToRange(age)       // use table above
+
+  interests = extractInterests(qn)     // tokens/phrases after "likes/loves/into/..."
+  mapped = mapInterests(interests)     // returns {categories:[], play_types:[]}
+
+  if mapped.categories is empty and mapped.play_types is empty:
+      suggestions = suggestTopIntents(age_range)
+      return fallbackPayload(age_range, suggestions)
+
+  return {
+    age_range: age_range,
+    categories: dedupe(mapped.categories),
+    play_types: dedupe(mapped.play_types),
+    complexity_level: null,
+    energy_requirement: null,
+    social_context: null,
+    lt_certified_only: false
+  }
+```
+
+**extractAge()** (priority order):
+
+* Match `(\d{1,2})\s*year[- ]?old` → return int
+* Match lexical buckets → return token (“toddler”, “preteen”, etc.)
+
+**mapAgeToRange()**:
+
+* Single age → closest site range (tie-break to younger bucket if safety is a concern).
+* Lexical bucket → direct map from “Age Mapping.”
+
+**extractInterests()**:
+
+* Find any of these cue words: `likes|loves|into|interested in|obsessed with|enjoys|is all about|prefers|wants|fans of`
+* Take the substring after the first cue; split on commas/“and/or”; trim; lemmatize.
+
+**mapInterests()**:
+
+* For each token/phrase, look up in the **Interest → Filter Dictionary**.
+* Return combined sets.
+
+---
+
+## Fallbacks & Guardrails
+
+* **No age found:**
+
+  * If words like toddler/preschooler present, use mapped range; else set `age_range = null` and return **age prompt chips** (e.g., “2–5,” “3–6,” “4–7”) in UI.
+* **No interest match:**
+
+  * Return payload with only `age_range` and **suggested interest chips** (top 6 for that age band).
+* **Over-broad interest (e.g., “games”)**:
+
+  * Keep **Games & Structured Play** but also propose specificity chips (*Logic Games*, *Group Games*, *Puzzles*).
+* **Zero results:**
+
+  * Re-query dropping **play_types** first, then broaden categories (keep **age_range** locked).
+
+---
+
+## Ready-to-Use JSON Dictionary (starter)
+
+```json
+{
+  "synonyms": {
+    "building": {"categories": ["Construction & Building"], "play_types": ["Building Toys", "Construction"]},
+    "construction": {"categories": ["Construction & Building"], "play_types": ["Construction"]},
+    "lego": {"categories": ["Construction & Building"], "play_types": ["Building Toys"]},
+    "pretend": {"categories": ["Imaginative & Pretend"], "play_types": ["Pretend Play", "Imagination"]},
+    "dress up": {"categories": ["Imaginative & Pretend"], "play_types": ["Pretend Play"]},
+    "puzzles": {"categories": ["Cognitive & Problem-Solving"], "play_types": ["Puzzles"]},
+    "logic": {"categories": ["Cognitive & Problem-Solving"], "play_types": ["Logic Games"]},
+    "board games": {"categories": ["Games & Structured Play"], "play_types": ["Group Games"]},
+    "card games": {"categories": ["Games & Structured Play"], "play_types": ["Group Games"]},
+    "sensory": {"categories": ["Sensory & Exploratory"], "play_types": ["Sensory Toys", "Textures"]},
+    "fidgets": {"categories": ["Sensory & Exploratory"], "play_types": ["Sensory Toys"]},
+    "fine motor": {"categories": ["Fine Motor"], "play_types": []},
+    "gross motor": {"categories": ["Gross Motor"], "play_types": ["Active Play"]},
+    "sports": {"categories": ["Sports"], "play_types": ["Active Play"]},
+    "art": {"categories": ["Creative Arts"], "play_types": ["Art Supplies", "Crafts"]},
+    "crafts": {"categories": ["Creative Arts"], "play_types": ["Crafts"]},
+    "music": {"categories": ["Music & Movement"], "play_types": []},
+    "dance": {"categories": ["Music & Movement"], "play_types": ["Active Play"]},
+    "science": {"categories": ["Science & Discovery (STEM)"], "play_types": []},
+    "stem": {"categories": ["Science & Discovery (STEM)"], "play_types": []},
+    "robots": {"categories": ["Science & Discovery (STEM)"], "play_types": []},
+    "coding": {"categories": ["Science & Discovery (STEM)"], "play_types": []},
+    "reading": {"categories": ["Language & Communication"], "play_types": []},
+    "language": {"categories": ["Language & Communication"], "play_types": []},
+    "speech": {"categories": ["Language & Communication"], "play_types": []},
+    "social": {"categories": ["Social-Emotional"], "play_types": ["Social Interaction"]},
+    "sel": {"categories": ["Social-Emotional"], "play_types": ["Social Interaction"]}
+  },
+  "age_words": {
+    "newborn": "Newborn to 18 months",
+    "infant": "Newborn to 18 months",
+    "baby": "Newborn to 18 months",
+    "toddler": "18 months to 3 years",
+    "preschooler": "2 to 5 years",
+    "kindergartener": "4 to 7 years",
+    "grade-schooler": "5 to 8 years",
+    "elementary": "6 to 9 years",
+    "tween": "10 to Early Teens",
+    "preteen": "10 to Early Teens",
+    "teen": "Preteens to Older Teens"
+  }
+}
+```
+
+---
+
+## Example End-to-End
+
+**Input:**
+“I’m shopping for a **7-year-old** who loves **building things and pretend play**.”
+
+**Output payload:**
+
+```json
+{
+  "age_range": "6 to 9 years",
+  "categories": ["Construction & Building", "Imaginative & Pretend"],
+  "play_types": ["Building Toys", "Pretend Play"],
+  "complexity_level": null,
+  "energy_requirement": null,
+  "social_context": null,
+  "lt_certified_only": false
+}
+```
+
+---
+
+If you want, I can turn this into a tiny **TypeScript utility** (regex + dictionary + typed payload) so your front end can drop it in and immediately populate filters from a shopper’s sentence.
