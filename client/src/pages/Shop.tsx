@@ -301,15 +301,15 @@ export default function Shop() {
       </div>
 
       {/* Natural Language Search */}
-      <div className="mb-8 bg-gradient-to-r from-olive/10 to-ochre/10 p-6 rounded-xl border-2 border-olive/20">
-        <div className="flex items-start gap-3 mb-3">
-          <Sparkles className="w-6 h-6 text-olive mt-1 flex-shrink-0" />
+      <div className="mb-8 bg-gradient-to-r from-olive/10 to-ochre/10 p-4 md:p-6 rounded-xl border-2 border-olive/20">
+        <div className="flex items-start gap-3">
+          <Sparkles className="w-6 h-6 text-olive mt-1 flex-shrink-0 hidden sm:block" />
           <div className="flex-1">
-            <h2 className="text-xl font-semibold text-olive mb-2">Try Smart Search</h2>
-            <p className="text-sm text-espresso/70 mb-4">
-              Describe what you're looking for in plain language. Try: "7-year-old who loves building" or "toddler into sensory play"
+            <h2 className="text-lg md:text-xl font-semibold text-olive mb-2">Try Smart Search</h2>
+            <p className="text-xs md:text-sm text-espresso/70 mb-4">
+              Describe what you're looking for. Try: "7-year-old who loves building"
             </p>
-            <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row gap-2">
               <input
                 type="text"
                 value={nlQuery}
@@ -336,8 +336,8 @@ export default function Shop() {
                     }
                   }
                 }}
-                placeholder="e.g., 5-year-old who loves puzzles and building things"
-                className="flex-1 px-4 py-3 bg-white border-2 border-olive/30 rounded-lg focus:border-olive focus:outline-none text-espresso placeholder:text-espresso/40"
+                placeholder="e.g., 5-year-old who loves puzzles"
+                className="flex-1 px-4 py-3 bg-white border-2 border-olive/30 rounded-lg focus:border-olive focus:outline-none text-espresso placeholder:text-espresso/40 text-sm md:text-base"
                 data-testid="input-nl-search"
               />
               <Button
@@ -364,7 +364,7 @@ export default function Shop() {
                   }
                 }}
                 disabled={!nlQuery.trim()}
-                className="bg-olive text-ivory hover:bg-ochre px-6 py-3 font-semibold shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+                className="bg-olive text-ivory hover:bg-ochre px-6 py-3 font-semibold shadow-md disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto whitespace-nowrap"
                 data-testid="button-nl-search"
               >
                 <Sparkles className="w-5 h-5 mr-2" />
