@@ -8,6 +8,13 @@ Preferred communication style: Simple, everyday language.
 
 # Recent Changes
 
+## October 18, 2025 - Shop Filter Audit & Mobile Layout Fix
+- **Filter Database Audit**: Audited production database to identify all actual filter values for play types, complexity, energy requirements, special needs, and social context
+- **Filter Array Updates**: Updated Shop.tsx filter arrays to match database exactly - removed non-existent values (music, reading, expert, autism_friendly) and added missing 'building_toys' play type
+- **User-Friendly Labels**: Created label mapping objects for all filter categories to display clean, readable option names instead of snake_case database values
+- **Mobile Layout Fix**: Restructured search/filter bar layout so Filters button is full-width on its own row (prevents mobile overflow issue)
+- **Filter Values**: Play Types (14 total): active_play, art_supplies, building_toys, construction, crafts, group_games, imagination, logic_games, pretend_play, puzzles, sensory_toys, social_interaction, sports, textures
+
 ## October 17, 2025 - Family Sharing System Implementation
 - **Family Sharing Architecture**: Implemented referral code-based system allowing multiple family members to access the same child's playboard without creating duplicate children
 - **Database Schema**: Added `user_child_links` table (many-to-many user-child relationships with roles: owner/editor/viewer) and `referral_tokens` table (12-character codes, 7-day expiry, single-use)
