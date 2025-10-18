@@ -322,7 +322,10 @@ export default function Shop() {
                       if (parsed.ageRange) {
                         setSelectedAgeBracket(parsed.ageRange);
                       }
-                      if (parsed.categories.length > 0) {
+                      // If multiple categories/interests, use 'all' and rely on play types
+                      if (parsed.categories.length > 1 || parsed.playTypes.length > 0) {
+                        setSelectedCategory('all');
+                      } else if (parsed.categories.length === 1) {
                         setSelectedCategory(parsed.categories[0]);
                       }
                       if (parsed.playTypes.length > 0) {
@@ -346,7 +349,10 @@ export default function Shop() {
                       if (parsed.ageRange) {
                         setSelectedAgeBracket(parsed.ageRange);
                       }
-                      if (parsed.categories.length > 0) {
+                      // If multiple categories/interests, use 'all' and rely on play types
+                      if (parsed.categories.length > 1 || parsed.playTypes.length > 0) {
+                        setSelectedCategory('all');
+                      } else if (parsed.categories.length === 1) {
                         setSelectedCategory(parsed.categories[0]);
                       }
                       if (parsed.playTypes.length > 0) {
