@@ -62,11 +62,56 @@ export default function Shop() {
     'Preteens to Older Teens',
   ];
   
-  const playTypes = ['sensory_toys', 'textures', 'active_play', 'group_games', 'social_interaction', 'logic_games', 'construction', 'art_supplies', 'crafts', 'sports', 'puzzles', 'imagination', 'pretend_play', 'music', 'reading'];
-  const complexityLevels = ['simple', 'moderate', 'complex', 'advanced', 'expert'];
+  const playTypes = ['active_play', 'art_supplies', 'building_toys', 'construction', 'crafts', 'group_games', 'imagination', 'logic_games', 'pretend_play', 'puzzles', 'sensory_toys', 'social_interaction', 'sports', 'textures'];
+  const complexityLevels = ['simple', 'moderate', 'complex', 'advanced'];
   const energyRequirements = ['sedentary', 'moderate', 'active', 'high_energy'];
-  const specialNeedsTypes = ['autism_friendly', 'sensory_processing', 'speech_therapy', 'motor_therapy'];
+  const specialNeedsTypes = ['sensory_processing', 'speech_therapy', 'motor_therapy'];
   const socialContexts = ['solo_play', 'paired_play', 'group_play', 'family_play'];
+  
+  // User-friendly labels for filter options
+  const playTypeLabels: Record<string, string> = {
+    'active_play': 'Active Play',
+    'art_supplies': 'Art Supplies',
+    'building_toys': 'Building Toys',
+    'construction': 'Construction',
+    'crafts': 'Crafts',
+    'group_games': 'Group Games',
+    'imagination': 'Imagination',
+    'logic_games': 'Logic Games',
+    'pretend_play': 'Pretend Play',
+    'puzzles': 'Puzzles',
+    'sensory_toys': 'Sensory Toys',
+    'social_interaction': 'Social Interaction',
+    'sports': 'Sports',
+    'textures': 'Textures'
+  };
+  
+  const complexityLabels: Record<string, string> = {
+    'simple': 'Simple',
+    'moderate': 'Moderate',
+    'complex': 'Complex',
+    'advanced': 'Advanced'
+  };
+  
+  const energyLabels: Record<string, string> = {
+    'sedentary': 'Sedentary',
+    'moderate': 'Moderate Energy',
+    'active': 'Active',
+    'high_energy': 'High Energy'
+  };
+  
+  const specialNeedsLabels: Record<string, string> = {
+    'sensory_processing': 'Sensory Processing',
+    'speech_therapy': 'Speech Therapy',
+    'motor_therapy': 'Motor Therapy'
+  };
+  
+  const socialContextLabels: Record<string, string> = {
+    'solo_play': 'Solo Play',
+    'paired_play': 'Paired Play',
+    'group_play': 'Group Play',
+    'family_play': 'Family Play'
+  };
 
   const { data: products = [], isLoading } = useQuery<Product[]>({
     queryKey: ['/api/products'],
@@ -426,7 +471,7 @@ export default function Shop() {
                       className="h-5 w-5"
                       data-testid={`checkbox-playtype-${type}`}
                     />
-                    <label htmlFor={`playtype-${type}`} className="text-sm capitalize cursor-pointer">{type.replace('_', ' ')}</label>
+                    <label htmlFor={`playtype-${type}`} className="text-sm cursor-pointer">{playTypeLabels[type] || type}</label>
                   </div>
                 ))}
               </div>
@@ -444,7 +489,7 @@ export default function Shop() {
                     onClick={() => setSelectedComplexity(selectedComplexity === level ? null : level)}
                     data-testid={`badge-complexity-${level}`}
                   >
-                    {level}
+                    {complexityLabels[level] || level}
                   </Badge>
                 ))}
               </div>
@@ -462,7 +507,7 @@ export default function Shop() {
                     onClick={() => setSelectedEnergy(selectedEnergy === energy ? null : energy)}
                     data-testid={`badge-energy-${energy}`}
                   >
-                    {energy.replace('_', ' ')}
+                    {energyLabels[energy] || energy}
                   </Badge>
                 ))}
               </div>
@@ -487,7 +532,7 @@ export default function Shop() {
                       className="h-5 w-5"
                       data-testid={`checkbox-specialneeds-${need}`}
                     />
-                    <label htmlFor={`specialneeds-${need}`} className="text-sm capitalize cursor-pointer">{need.replace('_', ' ')}</label>
+                    <label htmlFor={`specialneeds-${need}`} className="text-sm cursor-pointer">{specialNeedsLabels[need] || need}</label>
                   </div>
                 ))}
               </div>
@@ -512,7 +557,7 @@ export default function Shop() {
                       className="h-5 w-5"
                       data-testid={`checkbox-socialcontext-${context}`}
                     />
-                    <label htmlFor={`socialcontext-${context}`} className="text-sm capitalize cursor-pointer">{context.replace('_', ' ')}</label>
+                    <label htmlFor={`socialcontext-${context}`} className="text-sm cursor-pointer">{socialContextLabels[context] || context}</label>
                   </div>
                 ))}
               </div>
