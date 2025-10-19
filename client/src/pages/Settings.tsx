@@ -321,10 +321,28 @@ export default function Settings() {
       <h1 className="text-3xl font-bold mb-8" data-testid="heading-settings">Settings</h1>
 
       <Tabs defaultValue="account" className="w-full">
-        <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="account" data-testid="tab-account">Account</TabsTrigger>
-          <TabsTrigger value="children" data-testid="tab-children">Children</TabsTrigger>
-          <TabsTrigger value="saved" data-testid="tab-saved">Saved Items</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-3 bg-sand p-2 gap-2">
+          <TabsTrigger 
+            value="account" 
+            data-testid="tab-account"
+            className="data-[state=active]:bg-olive data-[state=active]:text-ivory data-[state=active]:shadow-md data-[state=active]:font-semibold hover:bg-olive/10 transition-all border-2 border-transparent data-[state=active]:border-olive cursor-pointer"
+          >
+            Account
+          </TabsTrigger>
+          <TabsTrigger 
+            value="children" 
+            data-testid="tab-children"
+            className="data-[state=active]:bg-olive data-[state=active]:text-ivory data-[state=active]:shadow-md data-[state=active]:font-semibold hover:bg-olive/10 transition-all border-2 border-transparent data-[state=active]:border-olive cursor-pointer"
+          >
+            Children
+          </TabsTrigger>
+          <TabsTrigger 
+            value="saved" 
+            data-testid="tab-saved"
+            className="data-[state=active]:bg-olive data-[state=active]:text-ivory data-[state=active]:shadow-md data-[state=active]:font-semibold hover:bg-olive/10 transition-all border-2 border-transparent data-[state=active]:border-olive cursor-pointer"
+          >
+            Saved Items
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="account" className="space-y-6">
@@ -349,7 +367,11 @@ export default function Settings() {
                     <Label className="text-sm text-muted-foreground">Email</Label>
                     <p className="text-lg" data-testid="text-parent-email">{user.email}</p>
                   </div>
-                  <Button onClick={() => setEditingAccount(true)} data-testid="button-edit-account">
+                  <Button 
+                    onClick={() => setEditingAccount(true)} 
+                    data-testid="button-edit-account"
+                    className="bg-olive hover:bg-ochre text-ivory font-semibold shadow-md hover:shadow-lg transition-all border-2 border-olive hover:border-ochre cursor-pointer"
+                  >
                     <Edit2 className="w-4 h-4 mr-2" />
                     Edit Information
                   </Button>
@@ -387,7 +409,11 @@ export default function Settings() {
                     />
                   </div>
                   <div className="flex gap-2">
-                    <Button onClick={handleAccountUpdate} data-testid="button-save-account">
+                    <Button 
+                      onClick={handleAccountUpdate} 
+                      data-testid="button-save-account"
+                      className="bg-olive hover:bg-ochre text-ivory font-semibold shadow-md hover:shadow-lg transition-all border-2 border-olive hover:border-ochre cursor-pointer"
+                    >
                       <Save className="w-4 h-4 mr-2" />
                       Save Changes
                     </Button>
@@ -402,6 +428,7 @@ export default function Settings() {
                         });
                       }}
                       data-testid="button-cancel-account"
+                      className="border-2 border-espresso/30 hover:border-espresso hover:bg-sand/50 font-semibold transition-all cursor-pointer"
                     >
                       <X className="w-4 h-4 mr-2" />
                       Cancel
@@ -441,7 +468,7 @@ export default function Settings() {
                   className="inline-block"
                 >
                   <Button 
-                    className="w-full sm:w-auto bg-[#4a5942] text-[#fff9ed] hover:bg-[#3d4a37] transition-colors" 
+                    className="w-full sm:w-auto bg-olive hover:bg-ochre text-ivory font-semibold shadow-md hover:shadow-lg transition-all border-2 border-olive hover:border-ochre cursor-pointer" 
                     data-testid="button-provide-feedback"
                   >
                     Share Your Feedback
@@ -492,7 +519,12 @@ export default function Settings() {
                           />
                         </div>
                         <div className="flex gap-2">
-                          <Button onClick={handleChildUpdate} size="sm" data-testid={`button-save-child-${child.id}`}>
+                          <Button 
+                            onClick={handleChildUpdate} 
+                            size="sm" 
+                            data-testid={`button-save-child-${child.id}`}
+                            className="bg-olive hover:bg-ochre text-ivory font-semibold shadow-md hover:shadow-lg transition-all border-2 border-olive hover:border-ochre cursor-pointer"
+                          >
                             <Save className="w-4 h-4 mr-2" />
                             Save
                           </Button>
@@ -501,6 +533,7 @@ export default function Settings() {
                             size="sm"
                             onClick={() => setEditingChild(null)}
                             data-testid={`button-cancel-child-${child.id}`}
+                            className="border-2 border-espresso/30 hover:border-espresso hover:bg-sand/50 font-semibold transition-all cursor-pointer"
                           >
                             <X className="w-4 h-4 mr-2" />
                             Cancel
@@ -526,6 +559,7 @@ export default function Settings() {
                               size="sm"
                               onClick={() => handleChildEdit(child.id)}
                               data-testid={`button-edit-child-${child.id}`}
+                              className="border-2 border-espresso/30 hover:border-olive hover:bg-olive/10 font-semibold transition-all cursor-pointer"
                             >
                               <Edit2 className="w-4 h-4 mr-2" />
                               Edit
@@ -535,6 +569,7 @@ export default function Settings() {
                               size="sm"
                               onClick={() => confirmDeleteChild(child.id)}
                               data-testid={`button-delete-child-${child.id}`}
+                              className="bg-red-600 hover:bg-red-700 text-white font-semibold shadow-md hover:shadow-lg transition-all border-2 border-red-600 hover:border-red-700 cursor-pointer"
                             >
                               <Trash2 className="w-4 h-4 mr-2" />
                               Remove
@@ -578,7 +613,7 @@ export default function Settings() {
                                     variant="default"
                                     size="sm"
                                     onClick={() => setLocation('/onboarding')}
-                                    className="bg-ochre hover:bg-burnt"
+                                    className="bg-ochre hover:bg-burnt text-ivory font-semibold shadow-md hover:shadow-lg transition-all border-2 border-ochre hover:border-burnt cursor-pointer"
                                     data-testid={`button-retake-questionnaire-${child.id}`}
                                   >
                                     <RefreshCw className="w-4 h-4 mr-2" />
@@ -607,7 +642,7 @@ export default function Settings() {
                                   }
                                 }}
                                 data-testid={`button-manage-family-${child.id}`}
-                                className="w-full"
+                                className="w-full border-2 border-espresso/30 hover:border-olive hover:bg-olive/10 font-semibold transition-all cursor-pointer"
                               >
                                 <Users2 className="w-4 h-4 mr-2" />
                                 {selectedChildForSharing === child.id ? 'Hide Family Access' : 'Manage Family Access'}
@@ -625,6 +660,7 @@ export default function Settings() {
                                         onClick={() => generateInviteCode(child.id)}
                                         size="sm"
                                         data-testid={`button-generate-invite-${child.id}`}
+                                        className="bg-olive hover:bg-ochre text-ivory font-semibold shadow-md hover:shadow-lg transition-all border-2 border-olive hover:border-ochre cursor-pointer"
                                       >
                                         Generate Invite Code
                                       </Button>
@@ -641,6 +677,7 @@ export default function Settings() {
                                             onClick={copyInviteCode}
                                             size="sm"
                                             data-testid={`button-copy-invite-${child.id}`}
+                                            className="bg-olive hover:bg-ochre text-ivory font-semibold shadow-md hover:shadow-lg transition-all border-2 border-olive hover:border-ochre cursor-pointer"
                                           >
                                             <Copy className="w-4 h-4" />
                                           </Button>
@@ -688,6 +725,7 @@ export default function Settings() {
                                                 size="sm"
                                                 onClick={() => removeFamilyMember(child.id, member.userId)}
                                                 data-testid={`button-remove-member-${member.userId}`}
+                                                className="hover:bg-red-50 hover:text-red-600 transition-all cursor-pointer"
                                               >
                                                 <Trash2 className="w-4 h-4" />
                                               </Button>
@@ -726,7 +764,11 @@ export default function Settings() {
                   className="font-mono"
                   data-testid="input-join-code"
                 />
-                <Button onClick={joinWithCode} data-testid="button-join-playboard">
+                <Button 
+                  onClick={joinWithCode} 
+                  data-testid="button-join-playboard"
+                  className="bg-olive hover:bg-ochre text-ivory font-semibold shadow-md hover:shadow-lg transition-all border-2 border-olive hover:border-ochre cursor-pointer"
+                >
                   Join
                 </Button>
               </div>
@@ -761,6 +803,7 @@ export default function Settings() {
                         size="sm"
                         onClick={() => removeSavedItem('brands', brand)}
                         data-testid={`button-remove-brand-${index}`}
+                        className="hover:bg-red-50 hover:text-red-600 transition-all cursor-pointer"
                       >
                         <X className="w-4 h-4" />
                       </Button>
@@ -794,6 +837,7 @@ export default function Settings() {
                         size="sm"
                         onClick={() => removeSavedItem('professionals', professional)}
                         data-testid={`button-remove-professional-${index}`}
+                        className="hover:bg-red-50 hover:text-red-600 transition-all cursor-pointer"
                       >
                         <X className="w-4 h-4" />
                       </Button>
@@ -827,6 +871,7 @@ export default function Settings() {
                         size="sm"
                         onClick={() => removeSavedItem('products', product)}
                         data-testid={`button-remove-product-${index}`}
+                        className="hover:bg-red-50 hover:text-red-600 transition-all cursor-pointer"
                       >
                         <X className="w-4 h-4" />
                       </Button>
