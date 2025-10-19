@@ -3,8 +3,14 @@ import { useStore } from '../store';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { User, Plus, FileText } from 'lucide-react';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { User, Plus, FileText, UserPlus } from 'lucide-react';
 import { calculateAgeFromBirthday, getAgeBandLabel } from '@shared/ageUtils';
+import { useState } from 'react';
+import { apiRequest } from '@/lib/queryClient';
+import { useToast } from '@/hooks/use-toast';
 
 const getStageNicknames = (ageBand: string): { current: string; shift: string } => {
   const stages: Record<string, { current: string; shift: string }> = {
@@ -98,6 +104,43 @@ const getShiftTeaser = (ageBand: string): string => {
 
 export default function YourChild() {
   const { children, getAnswers } = useStore();
+  const { toast } = useToast();
+  const [joinCode, setJoinCode] = useState('');
+  const [joinDialogOpen, setJoinDialogOpen] = useState(false);
+  const [isJoining, setIsJoining] = useState(false);
+
+  const handleJoinWithCode = async () => {
+    if (!joinCode.trim()) {
+      toast({
+        title: 'Error',
+        description: 'Please enter an invite code',
+        variant: 'destructive'
+      });
+      return;
+    }
+
+    setIsJoining(true);
+    try {
+      const response = await apiRequest('POST', '/api/children/join', { code: joinCode.trim() });
+      const data = await response.json();
+      toast({
+        title: 'Success!',
+        description: `You now have access to ${data.child.name}'s playboard`
+      });
+      setJoinCode('');
+      setJoinDialogOpen(false);
+      // Reload page to refresh children list
+      window.location.reload();
+    } catch (error: any) {
+      toast({
+        title: 'Error',
+        description: error.message || 'Invalid or expired invite code',
+        variant: 'destructive'
+      });
+    } finally {
+      setIsJoining(false);
+    }
+  };
 
   if (children.length === 0) {
     return (
@@ -267,6 +310,83 @@ export default function YourChild() {
                   Add Child
                 </Button>
               </Link>
+            </CardContent>
+          </Card>
+
+          <Card 
+            className="bg-white rounded-[1.3rem] shadow-md hover:shadow-lg transition-shadow border-2 border-dashed border-olive/20"
+            data-testid="card-join-child"
+          >
+            <CardContent className="p-8 h-full flex flex-col items-center justify-center min-h-[400px]">
+              <div className="w-16 h-16 bg-olive/10 rounded-full flex items-center justify-center mb-4">
+                <UserPlus className="w-8 h-8 text-olive" />
+              </div>
+              <h3 className="text-xl font-bold text-espresso mb-3">
+                Join with Invite Code
+              </h3>
+              <p className="text-espresso/60 mb-6 text-center">
+                Access a child profile shared by family
+              </p>
+              <Dialog open={joinDialogOpen} onOpenChange={setJoinDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button 
+                    className="bg-olive hover:bg-ochre text-ivory px-8 py-6 text-base rounded-[1.3rem] transition-colors"
+                    data-testid="button-join-with-code"
+                  >
+                    <UserPlus className="w-5 h-5 mr-2" />
+                    Join with Code
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-md">
+                  <DialogHeader>
+                    <DialogTitle>Join with Invite Code</DialogTitle>
+                    <DialogDescription>
+                      Enter the invite code shared by a family member to access their child's profile.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="space-y-4 py-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="join-code">Invite Code</Label>
+                      <Input
+                        id="join-code"
+                        placeholder="Enter 12-character code"
+                        value={joinCode}
+                        onChange={(e) => setJoinCode(e.target.value)}
+                        maxLength={12}
+                        data-testid="input-join-code"
+                        className="uppercase"
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') {
+                            e.preventDefault();
+                            handleJoinWithCode();
+                          }
+                        }}
+                      />
+                    </div>
+                  </div>
+                  <div className="flex gap-3">
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        setJoinDialogOpen(false);
+                        setJoinCode('');
+                      }}
+                      className="flex-1"
+                      data-testid="button-cancel-join"
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      onClick={handleJoinWithCode}
+                      disabled={isJoining || !joinCode.trim()}
+                      className="flex-1 bg-olive hover:bg-ochre text-ivory"
+                      data-testid="button-submit-join-code"
+                    >
+                      {isJoining ? 'Joining...' : 'Join'}
+                    </Button>
+                  </div>
+                </DialogContent>
+              </Dialog>
             </CardContent>
           </Card>
         </div>
