@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useStore } from '../store';
 import { useAuth } from '../hooks/useAuth';
 import { useLocation } from 'wouter';
-import { User, Mail, Lock, Baby, Trash2, Save, X, Heart, Briefcase, ShoppingBag, Edit2, RefreshCw, CheckCircle, Sparkles, Users2, Copy, Plus } from 'lucide-react';
+import { User, Mail, Lock, Baby, Trash2, Save, X, Heart, Briefcase, ShoppingBag, Edit2, RefreshCw, CheckCircle, Sparkles, Users2, Copy, Plus, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -11,6 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
 import { calculateAgeFromBirthday, categorizeAgeBand } from '@shared/ageUtils';
 import { apiRequest } from '@/lib/queryClient';
+import { InstallPrompt } from '@/components/InstallPrompt';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -474,6 +475,24 @@ export default function Settings() {
                     Share Your Feedback
                   </Button>
                 </a>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Download className="w-5 h-5" />
+                Install App
+              </CardTitle>
+              <CardDescription>Add Liza & Toph to your home screen for quick access</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <p className="text-sm text-muted-foreground">
+                  Install our app for a faster, app-like experience. Access your child's playboard with one tap from your home screen.
+                </p>
+                <InstallPrompt />
               </div>
             </CardContent>
           </Card>

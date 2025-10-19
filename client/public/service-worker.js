@@ -41,15 +41,25 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // Skip non-GET requests (POST, PUT, DELETE) - they can't be cached
+  if (event.request.method !== 'GET') {
+    return;
+  }
+
   event.respondWith(
     fetch(event.request)
       .then((response) => {
-        // Clone the response before caching
-        const responseToCache = response.clone();
-        
-        caches.open(CACHE_NAME).then((cache) => {
-          cache.put(event.request, responseToCache);
-        });
+        // Only cache successful GET responses (not opaque responses)
+        if (response && response.status === 200 && response.type === 'basic') {
+          // Clone the response before caching
+          const responseToCache = response.clone();
+          
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, responseToCache).catch((err) => {
+              console.warn('Cache put failed:', err);
+            });
+          });
+        }
         
         return response;
       })
