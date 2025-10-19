@@ -601,32 +601,21 @@ export default function PlayBoard() {
                 </div>
               ))}
             </div>
-
-            <div className="text-center">
-              <Link
-                to={`/shop?age=${childAgeBracket}`}
-                className="inline-flex items-center gap-2 px-8 py-4 bg-olive text-ivory rounded-xl hover:bg-ochre transition text-lg font-semibold shadow-lg hover:shadow-xl"
-                data-testid="button-shop-all"
-              >
-                <ShoppingCart className="w-5 h-5" />
-                Shop for {child.name}
-              </Link>
-            </div>
           </div>
         )}
 
-        {/* Personalized Recommendations CTA */}
+        {/* Discover More Recommendations */}
         <div className="mt-12 bg-gradient-to-r from-olive/10 to-blush/10 p-8 rounded-lg text-center">
-          <h2 className="text-2xl font-bold mb-4">Looking for personalized recommendations?</h2>
+          <h2 className="text-2xl font-bold mb-4">Discover More</h2>
           <p className="mb-6 opacity-80">
-            View products specifically curated for {child.name}'s Play Board
+            Explore additional products curated for {child.name}'s developmental stage and interests
           </p>
           <Link
             to="/recommendations"
             className="inline-block px-6 py-3 bg-olive text-ivory rounded-lg hover:bg-ochre transition font-medium"
             data-testid="button-view-recommendations"
           >
-            View My Recommendations
+            View more Recommendations for {child.name}
           </Link>
         </div>
       </div>
