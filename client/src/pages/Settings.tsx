@@ -76,6 +76,7 @@ export default function Settings() {
   const [selectedChildForSharing, setSelectedChildForSharing] = useState<string | null>(null);
   const [inviteCode, setInviteCode] = useState<string>('');
   const [familyMembers, setFamilyMembers] = useState<any[]>([]);
+  const [familyMembersError, setFamilyMembersError] = useState<boolean>(false);
   const [joinCode, setJoinCode] = useState<string>('');
 
   const handleAccountUpdate = async () => {
@@ -247,16 +248,17 @@ export default function Settings() {
   };
 
   const loadFamilyMembers = async (childId: string) => {
+    // Always expand the section
+    setSelectedChildForSharing(childId);
+    setFamilyMembersError(false);
+    
     try {
       const members = await apiRequest('GET', `/api/children/${childId}/family`, {});
       setFamilyMembers(members);
-      setSelectedChildForSharing(childId);
     } catch (error: any) {
-      toast({
-        title: 'Error',
-        description: 'Failed to load family members',
-        variant: 'destructive'
-      });
+      setFamilyMembersError(true);
+      setFamilyMembers([]);
+      // Don't show toast - we'll show an inline warning instead
     }
   };
 
@@ -582,6 +584,7 @@ export default function Settings() {
                                     setSelectedChildForSharing(null);
                                     setInviteCode('');
                                     setFamilyMembers([]);
+                                    setFamilyMembersError(false);
                                   } else {
                                     loadFamilyMembers(child.id);
                                   }
@@ -637,7 +640,13 @@ export default function Settings() {
                                       <Users2 className="w-4 h-4" />
                                       Family Members
                                     </h4>
-                                    {familyMembers.length === 0 ? (
+                                    {familyMembersError ? (
+                                      <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+                                        <p className="text-sm text-yellow-800">
+                                          Unable to load family members list. You can still generate and share invite codes above.
+                                        </p>
+                                      </div>
+                                    ) : familyMembers.length === 0 ? (
                                       <p className="text-sm text-muted-foreground">No other family members have access yet</p>
                                     ) : (
                                       <div className="space-y-2">
