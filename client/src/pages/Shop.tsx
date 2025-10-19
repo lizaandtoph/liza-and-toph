@@ -225,6 +225,11 @@ export default function Shop() {
     // Liza & Toph Certified filter
     const matchesLizaTophCertified = !lizaTophCertifiedOnly || product.isLizaTophCertified === true;
     
+    // Debug logging for filtered products
+    if (selectedAgeBracket && matchesPlayType && !matchesAge) {
+      console.log('[Age Filter Debug] Product filtered out by age:', product.name, 'Product age:', product.ageRangeCategory, 'Selected:', selectedAgeBracket);
+    }
+    
     return matchesSearch && matchesCategory && matchesAge && matchesPlayType && 
            matchesComplexity && matchesEnergy && matchesSpecialNeeds && matchesSocialContext &&
            matchesLizaTophCertified;

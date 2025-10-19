@@ -231,18 +231,19 @@ const INTEREST_SYNONYMS: Record<string, FilterMapping> = {
 };
 
 // Age number to age range mapping
+// Map age to the primary age bracket that contains that age
 function mapAgeToRange(age: number): string | null {
   if (age >= 0 && age < 1.5) return "Newborn to 18 months";
-  if (age >= 1.5 && age < 3) return "18 months to 3 years";
-  if (age >= 2 && age < 5) return "2 to 5 years";
-  if (age >= 3 && age < 6) return "3 to 6 years";
-  if (age >= 4 && age < 7) return "4 to 7 years";
-  if (age >= 5 && age < 8) return "5 to 8 years";
-  if (age >= 6 && age < 9) return "6 to 9 years";
-  if (age >= 7 && age < 10) return "7 to 10 years";
-  if (age >= 8 && age < 11) return "8 to 11 years";
-  if (age >= 9 && age < 12) return "9 to 12 years";
-  if (age >= 10 && age < 13) return "10 to Early Teens";
+  if (age >= 1.5 && age < 2) return "18 months to 3 years";
+  if (age >= 2 && age < 3) return "2 to 5 years";
+  if (age >= 3 && age < 4) return "3 to 6 years";
+  if (age >= 4 && age < 5) return "4 to 7 years";
+  if (age >= 5 && age < 6) return "5 to 8 years";
+  if (age >= 6 && age < 7) return "6 to 9 years";
+  if (age >= 7 && age < 8) return "7 to 10 years";
+  if (age >= 8 && age < 9) return "8 to 11 years";
+  if (age >= 9 && age < 10) return "9 to 12 years";
+  if (age >= 10 && age < 12) return "10 to Early Teens";
   if (age >= 12) return "Preteens to Older Teens";
   return null;
 }
