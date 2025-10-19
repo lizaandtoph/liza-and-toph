@@ -196,7 +196,8 @@ export default function Settings() {
   const generateInviteCode = async (childId: string) => {
     try {
       const response = await apiRequest('POST', `/api/children/${childId}/invite`, {});
-      setInviteCode(response.code);
+      const data = await response.json();
+      setInviteCode(data.code);
       setSelectedChildForSharing(childId);
       toast({
         title: 'Invite Created',
@@ -231,9 +232,10 @@ export default function Settings() {
 
     try {
       const response = await apiRequest('POST', '/api/children/join', { code: joinCode.trim() });
+      const data = await response.json();
       toast({
         title: 'Success',
-        description: `You now have access to ${response.child.name}'s playboard`
+        description: `You now have access to ${data.child.name}'s playboard`
       });
       setJoinCode('');
       // Reload page to refresh children list
@@ -253,7 +255,8 @@ export default function Settings() {
     setFamilyMembersError(false);
     
     try {
-      const members = await apiRequest('GET', `/api/children/${childId}/family`, {});
+      const response = await apiRequest('GET', `/api/children/${childId}/family`, {});
+      const members = await response.json();
       setFamilyMembers(members);
     } catch (error: any) {
       setFamilyMembersError(true);
