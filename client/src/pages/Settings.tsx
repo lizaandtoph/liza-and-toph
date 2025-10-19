@@ -321,25 +321,25 @@ export default function Settings() {
       <h1 className="text-3xl font-bold mb-8" data-testid="heading-settings">Settings</h1>
 
       <Tabs defaultValue="account" className="w-full">
-        <TabsList className="grid w-full grid-cols-3 bg-sand p-2 gap-2">
+        <TabsList className="grid w-full grid-cols-3 bg-sand/50 p-1 h-auto">
           <TabsTrigger 
             value="account" 
             data-testid="tab-account"
-            className="data-[state=active]:bg-olive data-[state=active]:text-ivory data-[state=active]:shadow-md data-[state=active]:font-semibold hover:bg-olive/10 transition-all border-2 border-transparent data-[state=active]:border-olive cursor-pointer"
+            className="data-[state=active]:bg-olive data-[state=active]:text-ivory data-[state=active]:shadow-md data-[state=active]:font-semibold hover:bg-olive/10 transition-all cursor-pointer py-3"
           >
             Account
           </TabsTrigger>
           <TabsTrigger 
             value="children" 
             data-testid="tab-children"
-            className="data-[state=active]:bg-olive data-[state=active]:text-ivory data-[state=active]:shadow-md data-[state=active]:font-semibold hover:bg-olive/10 transition-all border-2 border-transparent data-[state=active]:border-olive cursor-pointer"
+            className="data-[state=active]:bg-olive data-[state=active]:text-ivory data-[state=active]:shadow-md data-[state=active]:font-semibold hover:bg-olive/10 transition-all cursor-pointer py-3"
           >
             Children
           </TabsTrigger>
           <TabsTrigger 
             value="saved" 
             data-testid="tab-saved"
-            className="data-[state=active]:bg-olive data-[state=active]:text-ivory data-[state=active]:shadow-md data-[state=active]:font-semibold hover:bg-olive/10 transition-all border-2 border-transparent data-[state=active]:border-olive cursor-pointer"
+            className="data-[state=active]:bg-olive data-[state=active]:text-ivory data-[state=active]:shadow-md data-[state=active]:font-semibold hover:bg-olive/10 transition-all cursor-pointer py-3"
           >
             Saved Items
           </TabsTrigger>
