@@ -230,22 +230,34 @@ const INTEREST_SYNONYMS: Record<string, FilterMapping> = {
   },
 };
 
+// Age range definitions with min/max values
+const AGE_RANGES: Array<{ label: string; min: number; max: number }> = [
+  { label: "Newborn to 18 months", min: 0, max: 1.5 },
+  { label: "18 months to 3 years", min: 1.5, max: 3 },
+  { label: "2 to 5 years", min: 2, max: 5 },
+  { label: "3 to 6 years", min: 3, max: 6 },
+  { label: "4 to 7 years", min: 4, max: 7 },
+  { label: "5 to 8 years", min: 5, max: 8 },
+  { label: "6 to 9 years", min: 6, max: 9 },
+  { label: "7 to 10 years", min: 7, max: 10 },
+  { label: "8 to 11 years", min: 8, max: 11 },
+  { label: "9 to 12 years", min: 9, max: 12 },
+  { label: "10 to Early Teens", min: 10, max: 13 },
+  { label: "Preteens to Older Teens", min: 12, max: 18 },
+];
+
 // Age number to age range mapping
-// Map age to the primary age bracket that contains that age
-function mapAgeToRange(age: number): string | null {
-  if (age >= 0 && age < 1.5) return "Newborn to 18 months";
-  if (age >= 1.5 && age < 2) return "18 months to 3 years";
-  if (age >= 2 && age < 3) return "2 to 5 years";
-  if (age >= 3 && age < 4) return "3 to 6 years";
-  if (age >= 4 && age < 5) return "4 to 7 years";
-  if (age >= 5 && age < 6) return "5 to 8 years";
-  if (age >= 6 && age < 7) return "6 to 9 years";
-  if (age >= 7 && age < 8) return "7 to 10 years";
-  if (age >= 8 && age < 9) return "8 to 11 years";
-  if (age >= 9 && age < 10) return "9 to 12 years";
-  if (age >= 10 && age < 12) return "10 to Early Teens";
-  if (age >= 12) return "Preteens to Older Teens";
-  return null;
+// Map age to ALL overlapping age brackets that contain that age
+function mapAgeToRange(age: number): string[] {
+  const matchingRanges: string[] = [];
+  
+  for (const range of AGE_RANGES) {
+    if (age >= range.min && age <= range.max) {
+      matchingRanges.push(range.label);
+    }
+  }
+  
+  return matchingRanges;
 }
 
 // Normalize input string
@@ -259,7 +271,7 @@ function normalize(input: string): string {
 }
 
 // Extract age from query
-function extractAge(query: string): string | null {
+function extractAge(query: string): string[] {
   // Try explicit range first: "4-7 year old" or "4 to 7 year old"
   const rangeMatch = query.match(/(\d{1,2})\s*(?:-|to)\s*(\d{1,2})\s*year[- ]?old/);
   if (rangeMatch) {
@@ -276,14 +288,14 @@ function extractAge(query: string): string | null {
     return mapAgeToRange(age);
   }
 
-  // Try age words
+  // Try age words - return as single-element array for consistency
   for (const [word, range] of Object.entries(AGE_WORDS)) {
     if (query.includes(word)) {
-      return range;
+      return [range];
     }
   }
 
-  return null;
+  return [];
 }
 
 // Extract interests from query
@@ -356,7 +368,7 @@ function mapInterests(interests: string[]): FilterMapping {
 
 // Main parser function
 export interface ParsedQuery {
-  ageRange: string | null;
+  ageRanges: string[];
   categories: string[];
   playTypes: string[];
   hasResults: boolean;
@@ -365,17 +377,17 @@ export interface ParsedQuery {
 export function parseNaturalLanguageQuery(query: string): ParsedQuery {
   const normalized = normalize(query);
 
-  // Extract age
-  const ageRange = extractAge(normalized);
+  // Extract age (returns array of overlapping ranges)
+  const ageRanges = extractAge(normalized);
 
   // Extract and map interests
   const interests = extractInterests(normalized);
   const mapped = mapInterests(interests);
 
-  const hasResults = ageRange !== null || mapped.categories.length > 0 || mapped.playTypes.length > 0;
+  const hasResults = ageRanges.length > 0 || mapped.categories.length > 0 || mapped.playTypes.length > 0;
 
   return {
-    ageRange,
+    ageRanges,
     categories: mapped.categories,
     playTypes: mapped.playTypes,
     hasResults,

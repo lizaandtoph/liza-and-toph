@@ -41,11 +41,11 @@ export default function Shop() {
     const category = params.get('category') || 'all';
     const age = params.get('age') || null;
     setSelectedCategory(category);
-    setSelectedAgeBracket(age);
+    setSelectedAgeBrackets(age ? [age] : []);
   }, [location]);
   
   // Filter states
-  const [selectedAgeBracket, setSelectedAgeBracket] = useState<string | null>(ageFromUrl);
+  const [selectedAgeBrackets, setSelectedAgeBrackets] = useState<string[]>(ageFromUrl ? [ageFromUrl] : []);
   const [selectedPlayTypes, setSelectedPlayTypes] = useState<string[]>([]);
   const [selectedComplexity, setSelectedComplexity] = useState<string | null>(null);
   const [selectedEnergy, setSelectedEnergy] = useState<string | null>(null);
@@ -199,8 +199,8 @@ export default function Shop() {
       categories.some(d => d.toLowerCase().includes(selectedCategory));
     
     // Advanced filters (only applied when explicitly set)
-    // Age range category filter
-    const matchesAge = !selectedAgeBracket || product.ageRangeCategory === selectedAgeBracket;
+    // Age range category filter - matches if product age is in any of the selected brackets
+    const matchesAge = selectedAgeBrackets.length === 0 || selectedAgeBrackets.includes(product.ageRangeCategory);
     
     // Play types filter
     const matchesPlayType = selectedPlayTypes.length === 0 || (() => {
@@ -234,8 +234,8 @@ export default function Shop() {
     const matchesLizaTophCertified = !lizaTophCertifiedOnly || product.isLizaTophCertified === true;
     
     // Debug logging for filtered products
-    if (selectedAgeBracket && matchesPlayType && !matchesAge) {
-      console.log('[Age Filter Debug] Product filtered out by age:', product.name, 'Product age:', product.ageRangeCategory, 'Selected:', selectedAgeBracket);
+    if (selectedAgeBrackets.length > 0 && matchesPlayType && !matchesAge) {
+      console.log('[Age Filter Debug] Product filtered out by age:', product.name, 'Product age:', product.ageRangeCategory, 'Selected:', selectedAgeBrackets);
     }
     
     return matchesSearch && matchesCategory && matchesAge && matchesPlayType && 
@@ -246,10 +246,10 @@ export default function Shop() {
   // Reset to page 1 when filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchQuery, selectedCategory, selectedAgeBracket, selectedPlayTypes, selectedComplexity, selectedEnergy, selectedSpecialNeeds, selectedSocialContext, lizaTophCertifiedOnly]);
+  }, [searchQuery, selectedCategory, selectedAgeBrackets, selectedPlayTypes, selectedComplexity, selectedEnergy, selectedSpecialNeeds, selectedSocialContext, lizaTophCertifiedOnly]);
   
   const clearFilters = () => {
-    setSelectedAgeBracket(null);
+    setSelectedAgeBrackets([]);
     setSelectedPlayTypes([]);
     setSelectedComplexity(null);
     setSelectedEnergy(null);
@@ -260,7 +260,7 @@ export default function Shop() {
   };
   
   const activeFilterCount = 
-    (selectedAgeBracket ? 1 : 0) +
+    (selectedAgeBrackets.length > 0 ? 1 : 0) +
     selectedPlayTypes.length +
     (selectedComplexity ? 1 : 0) +
     (selectedEnergy ? 1 : 0) +
@@ -337,8 +337,8 @@ export default function Shop() {
                     console.log('[NLP Search] Parsed query:', parsed);
                     if (parsed.hasResults) {
                       // Apply filters
-                      if (parsed.ageRange) {
-                        setSelectedAgeBracket(parsed.ageRange);
+                      if (parsed.ageRanges.length > 0) {
+                        setSelectedAgeBrackets(parsed.ageRanges);
                       }
                       // If multiple categories/interests, use 'all' and rely on play types
                       if (parsed.categories.length > 1 || parsed.playTypes.length > 0) {
@@ -349,7 +349,7 @@ export default function Shop() {
                       if (parsed.playTypes.length > 0) {
                         setSelectedPlayTypes(parsed.playTypes);
                       }
-                      console.log('[NLP Search] Applied filters - Age:', parsed.ageRange, 'Category:', parsed.categories.length > 1 || parsed.playTypes.length > 0 ? 'all' : parsed.categories[0], 'Play Types:', parsed.playTypes);
+                      console.log('[NLP Search] Applied filters - Age Ranges:', parsed.ageRanges, 'Category:', parsed.categories.length > 1 || parsed.playTypes.length > 0 ? 'all' : parsed.categories[0], 'Play Types:', parsed.playTypes);
                       setShowFilters(true);
                       setCurrentPage(1);
                       scrollToProducts();
@@ -366,8 +366,8 @@ export default function Shop() {
                     const parsed = parseNaturalLanguageQuery(nlQuery);
                     if (parsed.hasResults) {
                       // Apply filters
-                      if (parsed.ageRange) {
-                        setSelectedAgeBracket(parsed.ageRange);
+                      if (parsed.ageRanges.length > 0) {
+                        setSelectedAgeBrackets(parsed.ageRanges);
                       }
                       // If multiple categories/interests, use 'all' and rely on play types
                       if (parsed.categories.length > 1 || parsed.playTypes.length > 0) {
@@ -539,9 +539,15 @@ export default function Shop() {
                 {ageRangeCategories.map(category => (
                   <Badge
                     key={category}
-                    variant={selectedAgeBracket === category ? "default" : "outline"}
-                    className={`cursor-pointer px-4 py-2 text-sm transition-colors ${selectedAgeBracket === category ? 'bg-olive text-white border-olive shadow-md font-semibold' : 'bg-[#dedacc] hover:bg-olive/20 border-espresso/20'}`}
-                    onClick={() => setSelectedAgeBracket(selectedAgeBracket === category ? null : category)}
+                    variant={selectedAgeBrackets.includes(category) ? "default" : "outline"}
+                    className={`cursor-pointer px-4 py-2 text-sm transition-colors ${selectedAgeBrackets.includes(category) ? 'bg-olive text-white border-olive shadow-md font-semibold' : 'bg-[#dedacc] hover:bg-olive/20 border-espresso/20'}`}
+                    onClick={() => {
+                      if (selectedAgeBrackets.includes(category)) {
+                        setSelectedAgeBrackets(selectedAgeBrackets.filter(b => b !== category));
+                      } else {
+                        setSelectedAgeBrackets([...selectedAgeBrackets, category]);
+                      }
+                    }}
                     data-testid={`badge-age-${category.replace(/\s+/g, '-').toLowerCase()}`}
                   >
                     {category}
