@@ -34,6 +34,20 @@ window.addEventListener('unhandledrejection', (event) => {
   }).catch(() => {});
 });
 
+// Register service worker for PWA functionality
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker
+      .register('/service-worker.js')
+      .then((registration) => {
+        console.log('[PWA] Service Worker registered:', registration.scope);
+      })
+      .catch((error) => {
+        console.error('[PWA] Service Worker registration failed:', error);
+      });
+  });
+}
+
 try {
   createRoot(document.getElementById("root")!).render(
     <QueryClientProvider client={queryClient}>
