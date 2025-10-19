@@ -978,6 +978,38 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Remove child from current user's profile
+  app.delete("/api/children/:childId", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub;
+      const { childId } = req.params;
+      
+      if (!userId) {
+        return res.status(401).json({ error: "Not authenticated" });
+      }
+      
+      // Check if user has access to this child
+      const links = await storage.getUserChildLinks(userId);
+      const hasAccess = links.some(link => link.childId === childId);
+      
+      if (!hasAccess) {
+        return res.status(404).json({ error: "Child not found" });
+      }
+      
+      // Delete the link between user and child
+      const success = await storage.deleteUserChildLink(userId, childId);
+      
+      if (!success) {
+        return res.status(500).json({ error: "Failed to remove child" });
+      }
+      
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error removing child:", error);
+      res.status(500).json({ error: "Failed to remove child" });
+    }
+  });
+
   // Backfill migration - Create owner links for existing children
   app.post("/api/admin/backfill-child-links", isAuthenticated, async (req: any, res) => {
     try {

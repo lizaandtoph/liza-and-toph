@@ -180,8 +180,14 @@ export default function Settings() {
     setDeleteDialogOpen(true);
   };
 
-  const handleDeleteChild = () => {
-    if (childToDelete) {
+  const handleDeleteChild = async () => {
+    if (!childToDelete) return;
+
+    try {
+      // Delete from database first
+      await apiRequest('DELETE', `/api/children/${childToDelete}`, {});
+      
+      // Then update local state
       deleteChild(childToDelete);
       setDeleteDialogOpen(false);
       setChildToDelete(null);
@@ -189,6 +195,14 @@ export default function Settings() {
         title: 'Success',
         description: 'Child profile removed'
       });
+    } catch (error: any) {
+      toast({
+        title: 'Error',
+        description: error.message || 'Failed to remove child profile',
+        variant: 'destructive'
+      });
+      setDeleteDialogOpen(false);
+      setChildToDelete(null);
     }
   };
 
