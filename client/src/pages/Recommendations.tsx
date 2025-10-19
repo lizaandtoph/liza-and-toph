@@ -6,12 +6,17 @@ import { Sparkles, ExternalLink, ShoppingBag, Heart } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { type Product } from '@shared/schema';
 import { calculateAgeFromBirthday, categorizeAgeBand, formatAgeRange } from '@shared/ageUtils';
-import { useMemo } from 'react';
+import { useMemo, useEffect } from 'react';
 
 export default function Recommendations() {
   const { getActiveChild, getAnswers, activeChildId, savedItems, addSavedItem, removeSavedItem } = useStore();
   const child = getActiveChild();
   const answers = child ? getAnswers(child.id) : { schemas: [], barriers: [], interests: [] };
+
+  // Scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
 
   // Calculate ageBand from birthday if missing (for backwards compatibility)
   const effectiveAgeBand = useMemo(() => {
