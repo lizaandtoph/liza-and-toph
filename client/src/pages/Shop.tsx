@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Search, Filter, ChevronDown, ChevronUp, X, Heart, Sparkles } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { type Product } from '@shared/schema';
@@ -16,6 +16,7 @@ export default function Shop() {
   const { getActiveChild, savedItems, addSavedItem, removeSavedItem } = useStore();
   const child = getActiveChild();
   const [location] = useLocation();
+  const productsRef = useRef<HTMLDivElement>(null);
   
   // Get category and age from URL params
   const urlParams = new URLSearchParams(window.location.search);
@@ -26,6 +27,13 @@ export default function Shop() {
   const [nlQuery, setNlQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>(categoryFromUrl);
   const [showFilters, setShowFilters] = useState(false);
+  
+  // Scroll to products section
+  const scrollToProducts = () => {
+    setTimeout(() => {
+      productsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
+  };
   
   // Update category and age when URL changes
   useEffect(() => {
@@ -344,6 +352,7 @@ export default function Shop() {
                       console.log('[NLP Search] Applied filters - Age:', parsed.ageRange, 'Category:', parsed.categories.length > 1 || parsed.playTypes.length > 0 ? 'all' : parsed.categories[0], 'Play Types:', parsed.playTypes);
                       setShowFilters(true);
                       setCurrentPage(1);
+                      scrollToProducts();
                     }
                   }
                 }}
@@ -371,6 +380,7 @@ export default function Shop() {
                       }
                       setShowFilters(true);
                       setCurrentPage(1);
+                      scrollToProducts();
                     }
                   }
                 }}
@@ -683,21 +693,22 @@ export default function Shop() {
       </div>
 
       {/* Products Grid */}
-      {isLoading ? (
-        <div className="text-center py-12">
-          <p className="text-lg opacity-70">Loading products...</p>
-        </div>
-      ) : filteredProducts.length === 0 ? (
-        <div className="text-center py-12">
-          <p className="text-lg opacity-70">No products found matching your criteria.</p>
-        </div>
-      ) : (
-        <div className="mb-4 text-sm opacity-70">
-          Showing {startIndex + 1}-{Math.min(endIndex, totalProducts)} of {totalProducts} products
-        </div>
-      )}
+      <div ref={productsRef}>
+        {isLoading ? (
+          <div className="text-center py-12">
+            <p className="text-lg opacity-70">Loading products...</p>
+          </div>
+        ) : filteredProducts.length === 0 ? (
+          <div className="text-center py-12">
+            <p className="text-lg opacity-70">No products found matching your criteria.</p>
+          </div>
+        ) : (
+          <div className="mb-4 text-sm opacity-70">
+            Showing {startIndex + 1}-{Math.min(endIndex, totalProducts)} of {totalProducts} products
+          </div>
+        )}
 
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {paginatedProducts.map((product) => {
           const badge = getProductBadge(product);
           const isSaved = savedItems.products.includes(product.name);
@@ -823,6 +834,8 @@ export default function Shop() {
           </Button>
         </div>
       )}
+
+      </div>
 
       {child?.name && (
         <div className="mt-12 bg-gradient-to-r from-olive/10 to-blush/10 p-8 rounded-lg text-center">
