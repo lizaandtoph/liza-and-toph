@@ -1,0 +1,5 @@
+- name: Voice & accessibility
+  must:
+    - expert, warm, clear; ~8th-grade reading
+    - inclusive language (no gendered parent labels)
+    - alt text on images; headings hierarchical
