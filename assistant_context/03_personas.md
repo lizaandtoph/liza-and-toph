@@ -1,0 +1,2 @@
+- Sarah (caregiver): Wants clarity, quick setup, budget-aware, hates jargon. Success = “I know what to get and why.”
+- Dr. Lee (peds/OT): Needs evidence-aligned language, sharable reports, role-based access. Success = efficient, parent-friendly plans.
