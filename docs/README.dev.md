@@ -1,0 +1,3 @@
+- Run: npm i && npm start (or Replit “Run”).
+- Env: Use Replit Secrets; commit only .env.example.
+- Structure: /client (UI), /server (API), /src/data (seed), /assistant_context and /docs guide assistants.
