@@ -1,0 +1,5 @@
+- name: Privacy & safety
+  must:
+    - consent banner visible before any tracking
+    - data deletion request link present in footer
+    - no raw PII in logs
