@@ -1,0 +1,5 @@
+- Card renders domain chips
+- Card shows one-sentence rationale
+- Prices are not displayed
+- TPV badge renders when present
+- Copy is inclusive
