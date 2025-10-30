@@ -1,0 +1,4 @@
+- Style: Short sentences, active voice, inclusive phrasing.
+- Accessibility: Alt text on images; clear headings.
+- Data: No PII in logs; consent before tracking; deletion honored on request.
+- Claims: Support growth; never diagnose.
