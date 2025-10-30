@@ -1,0 +1,3 @@
+- Flow: Onboarding → child profile → short assessment → Play Board (cards show domain chips + “Why this helps”) → affiliate links (no prices).
+- Pro: multi-child/caseload view, reports/exports, shared Play Boards.
+- TPV: product badges (Silver/Gold/Platinum) and filters; we don’t hold inventory.
