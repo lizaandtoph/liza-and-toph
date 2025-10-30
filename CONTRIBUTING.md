@@ -1,0 +1,4 @@
+- Small PRs (<400 LOC)
+- Reference acceptance criteria
+- Update docs if behavior changes
+- Add/adjust at least one test (or leave TODO)
