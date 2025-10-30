@@ -1,0 +1,5 @@
+- Mission: Bridge developmental science and play so families feel confident choosing toys/experiences that support growth.
+- Who we serve: L&T Family (parents/caregivers), L&T Pro (therapists/educators/pediatricians), TPV (brands).
+- What the product does: Quick assessment → personalized Play Board with domains (sensory, motor, cognitive, language, social-emotional) + clear rationales.
+- Guardrails: No medical/diagnostic claims. Privacy-first. COPPA/GDPR-K aware. AI supports human judgment.
+- Voice: Expert, warm, clear. Inclusive (no “moms/dads”). 8th-grade reading level.
