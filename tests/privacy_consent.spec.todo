@@ -1,0 +1,3 @@
+- Consent banner renders before analytics
+- Deletion link exists in footer
+- No raw PII in sample log output
