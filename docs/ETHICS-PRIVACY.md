@@ -1,0 +1,3 @@
+- Consent banner shown before analytics.
+- No raw PII in logs; use anonymized IDs.
+- Data deletion request: email link in footer.
