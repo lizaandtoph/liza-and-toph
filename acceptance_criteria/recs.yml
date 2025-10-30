@@ -1,0 +1,7 @@
+- name: Recommendation card
+  must:
+    - show domain chips (e.g., Sensory, Fine Motor)
+    - include a one-sentence "Why this helps" rationale
+    - show TPV badge if present (Silver/Gold/Platinum)
+    - hide prices; use compliant affiliate link
+    - avoid medical/diagnostic claims
