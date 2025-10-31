@@ -7,15 +7,17 @@ import { fileURLToPath } from "url";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const isDev = process.env.NODE_ENV !== "production";
 
-// Synchronously try to load dev plugins
+// Load Replit-only dev plugins *synchronously* to avoid async config issues
 function getDevPlugins() {
   if (!isDev) return [];
   const plugins = [];
   try {
-    // These will be loaded during build time, not config time
-    // to avoid async config issues with server/vite.ts
+    const devBanner = require("@replit/vite-plugin-dev-banner").default;
+    const cartographer = require("@replit/vite-plugin-cartographer").default;
+    const runtimeErrorModal = require("@replit/vite-plugin-runtime-error-modal").default;
+    plugins.push(devBanner(), cartographer(), runtimeErrorModal());
   } catch {
-    // Fail gracefully
+    // Fail gracefully if not installed or unavailable in production
   }
   return plugins;
 }
@@ -23,11 +25,14 @@ function getDevPlugins() {
 export default defineConfig({
   root: "client",
   plugins: [react(), ...getDevPlugins()],
-  server: { host: true, port: 5173 },
-  build: { 
+  server: {
+    host: true,
+    port: 5173,
+  },
+  build: {
     sourcemap: true,
     outDir: "../dist/public",
-    emptyOutDir: true
+    emptyOutDir: true,
   },
   resolve: {
     alias: {
