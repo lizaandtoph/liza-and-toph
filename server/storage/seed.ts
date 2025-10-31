@@ -1,7 +1,7 @@
 // server/storage/seed.ts
 import 'dotenv/config';
-import { db } from './db'; // your Drizzle/ORM connection
-import { milestones, products } from './schema'; // adjust to your tables
+import { db } from './db';            // ← change to '../db' if db.ts is one folder up
+import { milestones, products } from './schema'; // ← change to '../schema' if needed
 import { eq } from 'drizzle-orm';
 
 const ENV = process.env.NODE_ENV ?? 'development';
@@ -52,7 +52,7 @@ async function upsertProduct(p: {
   }
 }
 
-async function main() {
+export async function main() {
   // 🔽 Replace with your real seed lists
   const demoMilestones = [
     { id: 'ms_demo_36_balance', title: 'Balances on one foot', ageRange: '3-6y', domain: 'Gross Motor' },
@@ -65,10 +65,9 @@ async function main() {
   for (const p of demoProducts) await upsertProduct(p);
 
   console.log('[SEED] complete');
-  process.exit(0);
 }
 
-main().catch((e) => {
+main().then(() => process.exit(0)).catch((e) => {
   console.error('[SEED] failed', e);
   process.exit(1);
 });
