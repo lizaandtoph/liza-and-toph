@@ -216,11 +216,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Child Profile routes
-  app.post("/api/child-profiles", async (req, res) => {
+  app.post("/api/child-profiles", isAuthenticated, async (req: any, res) => {
     try {
-      const validatedData = insertChildProfileSchema.parse(req.body);
+      const userId = req.user?.claims?.sub;
+      if (!userId) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+
+      const validatedData = insertChildProfileSchema.parse({
+        ...req.body,
+        userId,
+      });
+
       const childProfile = await storage.createChildProfile(validatedData);
-      
+
       // Automatically create owner link for the child
       await storage.createUserChildLink({
         userId: childProfile.userId,
@@ -228,36 +237,74 @@ export async function registerRoutes(app: Express): Promise<Server> {
         role: "owner",
         invitedBy: null
       });
-      
+
       res.json(childProfile);
     } catch (error) {
+      console.error("Error creating child profile:", error);
       res.status(400).json({ message: "Invalid child profile data", error });
     }
   });
 
-  app.get("/api/child-profiles/:id", async (req, res) => {
+  app.get("/api/child-profiles/:id", isAuthenticated, async (req: any, res) => {
     try {
+      const userId = req.user?.claims?.sub;
+      if (!userId) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+
       const { id } = req.params;
       const childProfile = await storage.getChildProfile(id);
       if (!childProfile) {
         return res.status(404).json({ message: "Child profile not found" });
       }
+
+      const links = await storage.getUserChildLinks(userId);
+      const hasAccess = links.some(link => link.childId === id);
+      const isOwner = childProfile.userId === userId;
+      if (!hasAccess && !isOwner) {
+        return res.status(403).json({ message: "Forbidden" });
+      }
+
       res.json(childProfile);
     } catch (error) {
-      res.status(500).json({ message: "Server error", error });
+      console.error("Error fetching child profile:", error);
+      res.status(500).json({ message: "Failed to fetch child profile", error });
     }
   });
 
-  app.patch("/api/child-profiles/:id", async (req, res) => {
+  app.patch("/api/child-profiles/:id", isAuthenticated, async (req: any, res) => {
     try {
+      const userId = req.user?.claims?.sub;
+      if (!userId) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+
       const { id } = req.params;
-      const childProfile = await storage.updateChildProfile(id, req.body);
+      const existingChild = await storage.getChildProfile(id);
+      if (!existingChild) {
+        return res.status(404).json({ message: "Child profile not found" });
+      }
+
+      const links = await storage.getUserChildLinks(userId);
+      const hasEditAccess =
+        existingChild.userId === userId ||
+        links.some(link => link.childId === id && (link.role === "owner" || link.role === "editor"));
+
+      if (!hasEditAccess) {
+        return res.status(403).json({ message: "Forbidden" });
+      }
+
+      const { userId: _ignoredUserId, ...updates } = req.body ?? {};
+
+      const childProfile = await storage.updateChildProfile(id, updates);
       if (!childProfile) {
         return res.status(404).json({ message: "Child profile not found" });
       }
+
       res.json(childProfile);
     } catch (error) {
-      res.status(500).json({ message: "Server error", error });
+      console.error("Error updating child profile:", error);
+      res.status(400).json({ message: "Invalid child profile data", error });
     }
   });
 
