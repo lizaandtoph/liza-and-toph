@@ -3,86 +3,71 @@ import cookieParser from "cookie-parser";
 import path from "path";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
+import { requestId, auditLog } from "./logging"; // ✅ new: safe, structured logging (no bodies)
 
 const app = express();
 
 // Trust proxy for production (must be set before session middleware)
 app.set("trust proxy", 1);
 
-declare module 'http' {
+// ----- Minimal, privacy-safe request logging -----
+// Adds a stable request id and logs method/path/status/duration (no bodies, no PII)
+app.use(requestId);
+app.use(auditLog);
+
+// ----- Parsers & basics -----
+declare module "http" {
   interface IncomingMessage {
-    rawBody: unknown
+    rawBody: unknown;
   }
 }
-app.use(express.json({
-  verify: (req, _res, buf) => {
-    req.rawBody = buf;
-  }
-}));
+
+// Keep raw body capture for webhooks if needed (still safe; we don't log it)
+app.use(
+  express.json({
+    verify: (req, _res, buf) => {
+      req.rawBody = buf;
+    },
+  })
+);
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 
-app.use((req, res, next) => {
-  const start = Date.now();
-  const path = req.path;
-  let capturedJsonResponse: Record<string, any> | undefined = undefined;
-
-  const originalResJson = res.json;
-  res.json = function (bodyJson, ...args) {
-    capturedJsonResponse = bodyJson;
-    return originalResJson.apply(res, [bodyJson, ...args]);
-  };
-
-  res.on("finish", () => {
-    const duration = Date.now() - start;
-    if (path.startsWith("/api")) {
-      let logLine = `${req.method} ${path} ${res.statusCode} in ${duration}ms`;
-      if (capturedJsonResponse) {
-        logLine += ` :: ${JSON.stringify(capturedJsonResponse)}`;
-      }
-
-      if (logLine.length > 80) {
-        logLine = logLine.slice(0, 79) + "…";
-      }
-
-      log(logLine);
-    }
-  });
-
-  next();
-});
+// ❌ Removed old middleware that monkey-patched res.json and logged response bodies
+// (This prevented PII/token leakage into logs.)
 
 (async () => {
   const server = await registerRoutes(app);
 
+  // Central error handler (returns minimal message; no stack/PII)
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
     const status = err.status || err.statusCode || 500;
     const message = err.message || "Internal Server Error";
-
     res.status(status).json({ message });
-    throw err;
+    // Keep a server-side error for operators without leaking response bodies
+    try {
+      log(`[ERROR] ${status} ${message}`);
+    } catch {}
   });
 
-  // importantly only setup vite in development and after
-  // setting up all the other routes so the catch-all route
-  // doesn't interfere with the other routes
+  // Only setup Vite dev server in development after routes are registered
   if (app.get("env") === "development") {
     await setupVite(app, server);
   } else {
     serveStatic(app);
   }
 
-  // ALWAYS serve the app on the port specified in the environment variable PORT
-  // Other ports are firewalled. Default to 5000 if not specified.
-  // this serves both the API and the client.
-  // It is the only port that is not firewalled.
-  const port = parseInt(process.env.PORT || '5000', 10);
-  server.listen({
-    port,
-    host: "0.0.0.0",
-    reusePort: true,
-  }, () => {
-    log(`serving on port ${port}`);
-  });
+  // Serve API + client
+  const port = parseInt(process.env.PORT || "5000", 10);
+  server.listen(
+    {
+      port,
+      host: "0.0.0.0",
+      reusePort: true,
+    },
+    () => {
+      log(`serving on port ${port}`);
+    }
+  );
 })();
