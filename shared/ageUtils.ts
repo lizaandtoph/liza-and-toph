@@ -69,16 +69,24 @@ export function getAgeBandLabel(ageBand: string): string {
 export function formatAgeRange(ageRange: string | null | undefined): string {
   if (!ageRange) return '';
   
+  // Handle special text ranges first
+  const lowerRange = ageRange.toLowerCase();
+  if (lowerRange.includes('early teens') || lowerRange.includes('older teens') || lowerRange.includes('preteens')) {
+    // Return as-is for descriptive teen ranges
+    return ageRange;
+  }
+  
   // Parse age range to extract numbers and units
-  const match = ageRange.match(/(\d+)\s*(to|-)?\s*(\d+)?\s*(months?|years?)?/i);
-  if (!match) return ageRange;
+  const match = ageRange.match(/(\d+)\s*(to|-)?\s*(\d+)?\s*(months?|years?|y)?/i);
+  if (!match) return ageRange; // Return original if can't parse
   
   const minAge = parseInt(match[1]);
   const maxAge = match[3] ? parseInt(match[3]) : minAge;
   const unit = match[4]?.toLowerCase();
   
-  // Determine if values are in months
-  const isMonths = unit?.includes('month') || (!unit && maxAge <= 18);
+  // Determine if values are in months or years
+  const isMonths = unit?.includes('month') || (unit?.includes('m') && !unit?.includes('y')) || (!unit && minAge <= 18 && maxAge <= 18);
+  const isYears = unit?.includes('year') || unit?.includes('y');
   
   if (isMonths) {
     // If max age is over 18 months, convert to years
@@ -98,7 +106,7 @@ export function formatAgeRange(ageRange: string | null | undefined): string {
     return `${minAge} to ${maxAge} months`;
   }
   
-  // Already in years
+  // Already in years (or assume years if numbers are large)
   if (minAge === maxAge) {
     return `${minAge} year${minAge !== 1 ? 's' : ''}`;
   }
