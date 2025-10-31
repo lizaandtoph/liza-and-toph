@@ -7,7 +7,7 @@ import { fileURLToPath } from "url";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const isDev = process.env.NODE_ENV !== "production";
 
-// Load Replit-only dev plugins *synchronously* to avoid async config issues
+// Load Replit-only dev plugins synchronously
 function getDevPlugins() {
   if (!isDev) return [];
   const plugins = [];
@@ -18,7 +18,7 @@ function getDevPlugins() {
       require("@replit/vite-plugin-runtime-error-modal").default;
     plugins.push(devBanner(), cartographer(), runtimeErrorModal());
   } catch {
-    // Fail gracefully if not installed or unavailable in production
+    // Ignore if missing (safe for production)
   }
   return plugins;
 }
