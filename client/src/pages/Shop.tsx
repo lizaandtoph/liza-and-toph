@@ -200,7 +200,45 @@ export default function Shop() {
     
     // Advanced filters (only applied when explicitly set)
     // Age range category filter - matches if product age is in any of the selected brackets
-    const matchesAge = selectedAgeBrackets.length === 0 || selectedAgeBrackets.includes(product.ageRangeCategory);
+    // Age range category filter - matches if product age overlaps with any selected bracket
+const matchesAge = selectedAgeBrackets.length === 0 || (() => {
+  // Helper function to convert age bracket text to months
+  const bracketToMonths = (bracket: string): { min: number; max: number } => {
+    const months: Record<string, { min: number; max: number }> = {
+      'Newborn to 18 months': { min: 0, max: 18 },
+      '18 months to 3 years': { min: 18, max: 36 },
+      '2 to 5 years': { min: 24, max: 60 },
+      '3 to 6 years': { min: 36, max: 72 },
+      '4 to 7 years': { min: 48, max: 84 },
+      '5 to 8 years': { min: 60, max: 96 },
+      '6 to 9 years': { min: 72, max: 108 },
+      '7 to 10 years': { min: 84, max: 120 },
+      '8 to 11 years': { min: 96, max: 132 },
+      '9 to 12 years': { min: 108, max: 144 },
+      '10 to Early Teens': { min: 120, max: 168 }, // 10-14 years
+      'Preteens to Older Teens': { min: 132, max: 216 }, // 11-18 years
+    };
+    return months[bracket] || { min: 0, max: 216 };
+  };
+
+  // Check if product age range overlaps with ANY selected bracket
+  return selectedAgeBrackets.some(bracket => {
+    const selectedRange = bracketToMonths(bracket);
+    const productMin = product.minAgeMonths || 0;
+    const productMax = product.maxAgeMonths || 216;
+    
+    // Ranges overlap if: productMin <= selectedMax AND productMax >= selectedMin
+    const overlaps = productMin <= selectedRange.max && productMax >= selectedRange.min;
+    
+    if (overlaps && selectedAgeBrackets.length > 0) {
+      console.log('[Age Filter Debug] Match:', product.name, 
+        'Product:', productMin, '-', productMax, 'months',
+        'Selected:', bracket, '(', selectedRange.min, '-', selectedRange.max, 'months)');
+    }
+    
+    return overlaps;
+  });
+})();
     
     // Play types filter
     const matchesPlayType = selectedPlayTypes.length === 0 || (() => {
